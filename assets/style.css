@@ -1,0 +1,117 @@
+/* Calidescope — shared styles
+   Palette and type match the approved design prototype. */
+
+:root{
+  --ink:#1F2024;
+  --paper:#FAF7EF;
+  --blue:#1E40FF;
+  --pink:#E933A6;
+  --blue-pale:#DDE6FF;
+  --pink-pale:#FFDDF0;
+  --sand:#F3EEE2;
+  --line:#E4E0D6;
+  --muted:#6E6B65;
+  --row-hover:#FCFAF4;
+}
+
+* { box-sizing: border-box; }
+
+body{
+  margin:0;
+  background:var(--paper);
+  font-family:'Archivo',system-ui,sans-serif;
+  color:var(--ink);
+}
+
+a{ color:var(--blue); text-decoration:none; }
+a:hover{ color:var(--pink); }
+
+img, svg { max-width:100%; }
+
+/* ---------- nav ---------- */
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:26px 72px;
+}
+.nav-brand{ display:flex;align-items:center;gap:12px;color:var(--ink); }
+.nav-brand span{ font:600 15px 'Archivo',sans-serif;letter-spacing:.05em; }
+.nav-links{ display:flex;gap:26px;font:500 13px 'Archivo',sans-serif; }
+.nav-links a{ color:var(--muted); }
+.nav-links a.is-active{ color:var(--ink);border-bottom:2px solid var(--blue);padding-bottom:2px; }
+.nav-links a.is-contact{ color:var(--blue); }
+.nav-links a.is-contact.is-active{ color:var(--ink); }
+
+/* ---------- buttons ---------- */
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--blue);color:var(--paper);border:none;
+  border-radius:999px;padding:13px 26px;
+  font:600 14px 'Archivo',sans-serif;cursor:pointer;text-decoration:none;
+}
+.btn-primary:hover{ background:var(--pink);color:var(--paper); }
+
+.btn-outline{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1.5px solid var(--ink);color:var(--ink);background:none;
+  border-radius:999px;padding:12px 24px;
+  font:600 14px 'Archivo',sans-serif;cursor:pointer;text-decoration:none;
+}
+.btn-outline:hover{ background:var(--blue);border-color:var(--blue);color:var(--paper); }
+
+.btn-card{
+  display:inline-flex;border:1.5px solid var(--ink);color:var(--ink);
+  border-radius:999px;padding:11px 22px;font:600 13.5px 'Archivo',sans-serif;
+  text-decoration:none;
+}
+.btn-card.on-blue:hover{ background:var(--blue-pale);color:var(--ink); }
+.btn-card.on-pink:hover{ background:var(--pink-pale);color:var(--ink); }
+
+/* ---------- disclosure rows (accordions) ---------- */
+.row-toggle{
+  display:flex;align-items:center;justify-content:space-between;width:100%;
+  padding:30px 72px;cursor:pointer;background:none;border:none;text-align:left;
+  font:inherit;color:inherit;
+}
+.row-toggle:hover{ background:var(--row-hover); }
+
+.lens-toggle{
+  display:flex;align-items:center;justify-content:space-between;width:100%;
+  padding:22px 8px;cursor:pointer;background:none;border:none;text-align:left;
+  font:inherit;color:inherit;
+}
+.lens-toggle:hover{ background:var(--row-hover); }
+
+.glyph{
+  width:34px;height:34px;border:1px solid var(--ink);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font:400 18px 'Archivo',sans-serif;flex:none;
+}
+.glyph-sm{
+  width:30px;height:30px;border:1px solid var(--ink);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font:400 16px 'Archivo',sans-serif;flex:none;
+}
+
+.panel[hidden]{ display:none; }
+
+/* ---------- footer ---------- */
+.site-footer{
+  padding:44px 72px 40px;display:flex;align-items:flex-end;justify-content:space-between;
+  gap:24px;flex-wrap:wrap;
+}
+.site-footer .brand{ font:600 15px 'Archivo',sans-serif; }
+.site-footer .tagline{ font:400 13px/1.6 'Archivo',sans-serif;color:var(--muted);margin-top:8px;max-width:420px; }
+.site-footer .links{ display:flex;gap:18px;font:400 12px 'IBM Plex Mono',monospace;margin-top:16px;flex-wrap:wrap; }
+.site-footer .links a{ color:var(--muted); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 860px){
+  .nav{ padding:20px 24px;flex-wrap:wrap;gap:14px; }
+  .nav-links{ gap:16px;flex-wrap:wrap; }
+  .row-toggle{ padding:22px 24px; }
+  .lens-toggle{ padding:18px 4px; }
+  [style*="padding:110px 72px"],
+  [style*="padding:90px 72px"],
+  [style*="padding:120px 72px"]{ padding-left:24px !important;padding-right:24px !important; }
+  .site-footer{ padding:36px 24px 32px; }
+}
