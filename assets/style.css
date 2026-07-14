@@ -37,9 +37,12 @@ img, svg { max-width:100%; }
 .nav-brand span{ font:600 15px 'Archivo',sans-serif;letter-spacing:.05em; }
 .nav-links{ display:flex;gap:26px;font:500 13px 'Archivo',sans-serif; }
 .nav-links a{ color:var(--muted); }
+.nav-links a:hover{ color:var(--ink); }
 .nav-links a.is-active{ color:var(--ink);border-bottom:2px solid var(--blue);padding-bottom:2px; }
 .nav-links a.is-contact{ color:var(--blue); }
+.nav-links a.is-contact:hover{ color:var(--pink); }
 .nav-links a.is-contact.is-active{ color:var(--ink); }
+.nav-links a.is-contact.is-active:hover{ color:var(--pink); }
 
 /* ---------- buttons ---------- */
 .btn-primary{
@@ -57,6 +60,7 @@ img, svg { max-width:100%; }
   font:600 14px 'Archivo',sans-serif;cursor:pointer;text-decoration:none;
 }
 .btn-outline:hover{ background:var(--blue);border-color:var(--blue);color:var(--paper); }
+.btn-outline.on-proof:hover{ background:var(--pink);border-color:var(--pink);color:var(--paper); }
 
 .btn-card{
   display:inline-flex;border:1.5px solid var(--ink);color:var(--ink);
