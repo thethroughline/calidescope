@@ -11,11 +11,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=2">
 </head>
 <body>
 
 <div class="nav">
+  <div class="wrap">
   <a href="index.html" class="nav-brand">
     <svg width="24" height="24" viewBox="-100 -100 200 200">
       <circle cx="0" cy="0" r="92" fill="none" stroke="#1F2024" stroke-width="7"></circle>
@@ -31,15 +32,16 @@
     <a href="proof.html">Proof</a>
     <a href="contact.html" class="is-contact is-active">Contact</a>
   </div>
+  </div>
 </div>
 
-<div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:100px clamp(20px,5vw,72px) 70px">
+<div class="wrap" style="display:flex;flex-direction:column;align-items:center;text-align:center;padding-top:clamp(64px,12vh,100px);padding-bottom:70px">
   <div style="font:600 clamp(30px,4.5vw,42px)/1.15 'Archivo',sans-serif;letter-spacing:-.02em;max-width:640px">Start with one artifact.</div>
   <div style="font:400 18px/1.6 'Archivo',sans-serif;color:#6E6B65;margin:18px 0 0;max-width:540px">Send the Promise artifact that's not converting, or the Proof artifact that's not renewing. Same discipline, either side — the read starts within a week.</div>
   <a href="mailto:bret@calidescope.llc" class="btn-primary" style="padding:15px 32px;font-size:15px;margin:32px 0 0">bret@calidescope.llc</a>
 </div>
 
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;max-width:880px;margin:0 auto;padding:0 clamp(20px,5vw,72px) 80px">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;max-width:880px;margin:0 auto;padding:0 var(--gutter) 80px">
   <div style="text-align:center;display:flex;flex-direction:column;align-items:center">
     <div style="width:52px;height:52px;border-radius:50%;background:#F3EEE2;display:flex;align-items:center;justify-content:center;margin:0 0 14px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"></path><path d="M14 3v4h4"></path><line x1="9.5" y1="12" x2="14.5" y2="12" stroke="#1E40FF"></line><line x1="9.5" y1="15.5" x2="12.5" y2="15.5" stroke="#1E40FF"></line></svg></div>
     <div style="font:400 12px 'IBM Plex Mono',monospace;color:#6E6B65;margin:0 0 10px">01</div>
@@ -60,7 +62,8 @@
   </div>
 </div>
 
-<div class="site-footer" style="border-top:1px solid #E4E0D6">
+<div class="site-footer">
+  <div class="wrap">
   <div>
     <div class="brand">Calidescope LLC</div>
     <div class="tagline">Promise to Proof. The same discipline, both sides.</div>
@@ -71,6 +74,7 @@
     </div>
   </div>
   <div style="font:400 11px 'IBM Plex Mono',monospace;color:#6E6B65">© 2026 · NEW YORK</div>
+  </div>
 </div>
 
 </body>
