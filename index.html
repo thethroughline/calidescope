@@ -44,35 +44,67 @@
 
     <div class="world-grid">
       <div class="world-viz world-viz--left">
-        <div class="artifact-stack">
-          <div style="position:absolute;left:6px;top:28px;width:100px;height:128px;background:#fff;border:1.5px solid #D9D5CA;border-radius:5px;transform:rotate(-8deg);overflow:hidden">
-            <div style="height:16px;border-bottom:1px solid #E4E0D6;display:flex;align-items:center;gap:3px;padding:0 7px">
-              <span style="width:4px;height:4px;border-radius:50%;background:#D9D5CA"></span>
-              <span style="width:4px;height:4px;border-radius:50%;background:#D9D5CA"></span>
-              <span style="width:4px;height:4px;border-radius:50%;background:#D9D5CA"></span>
-            </div>
-            <div style="padding:10px 11px">
-              <div style="height:8px;width:70%;background:#D9D5CA;border-radius:2px"></div>
-              <div style="height:5px;width:90%;background:#EAE6DB;border-radius:2px;margin-top:7px"></div>
-              <div style="height:5px;width:82%;background:#EAE6DB;border-radius:2px;margin-top:5px"></div>
-              <div style="font:500 9px 'IBM Plex Mono',monospace;color:#6E6B65;margin-top:12px;letter-spacing:.08em">WEBPAGE</div>
-            </div>
-          </div>
-          <div style="position:absolute;left:64px;top:6px;width:130px;height:86px;background:#fff;border:1.5px solid #D9D5CA;border-radius:5px;transform:rotate(4deg);padding:11px">
-            <div style="height:9px;width:60%;background:#D9D5CA;border-radius:2px"></div>
-            <div style="height:5px;width:80%;background:#EAE6DB;border-radius:2px;margin-top:8px"></div>
-            <div style="height:5px;width:70%;background:#EAE6DB;border-radius:2px;margin-top:5px"></div>
-            <div style="font:500 9px 'IBM Plex Mono',monospace;color:#6E6B65;margin-top:8px;letter-spacing:.08em">DECK</div>
-          </div>
-          <div style="position:absolute;left:120px;top:58px;width:102px;height:130px;background:#fff;border:1.5px solid #1F2024;border-radius:5px;transform:rotate(-3deg);padding:12px">
-            <div style="height:8px;width:75%;background:#D9D5CA;border-radius:2px"></div>
-            <div style="height:5px;width:92%;background:#EAE6DB;border-radius:2px;margin-top:8px"></div>
-            <div style="height:5px;width:86%;background:#EAE6DB;border-radius:2px;margin-top:5px"></div>
-            <div style="height:5px;width:90%;background:#EAE6DB;border-radius:2px;margin-top:5px"></div>
-            <div style="height:5px;width:70%;background:#EAE6DB;border-radius:2px;margin-top:5px"></div>
-            <div style="font:500 9px 'IBM Plex Mono',monospace;color:#6E6B65;margin-top:12px;letter-spacing:.08em">COPY</div>
-          </div>
-        </div>
+        <svg width="100%" viewBox="0 0 390 212" fill="none" preserveAspectRatio="xMidYMid meet" style="max-width:390px" role="img" aria-label="Two messy piles of drafts: Promise artifacts (webpage, deck, copy) and Proof artifacts (QBR, case study, dashboard)">
+          <!-- PROMISE bunch -->
+          <g transform="rotate(-9 54 86)">
+            <rect x="8" y="30" width="92" height="112" rx="5" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
+            <circle cx="17" cy="38" r="2" fill="#D9D5CA"/><circle cx="24" cy="38" r="2" fill="#D9D5CA"/><circle cx="31" cy="38" r="2" fill="#D9D5CA"/>
+            <line x1="8" y1="45" x2="100" y2="45" stroke="#E4E0D6"/>
+            <rect x="16" y="53" width="58" height="7" rx="2" fill="#D9D5CA"/>
+            <rect x="16" y="66" width="72" height="4.5" rx="2" fill="#EAE6DB"/>
+            <rect x="16" y="75" width="64" height="4.5" rx="2" fill="#EAE6DB"/>
+            <text x="16" y="133" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="1" fill="#6E6B65">WEBPAGE</text>
+          </g>
+          <g transform="rotate(6 117 45)">
+            <rect x="58" y="6" width="118" height="78" rx="5" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
+            <rect x="68" y="17" width="60" height="8" rx="2" fill="#D9D5CA"/>
+            <rect x="68" y="32" width="90" height="4.5" rx="2" fill="#EAE6DB"/>
+            <rect x="68" y="41" width="76" height="4.5" rx="2" fill="#EAE6DB"/>
+            <text x="68" y="73" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="1" fill="#6E6B65">DECK</text>
+          </g>
+          <g transform="rotate(-4 146 116)">
+            <rect x="102" y="58" width="88" height="116" rx="5" fill="#fff" stroke="#1F2024" stroke-width="1.5"/>
+            <rect x="112" y="70" width="60" height="7" rx="2" fill="#D9D5CA"/>
+            <rect x="112" y="84" width="68" height="4.5" rx="2" fill="#EAE6DB"/>
+            <rect x="112" y="93" width="62" height="4.5" rx="2" fill="#EAE6DB"/>
+            <rect x="112" y="102" width="66" height="4.5" rx="2" fill="#EAE6DB"/>
+            <rect x="112" y="111" width="52" height="4.5" rx="2" fill="#EAE6DB"/>
+            <text x="112" y="163" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="1" fill="#6E6B65">COPY</text>
+          </g>
+          <text x="62" y="204" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="2" fill="#1E40FF">PROMISE</text>
+
+          <!-- PROOF bunch -->
+          <g transform="rotate(7 255 56)">
+            <rect x="196" y="16" width="118" height="80" rx="5" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
+            <rect x="206" y="26" width="52" height="7" rx="2" fill="#D9D5CA"/>
+            <rect x="206" y="62" width="10" height="16" fill="#EAE6DB"/>
+            <rect x="220" y="54" width="10" height="24" fill="#D9D5CA"/>
+            <rect x="234" y="46" width="10" height="32" fill="#E933A6"/>
+            <rect x="248" y="58" width="10" height="20" fill="#EAE6DB"/>
+            <text x="206" y="90" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="1" fill="#6E6B65">QBR</text>
+          </g>
+          <g transform="rotate(-7 278 117)">
+            <rect x="232" y="58" width="92" height="118" rx="5" fill="#fff" stroke="#1F2024" stroke-width="1.5"/>
+            <rect x="242" y="70" width="56" height="7" rx="2" fill="#D9D5CA"/>
+            <polyline points="242,108 258,98 274,103 290,88 306,93" stroke="#E933A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="306" cy="93" r="2.5" fill="#E933A6"/>
+            <rect x="242" y="122" width="70" height="4.5" rx="2" fill="#EAE6DB"/>
+            <rect x="242" y="131" width="58" height="4.5" rx="2" fill="#EAE6DB"/>
+            <text x="242" y="165" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="1" fill="#6E6B65">CASE STUDY</text>
+          </g>
+          <g transform="rotate(4 334 47)">
+            <rect x="286" y="4" width="96" height="86" rx="5" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
+            <circle cx="308" cy="34" r="10" stroke="#EAE6DB" stroke-width="4.5"/>
+            <circle cx="308" cy="34" r="10" stroke="#E933A6" stroke-width="4.5" stroke-dasharray="24 39" transform="rotate(-90 308 34)"/>
+            <rect x="326" y="34" width="7" height="12" fill="#EAE6DB"/>
+            <rect x="336" y="28" width="7" height="18" fill="#D9D5CA"/>
+            <rect x="346" y="22" width="7" height="24" fill="#E933A6"/>
+            <rect x="296" y="56" width="70" height="4.5" rx="2" fill="#EAE6DB"/>
+            <rect x="296" y="65" width="54" height="4.5" rx="2" fill="#EAE6DB"/>
+            <text x="296" y="82" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="1" fill="#6E6B65">DASHBOARD</text>
+          </g>
+          <text x="272" y="204" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="2" fill="#E933A6">PROOF</text>
+        </svg>
       </div>
 
       <div class="world-cap world-cap--left">
