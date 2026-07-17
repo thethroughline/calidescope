@@ -65,3 +65,17 @@
 .star-chip svg{ margin-top:10px;display:block; }
 
 .cs-footer-nav{ padding:0 0 60px; }
+
+/* ---------- sense-of-place plate (Set A · ruled elevations) beside the STAR timeline ---------- */
+.cs-body--plate{ max-width:none; }
+.cs-layout{ display:flex;gap:clamp(36px,6vw,96px);align-items:flex-start; }
+.cs-layout .star-vt{ flex:1 1 0;max-width:760px; }
+.cs-plate{
+  flex:none;width:clamp(200px,22vw,280px);
+  position:sticky;top:calc(var(--nav-h) + 44px);
+  margin-top:8px;
+}
+.cs-plate svg{ width:100%;display:block; }
+.cs-plate .pk{ font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.18em;text-transform:uppercase;margin-top:12px; }
+.cs-plate .pt{ font:italic 400 13.5px/1.4 'Archivo',sans-serif;color:#55524C;margin-top:5px; }
+@media (max-width:1020px){ .cs-plate{ display:none; } }
