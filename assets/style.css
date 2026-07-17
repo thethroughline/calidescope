@@ -87,6 +87,7 @@ h1,h2,h3{ text-wrap:balance; }
   justify-content:center;
   padding-block:var(--sp-5);
 }
+.fold--start{ justify-content:flex-start; }
 
 /* Snap only where every fold is known to fit the viewport: laptop and up.
    Phones, short windows, and zoomed-in users get normal scrolling. */
@@ -110,10 +111,10 @@ h1,h2,h3{ text-wrap:balance; }
   grid-template-columns:1fr auto 1fr;
   grid-template-rows:auto auto;
   column-gap:clamp(28px,4vw,64px);
-  row-gap:18px;
+  row-gap:30px;
   align-items:center;
   justify-items:center;
-  margin-top:var(--sp-4);
+  margin-top:clamp(40px,7vh,64px);
 }
 .world-viz{
   width:100%;
@@ -136,6 +137,7 @@ h1,h2,h3{ text-wrap:balance; }
   width:100%;
   max-width:400px;
   align-self:start;
+  text-align:center;
 }
 .world-cap .cap-title{ font:600 17px/1.4 'Archivo',sans-serif; }
 .world-cap .cap-sub{ font:400 13.5px/1.5 'Archivo',sans-serif;color:var(--muted);margin-top:4px;text-wrap:balance; }
