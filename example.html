@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A worked example — Calidescope</title>
+<meta name="description" content="One real page — proskauer.com — run through the Promise and Proof disciplines. Expand each block to see the full read.">
+<meta property="og:title" content="A worked example — Calidescope">
+<meta property="og:description" content="What a Calidescope read actually looks like, on a real page.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Jost:ital,wght@0,300;0,400;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=5">
+<style>
+/* ---------- showcase units (design-handoff token system, scoped) ---------- */
+.xu-page{ max-width:1020px;margin-inline:auto;padding-inline:var(--gutter); }
+.xunit{ position:relative;font-family:'Jost',sans-serif;font-weight:300;color:#1F2024; }
+.xunit + .xunit{ margin-top:44px; }
+.xu-inner{ overflow:hidden;position:relative; }
+.xunit:not(.open) .xu-inner{ max-height:330px;cursor:pointer; }
+.xunit:not(.open) .xu-inner::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:150px;
+  background:linear-gradient(to bottom, rgba(250,247,239,0), var(--paper));
+  pointer-events:none;
+}
+.xu-block{ border:1px solid rgba(31,32,36,.16);padding:clamp(22px,4vw,40px) clamp(18px,3.5vw,40px) 42px; }
+.xu-block.on-promise{ background:#E4EAFB; }
+.xu-block.on-proof{ background:#FBE3F1; }
+.xu-kicker{ font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(31,32,36,.55); }
+.xu-headline{ font-style:italic;font-weight:300;font-size:clamp(24px,3.4vw,30px);line-height:1.08;margin-top:10px;max-width:22ch; }
+.xu-expand{
+  position:absolute;left:0;right:0;bottom:14px;z-index:2;display:flex;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:#1F2024;
+}
+.xunit.open .xu-expand{ display:none; }
+.xu-expand span{ background:var(--paper);border:1px solid #1F2024;padding:6px 12px; }
+.xu-close{
+  display:none;position:absolute;top:14px;right:14px;z-index:3;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  background:#1F2024;color:#FBF8F1;border:1px solid #1F2024;padding:5px 10px;cursor:pointer;
+}
+.xunit.open .xu-close{ display:block; }
+.xu-card{ background:#FBF8F1;border:1px solid rgba(31,32,36,.16);padding:24px;margin-top:26px; }
+.xu-note{ font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;color:#B08D4C;margin-top:16px; }
+.xu-card a, .xu-block a{ color:inherit;text-decoration:underline; }
+.xu-block a:hover{ color:#1E40FF; }
+
+/* minto tree */
+.m-btn{ font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;cursor:pointer;border:1px solid rgba(31,32,36,.3);background:transparent;color:rgba(31,32,36,.6); }
+.m-btn.on{ border-color:#1F2024;background:#1F2024;color:#FBF8F1; }
+.m-trees{ display:flex;gap:22px;margin-top:20px;align-items:flex-start; }
+.m-tree{ flex:1;min-width:0; }
+.m-tree-label{ font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:rgba(31,32,36,.55);display:flex;align-items:center;gap:8px;margin-bottom:12px; }
+.m-gov{ border:1.5px solid #1F4E79;background:#F1ECDF;padding:11px 13px;text-align:center;max-width:78%;margin:0 auto; }
+.m-gov .k{ font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.13em;text-transform:uppercase;color:#1F4E79; }
+.m-gov .t{ font-style:italic;font-size:13.5px;line-height:1.3;margin-top:5px; }
+.m-stub{ width:1px;height:12px;background:rgba(31,32,36,.16);margin:0 auto; }
+.m-rule{ height:1px;background:rgba(31,32,36,.16);width:66%;margin:0 auto; }
+.m-pillars{ display:flex;gap:10px; }
+.m-pcol{ flex:1;display:flex;flex-direction:column;min-width:0; }
+.m-pill{ border:1.5px solid rgba(31,32,36,.16);background:#F1ECDF;padding:9px 8px;text-align:center; }
+.m-pill .k{ font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:rgba(31,32,36,.55); }
+.m-pill .t{ font-size:12px;line-height:1.25;margin:5px 0 6px; }
+.m-pill .tag{ font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase; }
+.m-ev{ margin-top:8px;border:1px solid rgba(31,32,36,.16);background:#F1ECDF;padding:8px 9px;font-size:10.5px;line-height:1.35;color:rgba(31,32,36,.55);text-align:center; }
+.m-ev .k{ font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:3px; }
+.m-miss{ margin-top:8px;border:1px dashed #B4553A;padding:8px 9px;font-size:10.5px;line-height:1.35;color:#B4553A;text-align:center; }
+/* state: current vs recommended */
+.minto.mode-current .p-weak{ border-color:#B4553A; }
+.minto.mode-current .p-weak .tag{ color:#B4553A; }
+.minto.mode-current .ev-added{ display:none; }
+.minto.mode-recommended .p-weak{ border-color:#5E7D5A; }
+.minto.mode-recommended .p-weak .tag{ color:#5E7D5A; }
+.minto.mode-recommended .ev-missing{ display:none; }
+.minto:not(.show-comp) .m-tree--comp{ display:none; }
+
+/* move card */
+.xu-move{ background:#FBF8F1;border:1px solid rgba(31,32,36,.16);border-left:3px solid #B08D4C;padding:22px 24px;margin-top:20px; }
+.mv-meta{ display:flex;gap:12px;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(31,32,36,.55);flex-wrap:wrap; }
+.mv-chip{ background:#B08D4C;color:#FBF8F1;padding:2px 7px;border-radius:2px;letter-spacing:.1em; }
+.mv-finding{ font-style:italic;font-size:18px;line-height:1.35;margin:13px 0 16px;max-width:52ch; }
+.mv-tris{ display:grid;grid-template-columns:1fr 26px 1fr;align-items:stretch; }
+.mv-tri{ background:#232428;padding:14px 12px 8px; }
+.mv-tri .k{ font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(241,236,223,.5); }
+.mv-arrow{ display:flex;align-items:center;justify-content:center;color:#B08D4C;font-size:18px; }
+.mv-verbatim{ background:#F1ECDF;border-left:3px solid #B08D4C;padding:12px 15px;margin-top:14px;font-size:13.5px; }
+.mv-verbatim .k{ font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(31,32,36,.55); }
+.mv-row{ display:flex;gap:10px;align-items:baseline;margin-top:13px;font-size:13.5px; }
+.mv-row .k{ font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#B08D4C;white-space:nowrap; }
+
+/* proof skeleton compare */
+.sk-legend{ display:flex;gap:18px;flex-wrap:wrap;align-items:center; }
+.sk-key{ display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(31,32,36,.55); }
+.sk-key i{ width:11px;height:11px;display:inline-block; }
+.sk-grid{ display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px; }
+.sk-col-label{ font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(31,32,36,.55);margin-bottom:10px;display:flex;align-items:center;gap:8px; }
+.sk-win{ background:#FBF8F1;border:1px solid rgba(31,32,36,.16); }
+.sk-chrome{ display:flex;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid rgba(31,32,36,.16); }
+.sk-chrome .u{ font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(31,32,36,.55);letter-spacing:.06em; }
+.sk-rows{ padding:14px;display:flex;flex-direction:column;gap:9px; }
+.sk-row{ border:1px solid rgba(31,32,36,.16);background:#F1ECDF;padding:10px 12px;cursor:pointer; }
+.sk-row:hover{ background:#F6F1E4; }
+.sk-row.miss{ border:1.5px dashed #B4553A;background:transparent; }
+.sk-row .lbl{ font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(31,32,36,.55); }
+.sk-row .bar{ height:6px;background:rgba(31,32,36,.10);margin-top:8px; }
+.sk-row .note{ font-family:'JetBrains Mono',monospace;font-size:10.5px;margin-top:8px;letter-spacing:.02em;color:#B08D4C; }
+.sk-row .reveal{ display:none;margin-top:10px;border-top:1px solid rgba(31,32,36,.16);padding-top:9px; }
+.sk-row.open .reveal{ display:block; }
+.sk-row .maps{ font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:#B08D4C; }
+.sk-row .quote{ font-style:italic;font-size:13.5px;line-height:1.4;margin-top:5px; }
+
+/* five beats */
+.beats{ display:flex;gap:11px;margin-top:16px;flex-wrap:wrap; }
+.beat{ flex:1;min-width:150px;background:#F1ECDF;border:1px solid rgba(31,32,36,.16);padding:14px 14px 16px; }
+.beat .n{ font-family:'JetBrains Mono',monospace;font-size:10px;color:#B08D4C;letter-spacing:.1em; }
+.beat .chip{ font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;border-radius:2px;background:rgba(31,32,36,.1); }
+.beat .t{ font-style:italic;font-size:12.5px;line-height:1.4; }
+.beat.missing{ background:transparent;border:1.5px dashed #B4553A; }
+.beat.missing .t{ color:#B4553A; }
+.beat .chip-wrap{ margin:8px 0 10px; }
+
+/* atomics */
+.atoms{ display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:16px; }
+.atom{ background:#F1ECDF;border:1px solid rgba(31,32,36,.16);padding:16px; }
+.atom .k{ font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#B08D4C; }
+.atom .t{ font-style:italic;font-size:15px;margin:6px 0 12px; }
+.atom p{ font-size:12px;color:rgba(31,32,36,.55);margin:12px 0 0; }
+.a-row{ display:flex;align-items:center;gap:9px;font-size:12px; }
+.a-key{ font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;width:38px;color:rgba(31,32,36,.55);flex:none; }
+.a-arrow{ color:#B08D4C;font-size:14px;margin:4px 0 4px 47px; }
+
+/* responsive stacking */
+@media (max-width:860px){
+  .m-trees{ flex-direction:column; }
+  .sk-grid{ grid-template-columns:1fr; }
+}
+@media (max-width:700px){
+  .mv-tris{ grid-template-columns:1fr; }
+  .mv-arrow{ transform:rotate(90deg);padding:6px 0; }
+}
+@media (max-width:560px){
+  .m-pillars{ flex-direction:column; }
+  .m-pcol > .m-stub{ display:none; }
+  .m-rule{ display:none; }
+}
+@media (prefers-reduced-motion: reduce){
+  .xu-inner{ transition:none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="wrap">
+    <a href="index.html" class="nav-brand">
+      <svg width="24" height="24" viewBox="-100 -100 200 200">
+        <circle cx="0" cy="0" r="92" fill="none" stroke="#1F2024" stroke-width="7"></circle>
+        <line x1="-92" y1="0" x2="92" y2="0" stroke="#1F2024" stroke-width="6"></line>
+        <line x1="-46" y1="-79.7" x2="46" y2="79.7" stroke="#1F2024" stroke-width="6"></line>
+        <line x1="46" y1="-79.7" x2="-46" y2="79.7" stroke="#1F2024" stroke-width="6"></line>
+        <circle cx="0" cy="0" r="12" fill="#1F2024"></circle>
+      </svg>
+      <span>Calidescope</span>
+    </a>
+    <div class="nav-links">
+      <a href="promise.html">Promise</a>
+      <a href="proof.html">Proof</a>
+      <a href="case-studies.html">Case Studies</a>
+      <a href="contact.html" class="is-contact">Contact</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap" style="padding-top:clamp(48px,8vh,80px);padding-bottom:24px">
+  <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#6E6B65;margin:0 0 12px">A WORKED EXAMPLE · PROSKAUER ROSE LLP</div>
+  <div style="font:600 clamp(28px,4vw,40px)/1.15 'Archivo',sans-serif;letter-spacing:-.02em;max-width:720px">What a read actually looks like.</div>
+  <div style="font:400 17px/1.6 'Archivo',sans-serif;color:#4A4740;margin:16px 0 0;max-width:620px">One real page — proskauer.com — run through both disciplines. Expand each block to see the full read.</div>
+</div>
+
+<div class="xu-page" style="padding-top:16px;padding-bottom:72px">
+
+  <!-- ============ PROMISE UNIT ============ -->
+  <div class="xunit" id="promise">
+    <button class="xu-close" type="button" data-close>Collapse ↑</button>
+    <div class="xu-inner">
+      <div class="xu-block on-promise">
+        <div class="xu-kicker">Promise block · anchor + support · § 02</div>
+        <div class="xu-headline">How you promise decides who chooses you.</div>
+
+        <!-- Card A · Minto tree -->
+        <div class="xu-card minto mode-current" id="minto">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#B08D4C">The argument as a tree · Minto</span>
+            <span style="flex:1"></span>
+            <button class="m-btn on" type="button" data-mode="current">Current</button>
+            <button class="m-btn" type="button" data-mode="recommended">Recommended</button>
+            <button class="m-btn" type="button" data-comp>+ Competitor</button>
+          </div>
+
+          <div class="m-trees">
+            <div class="m-tree">
+              <div class="m-tree-label"><span style="width:8px;height:8px;border-radius:50%;background:rgba(31,32,36,.55)"></span> Proskauer Rose LLP</div>
+              <div class="m-gov"><div class="k">Governing thought</div><div class="t">Proskauer is the firm to have beside you when the stakes are high.</div></div>
+              <div class="m-stub"></div>
+              <div class="m-rule"></div>
+              <div class="m-pillars">
+                <div class="m-pcol"><div class="m-stub"></div>
+                  <div class="m-pill p-weak"><div class="k">Pillar 01</div><div class="t">Commercial and human intelligence</div><span class="tag p-weak-tag" data-tag></span></div>
+                  <div class="m-miss ev-missing">No evidence on the page</div>
+                  <div class="m-ev ev-added"><span class="k" style="color:#5E7D5A">Evidence · added</span>Grifols $5.3B cross-border facility — the deal cite recast as a two-sentence reasoned proof</div>
+                </div>
+                <div class="m-pcol"><div class="m-stub"></div>
+                  <div class="m-pill p-weak"><div class="k">Pillar 02</div><div class="t">Cross-discipline team integration</div><span class="tag p-weak-tag" data-tag></span></div>
+                  <div class="m-miss ev-missing">No evidence on the page</div>
+                  <div class="m-ev ev-added"><span class="k" style="color:#5E7D5A">Evidence · added</span>Band 1 Fund Formation + Legal 500-listed NAV facilities, fielded as one private-funds team</div>
+                </div>
+                <div class="m-pcol"><div class="m-stub"></div>
+                  <div class="m-pill" style="border-color:#1F4E79"><div class="k">Pillar 03</div><div class="t">Recognised depth of experience</div><span class="tag" style="color:#1F4E79">Data</span></div>
+                  <div class="m-ev"><span class="k">Evidence</span>Top rankings, Chambers USA 2026; Maud Manon named Lawyer of the Year — France, IFLR Europe 2026</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="m-tree m-tree--comp">
+              <div class="m-tree-label"><span style="width:8px;height:8px;border-radius:50%;background:#1F4E79"></span> Arnold &amp; Porter · same scoring</div>
+              <div class="m-gov"><div class="k">Governing thought</div><div class="t">The firm to call for complex, high-stakes work — insider depth, commitment, recognized excellence.</div></div>
+              <div class="m-stub"></div>
+              <div class="m-rule"></div>
+              <div class="m-pillars">
+                <div class="m-pcol"><div class="m-stub"></div>
+                  <div class="m-pill" style="border:1.5px solid rgba(31,32,36,.16);border-left:3px solid #5E7D5A"><div class="k">Pillar 01</div><div class="t">Deep government-insider capability</div><span class="tag" style="color:#5E7D5A">Evidence</span></div>
+                  <div class="m-ev">Former senior U.S. &amp; European officials; former prosecutors in the litigation practice</div>
+                </div>
+                <div class="m-pcol"><div class="m-stub"></div>
+                  <div class="m-pill" style="border-color:#1F4E79"><div class="k">Pillar 02</div><div class="t">Proven pro bono commitment</div><span class="tag" style="color:#1F4E79">Data</span></div>
+                  <div class="m-ev">More than 100,000 hours of pro bono work in 2024</div>
+                </div>
+                <div class="m-pcol"><div class="m-stub"></div>
+                  <div class="m-pill" style="border-color:#1F4E79"><div class="k">Pillar 03</div><div class="t">Independent market recognition</div><span class="tag" style="color:#1F4E79">Data</span></div>
+                  <div class="m-ev">American Lawyer 2025 A-List (top 10); 173 ranked by Chambers 2026</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="xu-note">↳ Interaction · current → recommended → reveal one competitor, same six frameworks, same scoring.</div>
+        </div>
+
+        <!-- Card B · Move card -->
+        <div class="xu-move">
+          <div class="mv-meta"><span>Move 01</span><span>Aristotle ↗</span><span class="mv-chip">Differentiated</span></div>
+          <div class="mv-finding">The page runs almost entirely on credibility and emotion. Visitors who arrive with a specific legal problem need evidence of capability before they feel anything.</div>
+
+          <div class="mv-tris">
+            <div class="mv-tri">
+              <div class="k">The appeal mix · current</div>
+              <svg viewBox="0 0 220 156" style="width:100%;display:block;margin-top:6px">
+                <path d="M110 30 L30 112 L190 112 Z" fill="none" stroke="#F1ECDF" stroke-width="1.6"></path>
+                <circle cx="110" cy="30" r="3.4" fill="#F1ECDF"></circle><circle cx="30" cy="112" r="3.4" fill="#F1ECDF"></circle><circle cx="190" cy="112" r="3.4" fill="#F1ECDF"></circle>
+                <circle cx="91" cy="88" r="5" fill="none" stroke="rgba(241,236,223,.45)" stroke-width="1.2" stroke-dasharray="2.5 3"></circle>
+                <circle cx="78" cy="103" r="6" fill="#FFC24D" stroke="#FBF8F1" stroke-width="1.4"></circle>
+                <text x="110" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.2" fill="rgba(241,236,223,.85)">LOGIC · 10</text>
+                <text x="8" y="130" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.2" fill="rgba(241,236,223,.85)">CREDIBILITY · 65</text>
+                <text x="212" y="130" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.2" fill="rgba(241,236,223,.85)">FEELING · 25</text>
+                <text x="110" y="149" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" letter-spacing="1" fill="rgba(241,236,223,.4)">FIELD MEDIAN · L 30 · C 50 · P 25</text>
+              </svg>
+            </div>
+            <div class="mv-arrow">→</div>
+            <div class="mv-tri">
+              <div class="k">The appeal mix · proposed</div>
+              <svg viewBox="0 0 220 156" style="width:100%;display:block;margin-top:6px">
+                <path d="M110 30 L30 112 L190 112 Z" fill="none" stroke="#F1ECDF" stroke-width="1.6"></path>
+                <circle cx="110" cy="30" r="3.4" fill="#F1ECDF"></circle><circle cx="30" cy="112" r="3.4" fill="#F1ECDF"></circle><circle cx="190" cy="112" r="3.4" fill="#F1ECDF"></circle>
+                <circle cx="91" cy="88" r="5" fill="none" stroke="rgba(241,236,223,.45)" stroke-width="1.2" stroke-dasharray="2.5 3"></circle>
+                <circle cx="78" cy="103" r="6.5" fill="none" stroke="rgba(207,164,91,.5)" stroke-width="1.3" stroke-dasharray="2.5 3"></circle>
+                <line x1="72" y1="98" x2="66" y2="87" stroke="rgba(255,201,90,.7)" stroke-width="1.4"></line>
+                <circle cx="64" cy="83" r="6" fill="#FFC24D" stroke="#FBF8F1" stroke-width="1.4"></circle>
+                <text x="110" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.2" fill="rgba(241,236,223,.85)">LOGIC · 22</text>
+                <text x="8" y="130" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.2" fill="rgba(241,236,223,.85)">CREDIBILITY · 62</text>
+                <text x="212" y="130" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.2" fill="rgba(241,236,223,.85)">FEELING · 16</text>
+                <text x="110" y="149" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" letter-spacing="1" fill="rgba(207,164,91,.9)">L +12 · C −3 · P −9</text>
+              </svg>
+            </div>
+          </div>
+
+          <div class="mv-verbatim">
+            <div class="k">Verbatim from the page</div>
+            <span style="font-style:italic">“Proskauer Advises Grifols on $5.3 Billion Cross-border Syndicated Loan Facility.”</span>
+            <div style="margin-top:6px"><a href="https://www.proskauer.com" target="_blank" rel="noopener noreferrer">— source: proskauer.com/practices ↗</a></div>
+          </div>
+          <div class="mv-row"><span class="k">Where it lands ·</span><span>the “Why Proskauer?” section</span></div>
+          <div class="mv-row"><span class="k">Why it works ·</span><span>one deal cite turned into a two-sentence reasoned proof adds ~12 pts of perceived logic without spending a credibility signal.</span></div>
+        </div>
+
+        <div style="margin-top:20px;font-size:15px"><a href="#proof" data-open-proof>See what that looks like — the full read ↗</a></div>
+      </div>
+    </div>
+    <div class="xu-expand"><span>Expand ↓</span></div>
+  </div>
+
+  <!-- ============ PROOF UNIT ============ -->
+  <div class="xunit" id="proof">
+    <button class="xu-close" type="button" data-close>Collapse ↑</button>
+    <div class="xu-inner">
+      <div class="xu-block on-proof">
+        <div class="xu-kicker">Proof block · anchor + support · § 02</div>
+        <div class="xu-headline">How you prove decides who keeps choosing you.</div>
+
+        <!-- Card A · skeleton compare -->
+        <div class="xu-card">
+          <div class="sk-legend">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#B08D4C">The page, current → proposed · not the page, its bones</span>
+            <span style="flex:1"></span>
+            <span class="sk-key"><i style="background:#5E7D5A"></i> Holds</span>
+            <span class="sk-key"><i style="background:#B4553A"></i> Needs a change</span>
+            <span class="sk-key"><i style="background:#1F4E79"></i> Added / replaced</span>
+          </div>
+          <div class="sk-grid">
+            <div>
+              <div class="sk-col-label"><span style="width:8px;height:8px;border-radius:50%;background:rgba(31,32,36,.55)"></span> Current · what's on the page</div>
+              <div class="sk-win">
+                <div class="sk-chrome"><span style="display:flex;gap:5px"><i style="width:8px;height:8px;border-radius:50%;background:rgba(31,32,36,.18)"></i><i style="width:8px;height:8px;border-radius:50%;background:rgba(31,32,36,.18)"></i><i style="width:8px;height:8px;border-radius:50%;background:rgba(31,32,36,.18)"></i></span><span class="u">www.proskauer.com</span></div>
+                <div class="sk-rows" data-col="cur"></div>
+              </div>
+            </div>
+            <div>
+              <div class="sk-col-label"><span style="width:8px;height:8px;border-radius:50%;background:#1F4E79"></span> Proposed · how we'd rebuild it</div>
+              <div class="sk-win">
+                <div class="sk-chrome"><span style="display:flex;gap:5px"><i style="width:8px;height:8px;border-radius:50%;background:rgba(31,32,36,.18)"></i><i style="width:8px;height:8px;border-radius:50%;background:rgba(31,32,36,.18)"></i><i style="width:8px;height:8px;border-radius:50%;background:rgba(31,32,36,.18)"></i></span><span class="u">www.proskauer.com</span></div>
+                <div class="sk-rows" data-col="prop"></div>
+              </div>
+            </div>
+          </div>
+          <div class="xu-note">↳ Interaction · click any beat to reveal its verbatim text and the beat it maps to.</div>
+        </div>
+
+        <!-- Card B · five beats -->
+        <div class="xu-card">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#B08D4C">The story · five beats</span>
+          <div class="beats">
+            <div class="beat"><span class="n">01</span><div class="chip-wrap"><span class="chip">Setup</span></div><div class="t">Global counsel for the world's leading private funds.</div></div>
+            <div class="beat"><span class="n">02</span><div class="chip-wrap"><span class="chip" style="background:#E4EAFB;color:#1F4E79">Claim</span></div><div class="t">Band 1 for Fund Formation — the tier buyers screen on.</div></div>
+            <div class="beat"><span class="n">03</span><div class="chip-wrap"><span class="chip" style="background:rgba(176,141,76,.18);color:#B08D4C">Credibility</span></div><div class="t">Advised on $5.3B Grifols cross-border facility.</div></div>
+            <div class="beat"><span class="n">04</span><div class="chip-wrap"><span class="chip" style="background:rgba(94,125,90,.2);color:#5E7D5A">Proof</span></div><div class="t">NAV facilities practice — Legal 500 listed, 2025.</div></div>
+            <div class="beat missing"><span class="n">—</span><div class="chip-wrap"><span class="chip" style="background:transparent;border:1px solid #B4553A;color:#B4553A">Missing · Payoff</span></div><div class="t">The page doesn't carry this beat.</div></div>
+          </div>
+        </div>
+
+        <!-- Card C · atomics -->
+        <div class="xu-card">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#B08D4C">Three atomic before → afters</span>
+          <div class="atoms">
+            <div class="atom">
+              <div class="k">Structural</div>
+              <div class="t">Move the claim above the credentials.</div>
+              <div class="a-row"><span class="a-key">Now</span><span style="display:flex;flex-direction:column;gap:4px;width:74px"><span style="height:11px;border:1px solid rgba(31,32,36,.16);background:#FBF8F1"></span><span style="height:11px;border:1px solid rgba(31,32,36,.16);background:#FBF8F1;font-size:8px;font-family:'JetBrains Mono',monospace;padding-left:3px;color:rgba(31,32,36,.55)">cred</span><span style="height:11px;border:1px solid #1F4E79;background:#E4EAFB;font-size:8px;font-family:'JetBrains Mono',monospace;padding-left:3px;color:#1F4E79">claim</span></span></div>
+              <div class="a-arrow">↓</div>
+              <div class="a-row"><span class="a-key">Rec</span><span style="display:flex;flex-direction:column;gap:4px;width:74px"><span style="height:11px;border:1px solid #1F4E79;background:#E4EAFB;font-size:8px;font-family:'JetBrains Mono',monospace;padding-left:3px;color:#1F4E79">claim</span><span style="height:11px;border:1px solid rgba(31,32,36,.16);background:#FBF8F1;font-size:8px;font-family:'JetBrains Mono',monospace;padding-left:3px;color:rgba(31,32,36,.55)">cred</span><span style="height:11px;border:1px solid rgba(31,32,36,.16);background:#FBF8F1"></span></span></div>
+              <p>The buyer meets the claim before the proof, not after.</p>
+            </div>
+            <div class="atom">
+              <div class="k">Semantic · Hoey</div>
+              <div class="t">Let one anchor word travel.</div>
+              <div class="a-row"><span class="a-key">Now</span><span style="color:#B4553A;text-decoration:line-through">conversion → action → engagement</span></div>
+              <div class="a-arrow">↓</div>
+              <div class="a-row"><span class="a-key">Rec</span><span style="color:#5E7D5A">conversion · conversion · conversion</span></div>
+              <p>One metric, named the same word on every surface.</p>
+            </div>
+            <div class="atom">
+              <div class="k">Appeals · Aristotle</div>
+              <div class="t">Lift logic without spending trust.</div>
+              <div style="background:#232428;padding:10px 8px 4px;margin-top:4px">
+                <svg viewBox="0 0 220 156" style="width:100%;display:block">
+                  <path d="M110 30 L30 112 L190 112 Z" fill="none" stroke="#F1ECDF" stroke-width="1.6"></path>
+                  <circle cx="110" cy="30" r="3.4" fill="#F1ECDF"></circle><circle cx="30" cy="112" r="3.4" fill="#F1ECDF"></circle><circle cx="190" cy="112" r="3.4" fill="#F1ECDF"></circle>
+                  <circle cx="91" cy="88" r="5" fill="none" stroke="rgba(241,236,223,.45)" stroke-width="1.2" stroke-dasharray="2.5 3"></circle>
+                  <circle cx="78" cy="103" r="6.5" fill="none" stroke="rgba(207,164,91,.5)" stroke-width="1.3" stroke-dasharray="2.5 3"></circle>
+                  <line x1="72" y1="98" x2="66" y2="87" stroke="rgba(255,201,90,.7)" stroke-width="1.4"></line>
+                  <circle cx="64" cy="83" r="5.5" fill="#FFC24D" stroke="#FBF8F1" stroke-width="1.4"></circle>
+                  <text x="110" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.2" fill="rgba(241,236,223,.85)">LOGIC 10→22</text>
+                  <text x="8" y="130" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1" fill="rgba(241,236,223,.85)">CRED. 65→62</text>
+                  <text x="212" y="130" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1" fill="rgba(241,236,223,.85)">FEEL. 25→16</text>
+                  <text x="110" y="149" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" letter-spacing="1" fill="rgba(241,236,223,.4)">FIELD MEDIAN · L 30 · C 50 · P 25</text>
+                </svg>
+              </div>
+              <p>The same appeal-mix triangle the tool ships — reused here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="xu-expand"><span>Expand ↓</span></div>
+  </div>
+
+</div>
+
+<div class="site-footer">
+  <div class="wrap">
+    <div>
+      <div class="brand">Calidescope LLC</div>
+      <div class="tagline">Promise to Proof. The same discipline, both sides.</div>
+      <div class="links">
+        <a href="index.html">HOME</a>
+        <a href="promise.html">PROMISE</a>
+        <a href="proof.html">PROOF</a>
+        <a href="case-studies.html">CASE STUDIES</a>
+        <a href="contact.html">CONTACT</a>
+      </div>
+    </div>
+    <a href="contact.html" class="btn-primary">Start a conversation &rarr;</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- proof skeleton rows (data lifted from the design handoff) ---------- */
+  var CUR = [
+    {label:'Hero', accent:'#5E7D5A', bars:['100%','82%'], maps:'Beat 01 · Setup', quote:'“Global counsel for the world’s leading private funds.”'},
+    {label:'Sub-hero', accent:'#5E7D5A', bars:['82%'], maps:'Beat 01 · Setup, continued', quote:'“Clients turn to Proskauer when the outcome matters most.”'},
+    {label:'Problem', miss:true, lc:'#B4553A', maps:'Missing beat', quote:'No verbatim — the page never names the reader’s problem.'},
+    {label:'Claim', accent:'#5E7D5A', bars:['82%'], maps:'Beat 02 · Claim', quote:'“Band 1 for Fund Formation — the tier buyers screen on.”'},
+    {label:'Proof · 3 pillars', accent:'#B4553A', bars:['100%'], note:'2 pillars rest on unsupported claims', nc:'#B4553A', maps:'Beat 03 · Credibility', quote:'“Proskauer Advises Grifols on $5.3 Billion Cross-border Syndicated Loan Facility.”'},
+    {label:'Appeals', accent:'#5E7D5A', bars:['82%'], maps:'Appeal mix · L 10 · C 65 · E 25', quote:'The page leans almost entirely on credibility and emotion.'},
+    {label:'Close · footer', accent:'#5E7D5A', bars:['64%'], maps:'Close', quote:'“Contact our private funds group.”'}
+  ];
+  var PROP = [
+    {label:'Hero', accent:'#5E7D5A', bars:['100%','82%'], maps:'Beat 01 · Setup · holds', quote:'“Global counsel for the world’s leading private funds.”'},
+    {label:'Problem · added', accent:'#1F4E79', lc:'#1F4E79', bars:['82%'], note:'The pain, before the claim arrives', nc:'#1F4E79', maps:'Beat · Problem · proposed', quote:'“When a $5B facility crosses borders, generalist counsel becomes the risk.”'},
+    {label:'Claim', accent:'#5E7D5A', bars:['82%'], maps:'Beat 02 · Claim · holds', quote:'“Band 1 for Fund Formation — the tier buyers screen on.”'},
+    {label:'Proof · 3 pillars', accent:'#B08D4C', bars:['100%'], note:'Weak pillar → a credentialed one', nc:'#B08D4C', maps:'Beat 03 · Credibility · recast', quote:'The Grifols cite becomes a two-sentence reasoned proof — capability shown, not asserted.'},
+    {label:'Appeals · rebalanced', accent:'#1F4E79', lc:'#1F4E79', bars:['82%'], note:'Balance held', nc:'#1F4E79', maps:'Appeal mix · L 22 · C 62 · E 16', quote:'Logic lifted +12 without spending a credibility signal.'},
+    {label:'Close', accent:'#5E7D5A', bars:['64%'], maps:'Close · holds', quote:'“Contact our private funds group.”'}
+  ];
+  function buildRows(data, host){
+    data.forEach(function(d){
+      var row = document.createElement('div');
+      row.className = 'sk-row' + (d.miss ? ' miss' : '');
+      if (!d.miss) row.style.borderLeft = '3px solid ' + d.accent;
+      var html = '<div class="lbl"' + (d.lc ? ' style="color:' + d.lc + '"' : '') + '>' + d.label + '</div>';
+      (d.bars || []).forEach(function(w){ html += '<div class="bar" style="width:' + w + '"></div>'; });
+      if (d.note) html += '<div class="note"' + (d.nc ? ' style="color:' + d.nc + '"' : '') + '>' + d.note + '</div>';
+      html += '<div class="reveal"><div class="maps">' + d.maps + '</div><div class="quote">' + d.quote + '</div></div>';
+      row.innerHTML = html;
+      row.addEventListener('click', function(e){
+        e.stopPropagation();
+        var wasOpen = row.classList.contains('open');
+        host.querySelectorAll('.sk-row.open').forEach(function(r){ r.classList.remove('open'); });
+        if (!wasOpen) row.classList.add('open');
+        syncHeights();
+      });
+      host.appendChild(row);
+    });
+  }
+  buildRows(CUR, document.querySelector('[data-col="cur"]'));
+  buildRows(PROP, document.querySelector('[data-col="prop"]'));
+
+  /* ---------- minto tree toggles ---------- */
+  var minto = document.getElementById('minto');
+  function setTags(){
+    var current = minto.classList.contains('mode-current');
+    minto.querySelectorAll('[data-tag]').forEach(function(t){ t.textContent = current ? 'Claim · unsupported' : 'Evidence · added'; });
+  }
+  setTags();
+  minto.querySelectorAll('[data-mode]').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      minto.classList.toggle('mode-current', btn.dataset.mode === 'current');
+      minto.classList.toggle('mode-recommended', btn.dataset.mode === 'recommended');
+      minto.querySelectorAll('[data-mode]').forEach(function(b){ b.classList.toggle('on', b === btn); });
+      setTags(); syncHeights();
+    });
+  });
+  minto.querySelector('[data-comp]').addEventListener('click', function(e){
+    e.stopPropagation();
+    minto.classList.toggle('show-comp');
+    e.currentTarget.classList.toggle('on', minto.classList.contains('show-comp'));
+    syncHeights();
+  });
+
+  /* ---------- expandable showcase units ---------- */
+  var units = [].slice.call(document.querySelectorAll('.xunit'));
+  var COLLAPSED = 330;
+  function setUnit(unit, open, animate){
+    var inner = unit.querySelector('.xu-inner');
+    var isOpen = unit.classList.contains('open');
+    if (open === isOpen) return;
+    var from = open ? COLLAPSED : inner.scrollHeight;
+    var to = open ? inner.scrollHeight : COLLAPSED;
+    unit.classList.toggle('open', open);
+    if (reduced || animate === false){ inner.style.maxHeight = open ? 'none' : ''; return; }
+    inner.style.maxHeight = from + 'px';
+    inner.style.transition = 'max-height .42s cubic-bezier(.25,1,.5,1)';
+    requestAnimationFrame(function(){ inner.style.maxHeight = to + 'px'; });
+    inner.addEventListener('transitionend', function h(){
+      inner.removeEventListener('transitionend', h);
+      inner.style.transition = '';
+      inner.style.maxHeight = unit.classList.contains('open') ? 'none' : '';
+    });
+  }
+  function openOnly(target, animate){
+    units.forEach(function(u){ setUnit(u, u === target, animate); });
+    if (target) history.replaceState(null, '', '#' + target.id);
+    else history.replaceState(null, '', location.pathname);
+  }
+  function syncHeights(){
+    units.forEach(function(u){
+      if (u.classList.contains('open')){
+        var inner = u.querySelector('.xu-inner');
+        if (inner.style.maxHeight && inner.style.maxHeight !== 'none') inner.style.maxHeight = inner.scrollHeight + 'px';
+      }
+    });
+  }
+  units.forEach(function(unit){
+    unit.querySelector('.xu-inner').addEventListener('click', function(){
+      if (!unit.classList.contains('open')) { openOnly(unit); unit.scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block:'start'}); }
+    });
+    unit.querySelector('[data-close]').addEventListener('click', function(e){
+      e.stopPropagation(); openOnly(null);
+      unit.scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block:'nearest'});
+    });
+  });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') openOnly(null); });
+  var link = document.querySelector('[data-open-proof]');
+  if (link) link.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    var proof = document.getElementById('proof');
+    openOnly(proof);
+    proof.scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block:'start'});
+  });
+  /* deep links: #promise / #proof open expanded */
+  var initial = location.hash === '#promise' ? units[0] : location.hash === '#proof' ? units[1] : null;
+  if (initial){ openOnly(initial, false); setTimeout(function(){ initial.scrollIntoView({block:'start'}); }, 0); }
+})();
+</script>
+
+</body>
+</html>
