@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>A worked example — Calidescope</title>
-<meta name="description" content="One real page — proskauer.com — run through the Promise and Proof disciplines. Expand each block to see the full read.">
+<meta name="description" content="One real page — proskauer.com — run through the Promise discipline. Expand the block to see the full read.">
 <meta property="og:title" content="A worked example — Calidescope">
 <meta property="og:description" content="What a Calidescope read actually looks like, on a real page.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -89,51 +89,9 @@
 .mv-row{ display:flex;gap:10px;align-items:baseline;margin-top:13px;font-size:13.5px; }
 .mv-row .k{ font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#B08D4C;white-space:nowrap; }
 
-/* proof skeleton compare */
-.sk-legend{ display:flex;gap:18px;flex-wrap:wrap;align-items:center; }
-.sk-key{ display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(31,32,36,.55); }
-.sk-key i{ width:11px;height:11px;display:inline-block; }
-.sk-grid{ display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px; }
-.sk-col-label{ font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(31,32,36,.55);margin-bottom:10px;display:flex;align-items:center;gap:8px; }
-.sk-win{ background:#FBF8F1;border:1px solid rgba(31,32,36,.16); }
-.sk-chrome{ display:flex;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid rgba(31,32,36,.16); }
-.sk-chrome .u{ font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(31,32,36,.55);letter-spacing:.06em; }
-.sk-rows{ padding:14px;display:flex;flex-direction:column;gap:9px; }
-.sk-row{ border:1px solid rgba(31,32,36,.16);background:#F1ECDF;padding:10px 12px;cursor:pointer; }
-.sk-row:hover{ background:#F6F1E4; }
-.sk-row.miss{ border:1.5px dashed #B4553A;background:transparent; }
-.sk-row .lbl{ font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(31,32,36,.55); }
-.sk-row .bar{ height:6px;background:rgba(31,32,36,.10);margin-top:8px; }
-.sk-row .note{ font-family:'JetBrains Mono',monospace;font-size:10.5px;margin-top:8px;letter-spacing:.02em;color:#B08D4C; }
-.sk-row .reveal{ display:none;margin-top:10px;border-top:1px solid rgba(31,32,36,.16);padding-top:9px; }
-.sk-row.open .reveal{ display:block; }
-.sk-row .maps{ font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:#B08D4C; }
-.sk-row .quote{ font-style:italic;font-size:13.5px;line-height:1.4;margin-top:5px; }
-
-/* five beats */
-.beats{ display:flex;gap:11px;margin-top:16px;flex-wrap:wrap; }
-.beat{ flex:1;min-width:150px;background:#F1ECDF;border:1px solid rgba(31,32,36,.16);padding:14px 14px 16px; }
-.beat .n{ font-family:'JetBrains Mono',monospace;font-size:10px;color:#B08D4C;letter-spacing:.1em; }
-.beat .chip{ font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;border-radius:2px;background:rgba(31,32,36,.1); }
-.beat .t{ font-style:italic;font-size:12.5px;line-height:1.4; }
-.beat.missing{ background:transparent;border:1.5px dashed #B4553A; }
-.beat.missing .t{ color:#B4553A; }
-.beat .chip-wrap{ margin:8px 0 10px; }
-
-/* atomics */
-.atoms{ display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:16px; }
-.atom{ background:#F1ECDF;border:1px solid rgba(31,32,36,.16);padding:16px; }
-.atom .k{ font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#B08D4C; }
-.atom .t{ font-style:italic;font-size:15px;margin:6px 0 12px; }
-.atom p{ font-size:12px;color:rgba(31,32,36,.55);margin:12px 0 0; }
-.a-row{ display:flex;align-items:center;gap:9px;font-size:12px; }
-.a-key{ font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;width:38px;color:rgba(31,32,36,.55);flex:none; }
-.a-arrow{ color:#B08D4C;font-size:14px;margin:4px 0 4px 47px; }
-
 /* responsive stacking */
 @media (max-width:860px){
   .m-trees{ flex-direction:column; }
-  .sk-grid{ grid-template-columns:1fr; }
 }
 @media (max-width:700px){
   .mv-tris{ grid-template-columns:1fr; }
@@ -175,7 +133,7 @@
 <div class="wrap" style="padding-top:clamp(48px,8vh,80px);padding-bottom:24px">
   <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#6E6B65;margin:0 0 12px">A WORKED EXAMPLE · PROSKAUER ROSE LLP</div>
   <div style="font:600 clamp(28px,4vw,40px)/1.15 'Archivo',sans-serif;letter-spacing:-.02em;max-width:720px">What a read actually looks like.</div>
-  <div style="font:400 17px/1.6 'Archivo',sans-serif;color:#4A4740;margin:16px 0 0;max-width:620px">One real page — proskauer.com — run through both disciplines. Expand each block to see the full read.</div>
+  <div style="font:400 17px/1.6 'Archivo',sans-serif;color:#4A4740;margin:16px 0 0;max-width:620px">One real page — proskauer.com — run through the Promise discipline. Expand the block to see the full read.</div>
 </div>
 
 <div class="xu-page" style="padding-top:16px;padding-bottom:72px">
@@ -292,101 +250,6 @@
           <div class="mv-row"><span class="k">Why it works ·</span><span>one deal cite turned into a two-sentence reasoned proof adds ~12 pts of perceived logic without spending a credibility signal.</span></div>
         </div>
 
-        <div style="margin-top:20px;font-size:15px"><a href="#proof" data-open-proof>See what that looks like — the full read ↗</a></div>
-      </div>
-    </div>
-    <div class="xu-expand"><span>Expand ↓</span></div>
-  </div>
-
-  <!-- ============ PROOF UNIT ============ -->
-  <div class="xunit" id="proof">
-    <button class="xu-close" type="button" data-close>Collapse ↑</button>
-    <div class="xu-inner">
-      <div class="xu-block on-proof">
-        <div class="xu-kicker">Proof block · anchor + support · § 02</div>
-        <div class="xu-headline">How you prove decides who keeps choosing you.</div>
-
-        <!-- Card A · skeleton compare -->
-        <div class="xu-card">
-          <div class="sk-legend">
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#B08D4C">The page, current → proposed · not the page, its bones</span>
-            <span style="flex:1"></span>
-            <span class="sk-key"><i style="background:#5E7D5A"></i> Holds</span>
-            <span class="sk-key"><i style="background:#B4553A"></i> Needs a change</span>
-            <span class="sk-key"><i style="background:#1F4E79"></i> Added / replaced</span>
-          </div>
-          <div class="sk-grid">
-            <div>
-              <div class="sk-col-label"><span style="width:8px;height:8px;border-radius:50%;background:rgba(31,32,36,.55)"></span> Current · what's on the page</div>
-              <div class="sk-win">
-                <div class="sk-chrome"><span style="display:flex;gap:5px"><i style="width:8px;height:8px;border-radius:50%;background:rgba(31,32,36,.18)"></i><i style="width:8px;height:8px;border-radius:50%;background:rgba(31,32,36,.18)"></i><i style="width:8px;height:8px;border-radius:50%;background:rgba(31,32,36,.18)"></i></span><span class="u">www.proskauer.com</span></div>
-                <div class="sk-rows" data-col="cur"></div>
-              </div>
-            </div>
-            <div>
-              <div class="sk-col-label"><span style="width:8px;height:8px;border-radius:50%;background:#1F4E79"></span> Proposed · how we'd rebuild it</div>
-              <div class="sk-win">
-                <div class="sk-chrome"><span style="display:flex;gap:5px"><i style="width:8px;height:8px;border-radius:50%;background:rgba(31,32,36,.18)"></i><i style="width:8px;height:8px;border-radius:50%;background:rgba(31,32,36,.18)"></i><i style="width:8px;height:8px;border-radius:50%;background:rgba(31,32,36,.18)"></i></span><span class="u">www.proskauer.com</span></div>
-                <div class="sk-rows" data-col="prop"></div>
-              </div>
-            </div>
-          </div>
-          <div class="xu-note">↳ Interaction · click any beat to reveal its verbatim text and the beat it maps to.</div>
-        </div>
-
-        <!-- Card B · five beats -->
-        <div class="xu-card">
-          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#B08D4C">The story · five beats</span>
-          <div class="beats">
-            <div class="beat"><span class="n">01</span><div class="chip-wrap"><span class="chip">Setup</span></div><div class="t">Global counsel for the world's leading private funds.</div></div>
-            <div class="beat"><span class="n">02</span><div class="chip-wrap"><span class="chip" style="background:#E4EAFB;color:#1F4E79">Claim</span></div><div class="t">Band 1 for Fund Formation — the tier buyers screen on.</div></div>
-            <div class="beat"><span class="n">03</span><div class="chip-wrap"><span class="chip" style="background:rgba(176,141,76,.18);color:#B08D4C">Credibility</span></div><div class="t">Advised on $5.3B Grifols cross-border facility.</div></div>
-            <div class="beat"><span class="n">04</span><div class="chip-wrap"><span class="chip" style="background:rgba(94,125,90,.2);color:#5E7D5A">Proof</span></div><div class="t">NAV facilities practice — Legal 500 listed, 2025.</div></div>
-            <div class="beat missing"><span class="n">—</span><div class="chip-wrap"><span class="chip" style="background:transparent;border:1px solid #B4553A;color:#B4553A">Missing · Payoff</span></div><div class="t">The page doesn't carry this beat.</div></div>
-          </div>
-        </div>
-
-        <!-- Card C · atomics -->
-        <div class="xu-card">
-          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#B08D4C">Three atomic before → afters</span>
-          <div class="atoms">
-            <div class="atom">
-              <div class="k">Structural</div>
-              <div class="t">Move the claim above the credentials.</div>
-              <div class="a-row"><span class="a-key">Now</span><span style="display:flex;flex-direction:column;gap:4px;width:74px"><span style="height:11px;border:1px solid rgba(31,32,36,.16);background:#FBF8F1"></span><span style="height:11px;border:1px solid rgba(31,32,36,.16);background:#FBF8F1;font-size:8px;font-family:'JetBrains Mono',monospace;padding-left:3px;color:rgba(31,32,36,.55)">cred</span><span style="height:11px;border:1px solid #1F4E79;background:#E4EAFB;font-size:8px;font-family:'JetBrains Mono',monospace;padding-left:3px;color:#1F4E79">claim</span></span></div>
-              <div class="a-arrow">↓</div>
-              <div class="a-row"><span class="a-key">Rec</span><span style="display:flex;flex-direction:column;gap:4px;width:74px"><span style="height:11px;border:1px solid #1F4E79;background:#E4EAFB;font-size:8px;font-family:'JetBrains Mono',monospace;padding-left:3px;color:#1F4E79">claim</span><span style="height:11px;border:1px solid rgba(31,32,36,.16);background:#FBF8F1;font-size:8px;font-family:'JetBrains Mono',monospace;padding-left:3px;color:rgba(31,32,36,.55)">cred</span><span style="height:11px;border:1px solid rgba(31,32,36,.16);background:#FBF8F1"></span></span></div>
-              <p>The buyer meets the claim before the proof, not after.</p>
-            </div>
-            <div class="atom">
-              <div class="k">Semantic · Hoey</div>
-              <div class="t">Let one anchor word travel.</div>
-              <div class="a-row"><span class="a-key">Now</span><span style="color:#B4553A;text-decoration:line-through">conversion → action → engagement</span></div>
-              <div class="a-arrow">↓</div>
-              <div class="a-row"><span class="a-key">Rec</span><span style="color:#5E7D5A">conversion · conversion · conversion</span></div>
-              <p>One metric, named the same word on every surface.</p>
-            </div>
-            <div class="atom">
-              <div class="k">Appeals · Aristotle</div>
-              <div class="t">Lift logic without spending trust.</div>
-              <div style="background:#232428;padding:10px 8px 4px;margin-top:4px">
-                <svg viewBox="0 0 220 156" style="width:100%;display:block">
-                  <path d="M110 30 L30 112 L190 112 Z" fill="none" stroke="#F1ECDF" stroke-width="1.6"></path>
-                  <circle cx="110" cy="30" r="3.4" fill="#F1ECDF"></circle><circle cx="30" cy="112" r="3.4" fill="#F1ECDF"></circle><circle cx="190" cy="112" r="3.4" fill="#F1ECDF"></circle>
-                  <circle cx="91" cy="88" r="5" fill="none" stroke="rgba(241,236,223,.45)" stroke-width="1.2" stroke-dasharray="2.5 3"></circle>
-                  <circle cx="78" cy="103" r="6.5" fill="none" stroke="rgba(207,164,91,.5)" stroke-width="1.3" stroke-dasharray="2.5 3"></circle>
-                  <line x1="72" y1="98" x2="66" y2="87" stroke="rgba(255,201,90,.7)" stroke-width="1.4"></line>
-                  <circle cx="64" cy="83" r="5.5" fill="#FFC24D" stroke="#FBF8F1" stroke-width="1.4"></circle>
-                  <text x="110" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.2" fill="rgba(241,236,223,.85)">LOGIC 10→22</text>
-                  <text x="8" y="130" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1" fill="rgba(241,236,223,.85)">CRED. 65→62</text>
-                  <text x="212" y="130" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1" fill="rgba(241,236,223,.85)">FEEL. 25→16</text>
-                  <text x="110" y="149" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" letter-spacing="1" fill="rgba(241,236,223,.4)">FIELD MEDIAN · L 30 · C 50 · P 25</text>
-                </svg>
-              </div>
-              <p>The same appeal-mix triangle the tool ships — reused here.</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
     <div class="xu-expand"><span>Expand ↓</span></div>
@@ -414,47 +277,6 @@
 <script>
 (function(){
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* ---------- proof skeleton rows (data lifted from the design handoff) ---------- */
-  var CUR = [
-    {label:'Hero', accent:'#5E7D5A', bars:['100%','82%'], maps:'Beat 01 · Setup', quote:'“Global counsel for the world’s leading private funds.”'},
-    {label:'Sub-hero', accent:'#5E7D5A', bars:['82%'], maps:'Beat 01 · Setup, continued', quote:'“Clients turn to Proskauer when the outcome matters most.”'},
-    {label:'Problem', miss:true, lc:'#B4553A', maps:'Missing beat', quote:'No verbatim — the page never names the reader’s problem.'},
-    {label:'Claim', accent:'#5E7D5A', bars:['82%'], maps:'Beat 02 · Claim', quote:'“Band 1 for Fund Formation — the tier buyers screen on.”'},
-    {label:'Proof · 3 pillars', accent:'#B4553A', bars:['100%'], note:'2 pillars rest on unsupported claims', nc:'#B4553A', maps:'Beat 03 · Credibility', quote:'“Proskauer Advises Grifols on $5.3 Billion Cross-border Syndicated Loan Facility.”'},
-    {label:'Appeals', accent:'#5E7D5A', bars:['82%'], maps:'Appeal mix · L 10 · C 65 · E 25', quote:'The page leans almost entirely on credibility and emotion.'},
-    {label:'Close · footer', accent:'#5E7D5A', bars:['64%'], maps:'Close', quote:'“Contact our private funds group.”'}
-  ];
-  var PROP = [
-    {label:'Hero', accent:'#5E7D5A', bars:['100%','82%'], maps:'Beat 01 · Setup · holds', quote:'“Global counsel for the world’s leading private funds.”'},
-    {label:'Problem · added', accent:'#1F4E79', lc:'#1F4E79', bars:['82%'], note:'The pain, before the claim arrives', nc:'#1F4E79', maps:'Beat · Problem · proposed', quote:'“When a $5B facility crosses borders, generalist counsel becomes the risk.”'},
-    {label:'Claim', accent:'#5E7D5A', bars:['82%'], maps:'Beat 02 · Claim · holds', quote:'“Band 1 for Fund Formation — the tier buyers screen on.”'},
-    {label:'Proof · 3 pillars', accent:'#B08D4C', bars:['100%'], note:'Weak pillar → a credentialed one', nc:'#B08D4C', maps:'Beat 03 · Credibility · recast', quote:'The Grifols cite becomes a two-sentence reasoned proof — capability shown, not asserted.'},
-    {label:'Appeals · rebalanced', accent:'#1F4E79', lc:'#1F4E79', bars:['82%'], note:'Balance held', nc:'#1F4E79', maps:'Appeal mix · L 22 · C 62 · E 16', quote:'Logic lifted +12 without spending a credibility signal.'},
-    {label:'Close', accent:'#5E7D5A', bars:['64%'], maps:'Close · holds', quote:'“Contact our private funds group.”'}
-  ];
-  function buildRows(data, host){
-    data.forEach(function(d){
-      var row = document.createElement('div');
-      row.className = 'sk-row' + (d.miss ? ' miss' : '');
-      if (!d.miss) row.style.borderLeft = '3px solid ' + d.accent;
-      var html = '<div class="lbl"' + (d.lc ? ' style="color:' + d.lc + '"' : '') + '>' + d.label + '</div>';
-      (d.bars || []).forEach(function(w){ html += '<div class="bar" style="width:' + w + '"></div>'; });
-      if (d.note) html += '<div class="note"' + (d.nc ? ' style="color:' + d.nc + '"' : '') + '>' + d.note + '</div>';
-      html += '<div class="reveal"><div class="maps">' + d.maps + '</div><div class="quote">' + d.quote + '</div></div>';
-      row.innerHTML = html;
-      row.addEventListener('click', function(e){
-        e.stopPropagation();
-        var wasOpen = row.classList.contains('open');
-        host.querySelectorAll('.sk-row.open').forEach(function(r){ r.classList.remove('open'); });
-        if (!wasOpen) row.classList.add('open');
-        syncHeights();
-      });
-      host.appendChild(row);
-    });
-  }
-  buildRows(CUR, document.querySelector('[data-col="cur"]'));
-  buildRows(PROP, document.querySelector('[data-col="prop"]'));
 
   /* ---------- minto tree toggles ---------- */
   var minto = document.getElementById('minto');
@@ -522,16 +344,8 @@
     });
   });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') openOnly(null); });
-  var link = document.querySelector('[data-open-proof]');
-  if (link) link.addEventListener('click', function(e){
-    e.preventDefault();
-    e.stopPropagation();
-    var proof = document.getElementById('proof');
-    openOnly(proof);
-    proof.scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block:'start'});
-  });
-  /* deep links: #promise / #proof open expanded */
-  var initial = location.hash === '#promise' ? units[0] : location.hash === '#proof' ? units[1] : null;
+  /* deep link: #promise opens expanded */
+  var initial = location.hash === '#promise' ? units[0] : null;
   if (initial){ openOnly(initial, false); setTimeout(function(){ initial.scrollIntoView({block:'start'}); }, 0); }
 })();
 </script>
