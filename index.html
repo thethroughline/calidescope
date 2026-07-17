@@ -116,18 +116,33 @@
         <svg width="36" height="24" viewBox="0 0 36 24" fill="none" stroke="#1E40FF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h30"></path><path d="M25 5l7 7-7 7"></path></svg>
       </div>
 
-      <div class="world-viz world-viz--right">
-        <svg width="100%" height="104" viewBox="0 0 220 80" fill="none" preserveAspectRatio="xMidYMid meet" style="max-width:360px">
-          <path d="M12 40 C60 36 160 36 208 40" stroke="#1E40FF" stroke-width="2.6" stroke-linecap="round"></path>
-          <circle cx="12" cy="40" r="5" fill="#1E40FF"></circle>
-          <circle cx="76" cy="38" r="5" fill="#FAF7EF" stroke="#1F2024" stroke-width="2"></circle>
-          <circle cx="142" cy="37" r="5" fill="#FAF7EF" stroke="#1F2024" stroke-width="2"></circle>
-          <circle cx="208" cy="40" r="5" fill="#E933A6"></circle>
-          <text x="12" y="62" font-family="IBM Plex Mono,monospace" font-size="9" fill="#6E6B65" text-anchor="middle">CLAIM</text>
-          <text x="76" y="60" font-family="IBM Plex Mono,monospace" font-size="9" fill="#6E6B65" text-anchor="middle">SUPPORT</text>
-          <text x="142" y="59" font-family="IBM Plex Mono,monospace" font-size="9" fill="#6E6B65" text-anchor="middle">SUPPORT</text>
-          <text x="208" y="62" font-family="IBM Plex Mono,monospace" font-size="9" fill="#6E6B65" text-anchor="middle">ASK</text>
+      <div class="world-viz world-viz--right" style="height:auto">
+        <div class="loop-box" style="width:min(300px,100%)">
+        <svg viewBox="0 0 420 420">
+          <circle cx="210" cy="210" r="150" fill="none" stroke="#E4E0D6" stroke-width="2"></circle>
+          <path d="M210 60 A150 150 0 0 1 340 285" fill="none" stroke="#1E40FF" stroke-width="3"></path>
+          <path d="M340 285 A150 150 0 0 1 80 285" fill="none" stroke="#1F2024" stroke-width="3"></path>
+          <path d="M80 285 A150 150 0 0 1 210 60" fill="none" stroke="#E933A6" stroke-width="3"></path>
+          <path d="M336 270 l6 17 -17 -5" fill="none" stroke="#1E40FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M96 297 l-16 -8 17 -8" fill="none" stroke="#1F2024" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M200 63 l12 -12 4 17" fill="none" stroke="#E933A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
+        <div class="loop-node loop-node--promise">
+          <div class="node-dot" style="background:#DDE6FF"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"></path><path d="M5 4h12l-2.2 3.2L17 10.4H5" stroke="#1E40FF"></path></svg></div>
+          <div class="node-title">Promise</div>
+          <div class="node-sub">say what you'll deliver</div>
+        </div>
+        <div class="loop-node loop-node--perform">
+          <div class="node-dot" style="background:#F3EEE2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="20" x2="5" y2="14"></line><line x1="12" y1="20" x2="12" y2="8"></line><line x1="19" y1="20" x2="19" y2="4"></line></svg></div>
+          <div class="node-title">Perform</div>
+          <div class="node-sub">do the work</div>
+        </div>
+        <div class="loop-node loop-node--proof">
+          <div class="node-dot" style="background:#FFDDF0"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3.2v5.3c0 5-3.4 7.9-7 9-3.6-1.1-7-4-7-9V6.2L12 3z"></path><path d="M9 12.2l2 2 4-4.2" stroke="#E933A6" stroke-width="2"></path></svg></div>
+          <div class="node-title">Proof</div>
+          <div class="node-sub">show it</div>
+        </div>
+      </div>
       </div>
 
       <div class="world-cap world-cap--right">
@@ -161,35 +176,7 @@
 <!-- FOLD 3 · The loop, and the two sides -->
 <section class="fold">
   <div class="wrap">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:40px;align-items:center">
-      <div class="loop-box">
-        <svg viewBox="0 0 420 420">
-          <circle cx="210" cy="210" r="150" fill="none" stroke="#E4E0D6" stroke-width="2"></circle>
-          <path d="M210 60 A150 150 0 0 1 340 285" fill="none" stroke="#1E40FF" stroke-width="3"></path>
-          <path d="M340 285 A150 150 0 0 1 80 285" fill="none" stroke="#1F2024" stroke-width="3"></path>
-          <path d="M80 285 A150 150 0 0 1 210 60" fill="none" stroke="#E933A6" stroke-width="3"></path>
-          <path d="M336 270 l6 17 -17 -5" fill="none" stroke="#1E40FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-          <path d="M96 297 l-16 -8 17 -8" fill="none" stroke="#1F2024" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-          <path d="M200 63 l12 -12 4 17" fill="none" stroke="#E933A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-        </svg>
-        <div class="loop-node loop-node--promise">
-          <div class="node-dot" style="background:#DDE6FF"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"></path><path d="M5 4h12l-2.2 3.2L17 10.4H5" stroke="#1E40FF"></path></svg></div>
-          <div class="node-title">Promise</div>
-          <div class="node-sub">say what you'll deliver</div>
-        </div>
-        <div class="loop-node loop-node--perform">
-          <div class="node-dot" style="background:#F3EEE2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="20" x2="5" y2="14"></line><line x1="12" y1="20" x2="12" y2="8"></line><line x1="19" y1="20" x2="19" y2="4"></line></svg></div>
-          <div class="node-title">Perform</div>
-          <div class="node-sub">do the work</div>
-        </div>
-        <div class="loop-node loop-node--proof">
-          <div class="node-dot" style="background:#FFDDF0"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3.2v5.3c0 5-3.4 7.9-7 9-3.6-1.1-7-4-7-9V6.2L12 3z"></path><path d="M9 12.2l2 2 4-4.2" stroke="#E933A6" stroke-width="2"></path></svg></div>
-          <div class="node-title">Proof</div>
-          <div class="node-sub">show it</div>
-        </div>
-      </div>
-
-      <div style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(360px,100%),1fr));gap:24px">
         <div style="background:#DDE6FF;border-radius:12px;padding:26px 28px">
           <div style="width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 0 12px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"></path><path d="M5 4h12l-2.2 3.2L17 10.4H5" stroke="#1E40FF"></path></svg></div>
           <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#1E40FF;margin:0 0 10px">PROMISE</div>
@@ -204,7 +191,6 @@
           <p style="font:400 14px/1.6 'Archivo',sans-serif;margin:0 0 14px">Your QBRs, case studies, and renewal decks have to show the performance you promised — clearly enough that nobody has to take your word for it. Get it right, and the buyer stays.</p>
           <a href="proof.html" style="font:600 14px 'Archivo',sans-serif">See what that looks like →</a>
         </div>
-      </div>
     </div>
   </div>
 </section>
