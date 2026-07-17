@@ -118,10 +118,11 @@ h1,h2,h3{ text-wrap:balance; }
 .world-viz{
   width:100%;
   max-width:400px;
-  height:200px;
+  min-height:200px;
   display:flex;
-  align-items:center;
+  align-items:flex-end;
   justify-content:center;
+  align-self:end;
 }
 .world-viz--left{ grid-column:1;grid-row:1; }
 .world-arrow{
