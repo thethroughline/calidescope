@@ -79,3 +79,9 @@
 .cs-plate .pk{ font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.18em;text-transform:uppercase;margin-top:12px; }
 .cs-plate .pt{ font:italic 400 13.5px/1.4 'Archivo',sans-serif;color:#55524C;margin-top:5px; }
 @media (max-width:1020px){ .cs-plate{ display:none; } }
+
+/* ---------- perform (violet) accent ---------- */
+.cstile.on-violet .cstile-icon{ background:var(--violet-pale); }
+.cs-kicker.on-violet{ color:var(--violet); }
+.on-violet .star-node-icon{ background:var(--violet-pale); }
+.cs-also{ font:500 10.5px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:var(--muted);margin-top:10px; }
