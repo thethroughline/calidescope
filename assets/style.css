@@ -72,7 +72,7 @@ h1,h2,h3{ text-wrap:balance; }
   display:flex;align-items:center;justify-content:space-between;
 }
 .nav-brand{ display:flex;align-items:center;gap:12px;color:var(--ink); }
-.nav-brand span{ font:600 15px 'Archivo',sans-serif;letter-spacing:.05em; }
+.nav-brand span{ font:600 26px 'Archivo',sans-serif;letter-spacing:.02em; }
 .nav-links{ display:flex;gap:26px;font:500 13px 'Archivo',sans-serif; }
 .nav-links a{ color:var(--muted);padding:8px 0; }
 .nav-links a:hover{ color:var(--ink); }
