@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why — Calidescope</title>
+<meta name="description" content="Why Calidescope exists: a kaleidoscope of lenses turned on your communication, so you see it the way its audience will.">
+<meta property="og:title" content="Why — Calidescope">
+<meta property="og:description" content="A kaleidoscope of lenses turned on one piece of communication, so many reads resolve into one clean read.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/style.css?v=8">
+<style>
+/* ---------- Why page · scoped to .why-page so nothing leaks ---------- */
+.why-page{ --promise:#1E40FF;--perform:#7A3AD2;--proof:#E933A6;--measure:38rem; }
+.why-page .kicker{
+  font:500 10.5px 'IBM Plex Mono',ui-monospace,monospace;
+  text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin:0;
+}
+
+/* hero */
+.why-hero{ padding:clamp(3rem,8vw,6rem) 0 1rem; }
+.why-hero h1{
+  font:600 clamp(3.2rem,11vw,6rem)/.98 'Archivo',sans-serif;
+  letter-spacing:-.02em;margin:.5rem 0 1.6rem;
+}
+.why-lead{
+  font:400 clamp(1.5rem,3.4vw,2rem)/1.28 'Archivo',sans-serif;
+  letter-spacing:-.015em;max-width:34rem;margin:0 0 2.2rem;
+}
+.why-flow p{ max-width:var(--measure);margin:0 0 1.05rem;font:400 18px/1.62 'Archivo',sans-serif; }
+.why-flow .beat{ color:var(--muted); }
+.why-flow .turn{ font-weight:600;letter-spacing:-.01em; }
+
+/* the lens signature */
+.lens-figure{
+  margin:2.5rem 0 1.25rem;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:2.25rem 0;text-align:center;
+}
+.lens-figure svg{ width:100%;max-width:640px;height:auto;color:var(--ink); }
+.why-named{
+  text-align:center;font:600 clamp(1.35rem,3vw,1.75rem)/1.3 'Archivo',sans-serif;
+  letter-spacing:-.015em;max-width:32rem;margin:1.5rem auto 0;
+}
+
+/* three moments */
+.moments{ padding:clamp(3.5rem,8vw,6rem) 0 clamp(2rem,5vw,3rem); }
+.moments > .kicker{ margin-bottom:.4rem; }
+.moments h2{
+  font:600 clamp(1.6rem,4vw,2.25rem)/1.2 'Archivo',sans-serif;
+  letter-spacing:-.018em;margin:0 0 2.75rem;max-width:24rem;
+}
+.moment-grid{ display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1.5rem,3.5vw,2.75rem); }
+.moment{ padding-top:1.25rem;border-top:2px solid var(--ink); }
+.moment.on-promise{ border-color:var(--promise); }
+.moment.on-perform{ border-color:var(--perform); }
+.moment.on-proof{ border-color:var(--proof); }
+.moment .icon{ width:88px;height:88px;margin:-.25rem 0 1.15rem;display:block; }
+.moment .kicker{ margin-bottom:.7rem; }
+.moment.on-promise .kicker{ color:var(--promise); }
+.moment.on-perform .kicker{ color:var(--perform); }
+.moment.on-proof .kicker{ color:var(--proof); }
+.moment .m-lead{ font:600 1.24rem/1.2 'Archivo',sans-serif;letter-spacing:-.012em;margin:0 0 .65rem; }
+.moment .m-body{ margin:0;color:var(--muted);font:400 1rem/1.55 'Archivo',sans-serif; }
+
+/* founder / payoff */
+.why-close{ padding:clamp(3rem,7vw,5.5rem) 0;border-top:1px solid var(--line); }
+.why-close .why-flow p{ font-size:1.16rem; }
+.arrival{ margin:2.5rem 0 .5rem; }
+.arrival svg{ width:210px;max-width:60%;height:auto;color:var(--perform); }
+.why-payoff{
+  font:600 clamp(2.1rem,5.5vw,3.1rem)/1.05 'Archivo',sans-serif;
+  letter-spacing:-.02em;margin:.25rem 0 1.75rem;max-width:26rem;
+}
+.why-tail p{ max-width:var(--measure);margin:0 0 1.05rem;font:400 18px/1.62 'Archivo',sans-serif; }
+.why-tail .service{ color:var(--muted); }
+
+/* motion — content is visible by default; JS opts in to the reveal */
+.js-reveal .reveal{ opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease; }
+.js-reveal .reveal.in{ opacity:1;transform:none; }
+.js-reveal .draw{ stroke-dasharray:620;stroke-dashoffset:620;transition:stroke-dashoffset 1.4s ease .2s; }
+.js-reveal .lens-figure.in .draw{ stroke-dashoffset:0; }
+.js-reveal .arrival .draw{ stroke-dasharray:190;stroke-dashoffset:190; }
+.js-reveal .arrival.in .draw{ stroke-dashoffset:0; }
+
+@media (max-width:720px){
+  .moment-grid{ grid-template-columns:1fr;gap:2.25rem; }
+}
+@media (prefers-reduced-motion:reduce){
+  .js-reveal .reveal{ opacity:1;transform:none;transition:none; }
+  .js-reveal .draw{ stroke-dasharray:none;stroke-dashoffset:0;transition:none; }
+}
+</style>
+</head>
+<body class="why-page">
+
+<div class="nav">
+  <div class="wrap">
+    <a href="index.html" class="nav-brand">
+      <svg width="30" height="30" viewBox="-100 -100 200 200">
+        <circle cx="0" cy="0" r="92" fill="none" stroke="#1F2024" stroke-width="7"></circle>
+        <line x1="-92" y1="0" x2="92" y2="0" stroke="#1F2024" stroke-width="6"></line>
+        <line x1="-46" y1="-79.7" x2="46" y2="79.7" stroke="#1F2024" stroke-width="6"></line>
+        <line x1="46" y1="-79.7" x2="-46" y2="79.7" stroke="#1F2024" stroke-width="6"></line>
+        <circle cx="0" cy="0" r="12" fill="#1F2024"></circle>
+      </svg>
+      <span>Calidescope</span>
+    </a>
+    <div class="nav-links">
+      <a href="promise.html">Promise</a>
+      <a href="perform.html">Perform</a>
+      <a href="proof.html">Proof</a>
+      <a href="case-studies.html">Case Studies</a>
+      <a href="why.html" class="is-active">About</a>
+      <a href="contact.html" class="is-contact">Contact</a>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- ============ HERO · the idea first ============ -->
+  <section class="why-hero">
+    <div class="wrap">
+      <p class="kicker">About</p>
+      <h1>Why.</h1>
+
+      <p class="why-lead">Every piece of communication is received by someone.</p>
+
+      <div class="why-flow">
+        <p class="beat">Everything rides on what that person experiences. What they understand. What they remember. What they act on.</p>
+        <p>A single piece can be seen many ways.</p>
+        <p class="beat">Every discipline offers its own lens. Logic, rhetoric, story, design. Each one reveals something the others miss about how a message lands.</p>
+        <p>Look through one lens, you get one read.</p>
+        <p class="turn">Turn a whole kaleidoscope of them on the same piece, and the picture gets deeper, truer, and easier to act on.</p>
+      </div>
+
+      <!-- SIGNATURE FIGURE · many lenses on one object, resolving to one clean read (pure ink) -->
+      <figure class="lens-figure reveal" style="margin-inline:0" aria-label="Many overlapping lenses viewing one object, resolving into a single clear read.">
+        <svg viewBox="0 0 700 260" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <g stroke-width="1.7">
+            <ellipse cx="168" cy="130" rx="60" ry="94" transform="rotate(-24 168 130)"/>
+            <ellipse cx="212" cy="130" rx="60" ry="94" transform="rotate(22 212 130)"/>
+            <ellipse cx="190" cy="130" rx="94" ry="60" transform="rotate(52 190 130)"/>
+          </g>
+          <g stroke-width="1.7">
+            <rect x="176" y="116" width="28" height="28" rx="1.5" transform="rotate(-20 190 130)"/>
+            <rect x="176" y="116" width="28" height="28" rx="1.5" transform="rotate(26 190 130)"/>
+            <rect x="176" y="116" width="28" height="28" rx="1.5" transform="rotate(62 190 130)"/>
+          </g>
+          <path d="M312 132 C 360 96, 404 96, 452 130" stroke-width="1.9"/>
+          <path d="M452 130 l -13 -3 M452 130 l -6 -12" stroke-width="1.9"/>
+          <circle class="draw" cx="556" cy="130" r="86" stroke-width="2.2"/>
+          <rect x="537" y="111" width="38" height="38" rx="2" stroke-width="2.2"/>
+        </svg>
+      </figure>
+
+      <p class="why-named">That's the idea Calidescope is named for.</p>
+    </div>
+  </section>
+
+  <!-- ============ THREE MOMENTS · pitch / work / proof ============ -->
+  <section class="moments">
+    <div class="wrap">
+      <p class="kicker">Where it matters</p>
+      <h2>It matters most in three moments.</h2>
+
+      <div class="moment-grid">
+
+        <article class="moment on-promise reveal">
+          <svg class="icon" viewBox="0 0 96 96" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <g stroke="#1F2024" stroke-width="2.4">
+              <rect x="24" y="60" width="48" height="18" rx="2"/>
+              <path d="M31 60 C 26 45, 46 47, 41 35 C 37 26, 57 31, 51 21 C 48 16, 61 17, 66 25"/>
+            </g>
+            <path d="M35 78 C 41 58, 45 43, 63 22" stroke="#1E40FF" stroke-width="2.7"/>
+          </svg>
+          <p class="kicker">The pitch</p>
+          <p class="m-lead">It starts with the pitch.</p>
+          <p class="m-body">Everyone has an idea, and everyone wants theirs in. The deck grows in every direction, and the straight line to the point gets harder to hold.</p>
+        </article>
+
+        <article class="moment on-perform reveal">
+          <svg class="icon" viewBox="0 0 96 96" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <g stroke="#1F2024" stroke-width="2.4">
+              <rect x="14" y="50" width="16" height="16" rx="2"/>
+              <rect x="40" y="50" width="16" height="16" rx="2"/>
+              <rect x="66" y="50" width="16" height="16" rx="2"/>
+              <path d="M24 50 C 30 33, 40 66, 48 42 C 53 29, 62 60, 72 45"/>
+            </g>
+            <path d="M12 58 L 84 58" stroke="#7A3AD2" stroke-width="2.7"/>
+          </svg>
+          <p class="kicker">The workflow</p>
+          <p class="m-lead">Then the work begins.</p>
+          <p class="m-body">The workflow that looked clean in the promise meets the reality of doing it. There's a straighter line through it, waiting for someone to draw it.</p>
+        </article>
+
+        <article class="moment on-proof reveal">
+          <svg class="icon" viewBox="0 0 96 96" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <g fill="#1F2024" stroke="none">
+              <circle cx="22" cy="72" r="1.7"/><circle cx="31" cy="70" r="1.7"/><circle cx="40" cy="71" r="1.7"/>
+              <circle cx="49" cy="70" r="1.7"/><circle cx="58" cy="72" r="1.7"/><circle cx="67" cy="71" r="1.7"/><circle cx="74" cy="73" r="1.7"/>
+              <circle cx="30" cy="64" r="1.7"/><circle cx="40" cy="62" r="1.7"/><circle cx="50" cy="63" r="1.7"/><circle cx="60" cy="64" r="1.7"/>
+              <circle cx="40" cy="56" r="1.7"/><circle cx="50" cy="55" r="1.7"/>
+            </g>
+            <path d="M40 66 C 52 58, 60 44, 79 24" fill="none" stroke="#E933A6" stroke-width="2.7"/>
+            <circle cx="79" cy="24" r="3.1" fill="#E933A6"/>
+          </svg>
+          <p class="kicker">The proof</p>
+          <p class="m-lead">Then you have to prove it.</p>
+          <p class="m-body">Marketing impact lives under a mountain of data. The real story in there is simple. Finding it is the hard part.</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHY / FOUNDER / PAYOFF ============ -->
+  <section class="why-close">
+    <div class="wrap">
+      <div class="why-flow">
+        <p>I'm Bret Leece. I've spent thirty years on this, since 1995.</p>
+        <p>My grounding is in philosophy and the great books, and a long career in analytics, working through framework after framework, methodology after methodology.</p>
+        <p>All of it taught the same lesson. Take what you found, what it means, and what to do next, and make it simple.</p>
+      </div>
+
+      <div class="arrival reveal" aria-hidden="true">
+        <svg viewBox="0 0 210 40" fill="none" stroke-linecap="round">
+          <path class="draw" d="M6 20 L 188 20" stroke="currentColor" stroke-width="2.6"/>
+          <circle cx="196" cy="20" r="5" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <p class="why-payoff">That's what Calidescope is for.</p>
+
+      <div class="why-tail">
+        <p>Seeing your communication the way its audience will, so everyone lands on the same page with less pain and more clarity.</p>
+        <p class="service">The discipline as a service today, and as software as fast as I can ship it.</p>
+        <p>If any of those three moments sound like yours, that's the conversation.</p>
+        <a class="btn-primary" href="contact.html" style="margin-top:1.25rem">Start a conversation &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="site-footer">
+  <div class="wrap">
+    <div>
+      <div class="brand">Calidescope LLC</div>
+      <div class="tagline">Promise to Proof. The same discipline, all the way around.</div>
+      <div class="links">
+        <a href="index.html">HOME</a>
+        <a href="promise.html">PROMISE</a>
+        <a href="perform.html">PERFORM</a>
+        <a href="proof.html">PROOF</a>
+        <a href="case-studies.html">CASE STUDIES</a>
+        <a href="why.html">ABOUT</a>
+        <a href="contact.html">CONTACT</a>
+        <a href="privacy.html">PRIVACY</a>
+        <a href="terms.html">TERMS</a>
+        <a href="#" data-cookie-prefs>COOKIE PREFERENCES</a>
+      </div>
+    </div>
+    <a href="contact.html" class="btn-primary">Start a conversation &rarr;</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  var els = document.querySelectorAll('.reveal');
+  if (!els.length || !('IntersectionObserver' in window)) return;
+  // opt in to the reveal only when JS can finish the job — content stays visible otherwise
+  document.body.classList.add('js-reveal');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, {threshold:0.25});
+  els.forEach(function(e){ io.observe(e); });
+})();
+</script>
+<script src="assets/consent.js"></script>
+</body>
+</html>
