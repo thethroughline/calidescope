@@ -83,12 +83,33 @@
 .js-reveal .arrival .draw{ stroke-dasharray:190;stroke-dashoffset:190; }
 .js-reveal .arrival.in .draw{ stroke-dashoffset:0; }
 
+/* the signature figure builds itself: lenses draw and settle, the mark turns into place.
+   --len = path length, --t = duration, --d = delay, --r = starting rotation */
+.js-reveal .b{
+  stroke-dasharray:var(--len);stroke-dashoffset:var(--len);
+  transition:stroke-dashoffset var(--t,.9s) ease var(--d,0s);
+}
+.js-reveal .lens-figure.in .b{ stroke-dashoffset:0; }
+.js-reveal .b-turn{
+  transform:rotate(var(--r,0deg));transform-box:view-box;
+  transition:transform var(--t,1.2s) cubic-bezier(.2,.8,.25,1) var(--d,0s);
+}
+.js-reveal .lens-figure.in .b-turn{ transform:none; }
+.js-reveal .b-dot{
+  opacity:0;transform:scale(.25);transform-box:view-box;transform-origin:556px 130px;
+  transition:opacity .3s ease var(--d,0s),transform .5s cubic-bezier(.16,1,.3,1) var(--d,0s);
+}
+.js-reveal .lens-figure.in .b-dot{ opacity:1;transform:none; }
+
 @media (max-width:720px){
   .moment-grid{ grid-template-columns:1fr;gap:2.25rem; }
 }
 @media (prefers-reduced-motion:reduce){
   .js-reveal .reveal{ opacity:1;transform:none;transition:none; }
   .js-reveal .draw{ stroke-dasharray:none;stroke-dashoffset:0;transition:none; }
+  .js-reveal .b{ stroke-dasharray:none;stroke-dashoffset:0;transition:none; }
+  .js-reveal .b-turn{ transform:none;transition:none; }
+  .js-reveal .b-dot{ opacity:1;transform:none;transition:none; }
 }
 </style>
 </head>
@@ -135,23 +156,39 @@
         <p class="turn">Turn a whole kaleidoscope of them on the same piece, and the picture gets deeper, truer, and easier to act on.</p>
       </div>
 
-      <!-- SIGNATURE FIGURE · many lenses on one object, resolving to one clean read (pure ink) -->
-      <figure class="lens-figure reveal" style="margin-inline:0" aria-label="Many overlapping lenses viewing one object, resolving into a single clear read.">
+      <!-- SIGNATURE FIGURE · many lenses on one object, resolving into the Calidescope mark (pure ink).
+           Both halves build: the lenses draw and settle, then the mark turns into place. -->
+      <figure class="lens-figure reveal" style="margin-inline:0" aria-label="Many overlapping lenses viewing one object, resolving into the Calidescope mark.">
         <svg viewBox="0 0 700 260" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <g stroke-width="1.7">
-            <ellipse cx="168" cy="130" rx="60" ry="94" transform="rotate(-24 168 130)"/>
-            <ellipse cx="212" cy="130" rx="60" ry="94" transform="rotate(22 212 130)"/>
-            <ellipse cx="190" cy="130" rx="94" ry="60" transform="rotate(52 190 130)"/>
+
+          <!-- the lenses: three overlapping views, settling into register -->
+          <g class="b-turn" stroke-width="1.7" style="--r:-14deg;--t:1.5s;transform-origin:190px 130px">
+            <ellipse class="b" cx="168" cy="130" rx="60" ry="94" transform="rotate(-24 168 130)" style="--len:500px;--t:1s;--d:.05s"/>
+            <ellipse class="b" cx="212" cy="130" rx="60" ry="94" transform="rotate(22 212 130)" style="--len:500px;--t:1s;--d:.17s"/>
+            <ellipse class="b" cx="190" cy="130" rx="94" ry="60" transform="rotate(52 190 130)" style="--len:500px;--t:1s;--d:.29s"/>
           </g>
-          <g stroke-width="1.7">
-            <rect x="176" y="116" width="28" height="28" rx="1.5" transform="rotate(-20 190 130)"/>
-            <rect x="176" y="116" width="28" height="28" rx="1.5" transform="rotate(26 190 130)"/>
-            <rect x="176" y="116" width="28" height="28" rx="1.5" transform="rotate(62 190 130)"/>
+
+          <!-- the one object, seen three ways -->
+          <g class="b-turn" stroke-width="1.7" style="--r:-9deg;--t:1.3s;--d:.4s;transform-origin:190px 130px">
+            <rect class="b" x="176" y="116" width="28" height="28" rx="1.5" transform="rotate(-20 190 130)" style="--len:120px;--t:.6s;--d:.45s"/>
+            <rect class="b" x="176" y="116" width="28" height="28" rx="1.5" transform="rotate(26 190 130)" style="--len:120px;--t:.6s;--d:.55s"/>
+            <rect class="b" x="176" y="116" width="28" height="28" rx="1.5" transform="rotate(62 190 130)" style="--len:120px;--t:.6s;--d:.65s"/>
           </g>
-          <path d="M312 132 C 360 96, 404 96, 452 130" stroke-width="1.9"/>
-          <path d="M452 130 l -13 -3 M452 130 l -6 -12" stroke-width="1.9"/>
-          <circle class="draw" cx="556" cy="130" r="86" stroke-width="2.2"/>
-          <rect x="537" y="111" width="38" height="38" rx="2" stroke-width="2.2"/>
+
+          <path class="b" d="M312 132 C 360 96, 404 96, 452 130" stroke-width="1.9" style="--len:160px;--t:.55s;--d:.95s"/>
+          <path class="b" d="M452 130 l -13 -3 M452 130 l -6 -12" stroke-width="1.9" style="--len:30px;--t:.25s;--d:1.45s"/>
+
+          <!-- the read: the Calidescope mark, turning into place -->
+          <circle class="b" cx="556" cy="130" r="86" stroke-width="2.2" style="--len:560px;--t:1s;--d:1.5s"/>
+          <g class="b-turn" stroke-width="2" style="--r:-30deg;--t:1.35s;--d:1.7s;transform-origin:556px 130px">
+            <line class="b" x1="556" y1="130" x2="642" y2="130" style="--len:90px;--t:.45s;--d:1.85s"/>
+            <line class="b" x1="556" y1="130" x2="599" y2="55.5" style="--len:90px;--t:.45s;--d:1.91s"/>
+            <line class="b" x1="556" y1="130" x2="513" y2="55.5" style="--len:90px;--t:.45s;--d:1.97s"/>
+            <line class="b" x1="556" y1="130" x2="470" y2="130" style="--len:90px;--t:.45s;--d:2.03s"/>
+            <line class="b" x1="556" y1="130" x2="513" y2="204.5" style="--len:90px;--t:.45s;--d:2.09s"/>
+            <line class="b" x1="556" y1="130" x2="599" y2="204.5" style="--len:90px;--t:.45s;--d:2.15s"/>
+          </g>
+          <circle class="b-dot" cx="556" cy="130" r="11" fill="currentColor" stroke="none" style="--d:2.35s"/>
         </svg>
       </figure>
 
@@ -220,7 +257,7 @@
     <div class="wrap">
       <div class="why-flow">
         <p>I'm Bret Leece. I've spent thirty years on this, since 1995.</p>
-        <p>My grounding is in philosophy and the great books, and a long career in analytics, working through framework after framework, methodology after methodology.</p>
+        <p>My grounding is in philosophy and <a href="https://seaver.pepperdine.edu/academics/ge/great-books/" target="_blank" rel="noopener noreferrer">The Great Books</a>, and a long career in analytics, working through framework after framework, methodology after methodology.</p>
         <p>All of it taught the same lesson. Take what you found, what it means, and what to do next, and make it simple.</p>
       </div>
 
