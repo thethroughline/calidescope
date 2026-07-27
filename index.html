@@ -1,228 +1,457 @@
 <!DOCTYPE html>
-<html lang="en" class="snap-home">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Calidescope — Promise to Proof</title>
-<meta name="description" content="Calidescope provides services and software that improve B2B communications: the promises that win the business, and the proof that keeps it.">
-<meta property="og:title" content="Calidescope — Promise to Proof">
-<meta property="og:description" content="Get the promise right, and buyers choose you. Get the proof right, and they stay.">
+<title>You sell something complicated. Sell it before you explain it. — Calidescope</title>
+<meta name="description" content="B2B go-to-market communication that lands — for the people who read it and the models that parse it.">
+<link rel="canonical" href="https://calidescope.llc/index.html">
+<meta property="og:site_name" content="Calidescope">
+<meta property="og:title" content="You sell something complicated. Sell it before you explain it. — Calidescope">
+<meta property="og:description" content="B2B go-to-market communication that lands — for the people who read it and the models that parse it.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calidescope.llc/index.html">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<!-- Self-hosted fonts. Copy assets/fonts/ from calidescope-site-official.zip.
+     No third-party font call, per the privacy policy. -->
 <link rel="stylesheet" href="assets/fonts/fonts.css">
-<link rel="stylesheet" href="assets/style.css?v=8">
+<style>
+:root{
+  --ink:#1F2024;--paper:#FAF7EF;--sand:#F3EEE2;--muted:#6E6B65;--hair:#E4E0D6;
+  --blue:#1E40FF;--blue-t:#DDE6FF;--violet:#7A3AD2;--violet-t:#EBDFFA;--pink:#E933A6;--pink-t:#FFDDF0;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --sans:'Archivo',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --gut:clamp(22px,5vw,68px);--acc:#1F2024;--acc-t:#F3EEE2;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:19px;line-height:1.55;-webkit-font-smoothing:antialiased}
+p{margin:0 0 14px} a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--gut)}
+h1{font-weight:600;font-size:clamp(40px,6.4vw,74px);line-height:.99;letter-spacing:-.032em;margin:0 0 26px}
+h2{font-weight:600;font-size:clamp(29px,4.3vw,47px);line-height:1.04;letter-spacing:-.028em;margin:0 0 16px}
+h3{font-weight:600;font-size:clamp(20px,2.2vw,26px);line-height:1.14;letter-spacing:-.02em;margin:0 0 8px}
+h4{font-weight:600;font-size:19px;letter-spacing:-.012em;margin:0 0 6px}
+.lede{font-size:clamp(19px,2.1vw,23px);line-height:1.45;max-width:36ch;color:#3a3b40}
+.say{font-size:clamp(17px,1.85vw,20px);line-height:1.45;color:#3a3b40;max-width:46ch}
+.tag{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mut{color:var(--muted)}
+
+nav{border-bottom:1px solid var(--hair);background:var(--paper);position:sticky;top:0;z-index:60}
+nav .in{display:flex;align-items:center;gap:26px;height:80px}
+.logo{display:flex;align-items:center;gap:11px;font-weight:600;font-size:19px;letter-spacing:.02em}
+nav .links{display:flex;gap:24px;margin-left:auto;font-size:16.5px;align-items:center}
+nav .links a{color:var(--muted)}nav .links a:hover{color:var(--ink)}
+nav .links a.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--acc)}
+.btn{display:inline-block;background:var(--ink);color:var(--paper);font-weight:600;font-size:16.5px;padding:13px 22px;transition:.15s}
+.btn:hover{background:var(--acc);color:#fff}
+.btn.lg{font-size:19px;padding:18px 32px}
+.btn.out{background:none;color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.btn.out:hover{background:var(--ink);color:var(--paper)}
+.btn.acc{background:var(--acc);color:#fff}.btn.acc:hover{background:var(--ink)}
+@media(max-width:1080px){nav .links a:not(.btn){display:none}}
+
+.page{display:none}.page.on{display:block}
+.hero{padding:clamp(64px,9vw,124px) 0 clamp(48px,6vw,78px)}
+.hero.tint{background:var(--acc-t);border-bottom:1px solid rgba(31,32,36,.1)}
+.acts{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:36px}
+.scroll{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:18px;color:var(--muted)}
+.strip{background:var(--ink);color:var(--paper);padding:20px 0}
+.strip p{margin:0;font-size:clamp(17px,1.9vw,21px);font-weight:600;letter-spacing:-.012em}
+.sec{padding:clamp(58px,7.2vw,104px) 0}
+.sec.sand{background:var(--sand);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.sec.tint{background:var(--acc-t)}
+.sec.dark{background:var(--ink);color:var(--paper)}
+.sec.dark h2{color:var(--paper)}.sec.dark .say{color:rgba(250,247,239,.72)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5.5vw,74px);align-items:center}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,34px)}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2vw,24px)}
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr}.g4{grid-template-columns:1fr 1fr}}
+.hr{border-bottom:1px solid var(--ink);padding-bottom:20px;margin-bottom:42px;display:flex;
+  justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap}
+.hr h2{margin:0}
+
+.card{border-top:3px solid var(--hair);padding-top:20px}
+.card.b{border-color:var(--blue)}.card.v{border-color:var(--violet)}.card.p{border-color:var(--pink)}
+.card .say{font-size:17.5px;max-width:none;margin:0}
+.card .go{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;display:block;margin-top:16px}
+.shape{margin-bottom:12px;display:block}
+.ci{width:60px;height:60px;border-radius:50%;background:var(--acc-t);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid rgba(31,32,36,.2)}
+@media(max-width:860px){.steps{grid-template-columns:1fr}}
+.step{padding:28px 30px 30px 0;border-right:1px solid rgba(31,32,36,.14)}
+.step:last-child{border-right:0;padding-right:0}.step+.step{padding-left:30px}
+@media(max-width:860px){.step{border-right:0;border-bottom:1px solid rgba(31,32,36,.14);padding:24px 0}
+  .step+.step{padding-left:0}.step:last-child{border-bottom:0}}
+.step .n{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.16em;color:var(--acc);margin:0 0 12px;text-transform:uppercase}
+.step p{margin:0;font-size:18.5px;line-height:1.4;font-weight:600;letter-spacing:-.012em}
+.step p.sub{font-weight:400;font-size:17px;color:var(--muted);margin-top:8px}
+
+.shot{border:1px solid var(--hair);background:#fff;overflow:hidden}
+.shot img{width:100%}
+.shot figcaption{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);padding:12px 16px;border-top:1px solid var(--hair)}
+
+.stat{border-left:2px solid var(--ink);padding-left:22px}
+.stat .n{font-weight:600;font-size:clamp(30px,3.8vw,46px);letter-spacing:-.03em;line-height:1;margin:0 0 12px}
+.stat h3{font-size:20px;letter-spacing:-.016em;margin:0 0 10px}
+.stat.b{border-color:var(--blue)}.stat.b .n{color:var(--blue)}
+.stat.v{border-color:var(--violet)}.stat.v .n{color:var(--violet)}
+.stat.p{border-color:var(--pink)}.stat.p .n{color:var(--pink)}
+
+.offer{border:1px solid var(--hair);background:#fff;padding:30px;display:flex;flex-direction:column}
+.offer.lead{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+.offer.dash{border:1px dashed var(--hair);background:none;justify-content:center}
+.offer .say{font-size:17.5px;max-width:none;flex:1}
+
+.caserow{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+@media(max-width:900px){.caserow{grid-template-columns:1fr}}
+.case{padding:30px 34px;border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  display:flex;flex-direction:column;transition:.15s}
+.case:nth-child(3n+1){padding-left:0}
+.case:nth-child(3n){border-right:0;padding-right:0}
+@media(max-width:900px){
+  .case,.case:nth-child(3n),.case:nth-child(3n+1){border-right:0;padding:26px 0}}
+.case .n{font-weight:600;font-size:27px;letter-spacing:-.026em;margin:0 0 10px}
+.case h3{font-size:20px;letter-spacing:-.016em;margin:0 0 12px;flex:1}
+.case .tag{font-size:12.5px}
+.case .go{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-top:12px;color:var(--muted)}
+.case:hover .go{color:var(--ink)}
+.case.b .n{color:var(--blue)}.case.v .n{color:var(--violet)}.case.p .n{color:var(--pink)}
+
+/* case detail */
+.star{display:grid;grid-template-columns:150px 1fr;gap:24px;padding:26px 0;border-bottom:1px solid var(--hair)}
+@media(max-width:760px){.star{grid-template-columns:1fr;gap:8px}}
+.star .l{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.star p{margin:0;font-size:18.5px;line-height:1.5;max-width:60ch}
+.star p.alert{margin-top:12px;padding-left:16px;border-left:3px solid var(--acc);color:var(--ink);font-weight:500}
+.chips{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
+.chip{border-left:2px solid var(--acc);padding-left:14px}
+.chip .v{font-weight:600;font-size:27px;letter-spacing:-.026em;line-height:1;color:var(--acc)}
+.chip .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px;display:block}
+.plate{border:1px solid var(--hair);background:#fff;padding:26px;margin-bottom:34px}
+.plate figcaption{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:16px}
+.back{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:inline-block;margin-bottom:26px}
+.back:hover{color:var(--ink)}
+.pager{display:flex;justify-content:space-between;gap:20px;border-top:1px solid var(--ink);padding-top:24px;margin-top:12px;flex-wrap:wrap}
+
+.close{background:var(--sand);border-top:1px solid var(--hair);padding:clamp(62px,8vw,112px) 0;text-align:center}
+footer{border-top:1px solid var(--ink);padding:44px 0 56px;display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap}
+footer .fl{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+svg text.m{font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:1.2px;fill:#6E6B65}
+svg text.nm{font-family:'Archivo',sans-serif;font-size:21px;font-weight:600;fill:#1F2024}
+#chrome{background:var(--ink);color:rgba(250,247,239,.5);font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;padding:8px var(--gut)}
+
+/* hero drawing — tangle straightens into a line */
+.hero .g2{align-items:center;grid-template-columns:1.2fr .8fr;gap:clamp(28px,4vw,56px)}
+.hero h1{font-size:clamp(38px,5vw,60px)}
+@media(max-width:900px){.hero .g2{grid-template-columns:1fr}}
+.draw path.ink,.draw path.line{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.15s cubic-bezier(.5,0,.2,1) forwards}
+.draw path.line{animation-delay:.85s;animation-duration:.9s}
+.draw path.fall{stroke-dasharray:1;stroke-dashoffset:1;animation:draw .35s ease .8s forwards}
+.draw .pop{opacity:0;animation:pop .5s ease forwards}
+.draw .n1{animation-delay:1.35s}.draw .n2{animation-delay:1.5s}
+.draw .n3{animation-delay:1.65s}.draw .n4{animation-delay:1.8s}
+.draw .cap{opacity:0;animation:pop .6s ease 2s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pop{to{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  .draw path.ink,.draw path.line,.draw path.fall{animation:none;stroke-dashoffset:0}
+  .draw .pop,.draw .cap{animation:none;opacity:1}
+}
+</style>
 </head>
 <body>
+<a href="#main" style="position:absolute;left:-9999px" onfocus="this.style.left='12px';this.style.top='12px';this.style.background='#1F2024';this.style.color='#FAF7EF';this.style.padding='10px 16px';this.style.zIndex='999'">Skip to content</a>
+<nav>
+  <div class="wrap in">
+    <a class="logo" href="index.html">
+      <svg width="23" height="23" viewBox="0 0 40 40" fill="none" stroke="#1F2024" stroke-width="1.8" aria-hidden="true">
+        <circle cx="20" cy="20" r="17"/><path d="M20 3v34M5 11.5l30 17M5 28.5l30-17"/>
+        <circle cx="20" cy="20" r="3.2" fill="#1F2024" stroke="none"/></svg>
+      Calidescope</a>
+    <div class="links">
+      <a href="throughline.html">Throughline</a><a href="promise.html">Promise</a><a href="perform.html">Perform</a>
+      <a href="proof.html">Proof</a><a href="case-studies.html">Case studies</a><a href="why.html">About</a>
+      <a href="https://throughline.builders" target="_blank" rel="noopener" class="btn">Try it on your page ↗</a>
+    </div>
+  </div>
+</nav>
+<main id="main">
 
-<div class="nav">
-  <div class="wrap">
-    <a href="index.html" class="nav-brand">
-      <svg width="30" height="30" viewBox="-100 -100 200 200">
-        <circle cx="0" cy="0" r="92" fill="none" stroke="#1F2024" stroke-width="7"></circle>
-        <line x1="-92" y1="0" x2="92" y2="0" stroke="#1F2024" stroke-width="6"></line>
-        <line x1="-46" y1="-79.7" x2="46" y2="79.7" stroke="#1F2024" stroke-width="6"></line>
-        <line x1="46" y1="-79.7" x2="-46" y2="79.7" stroke="#1F2024" stroke-width="6"></line>
-        <circle cx="0" cy="0" r="12" fill="#1F2024"></circle>
+  <header class="hero">
+    <div class="wrap g2">
+      <div>
+        <h1>You sell something complicated.<br>Sell it before you explain it.</h1>
+        <p class="lede">Your homepage, your deck, your quarterly review. Each one has a few seconds to give a reason before the explaining starts.</p>
+        <div class="acts">
+          <a href="https://throughline.builders" target="_blank" rel="noopener" class="btn lg">Try it on your own page ↗</a>
+          <a href="#two" class="scroll">Or see what we mean
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v15M6 13l6 6 6-6"></path></svg></a>
+        </div>
+      </div>
+      <div>
+        <svg class="draw" viewBox="0 0 440 370" width="100%" style="display:block;max-width:470px;margin:0 auto" aria-label="A tangled argument straightened into one line">
+          <path class="ink" pathLength="1" d="M34 68 C104 26 84 126 172 94 C264 60 228 150 140 134 C72 124 114 172 214 150 C278 136 294 88 264 58" fill="none" stroke="#1F2024" stroke-width="2.6" stroke-linecap="round"></path>
+          <path class="fall" pathLength="1" d="M220 194 v40" fill="none" stroke="#6E6B65" stroke-width="2" stroke-linecap="round"></path>
+          <path class="pop n1" d="M212 232 L220 248 L228 232 z" fill="#6E6B65"></path>
+          <path class="line" pathLength="1" d="M34 300 H386" fill="none" stroke="#1E40FF" stroke-width="3" stroke-linecap="round"></path>
+          <circle class="pop n2" cx="34" cy="300" r="7" fill="#1E40FF"></circle>
+          <circle class="pop n3" cx="152" cy="300" r="7" fill="#1E40FF"></circle>
+          <circle class="pop n4" cx="270" cy="300" r="7" fill="#1E40FF"></circle>
+          <path class="pop n4" d="M386 290 L412 300 L386 310 z" fill="#1E40FF"></path>
+          <text x="220" y="348" text-anchor="middle" class="m cap">THE SAME ARGUMENT, STRAIGHTENED</text>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="strip"><div class="wrap"><p>For B2B GTM teams with a complicated product.</p></div></div>
+
+  <section class="sec" id="two">
+    <div class="wrap g2">
+      <div>
+        <h2>Your buyer reads it.<br>So does their AI.</h2>
+        <p class="say">Both reward the same thing. A claim you can find. Support that holds. One ask.</p>
+      </div>
+      <div>
+        <svg viewBox="0 0 540 330" width="100%" style="display:block;max-width:560px;margin:0 auto" aria-label="One page, read by a person and by an AI agent">
+          <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0 0 L10 5 L0 10 z" fill="#1F2024"></path></marker></defs>
+          <!-- the page -->
+          <rect x="200" y="64" width="140" height="164" fill="#FAF7EF" stroke="#1F2024" stroke-width="2"></rect>
+          <g stroke="#E4E0D6" stroke-width="3.4" stroke-linecap="round">
+            <path d="M218 94h104M218 110h78M218 144h104M218 160h64M218 194h104M218 210h84"></path></g>
+          <path d="M218 127h104" stroke="#1E40FF" stroke-width="4.4" stroke-linecap="round"></path>
+          <path d="M218 177h58" stroke="#1E40FF" stroke-width="4.4" stroke-linecap="round"></path>
+          <text x="270" y="256" text-anchor="middle" class="m">YOUR PAGE</text>
+          <!-- the person -->
+          <g stroke="#1F2024" stroke-width="2.2" fill="none" stroke-linecap="round">
+            <ellipse cx="66" cy="104" rx="12" ry="14"></ellipse>
+            <path d="M66 118v42M50 132c4-8 28-8 32 0M60 160l-6 30M74 160l6 30M52 192h10M76 192h10"></path></g>
+          <path d="M100 146 L192 146" stroke="#1F2024" stroke-width="2.2" marker-end="url(#ar)"></path>
+          <text x="66" y="230" text-anchor="middle" class="m">A PERSON</text>
+          <text x="66" y="250" text-anchor="middle" class="m">SKIMS IT</text>
+          <!-- the AI agent -->
+          <g stroke="#1F2024" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M470 66v10"></path>
+            <rect x="449" y="76" width="42" height="34" rx="6"></rect>
+            <path d="M461 102h18M470 110v8"></path>
+            <rect x="445" y="118" width="50" height="46" rx="5"></rect>
+            <path d="M456 130h28M456 140h18"></path>
+            <path d="M445 128 L431 128 L431 150M495 128 L509 128 L509 150"></path>
+            <path d="M457 164v24M483 164v24M449 188h16M475 188h16"></path>
+          </g>
+          <circle cx="470" cy="62" r="4" fill="#1F2024"></circle>
+          <circle cx="461" cy="91" r="3.6" fill="#1F2024"></circle>
+          <circle cx="479" cy="91" r="3.6" fill="#1F2024"></circle>
+          <path d="M420 146 L348 146" stroke="#1F2024" stroke-width="2.2" marker-end="url(#ar)"></path>
+          <text x="470" y="230" text-anchor="middle" class="m">AN AI AGENT</text>
+          <text x="470" y="250" text-anchor="middle" class="m">PARSES IT</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sand">
+    <div class="wrap">
+      <h2>Six things carry the argument.</h2>
+      <p class="say" style="margin-bottom:42px">You're in the room for two of them.</p>
+      <svg viewBox="0 0 1000 140" width="100%" style="display:block" aria-label="Six things across an eighteen-month sale">
+        <line x1="24" y1="80" x2="976" y2="80" stroke="#E4E0D6" stroke-width="2"></line>
+        <circle cx="76" cy="80" r="8" fill="#1E40FF"></circle><text x="76" y="46" text-anchor="middle" class="m" fill="#1E40FF">HOMEPAGE</text>
+        <circle cx="246" cy="80" r="8" fill="#1E40FF"></circle><text x="246" y="46" text-anchor="middle" class="m" fill="#1E40FF">DECK</text>
+        <circle cx="416" cy="80" r="8" fill="#1E40FF"></circle><text x="416" y="46" text-anchor="middle" class="m" fill="#1E40FF">PROPOSAL</text>
+        <circle cx="586" cy="80" r="8" fill="#7A3AD2"></circle><text x="586" y="46" text-anchor="middle" class="m" fill="#7A3AD2">KICKOFF</text>
+        <circle cx="756" cy="80" r="8" fill="#E933A6"></circle><text x="756" y="46" text-anchor="middle" class="m" fill="#E933A6">REVIEW</text>
+        <circle cx="926" cy="80" r="8" fill="#E933A6"></circle><text x="926" y="46" text-anchor="middle" class="m" fill="#E933A6">RENEWAL</text>
+        <text x="24" y="122" class="m">MONTH ONE</text>
+        <text x="976" y="122" text-anchor="end" class="m">MONTH EIGHTEEN</text>
       </svg>
-      <span>Calidescope</span>
-    </a>
-    <div class="nav-links">
-      <a href="promise.html">Promise</a>
-      <a href="perform.html">Perform</a>
-      <a href="proof.html">Proof</a>
-      <a href="case-studies.html">Case Studies</a>
-      <a href="why.html">About</a>
-      <a href="contact.html" class="is-contact">Contact</a>
     </div>
-  </div>
-</div>
+  </section>
 
-<!-- FOLD 1 · Promise to Proof -->
-<section class="fold fold--start">
-  <div class="wrap">
-
-    <div style="display:flex;flex-wrap:wrap;gap:32px 56px;align-items:center;margin-top:clamp(48px,12vh,120px)">
-      <h1 style="flex:1 1 340px;font:600 clamp(36px,5vw,58px)/1.08 'Archivo',sans-serif;letter-spacing:-.02em;margin:0">Promise to Proof.</h1>
-      <div style="flex:1.15 1 360px">
-        <div style="font:400 clamp(17px,1.5vw,20px)/1.6 'Archivo',sans-serif;color:#6E6B65">Calidescope provides services and <a href="https://throughline.builders/basic" target="_blank" rel="noopener noreferrer">software</a> that improve B2B communications: the promises that win the business, and the proof that keeps it.</div>
-        <div style="font:600 clamp(19px,1.6vw,22px)/1.55 'Archivo',sans-serif;color:#1F2024;margin:18px 0 0">Get the promise right, and buyers choose you. Get the proof right, and they stay.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOLD 2 · The world, 2026 -->
-<section class="fold fold--start">
-  <div class="wrap">
-    <div style="display:flex;align-items:center;gap:18px;margin:0 0 clamp(36px,6vh,72px)">
-      <div style="flex:1;border-top:1px solid #E4E0D6"></div>
-      <svg width="20" height="20" viewBox="-100 -100 200 200"><circle cx="0" cy="0" r="92" fill="none" stroke="#B9B4A7" stroke-width="8"></circle><line x1="-92" y1="0" x2="92" y2="0" stroke="#B9B4A7" stroke-width="7"></line><line x1="-46" y1="-79.7" x2="46" y2="79.7" stroke="#B9B4A7" stroke-width="7"></line><line x1="46" y1="-79.7" x2="-46" y2="79.7" stroke="#B9B4A7" stroke-width="7"></line><circle cx="0" cy="0" r="13" fill="#B9B4A7"></circle></svg>
-      <div style="flex:1;border-top:1px solid #E4E0D6"></div>
-    </div>
-        <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#6E6B65">THE WORLD, 2026</div>
-
-    <div class="world-grid">
-      <div class="world-viz world-viz--left">
-        <svg width="100%" viewBox="0 0 390 212" fill="none" preserveAspectRatio="xMidYMid meet" style="max-width:390px" role="img" aria-label="Two messy piles of drafts: Promise artifacts (webpage, deck, copy) and Proof artifacts (QBR, case study, dashboard)">
-          <!-- PROMISE bunch -->
-          <g transform="rotate(-9 54 86)">
-            <rect x="8" y="30" width="92" height="112" rx="5" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
-            <circle cx="17" cy="38" r="2" fill="#D9D5CA"/><circle cx="24" cy="38" r="2" fill="#D9D5CA"/><circle cx="31" cy="38" r="2" fill="#D9D5CA"/>
-            <line x1="8" y1="45" x2="100" y2="45" stroke="#E4E0D6"/>
-            <rect x="16" y="53" width="58" height="7" rx="2" fill="#D9D5CA"/>
-            <rect x="16" y="66" width="72" height="4.5" rx="2" fill="#EAE6DB"/>
-            <rect x="16" y="75" width="64" height="4.5" rx="2" fill="#EAE6DB"/>
-            <text x="16" y="133" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="1" fill="#6E6B65">WEBPAGE</text>
-          </g>
-          <g transform="rotate(6 117 45)">
-            <rect x="58" y="6" width="118" height="78" rx="5" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
-            <rect x="68" y="17" width="60" height="8" rx="2" fill="#D9D5CA"/>
-            <rect x="68" y="32" width="90" height="4.5" rx="2" fill="#EAE6DB"/>
-            <rect x="68" y="41" width="76" height="4.5" rx="2" fill="#EAE6DB"/>
-            <text x="68" y="73" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="1" fill="#6E6B65">DECK</text>
-          </g>
-          <g transform="rotate(-4 146 116)">
-            <rect x="102" y="58" width="88" height="116" rx="5" fill="#fff" stroke="#1F2024" stroke-width="1.5"/>
-            <rect x="112" y="70" width="60" height="7" rx="2" fill="#D9D5CA"/>
-            <rect x="112" y="84" width="68" height="4.5" rx="2" fill="#EAE6DB"/>
-            <rect x="112" y="93" width="62" height="4.5" rx="2" fill="#EAE6DB"/>
-            <rect x="112" y="102" width="66" height="4.5" rx="2" fill="#EAE6DB"/>
-            <rect x="112" y="111" width="52" height="4.5" rx="2" fill="#EAE6DB"/>
-            <text x="112" y="163" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="1" fill="#6E6B65">COPY</text>
-          </g>
-          <text x="62" y="204" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="2" fill="#1E40FF">PROMISE</text>
-
-          <!-- PROOF bunch -->
-          <g transform="rotate(7 255 56)">
-            <rect x="196" y="16" width="118" height="80" rx="5" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
-            <rect x="206" y="26" width="52" height="7" rx="2" fill="#D9D5CA"/>
-            <rect x="206" y="62" width="10" height="16" fill="#EAE6DB"/>
-            <rect x="220" y="54" width="10" height="24" fill="#D9D5CA"/>
-            <rect x="234" y="46" width="10" height="32" fill="#E933A6"/>
-            <rect x="248" y="58" width="10" height="20" fill="#EAE6DB"/>
-            <text x="206" y="90" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="1" fill="#6E6B65">QBR</text>
-          </g>
-          <g transform="rotate(-7 278 117)">
-            <rect x="232" y="58" width="92" height="118" rx="5" fill="#fff" stroke="#1F2024" stroke-width="1.5"/>
-            <rect x="242" y="70" width="56" height="7" rx="2" fill="#D9D5CA"/>
-            <polyline points="242,108 258,98 274,103 290,88 306,93" stroke="#E933A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            <circle cx="306" cy="93" r="2.5" fill="#E933A6"/>
-            <rect x="242" y="122" width="70" height="4.5" rx="2" fill="#EAE6DB"/>
-            <rect x="242" y="131" width="58" height="4.5" rx="2" fill="#EAE6DB"/>
-            <text x="242" y="165" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="1" fill="#6E6B65">CASE STUDY</text>
-          </g>
-          <g transform="rotate(4 334 47)">
-            <rect x="286" y="4" width="96" height="86" rx="5" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
-            <circle cx="308" cy="34" r="10" stroke="#EAE6DB" stroke-width="4.5"/>
-            <circle cx="308" cy="34" r="10" stroke="#E933A6" stroke-width="4.5" stroke-dasharray="24 39" transform="rotate(-90 308 34)"/>
-            <rect x="326" y="34" width="7" height="12" fill="#EAE6DB"/>
-            <rect x="336" y="28" width="7" height="18" fill="#D9D5CA"/>
-            <rect x="346" y="22" width="7" height="24" fill="#E933A6"/>
-            <rect x="296" y="56" width="70" height="4.5" rx="2" fill="#EAE6DB"/>
-            <rect x="296" y="65" width="54" height="4.5" rx="2" fill="#EAE6DB"/>
-            <text x="296" y="82" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="1" fill="#6E6B65">DASHBOARD</text>
-          </g>
-          <text x="272" y="204" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="2" fill="#E933A6">PROOF</text>
-        </svg>
-      </div>
-
-      <div class="world-cap world-cap--left">
-        <div class="cap-title">Producing has never been easier.</div>
-        <div class="cap-sub">Decks, copy, analyses — agents draft them all day.</div>
-      </div>
-
-      <div class="world-arrow">
-        <svg width="36" height="24" viewBox="0 0 36 24" fill="none" stroke="#1E40FF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h30"></path><path d="M25 5l7 7-7 7"></path></svg>
-      </div>
-
-      <div class="world-viz world-viz--right" style="height:auto">
-        <div class="loop-box" style="width:min(300px,100%);margin-bottom:-34px">
-        <svg viewBox="0 0 420 420">
-          <circle cx="210" cy="210" r="150" fill="none" stroke="#E4E0D6" stroke-width="2"></circle>
-          <path d="M210 60 A150 150 0 0 1 340 285" fill="none" stroke="#1E40FF" stroke-width="3"></path>
-          <path d="M340 285 A150 150 0 0 1 80 285" fill="none" stroke="#7A3AD2" stroke-width="3"></path>
-          <path d="M80 285 A150 150 0 0 1 210 60" fill="none" stroke="#E933A6" stroke-width="3"></path>
-          <path d="M336 270 l6 17 -17 -5" fill="none" stroke="#1E40FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-          <path d="M96 297 l-16 -8 17 -8" fill="none" stroke="#7A3AD2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-          <path d="M200 63 l12 -12 4 17" fill="none" stroke="#E933A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-        </svg>
-        <div class="loop-node loop-node--promise">
-          <div class="node-dot" style="background:#DDE6FF"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"></path><path d="M5 4h12l-2.2 3.2L17 10.4H5" stroke="#1E40FF"></path></svg></div>
-          <div class="node-title">Promise</div>
-          <div class="node-sub">say what you'll deliver</div>
+  <!-- AI, on the homepage -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="hr"><h2>AI is already in the room.</h2></div>
+      <div class="g3">
+        <div class="card b">
+          <svg class="shape" width="46" height="46" viewBox="0 0 60 60" fill="none" stroke="#1E40FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M30 8v6"></path><rect x="16" y="14" width="28" height="20" rx="5"></rect>
+            <path d="M24 28h12"></path><circle cx="24" cy="23" r="2.4" fill="#1E40FF" stroke="none"></circle>
+            <circle cx="36" cy="23" r="2.4" fill="#1E40FF" stroke="none"></circle>
+            <circle cx="30" cy="6" r="2.6" fill="#1E40FF" stroke="none"></circle>
+            <path d="M14 42h32M14 48h22"></path>
+          </svg>
+          <h3>It reads your page.</h3>
+          <p class="say">Buyers ask a model before they ask you. Whatever it can't find, they never see.</p>
         </div>
-        <div class="loop-node loop-node--perform">
-          <div class="node-dot" style="background:#EBDFFA"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="20" x2="5" y2="14"></line><line x1="12" y1="20" x2="12" y2="8"></line><line x1="19" y1="20" x2="19" y2="4"></line></svg></div>
-          <div class="node-title">Perform</div>
-          <div class="node-sub">do the work</div>
+        <div class="card b">
+          <svg class="shape" width="46" height="46" viewBox="0 0 60 60" fill="none" stroke="#1E40FF" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <rect x="12" y="10" width="26" height="34"></rect><path d="M20 20h12M20 27h10M20 34h7"></path>
+            <path d="M44 18l4 4-16 16-5 1 1-5z"></path>
+          </svg>
+          <h3>It writes everyone else's.</h3>
+          <p class="say">Volume went up for every team in your category on the same day. Clarity is what's left to win on.</p>
         </div>
-        <div class="loop-node loop-node--proof">
-          <div class="node-dot" style="background:#FFDDF0"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3.2v5.3c0 5-3.4 7.9-7 9-3.6-1.1-7-4-7-9V6.2L12 3z"></path><path d="M9 12.2l2 2 4-4.2" stroke="#E933A6" stroke-width="2"></path></svg></div>
-          <div class="node-title">Proof</div>
-          <div class="node-sub">show it</div>
+        <div class="card b">
+          <svg class="shape" width="46" height="46" viewBox="0 0 60 60" fill="none" stroke="#1E40FF" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <circle cx="30" cy="30" r="18"></circle><path d="M30 18v12l8 5"></path><path d="M30 12v-6M48 30h6M30 48v6M12 30H6"></path>
+          </svg>
+          <h3>We've built with it since 2022.</h3>
+          <p class="say">Inside enterprise measurement work, then proposals from weeks to hours, now the software we ship.</p>
         </div>
-      </div>
-      </div>
-
-      <div class="world-cap world-cap--right">
-        <div class="cap-title">Clarity has never been rarer.</div>
-        <div class="cap-sub">A clear line from promise to proof is what wins — and keeps — the business.</div>
       </div>
     </div>
+  </section>
 
-    <div style="font:600 clamp(18px,1.5vw,21px)/1.5 'Archivo',sans-serif;max-width:720px;margin:clamp(28px,4vh,48px) 0 0;text-wrap:balance">Calidescope exists to make sure your communications get you the business — and help you keep it.</div>
-  </div>
-</section>
+  <!-- THROUGHLINE — the software, led -->
+  <section class="sec tint" id="tl-home" style="--acc:#1E40FF;--acc-t:#DDE6FF">
+    <div class="wrap">
+      <div class="g2" style="margin-bottom:clamp(34px,4.5vw,54px)">
+        <div>
+          <h2>Try it on your own page.</h2>
+          <p class="say">Throughline reads a page the way its readers do, scores it, and shows you the one thing to cut. Paste a URL. Watch it work. It's live now.</p>
+          <div class="acts" style="margin-top:28px">
+            <a href="https://throughline.builders" target="_blank" rel="noopener" class="btn lg acc">Open Throughline ↗</a>
+            <span class="tag">Free to try · alpha</span>
+          </div>
+        </div>
+        <div>
+          <figure class="shot" style="margin:0">
+            <img src="assets/tl-score.jpg" alt="Throughline reading view: lenses, marked-up page, and a score" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" style="display: none;">
+            <svg style="display: block; width: 100%;" viewBox="0 0 500 268" aria-label="Throughline reading view">
+              <rect width="500" height="268" fill="#FAF7EF"></rect>
+              <rect x="14" y="26" width="100" height="182" fill="#fff" stroke="#1F2024" stroke-width="1.8"></rect>
+              <g stroke="#1E40FF" stroke-width="1.8" fill="none">
+                <rect x="30" y="48" width="12" height="12"></rect><rect x="30" y="76" width="12" height="12"></rect>
+                <rect x="30" y="104" width="12" height="12"></rect><rect x="30" y="132" width="12" height="12"></rect>
+                <path d="M32 54l3 3 6-7M32 82l3 3 6-7M32 110l3 3 6-7"></path></g>
+              <g stroke="#E4E0D6" stroke-width="3.4" stroke-linecap="round">
+                <path d="M52 54h46M52 82h38M52 110h46M52 138h32M52 166h44"></path></g>
+              <rect x="132" y="26" width="204" height="182" fill="#fff" stroke="#1F2024" stroke-width="1.8"></rect>
+              <g stroke="#E4E0D6" stroke-width="3.6" stroke-linecap="round">
+                <path d="M152 52h164M152 70h124M152 112h164M152 130h144M152 172h164M152 190h98"></path></g>
+              <path d="M152 91h164" stroke="#1E40FF" stroke-width="4.6" stroke-linecap="round"></path>
+              <path d="M152 151h106" stroke="#1E40FF" stroke-width="4.6" stroke-linecap="round"></path>
+              <rect x="354" y="26" width="132" height="182" fill="#fff" stroke="#1F2024" stroke-width="1.8"></rect>
+              <path d="M382 116 A38 38 0 1 1 458 116" fill="none" stroke="#E4E0D6" stroke-width="8" stroke-linecap="round"></path>
+              <path d="M382 116 A38 38 0 0 1 405 81" fill="none" stroke="#1E40FF" stroke-width="8" stroke-linecap="round"></path>
+              <text x="420" y="126" text-anchor="middle" font-family="Archivo,sans-serif" font-size="38" font-weight="600" fill="#1F2024">30</text>
+              <text x="420" y="240" text-anchor="middle" class="m">ONE SCORE</text>
+            </svg>
+            <figcaption>Throughline · one read, one score</figcaption>
+          </figure>
+        </div>
+      </div>
 
-<!-- FOLD 3 · The loop, and the two sides -->
-<section class="fold">
-  <div class="wrap">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(290px,100%),1fr));gap:20px">
-        <div style="background:#DDE6FF;border-radius:12px;padding:26px 28px">
-          <div style="width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 0 12px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"></path><path d="M5 4h12l-2.2 3.2L17 10.4H5" stroke="#1E40FF"></path></svg></div>
-          <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#1E40FF;margin:0 0 10px">PROMISE · THE PITCH</div>
-          <h3 style="font:600 21px/1.3 'Archivo',sans-serif;margin:0 0 8px">How you promise decides who chooses you.</h3>
-          <p style="font:400 14px/1.6 'Archivo',sans-serif;margin:0 0 14px">Your homepage, deck, and RFP responses all make a promise to the buyer. Say it clearly and specifically enough, and they choose you before the first call.</p>
-          <a href="promise.html" style="font:600 14px 'Archivo',sans-serif">See what that looks like →</a>
-        </div>
-        <div style="background:#EBDFFA;border-radius:12px;padding:26px 28px">
-          <div style="width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 0 12px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="20" x2="5" y2="14"></line><line x1="12" y1="20" x2="12" y2="8"></line><line x1="19" y1="20" x2="19" y2="4" stroke="#7A3AD2"></line></svg></div>
-          <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#7A3AD2;margin:0 0 10px">PERFORM · THE WORKFLOW</div>
-          <h3 style="font:600 21px/1.3 'Archivo',sans-serif;margin:0 0 8px">How you work decides whether the promise becomes the proof.</h3>
-          <p style="font:400 14px/1.6 'Archivo',sans-serif;margin:0 0 14px">The cadences, the handoffs, and the systems in between — with AI working inside the process. This is the work that keeps the promise.</p>
-          <a href="perform.html" style="font:600 14px 'Archivo',sans-serif">See what that looks like →</a>
-        </div>
-        <div style="background:#FFDDF0;border-radius:12px;padding:26px 28px">
-          <div style="width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 0 12px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3.2v5.3c0 5-3.4 7.9-7 9-3.6-1.1-7-4-7-9V6.2L12 3z"></path><path d="M9 12.2l2 2 4-4.2" stroke="#E933A6" stroke-width="2"></path></svg></div>
-          <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#E933A6;margin:0 0 10px">PROOF · THE EVIDENCE</div>
-          <h3 style="font:600 21px/1.3 'Archivo',sans-serif;margin:0 0 8px">How you prove decides who keeps choosing you.</h3>
-          <p style="font:400 14px/1.6 'Archivo',sans-serif;margin:0 0 14px">Your QBRs, case studies, and renewal decks have to show the performance you promised — clearly enough that nobody has to take your word for it. Get it right, and the buyer stays.</p>
-          <a href="proof.html" style="font:600 14px 'Archivo',sans-serif">See what that looks like →</a>
-        </div>
+      <div class="g4">
+        <div class="card" style="border-color:var(--blue)"><h4>Pick the lenses.</h4><p class="say">The perspectives that matter for the page in front of you.</p></div>
+        <div class="card" style="border-color:var(--blue)"><h4>Apply them.</h4><p class="say">Throughline runs each one. No expertise required.</p></div>
+        <div class="card" style="border-color:var(--blue)"><h4>See the synthesis.</h4><p class="say">One read. One score. What's doing more or less work than it should.</p></div>
+        <div class="card" style="border-color:var(--blue)"><h4>Make the moves.</h4><p class="say">Specific changes, grounded in the lenses you picked.</p></div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<div class="site-footer">
-  <div class="wrap">
+  <!-- The Read — the human option, second -->
+  <section class="sec" id="read">
+    <div class="wrap g2">
+      <div>
+        <h2>Or hand us the one that has to land.</h2>
+        <p class="say">When it's the pitch that decides the quarter, we do the reading ourselves and rewrite the section that matters. Back inside five business days.</p>
+        <div class="acts" style="margin-top:26px"><a href="contact.html" class="btn lg out">Show us one thing</a></div>
+      </div>
+      <div class="steps" style="grid-template-columns:1fr;border-top:0">
+        <div class="step" style="border:0;padding:0 0 22px"><p class="n">You send</p><p>One thing, and one sentence about what it has to do.</p></div>
+        <div class="step" style="border:0;padding:0 0 22px"><p class="n">We read</p><p>One score. One direction to cut.</p></div>
+        <div class="step" style="border:0;padding:0"><p class="n">You get</p><p>It back, marked up, with the section that matters rewritten.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sand">
+    <div class="wrap">
+      <div class="g2" style="margin-bottom:clamp(38px,5vw,60px)">
+        <div>
+          <h2>Promise to Proof.</h2>
+          <p class="say">Get the promise right, and buyers choose you. Get the proof right, and they stay.</p>
+        </div>
+        <div>
+          <svg viewBox="0 0 420 330" width="100%" style="display:block;max-width:460px;margin:0 auto" aria-label="Promise Perform Proof loop">
+            <defs>
+              <marker id="m1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#7A3AD2"></path></marker>
+              <marker id="m2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#E933A6"></path></marker>
+              <marker id="m3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1E40FF"></path></marker>
+            </defs>
+            <path d="M138 100 Q210 60 282 100" fill="none" stroke="#1E40FF" stroke-width="2.4" stroke-linecap="round" marker-end="url(#m1)"></path>
+            <path d="M304 126 Q298 204 226 228" fill="none" stroke="#7A3AD2" stroke-width="2.4" stroke-linecap="round" marker-end="url(#m2)"></path>
+            <path d="M194 228 Q122 204 116 126" fill="none" stroke="#E933A6" stroke-width="2.4" stroke-linecap="round" marker-end="url(#m3)"></path>
+            <path d="M118 98 L127 114 L109 114 Z" fill="none" stroke="#1E40FF" stroke-width="2.6" stroke-linejoin="round"></path>
+            <text x="96" y="103" text-anchor="end" class="nm">Promise</text><text x="96" y="125" text-anchor="end" class="m">WIN IT</text>
+            <rect x="294" y="99" width="16" height="16" fill="none" stroke="#7A3AD2" stroke-width="2.6"></rect>
+            <text x="324" y="103" class="nm">Perform</text><text x="324" y="125" class="m">KEEP IT</text>
+            <circle cx="210" cy="240" r="8.5" fill="none" stroke="#E933A6" stroke-width="2.6"></circle>
+            <text x="210" y="278" text-anchor="middle" class="nm">Proof</text><text x="210" y="300" text-anchor="middle" class="m">RENEW IT</text>
+          </svg>
+        </div>
+      </div>
+      <div class="g3">
+        <a class="card b" href="promise.html">
+          <svg class="shape" width="30" height="30" viewBox="0 0 40 40"><path d="M20 7 L34 32 L6 32 Z" fill="none" stroke="#1E40FF" stroke-width="2.6" stroke-linejoin="round"></path></svg>
+          <h3>Win the business.</h3><p class="say">Homepages, decks, proposals.</p><span class="go" style="color:var(--blue)">Promise →</span></a>
+        <a class="card v" href="perform.html">
+          <svg class="shape" width="30" height="30" viewBox="0 0 40 40"><rect x="8" y="8" width="24" height="24" fill="none" stroke="#7A3AD2" stroke-width="2.6"></rect></svg>
+          <h3>Keep the promise.</h3><p class="say">Cadences, handoffs, AI inside the process.</p><span class="go" style="color:var(--violet)">Perform →</span></a>
+        <a class="card p" href="proof.html">
+          <svg class="shape" width="30" height="30" viewBox="0 0 40 40"><circle cx="20" cy="20" r="13" fill="none" stroke="#E933A6" stroke-width="2.6"></circle></svg>
+          <h3>Earn the renewal.</h3><p class="say">Reviews, case studies, renewal decks.</p><span class="go" style="color:var(--pink)">Proof →</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec dark">
+    <div class="wrap g2" style="align-items:start">
+      <div><h2>Producing has never been easier.</h2><p class="say">Everyone ships a deck before lunch.</p></div>
+      <div><h2>Clarity has never been rarer.</h2><p class="say">Which makes one clear page the cheapest advantage you can buy.</p></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="hr"><h2>Where this has worked.</h2><a href="case-studies.html" class="tag" style="color:var(--ink)">All fifteen →</a></div>
+      <div class="g3" id="home-cases"><a class="stat b" href="case-study-dentsu.html"><p class="n">+70%</p><h3>A data business, renamed three times.</h3><p class="tag">dentsu</p></a><a class="stat v" href="case-study-motherboard.html"><p class="n">Coca-Cola</p><h3>A job that had failed three times before.</h3><p class="tag">Motherboard · IPG Mediabrands</p></a><a class="stat v" href="case-study-havas.html"><p class="n">$40M+</p><h3>Five CEOs, each with their own audience platform.</h3><p class="tag">Havas · Converged</p></a></div>
+    </div>
+  </section>
+
+  <section class="close">
+    <div class="wrap"><h2 style="max-width:20ch;margin:0 auto 28px">Start with one page.</h2>
+      <a href="https://throughline.builders" target="_blank" rel="noopener" class="btn lg">Try it on your own page ↗</a></div>
+  </section>
+
+</main>
+<div class="wrap">
+  <footer>
     <div>
-      <div class="brand">Calidescope LLC</div>
-      <div class="tagline">Promise to Proof. The same discipline, all the way around.</div>
-      <div class="links">
-        <a href="promise.html">PROMISE</a>
-        <a href="perform.html">PERFORM</a>
-        <a href="proof.html">PROOF</a>
-        <a href="case-studies.html">CASE STUDIES</a>
-        <a href="why.html">ABOUT</a>
-        <a href="contact.html">CONTACT</a>
-        <a href="privacy.html">PRIVACY</a>
-        <a href="terms.html">TERMS</a>
-        <a href="#" data-cookie-prefs>COOKIE PREFERENCES</a>
-      </div>
+      <a class="logo" href="index.html" style="margin-bottom:14px">
+        <svg width="21" height="21" viewBox="0 0 40 40" fill="none" stroke="#1F2024" stroke-width="1.9" aria-hidden="true">
+          <circle cx="20" cy="20" r="17"/><path d="M20 3v34M5 11.5l30 17M5 28.5l30-17"/>
+          <circle cx="20" cy="20" r="3.2" fill="#1F2024" stroke="none"/></svg>
+        Calidescope</a>
+      <p style="margin:0;font-weight:600;letter-spacing:-.014em;max-width:30ch">Promise to Proof. The same discipline, all the way around.</p>
     </div>
-    <a href="contact.html" class="btn-primary">Start a conversation →</a>
-  </div>
+    <div class="fl">
+      <a href="throughline.html">Throughline</a><a href="promise.html">Promise</a><a href="perform.html">Perform</a><a href="proof.html">Proof</a>
+      <a href="case-studies.html">Case studies</a><a href="why.html">About</a><a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>
+    </div>
+  </footer>
 </div>
-
-<script src="assets/consent.js"></script>
 </body>
 </html>

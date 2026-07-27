@@ -4,317 +4,245 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Why — Calidescope</title>
-<meta name="description" content="Why Calidescope exists: a kaleidoscope of lenses turned on your communication, so you see it the way its audience will.">
+<meta name="description" content="One lens tells you something. Six tell you what to do.">
+<link rel="canonical" href="https://calidescope.llc/why.html">
+<meta property="og:site_name" content="Calidescope">
 <meta property="og:title" content="Why — Calidescope">
-<meta property="og:description" content="A kaleidoscope of lenses turned on one piece of communication, so many reads resolve into one clean read.">
+<meta property="og:description" content="One lens tells you something. Six tell you what to do.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calidescope.llc/why.html">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<!-- Self-hosted fonts. Copy assets/fonts/ from calidescope-site-official.zip.
+     No third-party font call, per the privacy policy. -->
 <link rel="stylesheet" href="assets/fonts/fonts.css">
-<link rel="stylesheet" href="assets/style.css?v=8">
 <style>
-/* ---------- Why page · scoped to .why-page so nothing leaks ---------- */
-.why-page{ --promise:#1E40FF;--perform:#7A3AD2;--proof:#E933A6;--measure:38rem; }
-.why-page .kicker{
-  font:500 10.5px 'IBM Plex Mono',ui-monospace,monospace;
-  text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin:0;
+:root{
+  --ink:#1F2024;--paper:#FAF7EF;--sand:#F3EEE2;--muted:#6E6B65;--hair:#E4E0D6;
+  --blue:#1E40FF;--blue-t:#DDE6FF;--violet:#7A3AD2;--violet-t:#EBDFFA;--pink:#E933A6;--pink-t:#FFDDF0;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --sans:'Archivo',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --gut:clamp(22px,5vw,68px);--acc:#1F2024;--acc-t:#F3EEE2;
 }
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:19px;line-height:1.55;-webkit-font-smoothing:antialiased}
+p{margin:0 0 14px} a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--gut)}
+h1{font-weight:600;font-size:clamp(40px,6.4vw,74px);line-height:.99;letter-spacing:-.032em;margin:0 0 26px}
+h2{font-weight:600;font-size:clamp(29px,4.3vw,47px);line-height:1.04;letter-spacing:-.028em;margin:0 0 16px}
+h3{font-weight:600;font-size:clamp(20px,2.2vw,26px);line-height:1.14;letter-spacing:-.02em;margin:0 0 8px}
+h4{font-weight:600;font-size:19px;letter-spacing:-.012em;margin:0 0 6px}
+.lede{font-size:clamp(19px,2.1vw,23px);line-height:1.45;max-width:36ch;color:#3a3b40}
+.say{font-size:clamp(17px,1.85vw,20px);line-height:1.45;color:#3a3b40;max-width:46ch}
+.tag{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mut{color:var(--muted)}
 
-/* hero */
-.why-hero{ padding:clamp(3rem,8vw,6rem) 0 1rem; }
-.why-hero h1{
-  font:600 clamp(3.2rem,11vw,6rem)/.98 'Archivo',sans-serif;
-  letter-spacing:-.02em;margin:.5rem 0 1.6rem;
-}
-.why-lead{
-  font:400 clamp(1.5rem,3.4vw,2rem)/1.28 'Archivo',sans-serif;
-  letter-spacing:-.015em;max-width:34rem;margin:0 0 2.2rem;
-}
-.why-flow p{ max-width:var(--measure);margin:0 0 1.05rem;font:400 18px/1.62 'Archivo',sans-serif; }
-.why-flow .beat{ color:var(--muted); }
-.why-flow .turn{ font-weight:600;letter-spacing:-.01em; }
+nav{border-bottom:1px solid var(--hair);background:var(--paper);position:sticky;top:0;z-index:60}
+nav .in{display:flex;align-items:center;gap:26px;height:80px}
+.logo{display:flex;align-items:center;gap:11px;font-weight:600;font-size:19px;letter-spacing:.02em}
+nav .links{display:flex;gap:24px;margin-left:auto;font-size:16.5px;align-items:center}
+nav .links a{color:var(--muted)}nav .links a:hover{color:var(--ink)}
+nav .links a.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--acc)}
+.btn{display:inline-block;background:var(--ink);color:var(--paper);font-weight:600;font-size:16.5px;padding:13px 22px;transition:.15s}
+.btn:hover{background:var(--acc);color:#fff}
+.btn.lg{font-size:19px;padding:18px 32px}
+.btn.out{background:none;color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.btn.out:hover{background:var(--ink);color:var(--paper)}
+.btn.acc{background:var(--acc);color:#fff}.btn.acc:hover{background:var(--ink)}
+@media(max-width:1080px){nav .links a:not(.btn){display:none}}
 
-/* the lens signature */
-.lens-figure{
-  margin:2.5rem 0 1.25rem;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-  padding:2.25rem 0;text-align:center;
-}
-.lens-figure svg{ width:100%;max-width:640px;height:auto;color:var(--ink); }
-.why-named{
-  text-align:center;font:600 clamp(1.35rem,3vw,1.75rem)/1.3 'Archivo',sans-serif;
-  letter-spacing:-.015em;max-width:32rem;margin:1.5rem auto 0;
-}
+.page{display:none}.page.on{display:block}
+.hero{padding:clamp(64px,9vw,124px) 0 clamp(48px,6vw,78px)}
+.hero.tint{background:var(--acc-t);border-bottom:1px solid rgba(31,32,36,.1)}
+.acts{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:36px}
+.scroll{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:18px;color:var(--muted)}
+.strip{background:var(--ink);color:var(--paper);padding:20px 0}
+.strip p{margin:0;font-size:clamp(17px,1.9vw,21px);font-weight:600;letter-spacing:-.012em}
+.sec{padding:clamp(58px,7.2vw,104px) 0}
+.sec.sand{background:var(--sand);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.sec.tint{background:var(--acc-t)}
+.sec.dark{background:var(--ink);color:var(--paper)}
+.sec.dark h2{color:var(--paper)}.sec.dark .say{color:rgba(250,247,239,.72)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5.5vw,74px);align-items:center}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,34px)}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2vw,24px)}
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr}.g4{grid-template-columns:1fr 1fr}}
+.hr{border-bottom:1px solid var(--ink);padding-bottom:20px;margin-bottom:42px;display:flex;
+  justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap}
+.hr h2{margin:0}
 
-/* three moments */
-.moments{ padding:clamp(3.5rem,8vw,6rem) 0 clamp(2rem,5vw,3rem); }
-.moments > .kicker{ margin-bottom:.4rem; }
-.moments h2{
-  font:600 clamp(1.6rem,4vw,2.25rem)/1.2 'Archivo',sans-serif;
-  letter-spacing:-.018em;margin:0 0 2.75rem;max-width:24rem;
-}
-.moment-grid{ display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1.5rem,3.5vw,2.75rem); }
-.moment{ padding-top:1.25rem;border-top:2px solid var(--ink); }
-.moment.on-promise{ border-color:var(--promise); }
-.moment.on-perform{ border-color:var(--perform); }
-.moment.on-proof{ border-color:var(--proof); }
-.moment .icon{ width:88px;height:88px;margin:-.25rem 0 1.15rem;display:block; }
-.moment .kicker{ margin-bottom:.7rem; }
-.moment.on-promise .kicker{ color:var(--promise); }
-.moment.on-perform .kicker{ color:var(--perform); }
-.moment.on-proof .kicker{ color:var(--proof); }
-.moment .m-lead{ font:600 1.24rem/1.2 'Archivo',sans-serif;letter-spacing:-.012em;margin:0 0 .65rem; }
-.moment .m-body{ margin:0;color:var(--muted);font:400 1rem/1.55 'Archivo',sans-serif; }
+.card{border-top:3px solid var(--hair);padding-top:20px}
+.card.b{border-color:var(--blue)}.card.v{border-color:var(--violet)}.card.p{border-color:var(--pink)}
+.card .say{font-size:17.5px;max-width:none;margin:0}
+.card .go{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;display:block;margin-top:16px}
+.shape{margin-bottom:12px;display:block}
+.ci{width:60px;height:60px;border-radius:50%;background:var(--acc-t);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
 
-/* founder / payoff */
-.why-close{ padding:clamp(3rem,7vw,5.5rem) 0;border-top:1px solid var(--line); }
-.why-close .why-flow p{ font-size:1.16rem; }
-.arrival{ margin:2.5rem 0 .5rem; }
-.arrival svg{ width:210px;max-width:60%;height:auto;color:var(--perform); }
-.why-payoff{
-  font:600 clamp(2.1rem,5.5vw,3.1rem)/1.05 'Archivo',sans-serif;
-  letter-spacing:-.02em;margin:.25rem 0 1.75rem;max-width:26rem;
-}
-.why-tail p{ max-width:var(--measure);margin:0 0 1.05rem;font:400 18px/1.62 'Archivo',sans-serif; }
-.why-tail .service{ color:var(--muted); }
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid rgba(31,32,36,.2)}
+@media(max-width:860px){.steps{grid-template-columns:1fr}}
+.step{padding:28px 30px 30px 0;border-right:1px solid rgba(31,32,36,.14)}
+.step:last-child{border-right:0;padding-right:0}.step+.step{padding-left:30px}
+@media(max-width:860px){.step{border-right:0;border-bottom:1px solid rgba(31,32,36,.14);padding:24px 0}
+  .step+.step{padding-left:0}.step:last-child{border-bottom:0}}
+.step .n{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.16em;color:var(--acc);margin:0 0 12px;text-transform:uppercase}
+.step p{margin:0;font-size:18.5px;line-height:1.4;font-weight:600;letter-spacing:-.012em}
+.step p.sub{font-weight:400;font-size:17px;color:var(--muted);margin-top:8px}
 
-/* motion — content is visible by default; JS opts in to the reveal */
-.js-reveal .reveal{ opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease; }
-.js-reveal .reveal.in{ opacity:1;transform:none; }
-.js-reveal .draw{ stroke-dasharray:620;stroke-dashoffset:620;transition:stroke-dashoffset 1.4s ease .2s; }
-.js-reveal .lens-figure.in .draw{ stroke-dashoffset:0; }
-.js-reveal .arrival .draw{ stroke-dasharray:190;stroke-dashoffset:190; }
-.js-reveal .arrival.in .draw{ stroke-dashoffset:0; }
+.shot{border:1px solid var(--hair);background:#fff;overflow:hidden}
+.shot img{width:100%}
+.shot figcaption{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);padding:12px 16px;border-top:1px solid var(--hair)}
 
-/* the signature figure builds itself: lenses draw and settle, the mark turns into place.
-   --len = path length, --t = duration, --d = delay, --r = starting rotation */
-.js-reveal .b{
-  stroke-dasharray:var(--len);stroke-dashoffset:var(--len);
-  transition:stroke-dashoffset var(--t,.9s) ease var(--d,0s);
-}
-.js-reveal .lens-figure.in .b{ stroke-dashoffset:0; }
-.js-reveal .b-turn{
-  transform:rotate(var(--r,0deg));transform-box:view-box;
-  transition:transform var(--t,1.2s) cubic-bezier(.2,.8,.25,1) var(--d,0s);
-}
-.js-reveal .lens-figure.in .b-turn{ transform:none; }
-.js-reveal .b-dot{
-  opacity:0;transform:scale(.25);transform-box:view-box;transform-origin:556px 130px;
-  transition:opacity .3s ease var(--d,0s),transform .5s cubic-bezier(.16,1,.3,1) var(--d,0s);
-}
-.js-reveal .lens-figure.in .b-dot{ opacity:1;transform:none; }
+.stat{border-left:2px solid var(--ink);padding-left:22px}
+.stat .n{font-weight:600;font-size:clamp(30px,3.8vw,46px);letter-spacing:-.03em;line-height:1;margin:0 0 12px}
+.stat h3{font-size:20px;letter-spacing:-.016em;margin:0 0 10px}
+.stat.b{border-color:var(--blue)}.stat.b .n{color:var(--blue)}
+.stat.v{border-color:var(--violet)}.stat.v .n{color:var(--violet)}
+.stat.p{border-color:var(--pink)}.stat.p .n{color:var(--pink)}
 
-@media (max-width:720px){
-  .moment-grid{ grid-template-columns:1fr;gap:2.25rem; }
-}
-@media (prefers-reduced-motion:reduce){
-  .js-reveal .reveal{ opacity:1;transform:none;transition:none; }
-  .js-reveal .draw{ stroke-dasharray:none;stroke-dashoffset:0;transition:none; }
-  .js-reveal .b{ stroke-dasharray:none;stroke-dashoffset:0;transition:none; }
-  .js-reveal .b-turn{ transform:none;transition:none; }
-  .js-reveal .b-dot{ opacity:1;transform:none;transition:none; }
+.offer{border:1px solid var(--hair);background:#fff;padding:30px;display:flex;flex-direction:column}
+.offer.lead{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+.offer.dash{border:1px dashed var(--hair);background:none;justify-content:center}
+.offer .say{font-size:17.5px;max-width:none;flex:1}
+
+.caserow{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+@media(max-width:900px){.caserow{grid-template-columns:1fr}}
+.case{padding:30px 34px;border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  display:flex;flex-direction:column;transition:.15s}
+.case:nth-child(3n+1){padding-left:0}
+.case:nth-child(3n){border-right:0;padding-right:0}
+@media(max-width:900px){
+  .case,.case:nth-child(3n),.case:nth-child(3n+1){border-right:0;padding:26px 0}}
+.case .n{font-weight:600;font-size:27px;letter-spacing:-.026em;margin:0 0 10px}
+.case h3{font-size:20px;letter-spacing:-.016em;margin:0 0 12px;flex:1}
+.case .tag{font-size:12.5px}
+.case .go{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-top:12px;color:var(--muted)}
+.case:hover .go{color:var(--ink)}
+.case.b .n{color:var(--blue)}.case.v .n{color:var(--violet)}.case.p .n{color:var(--pink)}
+
+/* case detail */
+.star{display:grid;grid-template-columns:150px 1fr;gap:24px;padding:26px 0;border-bottom:1px solid var(--hair)}
+@media(max-width:760px){.star{grid-template-columns:1fr;gap:8px}}
+.star .l{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.star p{margin:0;font-size:18.5px;line-height:1.5;max-width:60ch}
+.star p.alert{margin-top:12px;padding-left:16px;border-left:3px solid var(--acc);color:var(--ink);font-weight:500}
+.chips{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
+.chip{border-left:2px solid var(--acc);padding-left:14px}
+.chip .v{font-weight:600;font-size:27px;letter-spacing:-.026em;line-height:1;color:var(--acc)}
+.chip .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px;display:block}
+.plate{border:1px solid var(--hair);background:#fff;padding:26px;margin-bottom:34px}
+.plate figcaption{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:16px}
+.back{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:inline-block;margin-bottom:26px}
+.back:hover{color:var(--ink)}
+.pager{display:flex;justify-content:space-between;gap:20px;border-top:1px solid var(--ink);padding-top:24px;margin-top:12px;flex-wrap:wrap}
+
+.close{background:var(--sand);border-top:1px solid var(--hair);padding:clamp(62px,8vw,112px) 0;text-align:center}
+footer{border-top:1px solid var(--ink);padding:44px 0 56px;display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap}
+footer .fl{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+svg text.m{font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:1.2px;fill:#6E6B65}
+svg text.nm{font-family:'Archivo',sans-serif;font-size:21px;font-weight:600;fill:#1F2024}
+#chrome{background:var(--ink);color:rgba(250,247,239,.5);font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;padding:8px var(--gut)}
+
+/* hero drawing — tangle straightens into a line */
+.hero .g2{align-items:center;grid-template-columns:1.2fr .8fr;gap:clamp(28px,4vw,56px)}
+.hero h1{font-size:clamp(38px,5vw,60px)}
+@media(max-width:900px){.hero .g2{grid-template-columns:1fr}}
+.draw path.ink,.draw path.line{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.15s cubic-bezier(.5,0,.2,1) forwards}
+.draw path.line{animation-delay:.85s;animation-duration:.9s}
+.draw path.fall{stroke-dasharray:1;stroke-dashoffset:1;animation:draw .35s ease .8s forwards}
+.draw .pop{opacity:0;animation:pop .5s ease forwards}
+.draw .n1{animation-delay:1.35s}.draw .n2{animation-delay:1.5s}
+.draw .n3{animation-delay:1.65s}.draw .n4{animation-delay:1.8s}
+.draw .cap{opacity:0;animation:pop .6s ease 2s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pop{to{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  .draw path.ink,.draw path.line,.draw path.fall{animation:none;stroke-dashoffset:0}
+  .draw .pop,.draw .cap{animation:none;opacity:1}
 }
 </style>
 </head>
-<body class="why-page">
-
-<div class="nav">
-  <div class="wrap">
-    <a href="index.html" class="nav-brand">
-      <svg width="30" height="30" viewBox="-100 -100 200 200">
-        <circle cx="0" cy="0" r="92" fill="none" stroke="#1F2024" stroke-width="7"></circle>
-        <line x1="-92" y1="0" x2="92" y2="0" stroke="#1F2024" stroke-width="6"></line>
-        <line x1="-46" y1="-79.7" x2="46" y2="79.7" stroke="#1F2024" stroke-width="6"></line>
-        <line x1="46" y1="-79.7" x2="-46" y2="79.7" stroke="#1F2024" stroke-width="6"></line>
-        <circle cx="0" cy="0" r="12" fill="#1F2024"></circle>
-      </svg>
-      <span>Calidescope</span>
-    </a>
-    <div class="nav-links">
-      <a href="promise.html">Promise</a>
-      <a href="perform.html">Perform</a>
-      <a href="proof.html">Proof</a>
-      <a href="case-studies.html">Case Studies</a>
-      <a href="why.html" class="is-active">About</a>
-      <a href="contact.html" class="is-contact">Contact</a>
+<body>
+<a href="#main" style="position:absolute;left:-9999px" onfocus="this.style.left='12px';this.style.top='12px';this.style.background='#1F2024';this.style.color='#FAF7EF';this.style.padding='10px 16px';this.style.zIndex='999'">Skip to content</a>
+<nav>
+  <div class="wrap in">
+    <a class="logo" href="index.html">
+      <svg width="23" height="23" viewBox="0 0 40 40" fill="none" stroke="#1F2024" stroke-width="1.8" aria-hidden="true">
+        <circle cx="20" cy="20" r="17"/><path d="M20 3v34M5 11.5l30 17M5 28.5l30-17"/>
+        <circle cx="20" cy="20" r="3.2" fill="#1F2024" stroke="none"/></svg>
+      Calidescope</a>
+    <div class="links">
+      <a href="throughline.html">Throughline</a><a href="promise.html">Promise</a><a href="perform.html">Perform</a>
+      <a href="proof.html">Proof</a><a href="case-studies.html">Case studies</a><a href="why.html">About</a>
+      <a href="https://throughline.builders" target="_blank" rel="noopener" class="btn">Try it on your page ↗</a>
     </div>
   </div>
-</div>
+</nav>
+<main id="main">
 
-<main>
+  <header class="hero"><div class="wrap">
+    <h1>Why.</h1>
+    <p class="lede">Everything you write is received by someone. How it lands depends on more than one discipline can explain.</p></div>
+  </header>
 
-  <!-- ============ HERO · the idea first ============ -->
-  <section class="why-hero">
-    <div class="wrap">
-      <p class="kicker">About</p>
-      <h1>Why.</h1>
+  <section class="sec sand"><div class="wrap g2">
+    <div><h2>Look at it through the whole kaleidoscope.</h2>
+      <p class="say">Logic, rhetoric, story, design. One lens tells you something. Six tell you what to do.</p></div>
+    <div>
+      <svg viewBox="0 0 340 350" width="100%" style="display:block;max-width:310px;margin:0 auto" aria-label="Six lenses on one page">
+        <circle cx="170" cy="170" r="126" fill="none" stroke="#E4E0D6" stroke-width="1.6"></circle>
+        <g stroke="#1F2024" stroke-width="1.8"><path d="M170 44v252M61 107l218 126M61 233l218-126"></path></g>
+        <circle cx="170" cy="170" r="30" fill="#FAF7EF" stroke="#1F2024" stroke-width="2"></circle>
+        <circle cx="170" cy="170" r="8" fill="#1F2024"></circle>
+        <circle cx="170" cy="44" r="7" fill="#1E40FF"></circle><circle cx="279" cy="107" r="7" fill="#7A3AD2"></circle>
+        <circle cx="279" cy="233" r="7" fill="#E933A6"></circle><circle cx="170" cy="296" r="7" fill="#1E40FF"></circle>
+        <circle cx="61" cy="233" r="7" fill="#7A3AD2"></circle><circle cx="61" cy="107" r="7" fill="#E933A6"></circle>
+        <text x="170" y="336" text-anchor="middle" class="m">ONE PAGE · SIX WAYS OF SEEING IT</text>
+      </svg></div>
+  </div></section>
 
-      <p class="why-lead">Every piece of communication is received by someone.</p>
+  <section class="sec"><div class="wrap">
+    <div class="hr"><h2>Three moments that decide it.</h2></div>
+    <div class="g3">
+      <div class="card b"><h3>The pitch</h3><p class="say">Keeping one idea clear while the deck grows. Every review adds a slide.</p></div>
+      <div class="card v"><h3>The workflow</h3><p class="say">Most of the loss happens between the teams, rather than inside them.</p></div>
+      <div class="card p"><h3>The proof</h3><p class="say">The number is the easy part. The claim it supports is the work.</p></div>
+    </div></div></section>
 
-      <div class="why-flow">
-        <p class="beat">Everything rides on what that person experiences. What they understand. What they remember. What they act on.</p>
-        <p>A single piece can be seen many ways.</p>
-        <p class="beat">Every discipline offers its own lens. Logic, rhetoric, story, design. Each one reveals something the others miss about how a message lands.</p>
-        <p>Look through one lens, you get one read.</p>
-        <p class="turn">Turn a whole kaleidoscope of them on the same piece, and the picture gets deeper, truer, and easier to act on.</p>
-      </div>
+  <section class="sec sand"><div class="wrap g2">
+    <div><h2>Bret Leece.</h2>
+      <p class="say">At this since 1995, trained in philosophy and in analytics — which turns out to be one training. Agencies, holding companies, measurement firms, and the software built inside all of them.</p>
+      <p class="say" style="font-weight:600;color:var(--ink)">Take what you found, what it means, and what to do next, and make it simple.</p></div>
+    <div style="display:grid;gap:18px">
+      <div class="stat"><p class="n">30 years</p><p class="say" style="margin:0;font-size:17px">On both sides of the promise and the proof.</p></div>
+      <div class="stat"><p class="n">Services and software</p><p class="say" style="margin:0;font-size:17px">The same discipline, run two ways.</p></div>
+      <div class="stat"><p class="n">One founder</p><p class="say" style="margin:0;font-size:17px">So you get the person who does the work.</p></div>
+    </div></div></section>
 
-      <!-- SIGNATURE FIGURE · many lenses on one object, resolving into the Calidescope mark (pure ink).
-           Both halves build: the lenses draw and settle, then the mark turns into place. -->
-      <figure class="lens-figure reveal" style="margin-inline:0" aria-label="Many overlapping lenses viewing one object, resolving into the Calidescope mark.">
-        <svg viewBox="0 0 700 260" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-
-          <!-- the lenses: three overlapping views, settling into register -->
-          <g class="b-turn" stroke-width="1.7" style="--r:-14deg;--t:1.5s;transform-origin:190px 130px">
-            <ellipse class="b" cx="168" cy="130" rx="60" ry="94" transform="rotate(-24 168 130)" style="--len:500px;--t:1s;--d:.05s"/>
-            <ellipse class="b" cx="212" cy="130" rx="60" ry="94" transform="rotate(22 212 130)" style="--len:500px;--t:1s;--d:.17s"/>
-            <ellipse class="b" cx="190" cy="130" rx="94" ry="60" transform="rotate(52 190 130)" style="--len:500px;--t:1s;--d:.29s"/>
-          </g>
-
-          <!-- the one object, seen three ways -->
-          <g class="b-turn" stroke-width="1.7" style="--r:-9deg;--t:1.3s;--d:.4s;transform-origin:190px 130px">
-            <rect class="b" x="176" y="116" width="28" height="28" rx="1.5" transform="rotate(-20 190 130)" style="--len:120px;--t:.6s;--d:.45s"/>
-            <rect class="b" x="176" y="116" width="28" height="28" rx="1.5" transform="rotate(26 190 130)" style="--len:120px;--t:.6s;--d:.55s"/>
-            <rect class="b" x="176" y="116" width="28" height="28" rx="1.5" transform="rotate(62 190 130)" style="--len:120px;--t:.6s;--d:.65s"/>
-          </g>
-
-          <path class="b" d="M312 132 C 360 96, 404 96, 452 130" stroke-width="1.9" style="--len:160px;--t:.55s;--d:.95s"/>
-          <path class="b" d="M452 130 l -13 -3 M452 130 l -6 -12" stroke-width="1.9" style="--len:30px;--t:.25s;--d:1.45s"/>
-
-          <!-- the read: the Calidescope mark, turning into place -->
-          <circle class="b" cx="556" cy="130" r="86" stroke-width="2.2" style="--len:560px;--t:1s;--d:1.5s"/>
-          <g class="b-turn" stroke-width="2" style="--r:-30deg;--t:1.35s;--d:1.7s;transform-origin:556px 130px">
-            <line class="b" x1="556" y1="130" x2="642" y2="130" style="--len:90px;--t:.45s;--d:1.85s"/>
-            <line class="b" x1="556" y1="130" x2="599" y2="55.5" style="--len:90px;--t:.45s;--d:1.91s"/>
-            <line class="b" x1="556" y1="130" x2="513" y2="55.5" style="--len:90px;--t:.45s;--d:1.97s"/>
-            <line class="b" x1="556" y1="130" x2="470" y2="130" style="--len:90px;--t:.45s;--d:2.03s"/>
-            <line class="b" x1="556" y1="130" x2="513" y2="204.5" style="--len:90px;--t:.45s;--d:2.09s"/>
-            <line class="b" x1="556" y1="130" x2="599" y2="204.5" style="--len:90px;--t:.45s;--d:2.15s"/>
-          </g>
-          <circle class="b-dot" cx="556" cy="130" r="11" fill="currentColor" stroke="none" style="--d:2.35s"/>
-        </svg>
-      </figure>
-
-      <p class="why-named">That's the idea Calidescope is named for.</p>
-    </div>
-  </section>
-
-  <!-- ============ THREE MOMENTS · pitch / work / proof ============ -->
-  <section class="moments">
-    <div class="wrap">
-      <p class="kicker">Where it matters</p>
-      <h2>It matters most in three moments.</h2>
-
-      <div class="moment-grid">
-
-        <article class="moment on-promise reveal">
-          <svg class="icon" viewBox="0 0 96 96" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <g stroke="#1F2024" stroke-width="2.4">
-              <rect x="24" y="60" width="48" height="18" rx="2"/>
-              <path d="M31 60 C 26 45, 46 47, 41 35 C 37 26, 57 31, 51 21 C 48 16, 61 17, 66 25"/>
-            </g>
-            <path d="M35 78 C 41 58, 45 43, 63 22" stroke="#1E40FF" stroke-width="2.7"/>
-          </svg>
-          <p class="kicker">The pitch</p>
-          <p class="m-lead">It starts with the pitch.</p>
-          <p class="m-body">Everyone has an idea, and everyone wants theirs in. The deck grows in every direction, and the straight line to the point gets harder to hold.</p>
-        </article>
-
-        <article class="moment on-perform reveal">
-          <svg class="icon" viewBox="0 0 96 96" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <g stroke="#1F2024" stroke-width="2.4">
-              <rect x="14" y="50" width="16" height="16" rx="2"/>
-              <rect x="40" y="50" width="16" height="16" rx="2"/>
-              <rect x="66" y="50" width="16" height="16" rx="2"/>
-              <path d="M24 50 C 30 33, 40 66, 48 42 C 53 29, 62 60, 72 45"/>
-            </g>
-            <path d="M12 58 L 84 58" stroke="#7A3AD2" stroke-width="2.7"/>
-          </svg>
-          <p class="kicker">The workflow</p>
-          <p class="m-lead">Then the work begins.</p>
-          <p class="m-body">The workflow that looked clean in the promise meets the reality of doing it. There's a straighter line through it, waiting for someone to draw it.</p>
-        </article>
-
-        <article class="moment on-proof reveal">
-          <svg class="icon" viewBox="0 0 96 96" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <g fill="#1F2024" stroke="none">
-              <circle cx="22" cy="72" r="1.7"/><circle cx="31" cy="70" r="1.7"/><circle cx="40" cy="71" r="1.7"/>
-              <circle cx="49" cy="70" r="1.7"/><circle cx="58" cy="72" r="1.7"/><circle cx="67" cy="71" r="1.7"/><circle cx="74" cy="73" r="1.7"/>
-              <circle cx="30" cy="64" r="1.7"/><circle cx="40" cy="62" r="1.7"/><circle cx="50" cy="63" r="1.7"/><circle cx="60" cy="64" r="1.7"/>
-              <circle cx="40" cy="56" r="1.7"/><circle cx="50" cy="55" r="1.7"/>
-            </g>
-            <path d="M40 66 C 52 58, 60 44, 79 24" fill="none" stroke="#E933A6" stroke-width="2.7"/>
-            <circle cx="79" cy="24" r="3.1" fill="#E933A6"/>
-          </svg>
-          <p class="kicker">The proof</p>
-          <p class="m-lead">Then you have to prove it.</p>
-          <p class="m-body">Marketing impact lives under a mountain of data. The real story in there is simple. Finding it is the hard part.</p>
-        </article>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ WHY / FOUNDER / PAYOFF ============ -->
-  <section class="why-close">
-    <div class="wrap">
-      <div class="why-flow">
-        <p>I'm Bret Leece. I've spent thirty years on this, since 1995.</p>
-        <p>My grounding is in philosophy and <a href="https://seaver.pepperdine.edu/academics/ge/great-books/" target="_blank" rel="noopener noreferrer">The Great Books</a>, and a long career in analytics, working through framework after framework, methodology after methodology.</p>
-        <p>All of it taught the same lesson. Take what you found, what it means, and what to do next, and make it simple.</p>
-      </div>
-
-      <div class="arrival reveal" aria-hidden="true">
-        <svg viewBox="0 0 210 40" fill="none" stroke-linecap="round">
-          <path class="draw" d="M6 20 L 188 20" stroke="currentColor" stroke-width="2.6"/>
-          <circle cx="196" cy="20" r="5" fill="currentColor"/>
-        </svg>
-      </div>
-
-      <p class="why-payoff">That's what Calidescope is for.</p>
-
-      <div class="why-tail">
-        <p>Seeing your communication the way its audience will, so everyone lands on the same page with less pain and more clarity.</p>
-        <p class="service">The discipline as a service today, and as software as fast as I can ship it.</p>
-        <p>If any of those three moments sound like yours, that's the conversation.</p>
-        <a class="btn-primary" href="contact.html" style="margin-top:1.25rem">Start a conversation &rarr;</a>
-      </div>
-    </div>
-  </section>
+  <section class="close"><div class="wrap"><h2 style="max-width:20ch;margin:0 auto 28px">Fewer words, better placed.</h2>
+    <a href="https://throughline.builders" target="_blank" rel="noopener" class="btn lg">Try it on your own page ↗</a></div></section>
 
 </main>
-
-<div class="site-footer">
-  <div class="wrap">
+<div class="wrap">
+  <footer>
     <div>
-      <div class="brand">Calidescope LLC</div>
-      <div class="tagline">Promise to Proof. The same discipline, all the way around.</div>
-      <div class="links">
-        <a href="index.html">HOME</a>
-        <a href="promise.html">PROMISE</a>
-        <a href="perform.html">PERFORM</a>
-        <a href="proof.html">PROOF</a>
-        <a href="case-studies.html">CASE STUDIES</a>
-        <a href="why.html">ABOUT</a>
-        <a href="contact.html">CONTACT</a>
-        <a href="privacy.html">PRIVACY</a>
-        <a href="terms.html">TERMS</a>
-        <a href="#" data-cookie-prefs>COOKIE PREFERENCES</a>
-      </div>
+      <a class="logo" href="index.html" style="margin-bottom:14px">
+        <svg width="21" height="21" viewBox="0 0 40 40" fill="none" stroke="#1F2024" stroke-width="1.9" aria-hidden="true">
+          <circle cx="20" cy="20" r="17"/><path d="M20 3v34M5 11.5l30 17M5 28.5l30-17"/>
+          <circle cx="20" cy="20" r="3.2" fill="#1F2024" stroke="none"/></svg>
+        Calidescope</a>
+      <p style="margin:0;font-weight:600;letter-spacing:-.014em;max-width:30ch">Promise to Proof. The same discipline, all the way around.</p>
     </div>
-    <a href="contact.html" class="btn-primary">Start a conversation &rarr;</a>
-  </div>
+    <div class="fl">
+      <a href="throughline.html">Throughline</a><a href="promise.html">Promise</a><a href="perform.html">Perform</a><a href="proof.html">Proof</a>
+      <a href="case-studies.html">Case studies</a><a href="why.html">About</a><a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>
+    </div>
+  </footer>
 </div>
-
-<script>
-(function(){
-  var els = document.querySelectorAll('.reveal');
-  if (!els.length || !('IntersectionObserver' in window)) return;
-  // opt in to the reveal only when JS can finish the job — content stays visible otherwise
-  document.body.classList.add('js-reveal');
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(en){ if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
-  }, {threshold:0.25});
-  els.forEach(function(e){ io.observe(e); });
-})();
-</script>
-<script src="assets/consent.js"></script>
 </body>
 </html>

@@ -3,149 +3,221 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Contact — Calidescope</title>
-<meta name="description" content="Start with one artifact. Send the Promise artifact that's not converting, or the Proof artifact that's not renewing.">
-<meta property="og:title" content="Contact — Calidescope">
-<meta property="og:description" content="Start with one artifact.">
+<title>Start with one thing — Calidescope</title>
+<meta name="description" content="Send the page, deck, proposal or review that has to work next.">
+<link rel="canonical" href="https://calidescope.llc/contact.html">
+<meta property="og:site_name" content="Calidescope">
+<meta property="og:title" content="Start with one thing — Calidescope">
+<meta property="og:description" content="Send the page, deck, proposal or review that has to work next.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calidescope.llc/contact.html">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<!-- Self-hosted fonts. Copy assets/fonts/ from calidescope-site-official.zip.
+     No third-party font call, per the privacy policy. -->
 <link rel="stylesheet" href="assets/fonts/fonts.css">
-<link rel="stylesheet" href="assets/style.css?v=8">
+<style>
+:root{
+  --ink:#1F2024;--paper:#FAF7EF;--sand:#F3EEE2;--muted:#6E6B65;--hair:#E4E0D6;
+  --blue:#1E40FF;--blue-t:#DDE6FF;--violet:#7A3AD2;--violet-t:#EBDFFA;--pink:#E933A6;--pink-t:#FFDDF0;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --sans:'Archivo',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --gut:clamp(22px,5vw,68px);--acc:#1F2024;--acc-t:#F3EEE2;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:19px;line-height:1.55;-webkit-font-smoothing:antialiased}
+p{margin:0 0 14px} a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--gut)}
+h1{font-weight:600;font-size:clamp(40px,6.4vw,74px);line-height:.99;letter-spacing:-.032em;margin:0 0 26px}
+h2{font-weight:600;font-size:clamp(29px,4.3vw,47px);line-height:1.04;letter-spacing:-.028em;margin:0 0 16px}
+h3{font-weight:600;font-size:clamp(20px,2.2vw,26px);line-height:1.14;letter-spacing:-.02em;margin:0 0 8px}
+h4{font-weight:600;font-size:19px;letter-spacing:-.012em;margin:0 0 6px}
+.lede{font-size:clamp(19px,2.1vw,23px);line-height:1.45;max-width:36ch;color:#3a3b40}
+.say{font-size:clamp(17px,1.85vw,20px);line-height:1.45;color:#3a3b40;max-width:46ch}
+.tag{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mut{color:var(--muted)}
+
+nav{border-bottom:1px solid var(--hair);background:var(--paper);position:sticky;top:0;z-index:60}
+nav .in{display:flex;align-items:center;gap:26px;height:80px}
+.logo{display:flex;align-items:center;gap:11px;font-weight:600;font-size:19px;letter-spacing:.02em}
+nav .links{display:flex;gap:24px;margin-left:auto;font-size:16.5px;align-items:center}
+nav .links a{color:var(--muted)}nav .links a:hover{color:var(--ink)}
+nav .links a.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--acc)}
+.btn{display:inline-block;background:var(--ink);color:var(--paper);font-weight:600;font-size:16.5px;padding:13px 22px;transition:.15s}
+.btn:hover{background:var(--acc);color:#fff}
+.btn.lg{font-size:19px;padding:18px 32px}
+.btn.out{background:none;color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.btn.out:hover{background:var(--ink);color:var(--paper)}
+.btn.acc{background:var(--acc);color:#fff}.btn.acc:hover{background:var(--ink)}
+@media(max-width:1080px){nav .links a:not(.btn){display:none}}
+
+.page{display:none}.page.on{display:block}
+.hero{padding:clamp(64px,9vw,124px) 0 clamp(48px,6vw,78px)}
+.hero.tint{background:var(--acc-t);border-bottom:1px solid rgba(31,32,36,.1)}
+.acts{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:36px}
+.scroll{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:18px;color:var(--muted)}
+.strip{background:var(--ink);color:var(--paper);padding:20px 0}
+.strip p{margin:0;font-size:clamp(17px,1.9vw,21px);font-weight:600;letter-spacing:-.012em}
+.sec{padding:clamp(58px,7.2vw,104px) 0}
+.sec.sand{background:var(--sand);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.sec.tint{background:var(--acc-t)}
+.sec.dark{background:var(--ink);color:var(--paper)}
+.sec.dark h2{color:var(--paper)}.sec.dark .say{color:rgba(250,247,239,.72)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5.5vw,74px);align-items:center}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,34px)}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2vw,24px)}
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr}.g4{grid-template-columns:1fr 1fr}}
+.hr{border-bottom:1px solid var(--ink);padding-bottom:20px;margin-bottom:42px;display:flex;
+  justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap}
+.hr h2{margin:0}
+
+.card{border-top:3px solid var(--hair);padding-top:20px}
+.card.b{border-color:var(--blue)}.card.v{border-color:var(--violet)}.card.p{border-color:var(--pink)}
+.card .say{font-size:17.5px;max-width:none;margin:0}
+.card .go{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;display:block;margin-top:16px}
+.shape{margin-bottom:12px;display:block}
+.ci{width:60px;height:60px;border-radius:50%;background:var(--acc-t);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid rgba(31,32,36,.2)}
+@media(max-width:860px){.steps{grid-template-columns:1fr}}
+.step{padding:28px 30px 30px 0;border-right:1px solid rgba(31,32,36,.14)}
+.step:last-child{border-right:0;padding-right:0}.step+.step{padding-left:30px}
+@media(max-width:860px){.step{border-right:0;border-bottom:1px solid rgba(31,32,36,.14);padding:24px 0}
+  .step+.step{padding-left:0}.step:last-child{border-bottom:0}}
+.step .n{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.16em;color:var(--acc);margin:0 0 12px;text-transform:uppercase}
+.step p{margin:0;font-size:18.5px;line-height:1.4;font-weight:600;letter-spacing:-.012em}
+.step p.sub{font-weight:400;font-size:17px;color:var(--muted);margin-top:8px}
+
+.shot{border:1px solid var(--hair);background:#fff;overflow:hidden}
+.shot img{width:100%}
+.shot figcaption{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);padding:12px 16px;border-top:1px solid var(--hair)}
+
+.stat{border-left:2px solid var(--ink);padding-left:22px}
+.stat .n{font-weight:600;font-size:clamp(30px,3.8vw,46px);letter-spacing:-.03em;line-height:1;margin:0 0 12px}
+.stat h3{font-size:20px;letter-spacing:-.016em;margin:0 0 10px}
+.stat.b{border-color:var(--blue)}.stat.b .n{color:var(--blue)}
+.stat.v{border-color:var(--violet)}.stat.v .n{color:var(--violet)}
+.stat.p{border-color:var(--pink)}.stat.p .n{color:var(--pink)}
+
+.offer{border:1px solid var(--hair);background:#fff;padding:30px;display:flex;flex-direction:column}
+.offer.lead{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+.offer.dash{border:1px dashed var(--hair);background:none;justify-content:center}
+.offer .say{font-size:17.5px;max-width:none;flex:1}
+
+.caserow{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+@media(max-width:900px){.caserow{grid-template-columns:1fr}}
+.case{padding:30px 34px;border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  display:flex;flex-direction:column;transition:.15s}
+.case:nth-child(3n+1){padding-left:0}
+.case:nth-child(3n){border-right:0;padding-right:0}
+@media(max-width:900px){
+  .case,.case:nth-child(3n),.case:nth-child(3n+1){border-right:0;padding:26px 0}}
+.case .n{font-weight:600;font-size:27px;letter-spacing:-.026em;margin:0 0 10px}
+.case h3{font-size:20px;letter-spacing:-.016em;margin:0 0 12px;flex:1}
+.case .tag{font-size:12.5px}
+.case .go{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-top:12px;color:var(--muted)}
+.case:hover .go{color:var(--ink)}
+.case.b .n{color:var(--blue)}.case.v .n{color:var(--violet)}.case.p .n{color:var(--pink)}
+
+/* case detail */
+.star{display:grid;grid-template-columns:150px 1fr;gap:24px;padding:26px 0;border-bottom:1px solid var(--hair)}
+@media(max-width:760px){.star{grid-template-columns:1fr;gap:8px}}
+.star .l{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.star p{margin:0;font-size:18.5px;line-height:1.5;max-width:60ch}
+.star p.alert{margin-top:12px;padding-left:16px;border-left:3px solid var(--acc);color:var(--ink);font-weight:500}
+.chips{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
+.chip{border-left:2px solid var(--acc);padding-left:14px}
+.chip .v{font-weight:600;font-size:27px;letter-spacing:-.026em;line-height:1;color:var(--acc)}
+.chip .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px;display:block}
+.plate{border:1px solid var(--hair);background:#fff;padding:26px;margin-bottom:34px}
+.plate figcaption{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:16px}
+.back{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:inline-block;margin-bottom:26px}
+.back:hover{color:var(--ink)}
+.pager{display:flex;justify-content:space-between;gap:20px;border-top:1px solid var(--ink);padding-top:24px;margin-top:12px;flex-wrap:wrap}
+
+.close{background:var(--sand);border-top:1px solid var(--hair);padding:clamp(62px,8vw,112px) 0;text-align:center}
+footer{border-top:1px solid var(--ink);padding:44px 0 56px;display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap}
+footer .fl{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+svg text.m{font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:1.2px;fill:#6E6B65}
+svg text.nm{font-family:'Archivo',sans-serif;font-size:21px;font-weight:600;fill:#1F2024}
+#chrome{background:var(--ink);color:rgba(250,247,239,.5);font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;padding:8px var(--gut)}
+
+/* hero drawing — tangle straightens into a line */
+.hero .g2{align-items:center;grid-template-columns:1.2fr .8fr;gap:clamp(28px,4vw,56px)}
+.hero h1{font-size:clamp(38px,5vw,60px)}
+@media(max-width:900px){.hero .g2{grid-template-columns:1fr}}
+.draw path.ink,.draw path.line{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.15s cubic-bezier(.5,0,.2,1) forwards}
+.draw path.line{animation-delay:.85s;animation-duration:.9s}
+.draw path.fall{stroke-dasharray:1;stroke-dashoffset:1;animation:draw .35s ease .8s forwards}
+.draw .pop{opacity:0;animation:pop .5s ease forwards}
+.draw .n1{animation-delay:1.35s}.draw .n2{animation-delay:1.5s}
+.draw .n3{animation-delay:1.65s}.draw .n4{animation-delay:1.8s}
+.draw .cap{opacity:0;animation:pop .6s ease 2s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pop{to{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  .draw path.ink,.draw path.line,.draw path.fall{animation:none;stroke-dashoffset:0}
+  .draw .pop,.draw .cap{animation:none;opacity:1}
+}
+</style>
 </head>
 <body>
-
-<div class="nav">
-  <div class="wrap">
-  <a href="index.html" class="nav-brand">
-    <svg width="30" height="30" viewBox="-100 -100 200 200">
-      <circle cx="0" cy="0" r="92" fill="none" stroke="#1F2024" stroke-width="7"></circle>
-      <line x1="-92" y1="0" x2="92" y2="0" stroke="#1F2024" stroke-width="6"></line>
-      <line x1="-46" y1="-79.7" x2="46" y2="79.7" stroke="#1F2024" stroke-width="6"></line>
-      <line x1="46" y1="-79.7" x2="-46" y2="79.7" stroke="#1F2024" stroke-width="6"></line>
-      <circle cx="0" cy="0" r="12" fill="#1F2024"></circle>
-    </svg>
-    <span>Calidescope</span>
-  </a>
-  <div class="nav-links">
-    <a href="promise.html">Promise</a>
-    <a href="perform.html">Perform</a>
-    <a href="proof.html">Proof</a>
-    <a href="case-studies.html">Case Studies</a>
-      <a href="why.html">About</a>
-      <a href="contact.html" class="is-contact is-active">Contact</a>
-  </div>
-  </div>
-</div>
-
-<div class="wrap" style="display:flex;flex-direction:column;align-items:center;text-align:center;padding-top:clamp(64px,12vh,100px);padding-bottom:70px">
-  <div style="font:600 clamp(30px,4.5vw,42px)/1.15 'Archivo',sans-serif;letter-spacing:-.02em;max-width:640px">Start with one artifact.</div>
-  <div style="font:400 18px/1.6 'Archivo',sans-serif;color:#6E6B65;margin:18px 0 0;max-width:540px">Send the Promise artifact that's not converting, or the Proof artifact that's not renewing. Same discipline, either side — the read starts within a week.</div>
-
-  <svg width="100%" viewBox="0 0 520 196" fill="none" preserveAspectRatio="xMidYMid meet" style="max-width:520px;margin:30px 0 0" role="img" aria-label="A jumbled pile of Promise drafts and Proof reports — webpage, deck, copy, QBR, case study, dashboard — with no clear order">
-    <path d="M96 36 C110 28 122 26 136 30" stroke="#D9D5CA" stroke-width="1.5" stroke-dasharray="3 5" stroke-linecap="round"/>
-    <path d="M212 120 C226 132 240 138 254 138" stroke="#D9D5CA" stroke-width="1.5" stroke-dasharray="3 5" stroke-linecap="round"/>
-    <path d="M338 44 C352 36 366 34 378 38" stroke="#D9D5CA" stroke-width="1.5" stroke-dasharray="3 5" stroke-linecap="round"/>
-    <g transform="rotate(-12 57 96)">
-      <rect x="18" y="48" width="78" height="96" rx="5" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
-      <circle cx="26" cy="56" r="1.8" fill="#D9D5CA"/><circle cx="32" cy="56" r="1.8" fill="#D9D5CA"/><circle cx="38" cy="56" r="1.8" fill="#D9D5CA"/>
-      <line x1="18" y1="62" x2="96" y2="62" stroke="#E4E0D6"/>
-      <rect x="25" y="69" width="48" height="6" rx="2" fill="#D9D5CA"/>
-      <rect x="25" y="81" width="60" height="4" rx="2" fill="#EAE6DB"/>
-      <rect x="25" y="89" width="54" height="4" rx="2" fill="#EAE6DB"/>
-      <text x="25" y="134" font-family="IBM Plex Mono,monospace" font-size="8.5" letter-spacing="1" fill="#55524C">WEBPAGE</text>
-    </g>
-    <g transform="rotate(9 124 43)">
-      <rect x="74" y="10" width="100" height="66" rx="5" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
-      <rect x="83" y="20" width="50" height="7" rx="2" fill="#D9D5CA"/>
-      <rect x="83" y="33" width="74" height="4" rx="2" fill="#EAE6DB"/>
-      <rect x="83" y="41" width="62" height="4" rx="2" fill="#EAE6DB"/>
-      <text x="83" y="66" font-family="IBM Plex Mono,monospace" font-size="8.5" letter-spacing="1" fill="#55524C">DECK</text>
-    </g>
-    <g transform="rotate(-7 173 117)">
-      <rect x="136" y="68" width="74" height="98" rx="5" fill="#fff" stroke="#1F2024" stroke-width="1.5"/>
-      <rect x="145" y="79" width="48" height="6" rx="2" fill="#D9D5CA"/>
-      <rect x="145" y="91" width="56" height="4" rx="2" fill="#EAE6DB"/>
-      <rect x="145" y="99" width="50" height="4" rx="2" fill="#EAE6DB"/>
-      <rect x="145" y="107" width="54" height="4" rx="2" fill="#EAE6DB"/>
-      <text x="145" y="154" font-family="IBM Plex Mono,monospace" font-size="8.5" letter-spacing="1" fill="#55524C">COPY</text>
-    </g>
-    <g transform="rotate(-10 280 52)">
-      <rect x="230" y="18" width="100" height="68" rx="5" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
-      <rect x="239" y="27" width="42" height="6" rx="2" fill="#D9D5CA"/>
-      <rect x="239" y="56" width="8" height="14" fill="#EAE6DB"/>
-      <rect x="251" y="49" width="8" height="21" fill="#D9D5CA"/>
-      <rect x="263" y="42" width="8" height="28" fill="#E933A6"/>
-      <rect x="275" y="52" width="8" height="18" fill="#EAE6DB"/>
-      <text x="239" y="80" font-family="IBM Plex Mono,monospace" font-size="8.5" letter-spacing="1" fill="#55524C">QBR</text>
-    </g>
-    <g transform="rotate(8 340 112)">
-      <rect x="300" y="62" width="80" height="100" rx="5" fill="#fff" stroke="#1F2024" stroke-width="1.5"/>
-      <rect x="309" y="73" width="50" height="6" rx="2" fill="#D9D5CA"/>
-      <polyline points="309,104 323,95 337,99 351,88 365,92" stroke="#E933A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="365" cy="92" r="2.2" fill="#E933A6"/>
-      <rect x="309" y="116" width="58" height="4" rx="2" fill="#EAE6DB"/>
-      <rect x="309" y="124" width="48" height="4" rx="2" fill="#EAE6DB"/>
-      <text x="309" y="150" font-family="IBM Plex Mono,monospace" font-size="8.5" letter-spacing="1" fill="#55524C">CASE STUDY</text>
-    </g>
-    <g transform="rotate(-6 438 61)">
-      <rect x="396" y="24" width="84" height="74" rx="5" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
-      <circle cx="416" cy="50" r="9" stroke="#EAE6DB" stroke-width="4"/>
-      <circle cx="416" cy="50" r="9" stroke="#E933A6" stroke-width="4" stroke-dasharray="21 36" transform="rotate(-90 416 50)"/>
-      <rect x="432" y="50" width="6" height="10" fill="#EAE6DB"/>
-      <rect x="441" y="45" width="6" height="15" fill="#D9D5CA"/>
-      <rect x="450" y="40" width="6" height="20" fill="#E933A6"/>
-      <text x="404" y="88" font-family="IBM Plex Mono,monospace" font-size="8.5" letter-spacing="1" fill="#55524C">DASHBOARD</text>
-    </g>
-    <g transform="rotate(12 462 148)">
-      <rect x="428" y="116" width="68" height="52" rx="5" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
-      <rect x="436" y="124" width="34" height="5" rx="2" fill="#D9D5CA"/>
-      <polyline points="436,152 448,144 460,148 472,140 486,145" stroke="#B9B4A7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-    </g>
-  </svg>
-
-  <a href="mailto:bret@calidescope.llc" class="btn-primary" style="padding:15px 32px;font-size:15px;margin:32px 0 0">bret@calidescope.llc</a>
-</div>
-
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;max-width:880px;margin:0 auto;padding:0 var(--gutter) 80px">
-  <div style="text-align:center;display:flex;flex-direction:column;align-items:center">
-    <div style="width:52px;height:52px;border-radius:50%;background:#F3EEE2;display:flex;align-items:center;justify-content:center;margin:0 0 14px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"></path><path d="M14 3v4h4"></path><line x1="9.5" y1="12" x2="14.5" y2="12" stroke="#1E40FF"></line><line x1="9.5" y1="15.5" x2="12.5" y2="15.5" stroke="#1E40FF"></line></svg></div>
-    <div style="font:400 12px 'IBM Plex Mono',monospace;color:#6E6B65;margin:0 0 10px">01</div>
-    <div style="font:600 16px 'Archivo',sans-serif;margin:0 0 8px">The artifact</div>
-    <div style="font:400 13.5px/1.6 'Archivo',sans-serif;color:#6E6B65">A link or file — homepage, deck, QBR, case study.</div>
-  </div>
-  <div style="text-align:center;display:flex;flex-direction:column;align-items:center">
-    <div style="width:52px;height:52px;border-radius:50%;background:#F3EEE2;display:flex;align-items:center;justify-content:center;margin:0 0 14px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9.3 9.6a2.8 2.8 0 015.4 1c0 1.9-2.6 2.1-2.6 3.9" stroke="#1E40FF"></path><circle cx="12" cy="17.2" r="0.9" fill="#1E40FF" stroke="none"></circle></svg></div>
-    <div style="font:400 12px 'IBM Plex Mono',monospace;color:#6E6B65;margin:0 0 10px">02</div>
-    <div style="font:600 16px 'Archivo',sans-serif;margin:0 0 8px">The question</div>
-    <div style="font:400 13.5px/1.6 'Archivo',sans-serif;color:#6E6B65">What it needs to do — win, close, renew.</div>
-  </div>
-  <div style="text-align:center;display:flex;flex-direction:column;align-items:center">
-    <div style="width:52px;height:52px;border-radius:50%;background:#F3EEE2;display:flex;align-items:center;justify-content:center;margin:0 0 14px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="20" x2="5" y2="14"></line><line x1="12" y1="20" x2="12" y2="8"></line><line x1="19" y1="20" x2="19" y2="4" stroke="#1E40FF"></line></svg></div>
-    <div style="font:400 12px 'IBM Plex Mono',monospace;color:#6E6B65;margin:0 0 10px">03</div>
-    <div style="font:600 16px 'Archivo',sans-serif;margin:0 0 8px">The result</div>
-    <div style="font:400 13.5px/1.6 'Archivo',sans-serif;color:#6E6B65">A more effective GTM artifact — or a performance-proof artifact.</div>
-  </div>
-</div>
-
-<div class="site-footer">
-  <div class="wrap">
-  <div>
-    <div class="brand">Calidescope LLC</div>
-    <div class="tagline">Promise to Proof. The same discipline, all the way around.</div>
+<a href="#main" style="position:absolute;left:-9999px" onfocus="this.style.left='12px';this.style.top='12px';this.style.background='#1F2024';this.style.color='#FAF7EF';this.style.padding='10px 16px';this.style.zIndex='999'">Skip to content</a>
+<nav>
+  <div class="wrap in">
+    <a class="logo" href="index.html">
+      <svg width="23" height="23" viewBox="0 0 40 40" fill="none" stroke="#1F2024" stroke-width="1.8" aria-hidden="true">
+        <circle cx="20" cy="20" r="17"/><path d="M20 3v34M5 11.5l30 17M5 28.5l30-17"/>
+        <circle cx="20" cy="20" r="3.2" fill="#1F2024" stroke="none"/></svg>
+      Calidescope</a>
     <div class="links">
-      <a href="promise.html">PROMISE</a>
-        <a href="perform.html">PERFORM</a>
-      <a href="proof.html">PROOF</a>
-      <a href="case-studies.html">CASE STUDIES</a>
-      <a href="why.html">ABOUT</a>
-      <a href="privacy.html">PRIVACY</a>
-      <a href="terms.html">TERMS</a>
-      <a href="#" data-cookie-prefs>COOKIE PREFERENCES</a>
+      <a href="throughline.html">Throughline</a><a href="promise.html">Promise</a><a href="perform.html">Perform</a>
+      <a href="proof.html">Proof</a><a href="case-studies.html">Case studies</a><a href="why.html">About</a>
+      <a href="https://throughline.builders" target="_blank" rel="noopener" class="btn">Try it on your page ↗</a>
     </div>
   </div>
-  <div style="font:400 11px 'IBM Plex Mono',monospace;color:#6E6B65">© 2026 · NEW YORK</div>
-  </div>
-</div>
+</nav>
+<main id="main">
 
-<script src="assets/consent.js"></script>
+  <header class="hero"><div class="wrap">
+    <h1>Start with one thing.</h1>
+    <p class="lede">A homepage. A deck. A proposal. A quarterly review. Whatever has to work next.</p></div>
+  </header>
+  <section class="sec" style="padding-top:0;--acc:#1E40FF"><div class="wrap">
+    <div class="steps">
+      <div class="step"><p class="n">You send</p><p>A link or a file.</p><p class="sub">Plus one sentence: what it has to do. Win, close, or renew.</p></div>
+      <div class="step"><p class="n">We read</p><p>Closely, and against the same discipline every time.</p><p class="sub">One score. One direction to cut.</p></div>
+      <div class="step"><p class="n">You get</p><p>It back inside five business days.</p><p class="sub">Marked up, the line on one page, the section that matters rewritten. Then forty-five minutes together.</p></div>
+    </div>
+    <div style="text-align:center;padding-top:52px">
+      <a href="mailto:bret@calidescope.llc" class="btn lg">bret@calidescope.llc</a>
+      <p class="tag" style="margin-top:22px">New York · replies within a business day</p>
+      <p class="say" style="margin:26px auto 0;max-width:44ch;color:var(--muted)">In a hurry? <a href="https://throughline.builders" target="_blank" rel="noopener" style="border-bottom:1px solid var(--hair)">Run it yourself on Throughline</a> and send us the score.</p>
+    </div>
+  </div></section>
+
+</main>
+<div class="wrap">
+  <footer>
+    <div>
+      <a class="logo" href="index.html" style="margin-bottom:14px">
+        <svg width="21" height="21" viewBox="0 0 40 40" fill="none" stroke="#1F2024" stroke-width="1.9" aria-hidden="true">
+          <circle cx="20" cy="20" r="17"/><path d="M20 3v34M5 11.5l30 17M5 28.5l30-17"/>
+          <circle cx="20" cy="20" r="3.2" fill="#1F2024" stroke="none"/></svg>
+        Calidescope</a>
+      <p style="margin:0;font-weight:600;letter-spacing:-.014em;max-width:30ch">Promise to Proof. The same discipline, all the way around.</p>
+    </div>
+    <div class="fl">
+      <a href="throughline.html">Throughline</a><a href="promise.html">Promise</a><a href="perform.html">Perform</a><a href="proof.html">Proof</a>
+      <a href="case-studies.html">Case studies</a><a href="why.html">About</a><a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>
+    </div>
+  </footer>
+</div>
 </body>
 </html>

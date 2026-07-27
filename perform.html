@@ -3,206 +3,261 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Perform — Calidescope</title>
-<meta name="description" content="The work between the promise and the proof: the cadences, handoffs, and AI-in-the-process systems that turn one into the other.">
-<meta property="og:title" content="Perform — Calidescope">
-<meta property="og:description" content="Get the workflow right, and the promise keeps its word.">
+<title>Keep the promise — Calidescope</title>
+<meta name="description" content="Cadences, handoffs, and the systems that carry them — with AI inside the process.">
+<link rel="canonical" href="https://calidescope.llc/perform.html">
+<meta property="og:site_name" content="Calidescope">
+<meta property="og:title" content="Keep the promise — Calidescope">
+<meta property="og:description" content="Cadences, handoffs, and the systems that carry them — with AI inside the process.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calidescope.llc/perform.html">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<!-- Self-hosted fonts. Copy assets/fonts/ from calidescope-site-official.zip.
+     No third-party font call, per the privacy policy. -->
 <link rel="stylesheet" href="assets/fonts/fonts.css">
-<link rel="stylesheet" href="assets/style.css?v=8">
-<link rel="stylesheet" href="assets/case-studies.css?v=6">
+<style>
+:root{
+  --ink:#1F2024;--paper:#FAF7EF;--sand:#F3EEE2;--muted:#6E6B65;--hair:#E4E0D6;
+  --blue:#1E40FF;--blue-t:#DDE6FF;--violet:#7A3AD2;--violet-t:#EBDFFA;--pink:#E933A6;--pink-t:#FFDDF0;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --sans:'Archivo',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --gut:clamp(22px,5vw,68px);--acc:#1F2024;--acc-t:#F3EEE2;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:19px;line-height:1.55;-webkit-font-smoothing:antialiased}
+p{margin:0 0 14px} a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--gut)}
+h1{font-weight:600;font-size:clamp(40px,6.4vw,74px);line-height:.99;letter-spacing:-.032em;margin:0 0 26px}
+h2{font-weight:600;font-size:clamp(29px,4.3vw,47px);line-height:1.04;letter-spacing:-.028em;margin:0 0 16px}
+h3{font-weight:600;font-size:clamp(20px,2.2vw,26px);line-height:1.14;letter-spacing:-.02em;margin:0 0 8px}
+h4{font-weight:600;font-size:19px;letter-spacing:-.012em;margin:0 0 6px}
+.lede{font-size:clamp(19px,2.1vw,23px);line-height:1.45;max-width:36ch;color:#3a3b40}
+.say{font-size:clamp(17px,1.85vw,20px);line-height:1.45;color:#3a3b40;max-width:46ch}
+.tag{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mut{color:var(--muted)}
+
+nav{border-bottom:1px solid var(--hair);background:var(--paper);position:sticky;top:0;z-index:60}
+nav .in{display:flex;align-items:center;gap:26px;height:80px}
+.logo{display:flex;align-items:center;gap:11px;font-weight:600;font-size:19px;letter-spacing:.02em}
+nav .links{display:flex;gap:24px;margin-left:auto;font-size:16.5px;align-items:center}
+nav .links a{color:var(--muted)}nav .links a:hover{color:var(--ink)}
+nav .links a.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--acc)}
+.btn{display:inline-block;background:var(--ink);color:var(--paper);font-weight:600;font-size:16.5px;padding:13px 22px;transition:.15s}
+.btn:hover{background:var(--acc);color:#fff}
+.btn.lg{font-size:19px;padding:18px 32px}
+.btn.out{background:none;color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.btn.out:hover{background:var(--ink);color:var(--paper)}
+.btn.acc{background:var(--acc);color:#fff}.btn.acc:hover{background:var(--ink)}
+@media(max-width:1080px){nav .links a:not(.btn){display:none}}
+
+.page{display:none}.page.on{display:block}
+.hero{padding:clamp(64px,9vw,124px) 0 clamp(48px,6vw,78px)}
+.hero.tint{background:var(--acc-t);border-bottom:1px solid rgba(31,32,36,.1)}
+.acts{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:36px}
+.scroll{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:18px;color:var(--muted)}
+.strip{background:var(--ink);color:var(--paper);padding:20px 0}
+.strip p{margin:0;font-size:clamp(17px,1.9vw,21px);font-weight:600;letter-spacing:-.012em}
+.sec{padding:clamp(58px,7.2vw,104px) 0}
+.sec.sand{background:var(--sand);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.sec.tint{background:var(--acc-t)}
+.sec.dark{background:var(--ink);color:var(--paper)}
+.sec.dark h2{color:var(--paper)}.sec.dark .say{color:rgba(250,247,239,.72)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5.5vw,74px);align-items:center}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,34px)}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2vw,24px)}
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr}.g4{grid-template-columns:1fr 1fr}}
+.hr{border-bottom:1px solid var(--ink);padding-bottom:20px;margin-bottom:42px;display:flex;
+  justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap}
+.hr h2{margin:0}
+
+.card{border-top:3px solid var(--hair);padding-top:20px}
+.card.b{border-color:var(--blue)}.card.v{border-color:var(--violet)}.card.p{border-color:var(--pink)}
+.card .say{font-size:17.5px;max-width:none;margin:0}
+.card .go{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;display:block;margin-top:16px}
+.shape{margin-bottom:12px;display:block}
+.ci{width:60px;height:60px;border-radius:50%;background:var(--acc-t);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid rgba(31,32,36,.2)}
+@media(max-width:860px){.steps{grid-template-columns:1fr}}
+.step{padding:28px 30px 30px 0;border-right:1px solid rgba(31,32,36,.14)}
+.step:last-child{border-right:0;padding-right:0}.step+.step{padding-left:30px}
+@media(max-width:860px){.step{border-right:0;border-bottom:1px solid rgba(31,32,36,.14);padding:24px 0}
+  .step+.step{padding-left:0}.step:last-child{border-bottom:0}}
+.step .n{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.16em;color:var(--acc);margin:0 0 12px;text-transform:uppercase}
+.step p{margin:0;font-size:18.5px;line-height:1.4;font-weight:600;letter-spacing:-.012em}
+.step p.sub{font-weight:400;font-size:17px;color:var(--muted);margin-top:8px}
+
+.shot{border:1px solid var(--hair);background:#fff;overflow:hidden}
+.shot img{width:100%}
+.shot figcaption{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);padding:12px 16px;border-top:1px solid var(--hair)}
+
+.stat{border-left:2px solid var(--ink);padding-left:22px}
+.stat .n{font-weight:600;font-size:clamp(30px,3.8vw,46px);letter-spacing:-.03em;line-height:1;margin:0 0 12px}
+.stat h3{font-size:20px;letter-spacing:-.016em;margin:0 0 10px}
+.stat.b{border-color:var(--blue)}.stat.b .n{color:var(--blue)}
+.stat.v{border-color:var(--violet)}.stat.v .n{color:var(--violet)}
+.stat.p{border-color:var(--pink)}.stat.p .n{color:var(--pink)}
+
+.offer{border:1px solid var(--hair);background:#fff;padding:30px;display:flex;flex-direction:column}
+.offer.lead{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+.offer.dash{border:1px dashed var(--hair);background:none;justify-content:center}
+.offer .say{font-size:17.5px;max-width:none;flex:1}
+
+.caserow{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+@media(max-width:900px){.caserow{grid-template-columns:1fr}}
+.case{padding:30px 34px;border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  display:flex;flex-direction:column;transition:.15s}
+.case:nth-child(3n+1){padding-left:0}
+.case:nth-child(3n){border-right:0;padding-right:0}
+@media(max-width:900px){
+  .case,.case:nth-child(3n),.case:nth-child(3n+1){border-right:0;padding:26px 0}}
+.case .n{font-weight:600;font-size:27px;letter-spacing:-.026em;margin:0 0 10px}
+.case h3{font-size:20px;letter-spacing:-.016em;margin:0 0 12px;flex:1}
+.case .tag{font-size:12.5px}
+.case .go{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-top:12px;color:var(--muted)}
+.case:hover .go{color:var(--ink)}
+.case.b .n{color:var(--blue)}.case.v .n{color:var(--violet)}.case.p .n{color:var(--pink)}
+
+/* case detail */
+.star{display:grid;grid-template-columns:150px 1fr;gap:24px;padding:26px 0;border-bottom:1px solid var(--hair)}
+@media(max-width:760px){.star{grid-template-columns:1fr;gap:8px}}
+.star .l{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.star p{margin:0;font-size:18.5px;line-height:1.5;max-width:60ch}
+.star p.alert{margin-top:12px;padding-left:16px;border-left:3px solid var(--acc);color:var(--ink);font-weight:500}
+.chips{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
+.chip{border-left:2px solid var(--acc);padding-left:14px}
+.chip .v{font-weight:600;font-size:27px;letter-spacing:-.026em;line-height:1;color:var(--acc)}
+.chip .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px;display:block}
+.plate{border:1px solid var(--hair);background:#fff;padding:26px;margin-bottom:34px}
+.plate figcaption{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:16px}
+.back{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:inline-block;margin-bottom:26px}
+.back:hover{color:var(--ink)}
+.pager{display:flex;justify-content:space-between;gap:20px;border-top:1px solid var(--ink);padding-top:24px;margin-top:12px;flex-wrap:wrap}
+
+.close{background:var(--sand);border-top:1px solid var(--hair);padding:clamp(62px,8vw,112px) 0;text-align:center}
+footer{border-top:1px solid var(--ink);padding:44px 0 56px;display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap}
+footer .fl{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+svg text.m{font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:1.2px;fill:#6E6B65}
+svg text.nm{font-family:'Archivo',sans-serif;font-size:21px;font-weight:600;fill:#1F2024}
+#chrome{background:var(--ink);color:rgba(250,247,239,.5);font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;padding:8px var(--gut)}
+
+/* hero drawing — tangle straightens into a line */
+.hero .g2{align-items:center;grid-template-columns:1.2fr .8fr;gap:clamp(28px,4vw,56px)}
+.hero h1{font-size:clamp(38px,5vw,60px)}
+@media(max-width:900px){.hero .g2{grid-template-columns:1fr}}
+.draw path.ink,.draw path.line{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.15s cubic-bezier(.5,0,.2,1) forwards}
+.draw path.line{animation-delay:.85s;animation-duration:.9s}
+.draw path.fall{stroke-dasharray:1;stroke-dashoffset:1;animation:draw .35s ease .8s forwards}
+.draw .pop{opacity:0;animation:pop .5s ease forwards}
+.draw .n1{animation-delay:1.35s}.draw .n2{animation-delay:1.5s}
+.draw .n3{animation-delay:1.65s}.draw .n4{animation-delay:1.8s}
+.draw .cap{opacity:0;animation:pop .6s ease 2s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pop{to{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  .draw path.ink,.draw path.line,.draw path.fall{animation:none;stroke-dashoffset:0}
+  .draw .pop,.draw .cap{animation:none;opacity:1}
+}
+</style>
 </head>
 <body>
-
-<div class="nav">
-  <div class="wrap">
-  <a href="index.html" class="nav-brand">
-    <svg width="30" height="30" viewBox="-100 -100 200 200">
-      <circle cx="0" cy="0" r="92" fill="none" stroke="#1F2024" stroke-width="7"></circle>
-      <line x1="-92" y1="0" x2="92" y2="0" stroke="#1F2024" stroke-width="6"></line>
-      <line x1="-46" y1="-79.7" x2="46" y2="79.7" stroke="#1F2024" stroke-width="6"></line>
-      <line x1="46" y1="-79.7" x2="-46" y2="79.7" stroke="#1F2024" stroke-width="6"></line>
-      <circle cx="0" cy="0" r="12" fill="#1F2024"></circle>
-    </svg>
-    <span>Calidescope</span>
-  </a>
-  <div class="nav-links">
-    <a href="promise.html">Promise</a>
-    <a href="perform.html" class="is-active">Perform</a>
-    <a href="proof.html">Proof</a>
-    <a href="case-studies.html">Case Studies</a>
-      <a href="why.html">About</a>
-      <a href="contact.html" class="is-contact">Contact</a>
-  </div>
-  </div>
-</div>
-
-<div style="background:#EBDFFA;border-bottom:1px solid #E4E0D6">
-<div class="wrap" style="padding-top:clamp(56px,9vh,84px);padding-bottom:clamp(44px,8vh,64px)">
-  <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#7A3AD2;margin:0 0 18px">PERFORM · THE WORKFLOW</div>
-  <div style="font:600 clamp(32px,4.5vw,46px)/1.14 'Archivo',sans-serif;letter-spacing:-.02em;max-width:740px">The work between the promise and the proof.</div>
-  <div style="font:400 18px/1.6 'Archivo',sans-serif;color:#1F2024;margin:18px 0 0;max-width:600px">Promises win the business. Proof keeps it. In between is the workflow — the cadences, the handoffs, and the systems that turn one into the other.</div>
-  <div style="font:600 20px/1.5 'Archivo',sans-serif;color:#1F2024;margin:14px 0 0;max-width:600px">Get the workflow right, and the promise keeps its word.</div>
-</div>
-</div>
-
-<div class="wrap" style="padding-top:56px;padding-bottom:20px">
-  <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#6E6B65;margin:0 0 8px">MADE PRACTICAL</div>
-  <div style="font:600 26px 'Archivo',sans-serif">What getting it right earns you</div>
-</div>
-<div class="wrap" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;padding-bottom:60px">
-  <div style="border:1px solid #E4E0D6;background:#fff;border-radius:12px;padding:26px 24px;display:flex;flex-direction:column">
-    <div style="width:52px;height:52px;border-radius:50%;background:#EBDFFA;display:flex;align-items:center;justify-content:center;margin:0 0 14px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7v5l3.5 2" stroke="#7A3AD2"></path></svg></div>
-    <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#55524C;margin:0 0 10px">For the lead running five status meetings</div>
-    <div style="font:700 22px/1.25 'Archivo',sans-serif;color:#7A3AD2;margin:0 0 8px">A cadence that decides things.</div>
-    <div style="font:400 15px/1.6 'Archivo',sans-serif;color:#4A4740">Meetings that end in calls made, owners named, work moving.</div>
-  </div>
-  <div style="border:1px solid #E4E0D6;background:#fff;border-radius:12px;padding:26px 24px;display:flex;flex-direction:column">
-    <div style="width:52px;height:52px;border-radius:50%;background:#EBDFFA;display:flex;align-items:center;justify-content:center;margin:0 0 14px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h7l3 4h6"></path><path d="M17 9l3 3-3 3" stroke="#7A3AD2"></path><circle cx="4" cy="8" r="1.4" fill="#1F2024"></circle></svg></div>
-    <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#55524C;margin:0 0 10px">For the team losing work between teams</div>
-    <div style="font:700 22px/1.25 'Archivo',sans-serif;color:#7A3AD2;margin:0 0 8px">Handoffs with names on them.</div>
-    <div style="font:400 15px/1.6 'Archivo',sans-serif;color:#4A4740">And a rhythm the work can keep.</div>
-  </div>
-  <div style="border:1px solid #E4E0D6;background:#fff;border-radius:12px;padding:26px 24px;display:flex;flex-direction:column">
-    <div style="width:52px;height:52px;border-radius:50%;background:#EBDFFA;display:flex;align-items:center;justify-content:center;margin:0 0 14px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" stroke="#7A3AD2"></circle><path d="M12 4v2.5M12 17.5V20M4 12h2.5M17.5 12H20M6.3 6.3l1.8 1.8M15.9 15.9l1.8 1.8M6.3 17.7l1.8-1.8M15.9 8.1l1.8-1.8"></path></svg></div>
-    <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#55524C;margin:0 0 10px">For the leader bringing in AI</div>
-    <div style="font:700 22px/1.25 'Archivo',sans-serif;color:#7A3AD2;margin:0 0 8px">AI built into the process.</div>
-    <div style="font:400 15px/1.6 'Archivo',sans-serif;color:#4A4740">Drafting, testing, pacing.</div>
-  </div>
-</div>
-
-<div class="wrap" style="padding-bottom:56px">
-<div style="background:#fff;border:1px solid #E4E0D6;border-radius:12px;padding:34px 32px">
-  <div style="font:500 10px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#7A3AD2;margin-bottom:14px">AI IN THE WORKFLOW · IN PRODUCTION</div>
-  <div style="font:600 22px/1.45 'Archivo',sans-serif;max-width:720px;margin:0 0 20px">We've been putting AI inside working processes since 2022.</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px">
-    <div style="border-top:3px solid #7A3AD2;padding-top:14px">
-      <div style="font:600 16px 'Archivo',sans-serif">GenAI in agency measurement workflows</div>
-      <div style="font:400 13.5px/1.55 'Archivo',sans-serif;color:#4A4740;margin-top:6px">Adopted inside enterprise client work in 2022–23, before it was standard practice.</div>
-    </div>
-    <div style="border-top:3px solid #7A3AD2;padding-top:14px">
-      <div style="font:600 16px 'Archivo',sans-serif">Proposals: weeks → hours</div>
-      <div style="font:400 13.5px/1.55 'Archivo',sans-serif;color:#4A4740;margin-top:6px">Enterprise AI deployed into a commercial team's working process, 2025–26.</div>
-    </div>
-    <div style="border-top:3px solid #7A3AD2;padding-top:14px">
-      <div style="font:600 16px 'Archivo',sans-serif">Software we ship ourselves</div>
-      <div style="font:400 13.5px/1.55 'Archivo',sans-serif;color:#4A4740;margin-top:6px">The Throughline is built with the same AI-in-the-workflow discipline we bring to clients.</div>
-    </div>
-  </div>
-</div>
-</div>
-
-<div class="wrap" style="padding-bottom:20px">
-  <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#6E6B65;margin:0 0 8px">TWO WAYS IN</div>
-  <div style="font:600 26px 'Archivo',sans-serif">The consulting today, the application in time</div>
-</div>
-<div class="wrap" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;padding-top:20px;padding-bottom:48px">
-  <div style="background:#fff;border:1.5px solid #7A3AD2;border-radius:12px;padding:34px 32px">
-    <div style="width:52px;height:52px;border-radius:50%;background:#EBDFFA;display:flex;align-items:center;justify-content:center;margin:0 0 14px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="1.6"></rect><path d="M4 9.5h16"></path><path d="M8 3v3M16 3v3"></path><path d="M8 14h4M8 17h6" stroke="#7A3AD2" stroke-width="1.4"></path></svg></div>
-    <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#7A3AD2;margin:0 0 10px">THE CONSULTING</div>
-    <h3 style="font:600 24px 'Archivo',sans-serif;margin:0 0 10px">Workflow design</h3>
-    <p style="font:400 14.5px/1.65 'Archivo',sans-serif;margin:0">Cadences that decide, handoffs with names on them, sales and service untangled, and AI adopted inside the working process. Bring the workflow that's eating the week.</p>
-  </div>
-  <div style="background:#FCFAF4;border:1.5px dashed #E4E0D6;border-radius:12px;padding:34px 32px">
-    <div style="width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 0 14px"><svg width="24" height="27" viewBox="0 0 64 72" fill="none"><polygon points="32,14 56,62 8,62" stroke="#1F2024" stroke-width="4" stroke-linejoin="miter"></polygon><line x1="32" y1="12.8" x2="32" y2="62" stroke="#7A3AD2" stroke-width="3"></line><circle cx="32" cy="6" r="5" fill="#1F2024"></circle></svg></div>
-    <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#6E6B65;margin:0 0 10px">THE APPLICATION — IN TIME</div>
-    <h3 style="font:600 24px 'Archivo',sans-serif;margin:0 0 10px">The same discipline, as software</h3>
-    <p style="font:400 14.5px/1.65 'Archivo',sans-serif;margin:0">When it's ready. Not live yet.</p>
-  </div>
-</div>
-
-<div class="wrap" style="padding-bottom:20px">
-  <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#6E6B65;margin:0 0 8px">CASE STUDIES</div>
-  <div style="font:600 26px 'Archivo',sans-serif">Where the Perform discipline has worked</div>
-</div>
-<div class="wrap" style="padding-top:20px;padding-bottom:18px">
-    <div class="cstile-grid">
-      <a href="case-study-motherboard.html" class="cstile on-violet">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" stroke="#1F2024" stroke-width="1.6"></rect><path d="M8 4V2M12 4V2M16 4V2M8 22v-2M12 22v-2M16 22v-2M4 8H2M4 12H2M4 16H2M22 8h-2M22 12h-2M22 16h-2" stroke="#1F2024" stroke-width="1.3"></path><rect x="9" y="9" width="6" height="6" rx="1" stroke="#1F2024" stroke-width="1.5"></rect></svg></div>
-        <div class="cstile-headline">A job that had failed three times before.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" fill="#EBDFFA"></rect><rect x="16" y="14" width="8" height="20" fill="#7A3AD2"></rect></svg>
-          <div class="cstile-stat">Won<span class="u">the Coca-Cola pitch</span></div>
-        </div>
-        <div class="cstile-tag">MOTHERBOARD · IPG MEDIABRANDS · 2015–2017</div>
-      </a>
-
-      <a href="case-study-disney.html" class="cstile on-violet">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2" stroke="#1F2024" stroke-width="1.6"></circle><path d="M5 20c1.5-3.5 4-5 7-5s5.5 1.5 7 5" stroke="#1F2024" stroke-width="1.6"></path><circle cx="19" cy="6" r="1.4" fill="#1F2024"></circle><circle cx="5" cy="6" r="1.4" fill="#1F2024"></circle></svg></div>
-        <div class="cstile-headline">Personalization, before it had a name.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" fill="#EBDFFA"></rect><rect x="16" y="14" width="8" height="20" fill="#7A3AD2"></rect></svg>
-          <div class="cstile-stat">4<span class="u">property groups, one CRM</span></div>
-        </div>
-        <div class="cstile-tag">WALT DISNEY INTERNET GROUP · 1999–2001</div>
-      </a>
-
-      <a href="case-study-hob.html" class="cstile on-violet">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="8" height="8" rx="4" stroke="#1F2024" stroke-width="1.6"></rect><rect x="13" y="8" width="8" height="8" rx="4" stroke="#7A3AD2" stroke-width="1.6"></rect></svg></div>
-        <div class="cstile-headline">A merger, and no shared customer record.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" fill="#EBDFFA"></rect><rect x="16" y="14" width="8" height="20" fill="#7A3AD2"></rect></svg>
-          <div class="cstile-stat">$25M<span class="u">in sales generated</span></div>
-        </div>
-        <div class="cstile-tag">HOUSE OF BLUES · 2001–2002</div>
-      </a>
-
-      <a href="case-study-aeg.html" class="cstile on-violet">
-        <div class="cstile-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M3 9a2 2 0 000 4v3a1 1 0 001 1h16a1 1 0 001-1v-3a2 2 0 000-4V6a1 1 0 00-1-1H4a1 1 0 00-1 1v3z" stroke="#1F2024" stroke-width="1.5"></path></svg></div>
-        <div class="cstile-headline">A portfolio of venues with no shared system.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" fill="#EBDFFA"></rect><rect x="16" y="14" width="8" height="20" fill="#7A3AD2"></rect></svg>
-          <div class="cstile-stat">$50M<span class="u">ticket sales enabled</span></div>
-        </div>
-        <div class="cstile-tag">AEG · 2003–2007</div>
-      </a>
-
-      <a href="case-study-havas.html" class="cstile on-violet">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="7" cy="9" r="2.6" fill="#1F2024"></circle><circle cx="17" cy="9" r="2.6" fill="#1F2024"></circle><circle cx="12" cy="18" r="2.6" fill="#7A3AD2"></circle><line x1="7" y1="9" x2="12" y2="18" stroke="#1F2024" stroke-width="1.6"></line><line x1="17" y1="9" x2="12" y2="18" stroke="#1F2024" stroke-width="1.6"></line></svg></div>
-        <div class="cstile-headline">Five CEOs, each with their own audience platform. No reason to agree on one.</div>
-        <div class="cstile-chartrow">
-          <svg width="42" height="42" viewBox="0 0 46 46"><circle cx="23" cy="23" r="18" fill="none" stroke="#E4E0D6" stroke-width="6"></circle><circle cx="23" cy="23" r="18" fill="none" stroke="#7A3AD2" stroke-width="6" stroke-dasharray="75 113" stroke-linecap="round" transform="rotate(-90 23 23)"></circle></svg>
-          <div class="cstile-stat">$40M+<span class="u">retained accounts</span></div>
-        </div>
-        <div class="cstile-tag">HAVAS · CONVERGED · 2018–2020</div>
-      </a>
-
-      <a href="case-study-comscore.html" class="cstile on-violet">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="8" height="10" rx="1.5" stroke="#1F2024" stroke-width="1.6"></rect><rect x="13" y="7" width="8" height="10" rx="1.5" stroke="#1F2024" stroke-width="1.6"></rect><path d="M11 12h2" stroke="#1F2024" stroke-width="2"></path></svg></div>
-        <div class="cstile-headline">One video market. Two org charts.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" fill="#EBDFFA"></rect><rect x="16" y="14" width="8" height="20" fill="#7A3AD2"></rect></svg>
-          <div class="cstile-stat">−25%<span class="u">operating cost, 8 months</span></div>
-        </div>
-        <div class="cstile-tag">COMSCORE · 2017–2018</div>
-      </a>
-    </div>
-</div>
-<div class="wrap" style="padding-bottom:48px"><a href="case-studies.html" style="font:600 14px 'Archivo',sans-serif">All fifteen case studies &rarr;</a></div>
-
-<div class="wrap" style="padding-bottom:48px"><a href="contact.html" class="btn-outline">Start a conversation →</a></div>
-
-<div class="site-footer">
-  <div class="wrap">
-  <div>
-    <div class="brand">Calidescope LLC</div>
-    <div class="tagline">Promise to Proof. The same discipline, all the way around.</div>
+<a href="#main" style="position:absolute;left:-9999px" onfocus="this.style.left='12px';this.style.top='12px';this.style.background='#1F2024';this.style.color='#FAF7EF';this.style.padding='10px 16px';this.style.zIndex='999'">Skip to content</a>
+<nav>
+  <div class="wrap in">
+    <a class="logo" href="index.html">
+      <svg width="23" height="23" viewBox="0 0 40 40" fill="none" stroke="#1F2024" stroke-width="1.8" aria-hidden="true">
+        <circle cx="20" cy="20" r="17"/><path d="M20 3v34M5 11.5l30 17M5 28.5l30-17"/>
+        <circle cx="20" cy="20" r="3.2" fill="#1F2024" stroke="none"/></svg>
+      Calidescope</a>
     <div class="links">
-      <a href="promise.html">PROMISE</a>
-        <a href="perform.html">PERFORM</a>
-      <a href="case-studies.html">CASE STUDIES</a>
-        <a href="why.html">ABOUT</a>
-        <a href="contact.html">CONTACT</a>
-      <a href="privacy.html">PRIVACY</a>
-      <a href="terms.html">TERMS</a>
-      <a href="#" data-cookie-prefs>COOKIE PREFERENCES</a>
+      <a href="throughline.html">Throughline</a><a href="promise.html">Promise</a><a href="perform.html">Perform</a>
+      <a href="proof.html">Proof</a><a href="case-studies.html">Case studies</a><a href="why.html">About</a>
+      <a href="https://throughline.builders" target="_blank" rel="noopener" class="btn">Try it on your page ↗</a>
     </div>
   </div>
-  <div style="font:600 14px 'Archivo',sans-serif">The rest of the loop: <a href="promise.html">Promise &rarr;</a> &nbsp;·&nbsp; <a href="proof.html">Proof &rarr;</a></div>
-  </div>
-</div>
+</nav>
+<main id="main">
 
-<script src="assets/consent.js"></script>
-<script src="assets/consent.js"></script>
+  <header class="hero tint">
+    <div class="wrap">
+      <svg class="shape" width="38" height="38" viewBox="0 0 40 40" style="margin-bottom:22px"><rect x="8" y="8" width="24" height="24" fill="none" stroke="#7A3AD2" stroke-width="2.6"></rect></svg>
+      <h1>Keep the promise.</h1>
+      <p class="lede">Between winning it and proving it sits the work. Cadences, handoffs, and the systems that carry them.</p>
+      <div class="acts"><a href="contact.html" class="btn lg acc">Start a conversation</a></div>
+    </div>
+  </header>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="hr"><h2>What getting it right earns you.</h2></div>
+      <div class="g3">
+        <div class="card v"><div class="ci"><svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#7A3AD2" stroke-width="1.7"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg></div>
+          <h3>A cadence that decides.</h3><p class="say">Meetings that end in calls made and owners named.</p></div>
+        <div class="card v"><div class="ci"><svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#7A3AD2" stroke-width="1.7"><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="12" r="3"></circle><path d="M9 12h6"></path></svg></div>
+          <h3>Handoffs with names on them.</h3><p class="say">And a rhythm the work can keep.</p></div>
+        <div class="card v"><div class="ci"><svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#7A3AD2" stroke-width="1.7"><rect x="4" y="6" width="16" height="12" rx="2"></rect><path d="M9 3v3M15 3v3M9 11h6M9 14h3"></path></svg></div>
+          <h3>AI inside the process.</h3><p class="say">Drafting, testing, pacing — where the work happens.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec tint">
+    <div class="wrap">
+      <h2 style="max-width:24ch">We've put AI inside working processes since 2022.</h2>
+      <svg viewBox="0 0 1000 130" width="100%" style="display:block;margin:36px 0 8px" aria-label="AI in the workflow since 2022">
+        <line x1="70" y1="76" x2="900" y2="76" stroke="#7A3AD2" stroke-width="2.4"></line>
+        <circle cx="140" cy="76" r="8" fill="#7A3AD2"></circle><text x="140" y="44" text-anchor="middle" class="m" fill="#7A3AD2">2022</text>
+        <text x="140" y="112" text-anchor="middle" class="m">MEASUREMENT WORK</text>
+        <circle cx="500" cy="76" r="8" fill="#7A3AD2"></circle><text x="500" y="44" text-anchor="middle" class="m" fill="#7A3AD2">2025</text>
+        <text x="500" y="112" text-anchor="middle" class="m">PROPOSALS: WEEKS TO HOURS</text>
+        <circle cx="860" cy="76" r="8" fill="#7A3AD2"></circle><text x="860" y="44" text-anchor="middle" class="m" fill="#7A3AD2">TODAY</text>
+        <text x="860" y="112" text-anchor="middle" class="m">SOFTWARE WE SHIP</text>
+      </svg>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="hr"><h2>How this starts.</h2></div>
+      <div class="g2" style="gap:26px;align-items:stretch">
+        <div class="offer lead"><h3>Workflow design</h3>
+          <p class="say">Cadences that decide, handoffs with names on them, sales and service untangled, AI adopted inside the working process. Bring the workflow that's eating the week.</p>
+          <a href="contact.html" class="btn acc" style="align-self:flex-start;margin-top:16px">Start a conversation</a></div>
+        <div class="offer dash"><p class="say" style="margin:0;color:var(--muted)">A Perform application is in the works.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sand"><div class="wrap">
+    <div class="hr" style="border-color:var(--ink)"><h2>Where it has worked.</h2><a href="case-studies.html" class="tag" style="color:var(--ink)">All fifteen →</a></div>
+    <div class="g3" id="perform-cases"><a class="stat v" href="case-study-motherboard.html"><p class="n">Coca-Cola</p><h3>A job that had failed three times before.</h3><p class="tag">Motherboard · IPG Mediabrands</p></a><a class="stat v" href="case-study-disney.html"><p class="n">4 groups</p><h3>Personalisation, before it had a name.</h3><p class="tag">Walt Disney Internet Group</p></a><a class="stat v" href="case-study-hob.html"><p class="n">$25M</p><h3>A merger, and no shared customer record.</h3><p class="tag">House of Blues</p></a></div></div></section>
+
+  <section class="close"><div class="wrap"><h2 style="max-width:22ch;margin:0 auto 28px">Bring the workflow that's eating the week.</h2>
+    <a href="contact.html" class="btn lg acc">Start a conversation</a></div></section>
+
+</main>
+<div class="wrap">
+  <footer>
+    <div>
+      <a class="logo" href="index.html" style="margin-bottom:14px">
+        <svg width="21" height="21" viewBox="0 0 40 40" fill="none" stroke="#1F2024" stroke-width="1.9" aria-hidden="true">
+          <circle cx="20" cy="20" r="17"/><path d="M20 3v34M5 11.5l30 17M5 28.5l30-17"/>
+          <circle cx="20" cy="20" r="3.2" fill="#1F2024" stroke="none"/></svg>
+        Calidescope</a>
+      <p style="margin:0;font-weight:600;letter-spacing:-.014em;max-width:30ch">Promise to Proof. The same discipline, all the way around.</p>
+    </div>
+    <div class="fl">
+      <a href="throughline.html">Throughline</a><a href="promise.html">Promise</a><a href="perform.html">Perform</a><a href="proof.html">Proof</a>
+      <a href="case-studies.html">Case studies</a><a href="why.html">About</a><a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>
+    </div>
+  </footer>
+</div>
 </body>
 </html>

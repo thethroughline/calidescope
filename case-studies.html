@@ -3,242 +3,214 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Case studies — Calidescope</title>
-<meta name="description" content="Fifteen situations, fifteen outcomes — the discipline behind Calidescope, across Promise, Perform, and Proof.">
-<meta property="og:title" content="Case studies — Calidescope">
-<meta property="og:description" content="Fifteen situations. Fifteen outcomes. The discipline behind Calidescope, before it became a company.">
+<title>Won it. Kept it. Renewed it. — Calidescope</title>
+<meta name="description" content="Fifteen engagements, sorted by the job they had to do.">
+<link rel="canonical" href="https://calidescope.llc/case-studies.html">
+<meta property="og:site_name" content="Calidescope">
+<meta property="og:title" content="Won it. Kept it. Renewed it. — Calidescope">
+<meta property="og:description" content="Fifteen engagements, sorted by the job they had to do.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calidescope.llc/case-studies.html">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<!-- Self-hosted fonts. Copy assets/fonts/ from calidescope-site-official.zip.
+     No third-party font call, per the privacy policy. -->
 <link rel="stylesheet" href="assets/fonts/fonts.css">
-<link rel="stylesheet" href="assets/style.css?v=8">
-<link rel="stylesheet" href="assets/case-studies.css?v=6">
+<style>
+:root{
+  --ink:#1F2024;--paper:#FAF7EF;--sand:#F3EEE2;--muted:#6E6B65;--hair:#E4E0D6;
+  --blue:#1E40FF;--blue-t:#DDE6FF;--violet:#7A3AD2;--violet-t:#EBDFFA;--pink:#E933A6;--pink-t:#FFDDF0;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --sans:'Archivo',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --gut:clamp(22px,5vw,68px);--acc:#1F2024;--acc-t:#F3EEE2;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:19px;line-height:1.55;-webkit-font-smoothing:antialiased}
+p{margin:0 0 14px} a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--gut)}
+h1{font-weight:600;font-size:clamp(40px,6.4vw,74px);line-height:.99;letter-spacing:-.032em;margin:0 0 26px}
+h2{font-weight:600;font-size:clamp(29px,4.3vw,47px);line-height:1.04;letter-spacing:-.028em;margin:0 0 16px}
+h3{font-weight:600;font-size:clamp(20px,2.2vw,26px);line-height:1.14;letter-spacing:-.02em;margin:0 0 8px}
+h4{font-weight:600;font-size:19px;letter-spacing:-.012em;margin:0 0 6px}
+.lede{font-size:clamp(19px,2.1vw,23px);line-height:1.45;max-width:36ch;color:#3a3b40}
+.say{font-size:clamp(17px,1.85vw,20px);line-height:1.45;color:#3a3b40;max-width:46ch}
+.tag{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mut{color:var(--muted)}
+
+nav{border-bottom:1px solid var(--hair);background:var(--paper);position:sticky;top:0;z-index:60}
+nav .in{display:flex;align-items:center;gap:26px;height:80px}
+.logo{display:flex;align-items:center;gap:11px;font-weight:600;font-size:19px;letter-spacing:.02em}
+nav .links{display:flex;gap:24px;margin-left:auto;font-size:16.5px;align-items:center}
+nav .links a{color:var(--muted)}nav .links a:hover{color:var(--ink)}
+nav .links a.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--acc)}
+.btn{display:inline-block;background:var(--ink);color:var(--paper);font-weight:600;font-size:16.5px;padding:13px 22px;transition:.15s}
+.btn:hover{background:var(--acc);color:#fff}
+.btn.lg{font-size:19px;padding:18px 32px}
+.btn.out{background:none;color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.btn.out:hover{background:var(--ink);color:var(--paper)}
+.btn.acc{background:var(--acc);color:#fff}.btn.acc:hover{background:var(--ink)}
+@media(max-width:1080px){nav .links a:not(.btn){display:none}}
+
+.page{display:none}.page.on{display:block}
+.hero{padding:clamp(64px,9vw,124px) 0 clamp(48px,6vw,78px)}
+.hero.tint{background:var(--acc-t);border-bottom:1px solid rgba(31,32,36,.1)}
+.acts{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:36px}
+.scroll{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:18px;color:var(--muted)}
+.strip{background:var(--ink);color:var(--paper);padding:20px 0}
+.strip p{margin:0;font-size:clamp(17px,1.9vw,21px);font-weight:600;letter-spacing:-.012em}
+.sec{padding:clamp(58px,7.2vw,104px) 0}
+.sec.sand{background:var(--sand);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.sec.tint{background:var(--acc-t)}
+.sec.dark{background:var(--ink);color:var(--paper)}
+.sec.dark h2{color:var(--paper)}.sec.dark .say{color:rgba(250,247,239,.72)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5.5vw,74px);align-items:center}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,34px)}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2vw,24px)}
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr}.g4{grid-template-columns:1fr 1fr}}
+.hr{border-bottom:1px solid var(--ink);padding-bottom:20px;margin-bottom:42px;display:flex;
+  justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap}
+.hr h2{margin:0}
+
+.card{border-top:3px solid var(--hair);padding-top:20px}
+.card.b{border-color:var(--blue)}.card.v{border-color:var(--violet)}.card.p{border-color:var(--pink)}
+.card .say{font-size:17.5px;max-width:none;margin:0}
+.card .go{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;display:block;margin-top:16px}
+.shape{margin-bottom:12px;display:block}
+.ci{width:60px;height:60px;border-radius:50%;background:var(--acc-t);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid rgba(31,32,36,.2)}
+@media(max-width:860px){.steps{grid-template-columns:1fr}}
+.step{padding:28px 30px 30px 0;border-right:1px solid rgba(31,32,36,.14)}
+.step:last-child{border-right:0;padding-right:0}.step+.step{padding-left:30px}
+@media(max-width:860px){.step{border-right:0;border-bottom:1px solid rgba(31,32,36,.14);padding:24px 0}
+  .step+.step{padding-left:0}.step:last-child{border-bottom:0}}
+.step .n{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.16em;color:var(--acc);margin:0 0 12px;text-transform:uppercase}
+.step p{margin:0;font-size:18.5px;line-height:1.4;font-weight:600;letter-spacing:-.012em}
+.step p.sub{font-weight:400;font-size:17px;color:var(--muted);margin-top:8px}
+
+.shot{border:1px solid var(--hair);background:#fff;overflow:hidden}
+.shot img{width:100%}
+.shot figcaption{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);padding:12px 16px;border-top:1px solid var(--hair)}
+
+.stat{border-left:2px solid var(--ink);padding-left:22px}
+.stat .n{font-weight:600;font-size:clamp(30px,3.8vw,46px);letter-spacing:-.03em;line-height:1;margin:0 0 12px}
+.stat h3{font-size:20px;letter-spacing:-.016em;margin:0 0 10px}
+.stat.b{border-color:var(--blue)}.stat.b .n{color:var(--blue)}
+.stat.v{border-color:var(--violet)}.stat.v .n{color:var(--violet)}
+.stat.p{border-color:var(--pink)}.stat.p .n{color:var(--pink)}
+
+.offer{border:1px solid var(--hair);background:#fff;padding:30px;display:flex;flex-direction:column}
+.offer.lead{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+.offer.dash{border:1px dashed var(--hair);background:none;justify-content:center}
+.offer .say{font-size:17.5px;max-width:none;flex:1}
+
+.caserow{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+@media(max-width:900px){.caserow{grid-template-columns:1fr}}
+.case{padding:30px 34px;border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  display:flex;flex-direction:column;transition:.15s}
+.case:nth-child(3n+1){padding-left:0}
+.case:nth-child(3n){border-right:0;padding-right:0}
+@media(max-width:900px){
+  .case,.case:nth-child(3n),.case:nth-child(3n+1){border-right:0;padding:26px 0}}
+.case .n{font-weight:600;font-size:27px;letter-spacing:-.026em;margin:0 0 10px}
+.case h3{font-size:20px;letter-spacing:-.016em;margin:0 0 12px;flex:1}
+.case .tag{font-size:12.5px}
+.case .go{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-top:12px;color:var(--muted)}
+.case:hover .go{color:var(--ink)}
+.case.b .n{color:var(--blue)}.case.v .n{color:var(--violet)}.case.p .n{color:var(--pink)}
+
+/* case detail */
+.star{display:grid;grid-template-columns:150px 1fr;gap:24px;padding:26px 0;border-bottom:1px solid var(--hair)}
+@media(max-width:760px){.star{grid-template-columns:1fr;gap:8px}}
+.star .l{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.star p{margin:0;font-size:18.5px;line-height:1.5;max-width:60ch}
+.star p.alert{margin-top:12px;padding-left:16px;border-left:3px solid var(--acc);color:var(--ink);font-weight:500}
+.chips{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
+.chip{border-left:2px solid var(--acc);padding-left:14px}
+.chip .v{font-weight:600;font-size:27px;letter-spacing:-.026em;line-height:1;color:var(--acc)}
+.chip .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px;display:block}
+.plate{border:1px solid var(--hair);background:#fff;padding:26px;margin-bottom:34px}
+.plate figcaption{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:16px}
+.back{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:inline-block;margin-bottom:26px}
+.back:hover{color:var(--ink)}
+.pager{display:flex;justify-content:space-between;gap:20px;border-top:1px solid var(--ink);padding-top:24px;margin-top:12px;flex-wrap:wrap}
+
+.close{background:var(--sand);border-top:1px solid var(--hair);padding:clamp(62px,8vw,112px) 0;text-align:center}
+footer{border-top:1px solid var(--ink);padding:44px 0 56px;display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap}
+footer .fl{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+svg text.m{font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:1.2px;fill:#6E6B65}
+svg text.nm{font-family:'Archivo',sans-serif;font-size:21px;font-weight:600;fill:#1F2024}
+#chrome{background:var(--ink);color:rgba(250,247,239,.5);font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;padding:8px var(--gut)}
+
+/* hero drawing — tangle straightens into a line */
+.hero .g2{align-items:center;grid-template-columns:1.2fr .8fr;gap:clamp(28px,4vw,56px)}
+.hero h1{font-size:clamp(38px,5vw,60px)}
+@media(max-width:900px){.hero .g2{grid-template-columns:1fr}}
+.draw path.ink,.draw path.line{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.15s cubic-bezier(.5,0,.2,1) forwards}
+.draw path.line{animation-delay:.85s;animation-duration:.9s}
+.draw path.fall{stroke-dasharray:1;stroke-dashoffset:1;animation:draw .35s ease .8s forwards}
+.draw .pop{opacity:0;animation:pop .5s ease forwards}
+.draw .n1{animation-delay:1.35s}.draw .n2{animation-delay:1.5s}
+.draw .n3{animation-delay:1.65s}.draw .n4{animation-delay:1.8s}
+.draw .cap{opacity:0;animation:pop .6s ease 2s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pop{to{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  .draw path.ink,.draw path.line,.draw path.fall{animation:none;stroke-dashoffset:0}
+  .draw .pop,.draw .cap{animation:none;opacity:1}
+}
+</style>
 </head>
 <body>
-
-<div class="nav">
-  <div class="wrap">
-    <a href="index.html" class="nav-brand">
-      <svg width="30" height="30" viewBox="-100 -100 200 200">
-        <circle cx="0" cy="0" r="92" fill="none" stroke="#1F2024" stroke-width="7"></circle>
-        <line x1="-92" y1="0" x2="92" y2="0" stroke="#1F2024" stroke-width="6"></line>
-        <line x1="-46" y1="-79.7" x2="46" y2="79.7" stroke="#1F2024" stroke-width="6"></line>
-        <line x1="46" y1="-79.7" x2="-46" y2="79.7" stroke="#1F2024" stroke-width="6"></line>
-        <circle cx="0" cy="0" r="12" fill="#1F2024"></circle>
-      </svg>
-      <span>Calidescope</span>
-    </a>
-    <div class="nav-links">
-      <a href="promise.html">Promise</a>
-      <a href="perform.html">Perform</a>
-      <a href="proof.html">Proof</a>
-      <a href="case-studies.html" class="is-active">Case Studies</a>
-      <a href="why.html">About</a>
-      <a href="contact.html" class="is-contact">Contact</a>
+<a href="#main" style="position:absolute;left:-9999px" onfocus="this.style.left='12px';this.style.top='12px';this.style.background='#1F2024';this.style.color='#FAF7EF';this.style.padding='10px 16px';this.style.zIndex='999'">Skip to content</a>
+<nav>
+  <div class="wrap in">
+    <a class="logo" href="index.html">
+      <svg width="23" height="23" viewBox="0 0 40 40" fill="none" stroke="#1F2024" stroke-width="1.8" aria-hidden="true">
+        <circle cx="20" cy="20" r="17"/><path d="M20 3v34M5 11.5l30 17M5 28.5l30-17"/>
+        <circle cx="20" cy="20" r="3.2" fill="#1F2024" stroke="none"/></svg>
+      Calidescope</a>
+    <div class="links">
+      <a href="throughline.html">Throughline</a><a href="promise.html">Promise</a><a href="perform.html">Perform</a>
+      <a href="proof.html">Proof</a><a href="case-studies.html">Case studies</a><a href="why.html">About</a>
+      <a href="https://throughline.builders" target="_blank" rel="noopener" class="btn">Try it on your page ↗</a>
     </div>
   </div>
-</div>
+</nav>
+<main id="main">
 
-<div class="cs-index">
-  <div class="cs-wrap">
-    <div class="cs-idx-kicker">CASE STUDIES</div>
-    <div class="cs-idx-title">Fifteen situations. Fifteen outcomes.</div>
-    <div class="cs-idx-sub">Each one a real engagement, sorted Promise, then Perform, then Proof.</div>
-    <div class="cs-idx-frame"><div>Some predate Calidescope as a company. The discipline behind them is what Calidescope is built on, and what it runs today.</div></div>
-
-        <div class="cs-section-head">
-      <div class="cs-section-dot" style="background:#1E40FF"></div>
-      <h2>Promise</h2>
-      <span class="count">4 case studies · the pitches that won</span>
+  <header class="hero">
+    <div class="wrap">
+      <h1>Won it. Kept it.<br>Renewed it.</h1>
+      <p class="lede">Fifteen of them, sorted by the job they had to do.</p>
     </div>
-    <div class="cstile-grid">
-      <a href="case-study-m1.html" class="cstile featured on-blue">
-        <div class="cstile-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-linecap="round"><line x1="5" y1="19" x2="5" y2="13" stroke="#1E40FF" stroke-width="2"></line><line x1="12" y1="19" x2="12" y2="9" stroke="#1E40FF" stroke-width="2"></line><line x1="19" y1="19" x2="19" y2="5" stroke="#1F2024" stroke-width="2"></line></svg></div>
-        <div class="cstile-headline">A platform built. Barely used.</div>
-        <div class="cstile-chartrow">
-          <svg width="64" height="42" viewBox="0 0 70 46"><rect x="4" y="34" width="18" height="8" fill="#E4E0D6"></rect><rect x="40" y="4" width="18" height="38" fill="#1E40FF"></rect></svg>
-          <div class="cstile-stat">5x<span class="u">revenue</span></div>
-        </div>
-        <div class="cstile-tag">M1 · DENTSU AEGIS NETWORK · 2018</div>
-      </a>
+  </header>
+  <section class="sec" style="padding-top:clamp(16px,3vw,36px)"><div class="wrap" id="cases-index"><div class="hr" style="align-items:center"><h2 style="display:flex;align-items:center;gap:14px"><svg width="26" height="26" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 7 L34 32 L6 32 Z" fill="none" stroke="#1E40FF" stroke-width="3" stroke-linejoin="round"></path></svg>Win the business</h2><span class="tag">Four</span></div><div class="caserow"><a class="case b" href="case-study-m1.html"><p class="n">300%</p><h3>A platform built. Barely used.</h3><p class="tag">M1 · Dentsu Aegis Network · 2018</p><span class="go">Read it →</span></a><a class="case b" href="case-study-marketshare.html"><p class="n">$2M</p><h3>Proving search drove store sales — through the Great Recession.</h3><p class="tag">MarketShare Partners · London · 2007–2010</p><span class="go">Read it →</span></a><a class="case b" href="case-study-dentsu.html"><p class="n">+70%</p><h3>A data business, renamed three times.</h3><p class="tag">dentsu · 2025–2026</p><span class="go">Read it →</span></a><a class="case b" href="case-study-rnbw.html"><p class="n">40+</p><h3>A launch with no category playbook to borrow.</h3><p class="tag">RNBW · Calidescope engagement · 2020–2025</p><span class="go">Read it →</span></a></div><div class="hr" style="align-items:center;margin-top:64px"><h2 style="display:flex;align-items:center;gap:14px"><svg width="26" height="26" viewBox="0 0 40 40" aria-hidden="true"><rect x="8" y="8" width="24" height="24" fill="none" stroke="#7A3AD2" stroke-width="3"></rect></svg>Keep the promise</h2><span class="tag">Six</span></div><div class="caserow"><a class="case v" href="case-study-motherboard.html"><p class="n">Coca-Cola</p><h3>A job that had failed three times before.</h3><p class="tag">Motherboard · IPG Mediabrands · 2015–2017</p><span class="go">Read it →</span></a><a class="case v" href="case-study-disney.html"><p class="n">4 groups</p><h3>Personalisation, before it had a name.</h3><p class="tag">Walt Disney Internet Group · 1999–2001</p><span class="go">Read it →</span></a><a class="case v" href="case-study-hob.html"><p class="n">$25M</p><h3>A merger, and no shared customer record.</h3><p class="tag">House of Blues · 2001–2002</p><span class="go">Read it →</span></a><a class="case v" href="case-study-aeg.html"><p class="n">$50M</p><h3>A portfolio of venues with no shared system.</h3><p class="tag">AEG · 2003–2007</p><span class="go">Read it →</span></a><a class="case v" href="case-study-havas.html"><p class="n">$40M+</p><h3>Five CEOs, each with their own audience platform.</h3><p class="tag">Havas · Converged · 2018–2020</p><span class="go">Read it →</span></a><a class="case v" href="case-study-comscore.html"><p class="n">−25%</p><h3>One video market. Two org charts.</h3><p class="tag">comScore · 2017–2018</p><span class="go">Read it →</span></a></div><div class="hr" style="align-items:center;margin-top:64px"><h2 style="display:flex;align-items:center;gap:14px"><svg width="26" height="26" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="13" fill="none" stroke="#E933A6" stroke-width="3"></circle></svg>Earn the renewal</h2><span class="tag">Five</span></div><div class="caserow"><a class="case p" href="case-study-sprint.html"><p class="n">±3%</p><h3>Forecasting demand before the tools existed to do it.</h3><p class="tag">Sprint Corporation · 1995–1999</p><span class="go">Read it →</span></a><a class="case p" href="case-study-amex.html"><p class="n">Retained</p><h3>One more bad review from losing the account.</h3><p class="tag">American Express · UM Worldwide · 2022–2023</p><span class="go">Read it →</span></a><a class="case p" href="case-study-initiative.html"><p class="n">+150%</p><h3>Five analytics teams — some paid, some given away.</h3><p class="tag">Initiative · 2010–2017</p><span class="go">Read it →</span></a><a class="case p" href="case-study-usheru.html"><p class="n">Show</p><h3>A platform delivering value — and unable to show it.</h3><p class="tag">usheru · Calidescope engagement · 2020–2025</p><span class="go">Read it →</span></a><a class="case p" href="case-study-barkley.html"><p class="n">Retention</p><h3>Data capabilities that grew faster than clients could follow.</h3><p class="tag">Barkley · Calidescope engagement · 2020–2025</p><span class="go">Read it →</span></a></div></div></section>
+  <section class="close"><div class="wrap"><h2 style="max-width:22ch;margin:0 auto 28px">See what yours scores.</h2>
+    <a href="https://throughline.builders" target="_blank" rel="noopener" class="btn lg">Try it on your own page ↗</a></div></section>
 
-      <a href="case-study-marketshare.html" class="cstile on-blue">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v10H9l-4 4v-4H4z" stroke="#1F2024" stroke-width="1.6"></path><line x1="8" y1="9" x2="16" y2="9" stroke="#1E40FF" stroke-width="1.4"></line></svg></div>
-        <div class="cstile-headline">Proving search drove store sales — through the Great Recession.</div>
-        <div class="cstile-chartrow">
-          <svg width="52" height="34" viewBox="0 0 60 40"><rect x="4" y="30" width="14" height="6" fill="#E4E0D6"></rect><rect x="34" y="8" width="14" height="28" fill="#1E40FF"></rect></svg>
-          <div class="cstile-stat">$2M<span class="u">new international business</span></div>
-        </div>
-        <div class="cstile-tag">MARKETSHARE PARTNERS · LONDON · 2007–2010</div>
-      </a>
-
-      <a href="case-study-dentsu.html" class="cstile on-blue">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="14" width="11" height="7" rx="1.4" stroke="#1F2024" stroke-width="1.5"></rect><rect x="7" y="9" width="11" height="7" rx="1.4" stroke="#1F2024" stroke-width="1.5"></rect><rect x="11" y="4" width="11" height="7" rx="1.4" stroke="#1E40FF" stroke-width="1.5"></rect></svg></div>
-        <div class="cstile-headline">A data business, renamed three times.</div>
-        <div class="cstile-chartrow">
-          <svg width="52" height="34" viewBox="0 0 60 40"><rect x="4" y="22" width="14" height="14" fill="#E4E0D6"></rect><rect x="34" y="6" width="14" height="30" fill="#1E40FF"></rect></svg>
-          <div class="cstile-stat">+70%<span class="u">YoY revenue growth</span></div>
-        </div>
-        <div class="cstile-tag">DENTSU · 2025–2026</div>
-      </a>
-
-      <a href="case-study-rnbw.html" class="cstile on-blue">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9a2 2 0 000 4v3a1 1 0 001 1h14a1 1 0 001-1v-3a2 2 0 000-4V6a1 1 0 00-1-1H5a1 1 0 00-1 1v3z" stroke="#1F2024" stroke-width="1.5"></path><path d="M9 12h6" stroke="#1E40FF" stroke-width="1.6"></path></svg></div>
-        <div class="cstile-headline">A launch with no category playbook to borrow.</div>
-        <div class="cstile-chartrow">
-          <svg width="52" height="34" viewBox="0 0 60 40"><rect x="4" y="28" width="14" height="8" fill="#E4E0D6"></rect><rect x="34" y="8" width="14" height="28" fill="#1E40FF"></rect></svg>
-          <div class="cstile-stat">40+<span class="u">dispensaries at launch</span></div>
-        </div>
-        <div class="cstile-tag">RNBW · CALIDESCOPE ENGAGEMENT</div>
-      </a>
-    </div>
-
-    <div class="cs-section-head">
-      <div class="cs-section-dot" style="background:#7A3AD2"></div>
-      <h2>Perform</h2>
-      <span class="count">6 case studies · the workflows that delivered</span>
-    </div>
-    <div class="cstile-grid">
-      <a href="case-study-motherboard.html" class="cstile featured on-violet">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" stroke="#1F2024" stroke-width="1.6"></rect><path d="M8 4V2M12 4V2M16 4V2M8 22v-2M12 22v-2M16 22v-2M4 8H2M4 12H2M4 16H2M22 8h-2M22 12h-2M22 16h-2" stroke="#1F2024" stroke-width="1.3"></path><rect x="9" y="9" width="6" height="6" rx="1" stroke="#1F2024" stroke-width="1.5"></rect></svg></div>
-        <div class="cstile-headline">A job that had failed three times before.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" fill="#EBDFFA"></rect><rect x="16" y="14" width="8" height="20" fill="#7A3AD2"></rect></svg>
-          <div class="cstile-stat">Won<span class="u">the Coca-Cola pitch</span></div>
-        </div>
-        <div class="cstile-tag">MOTHERBOARD · IPG MEDIABRANDS · 2015–2017</div>
-      </a>
-
-      <a href="case-study-disney.html" class="cstile on-violet">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2" stroke="#1F2024" stroke-width="1.6"></circle><path d="M5 20c1.5-3.5 4-5 7-5s5.5 1.5 7 5" stroke="#1F2024" stroke-width="1.6"></path><circle cx="19" cy="6" r="1.4" fill="#1F2024"></circle><circle cx="5" cy="6" r="1.4" fill="#1F2024"></circle></svg></div>
-        <div class="cstile-headline">Personalization, before it had a name.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" fill="#EBDFFA"></rect><rect x="16" y="14" width="8" height="20" fill="#7A3AD2"></rect></svg>
-          <div class="cstile-stat">4<span class="u">property groups, one CRM</span></div>
-        </div>
-        <div class="cstile-tag">WALT DISNEY INTERNET GROUP · 1999–2001</div>
-      </a>
-
-      <a href="case-study-hob.html" class="cstile on-violet">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="8" height="8" rx="4" stroke="#1F2024" stroke-width="1.6"></rect><rect x="13" y="8" width="8" height="8" rx="4" stroke="#7A3AD2" stroke-width="1.6"></rect></svg></div>
-        <div class="cstile-headline">A merger, and no shared customer record.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" fill="#EBDFFA"></rect><rect x="16" y="14" width="8" height="20" fill="#7A3AD2"></rect></svg>
-          <div class="cstile-stat">$25M<span class="u">in sales generated</span></div>
-        </div>
-        <div class="cstile-tag">HOUSE OF BLUES · 2001–2002</div>
-      </a>
-
-      <a href="case-study-aeg.html" class="cstile on-violet">
-        <div class="cstile-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M3 9a2 2 0 000 4v3a1 1 0 001 1h16a1 1 0 001-1v-3a2 2 0 000-4V6a1 1 0 00-1-1H4a1 1 0 00-1 1v3z" stroke="#1F2024" stroke-width="1.5"></path></svg></div>
-        <div class="cstile-headline">A portfolio of venues with no shared system.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" fill="#EBDFFA"></rect><rect x="16" y="14" width="8" height="20" fill="#7A3AD2"></rect></svg>
-          <div class="cstile-stat">$50M<span class="u">ticket sales enabled</span></div>
-        </div>
-        <div class="cstile-tag">AEG · 2003–2007</div>
-      </a>
-
-      <a href="case-study-havas.html" class="cstile on-violet">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="7" cy="9" r="2.6" fill="#1F2024"></circle><circle cx="17" cy="9" r="2.6" fill="#1F2024"></circle><circle cx="12" cy="18" r="2.6" fill="#7A3AD2"></circle><line x1="7" y1="9" x2="12" y2="18" stroke="#1F2024" stroke-width="1.6"></line><line x1="17" y1="9" x2="12" y2="18" stroke="#1F2024" stroke-width="1.6"></line></svg></div>
-        <div class="cstile-headline">Five CEOs, each with their own audience platform. No reason to agree on one.</div>
-        <div class="cstile-chartrow">
-          <svg width="42" height="42" viewBox="0 0 46 46"><circle cx="23" cy="23" r="18" fill="none" stroke="#E4E0D6" stroke-width="6"></circle><circle cx="23" cy="23" r="18" fill="none" stroke="#7A3AD2" stroke-width="6" stroke-dasharray="75 113" stroke-linecap="round" transform="rotate(-90 23 23)"></circle></svg>
-          <div class="cstile-stat">$40M+<span class="u">retained accounts</span></div>
-        </div>
-        <div class="cstile-tag">HAVAS · CONVERGED · 2018–2020</div>
-      </a>
-
-      <a href="case-study-comscore.html" class="cstile on-violet">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="8" height="10" rx="1.5" stroke="#1F2024" stroke-width="1.6"></rect><rect x="13" y="7" width="8" height="10" rx="1.5" stroke="#1F2024" stroke-width="1.6"></rect><path d="M11 12h2" stroke="#1F2024" stroke-width="2"></path></svg></div>
-        <div class="cstile-headline">One video market. Two org charts.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" fill="#EBDFFA"></rect><rect x="16" y="14" width="8" height="20" fill="#7A3AD2"></rect></svg>
-          <div class="cstile-stat">−25%<span class="u">operating cost, 8 months</span></div>
-        </div>
-        <div class="cstile-tag">COMSCORE · 2017–2018</div>
-      </a>
-    </div>
-
-    <div class="cs-section-head">
-      <div class="cs-section-dot" style="background:#E933A6"></div>
-      <h2>Proof</h2>
-      <span class="count">5 case studies · the evidence that kept</span>
-    </div>
-    <div class="cstile-grid">
-      <a href="case-study-sprint.html" class="cstile on-pink">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round"><ellipse cx="12" cy="5" rx="7" ry="2.3" stroke="#1F2024" stroke-width="1.6"></ellipse><path d="M5 5v6c0 1.3 3 2.3 7 2.3s7-1 7-2.3V5" stroke="#1F2024" stroke-width="1.6"></path><path d="M5 11v6c0 1.3 3 2.3 7 2.3s7-1 7-2.3v-6" stroke="#E933A6" stroke-width="1.6"></path></svg></div>
-        <div class="cstile-headline">Forecasting demand before the tools existed to do it.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 40 40"><rect x="4" y="13" width="32" height="14" rx="4" fill="#E933A6" fill-opacity="0.22"></rect><line x1="4" y1="20" x2="36" y2="20" stroke="#E933A6" stroke-width="2.5"></line></svg>
-          <div class="cstile-stat">±3%<span class="u">30-day forecast accuracy</span></div>
-        </div>
-        <div class="cstile-tag">SPRINT CORPORATION · 1995–1999</div>
-      </a>
-
-      <a href="case-study-amex.html" class="cstile featured on-pink">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0113-6" stroke="#1F2024" stroke-width="1.8"></path><path d="M20 12a8 8 0 01-13 6" stroke="#E933A6" stroke-width="1.8"></path></svg></div>
-        <div class="cstile-headline">One more bad review from losing the account.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z" stroke="#1F2024" stroke-width="1.6"></path><path d="M9 12l2 2 4-4" stroke="#E933A6" stroke-width="2"></path></svg>
-          <div class="cstile-stat">Avoided<span class="u">the formal review</span></div>
-        </div>
-        <div class="cstile-tag">AMERICAN EXPRESS · UM WORLDWIDE · 2022–2023</div>
-      </a>
-
-      <a href="case-study-initiative.html" class="cstile on-pink">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="10" cy="10" r="6" stroke="#1F2024" stroke-width="1.6"></circle><line x1="14.2" y1="14.2" x2="19" y2="19" stroke="#1F2024" stroke-width="1.8" stroke-linecap="round"></line><rect x="7" y="10" width="2.2" height="4" fill="#E933A6"></rect><rect x="10.5" y="7" width="2.2" height="7" fill="#E933A6"></rect></svg></div>
-        <div class="cstile-headline">Five analytics teams — some paid, some given away.</div>
-        <div class="cstile-chartrow">
-          <svg width="52" height="34" viewBox="0 0 60 40"><rect x="2" y="28" width="8" height="8" fill="#E4E0D6"></rect><rect x="13" y="25" width="8" height="11" fill="#E4E0D6"></rect><rect x="24" y="21" width="8" height="15" fill="#D9D5CA"></rect><rect x="35" y="15" width="8" height="21" fill="#D9D5CA"></rect><rect x="46" y="4" width="8" height="32" fill="#E933A6"></rect></svg>
-          <div class="cstile-stat">+150%<span class="u">analytics revenue</span></div>
-        </div>
-        <div class="cstile-tag">INITIATIVE · 2010–2017</div>
-      </a>
-
-      <a href="case-study-usheru.html" class="cstile on-pink">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" stroke="#1F2024" stroke-width="1.6"></rect><path d="M10 9.5l5 2.5-5 2.5z" stroke="#E933A6" stroke-width="1.6" stroke-linejoin="round"></path></svg></div>
-        <div class="cstile-headline">A platform delivering value — and unable to show it.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" fill="#FFDDF0"></rect><rect x="16" y="14" width="8" height="20" fill="#E933A6"></rect></svg>
-          <div class="cstile-stat">Show<span class="u">replaced tell</span></div>
-        </div>
-        <div class="cstile-tag">USHERU · CALIDESCOPE ENGAGEMENT</div>
-      </a>
-
-      <a href="case-study-barkley.html" class="cstile on-pink">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4 6c4 0 5 4 8 4M4 12h8M4 18c4 0 5-4 8-4" stroke="#1F2024" stroke-width="1.5"></path><path d="M12 12h8" stroke="#E933A6" stroke-width="2"></path></svg></div>
-        <div class="cstile-headline">Data capabilities that grew faster than clients could follow.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" fill="#FFDDF0"></rect><rect x="16" y="14" width="8" height="20" fill="#E933A6"></rect></svg>
-          <div class="cstile-stat">Retention<span class="u">up, complexity down</span></div>
-        </div>
-        <div class="cstile-tag">BARKLEY · CALIDESCOPE ENGAGEMENT</div>
-      </a>
-    </div>
-  </div>
-</div>
-
-<div class="site-footer">
-  <div class="wrap">
+</main>
+<div class="wrap">
+  <footer>
     <div>
-      <div class="brand">Calidescope LLC</div>
-      <div class="tagline">Promise to Proof. The same discipline, all the way around.</div>
-      <div class="links">
-        <a href="index.html">HOME</a>
-        <a href="promise.html">PROMISE</a>
-        <a href="perform.html">PERFORM</a>
-        <a href="proof.html">PROOF</a>
-        <a href="case-studies.html">CASE STUDIES</a>
-        <a href="why.html">ABOUT</a>
-        <a href="contact.html">CONTACT</a>
-        <a href="privacy.html">PRIVACY</a>
-        <a href="terms.html">TERMS</a>
-        <a href="#" data-cookie-prefs>COOKIE PREFERENCES</a>
-      </div>
+      <a class="logo" href="index.html" style="margin-bottom:14px">
+        <svg width="21" height="21" viewBox="0 0 40 40" fill="none" stroke="#1F2024" stroke-width="1.9" aria-hidden="true">
+          <circle cx="20" cy="20" r="17"/><path d="M20 3v34M5 11.5l30 17M5 28.5l30-17"/>
+          <circle cx="20" cy="20" r="3.2" fill="#1F2024" stroke="none"/></svg>
+        Calidescope</a>
+      <p style="margin:0;font-weight:600;letter-spacing:-.014em;max-width:30ch">Promise to Proof. The same discipline, all the way around.</p>
     </div>
-    <a href="contact.html" class="btn-primary">Start a conversation &rarr;</a>
-  </div>
+    <div class="fl">
+      <a href="throughline.html">Throughline</a><a href="promise.html">Promise</a><a href="perform.html">Perform</a><a href="proof.html">Proof</a>
+      <a href="case-studies.html">Case studies</a><a href="why.html">About</a><a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>
+    </div>
+  </footer>
 </div>
-
-<script src="assets/consent.js"></script>
 </body>
 </html>

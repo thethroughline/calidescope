@@ -3,285 +3,269 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Proof — Calidescope</title>
-<meta name="description" content="Every QBR, case study, and renewal deck has to show the performance you promised. Get the proof right, and buyers stay.">
-<meta property="og:title" content="Proof — Calidescope">
-<meta property="og:description" content="How you prove decides who keeps choosing you.">
+<title>Earn the renewal — Calidescope</title>
+<meta name="description" content="Show what was delivered, clearly enough to check.">
+<link rel="canonical" href="https://calidescope.llc/proof.html">
+<meta property="og:site_name" content="Calidescope">
+<meta property="og:title" content="Earn the renewal — Calidescope">
+<meta property="og:description" content="Show what was delivered, clearly enough to check.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calidescope.llc/proof.html">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<!-- Self-hosted fonts. Copy assets/fonts/ from calidescope-site-official.zip.
+     No third-party font call, per the privacy policy. -->
 <link rel="stylesheet" href="assets/fonts/fonts.css">
-<link rel="stylesheet" href="assets/style.css?v=8">
-<link rel="stylesheet" href="assets/case-studies.css?v=6">
+<style>
+:root{
+  --ink:#1F2024;--paper:#FAF7EF;--sand:#F3EEE2;--muted:#6E6B65;--hair:#E4E0D6;
+  --blue:#1E40FF;--blue-t:#DDE6FF;--violet:#7A3AD2;--violet-t:#EBDFFA;--pink:#E933A6;--pink-t:#FFDDF0;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --sans:'Archivo',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --gut:clamp(22px,5vw,68px);--acc:#1F2024;--acc-t:#F3EEE2;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:19px;line-height:1.55;-webkit-font-smoothing:antialiased}
+p{margin:0 0 14px} a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--gut)}
+h1{font-weight:600;font-size:clamp(40px,6.4vw,74px);line-height:.99;letter-spacing:-.032em;margin:0 0 26px}
+h2{font-weight:600;font-size:clamp(29px,4.3vw,47px);line-height:1.04;letter-spacing:-.028em;margin:0 0 16px}
+h3{font-weight:600;font-size:clamp(20px,2.2vw,26px);line-height:1.14;letter-spacing:-.02em;margin:0 0 8px}
+h4{font-weight:600;font-size:19px;letter-spacing:-.012em;margin:0 0 6px}
+.lede{font-size:clamp(19px,2.1vw,23px);line-height:1.45;max-width:36ch;color:#3a3b40}
+.say{font-size:clamp(17px,1.85vw,20px);line-height:1.45;color:#3a3b40;max-width:46ch}
+.tag{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mut{color:var(--muted)}
+
+nav{border-bottom:1px solid var(--hair);background:var(--paper);position:sticky;top:0;z-index:60}
+nav .in{display:flex;align-items:center;gap:26px;height:80px}
+.logo{display:flex;align-items:center;gap:11px;font-weight:600;font-size:19px;letter-spacing:.02em}
+nav .links{display:flex;gap:24px;margin-left:auto;font-size:16.5px;align-items:center}
+nav .links a{color:var(--muted)}nav .links a:hover{color:var(--ink)}
+nav .links a.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--acc)}
+.btn{display:inline-block;background:var(--ink);color:var(--paper);font-weight:600;font-size:16.5px;padding:13px 22px;transition:.15s}
+.btn:hover{background:var(--acc);color:#fff}
+.btn.lg{font-size:19px;padding:18px 32px}
+.btn.out{background:none;color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.btn.out:hover{background:var(--ink);color:var(--paper)}
+.btn.acc{background:var(--acc);color:#fff}.btn.acc:hover{background:var(--ink)}
+@media(max-width:1080px){nav .links a:not(.btn){display:none}}
+
+.page{display:none}.page.on{display:block}
+.hero{padding:clamp(64px,9vw,124px) 0 clamp(48px,6vw,78px)}
+.hero.tint{background:var(--acc-t);border-bottom:1px solid rgba(31,32,36,.1)}
+.acts{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:36px}
+.scroll{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:18px;color:var(--muted)}
+.strip{background:var(--ink);color:var(--paper);padding:20px 0}
+.strip p{margin:0;font-size:clamp(17px,1.9vw,21px);font-weight:600;letter-spacing:-.012em}
+.sec{padding:clamp(58px,7.2vw,104px) 0}
+.sec.sand{background:var(--sand);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.sec.tint{background:var(--acc-t)}
+.sec.dark{background:var(--ink);color:var(--paper)}
+.sec.dark h2{color:var(--paper)}.sec.dark .say{color:rgba(250,247,239,.72)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5.5vw,74px);align-items:center}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,34px)}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2vw,24px)}
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr}.g4{grid-template-columns:1fr 1fr}}
+.hr{border-bottom:1px solid var(--ink);padding-bottom:20px;margin-bottom:42px;display:flex;
+  justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap}
+.hr h2{margin:0}
+
+.card{border-top:3px solid var(--hair);padding-top:20px}
+.card.b{border-color:var(--blue)}.card.v{border-color:var(--violet)}.card.p{border-color:var(--pink)}
+.card .say{font-size:17.5px;max-width:none;margin:0}
+.card .go{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;display:block;margin-top:16px}
+.shape{margin-bottom:12px;display:block}
+.ci{width:60px;height:60px;border-radius:50%;background:var(--acc-t);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid rgba(31,32,36,.2)}
+@media(max-width:860px){.steps{grid-template-columns:1fr}}
+.step{padding:28px 30px 30px 0;border-right:1px solid rgba(31,32,36,.14)}
+.step:last-child{border-right:0;padding-right:0}.step+.step{padding-left:30px}
+@media(max-width:860px){.step{border-right:0;border-bottom:1px solid rgba(31,32,36,.14);padding:24px 0}
+  .step+.step{padding-left:0}.step:last-child{border-bottom:0}}
+.step .n{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.16em;color:var(--acc);margin:0 0 12px;text-transform:uppercase}
+.step p{margin:0;font-size:18.5px;line-height:1.4;font-weight:600;letter-spacing:-.012em}
+.step p.sub{font-weight:400;font-size:17px;color:var(--muted);margin-top:8px}
+
+.shot{border:1px solid var(--hair);background:#fff;overflow:hidden}
+.shot img{width:100%}
+.shot figcaption{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);padding:12px 16px;border-top:1px solid var(--hair)}
+
+.stat{border-left:2px solid var(--ink);padding-left:22px}
+.stat .n{font-weight:600;font-size:clamp(30px,3.8vw,46px);letter-spacing:-.03em;line-height:1;margin:0 0 12px}
+.stat h3{font-size:20px;letter-spacing:-.016em;margin:0 0 10px}
+.stat.b{border-color:var(--blue)}.stat.b .n{color:var(--blue)}
+.stat.v{border-color:var(--violet)}.stat.v .n{color:var(--violet)}
+.stat.p{border-color:var(--pink)}.stat.p .n{color:var(--pink)}
+
+.offer{border:1px solid var(--hair);background:#fff;padding:30px;display:flex;flex-direction:column}
+.offer.lead{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+.offer.dash{border:1px dashed var(--hair);background:none;justify-content:center}
+.offer .say{font-size:17.5px;max-width:none;flex:1}
+
+.caserow{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+@media(max-width:900px){.caserow{grid-template-columns:1fr}}
+.case{padding:30px 34px;border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  display:flex;flex-direction:column;transition:.15s}
+.case:nth-child(3n+1){padding-left:0}
+.case:nth-child(3n){border-right:0;padding-right:0}
+@media(max-width:900px){
+  .case,.case:nth-child(3n),.case:nth-child(3n+1){border-right:0;padding:26px 0}}
+.case .n{font-weight:600;font-size:27px;letter-spacing:-.026em;margin:0 0 10px}
+.case h3{font-size:20px;letter-spacing:-.016em;margin:0 0 12px;flex:1}
+.case .tag{font-size:12.5px}
+.case .go{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-top:12px;color:var(--muted)}
+.case:hover .go{color:var(--ink)}
+.case.b .n{color:var(--blue)}.case.v .n{color:var(--violet)}.case.p .n{color:var(--pink)}
+
+/* case detail */
+.star{display:grid;grid-template-columns:150px 1fr;gap:24px;padding:26px 0;border-bottom:1px solid var(--hair)}
+@media(max-width:760px){.star{grid-template-columns:1fr;gap:8px}}
+.star .l{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.star p{margin:0;font-size:18.5px;line-height:1.5;max-width:60ch}
+.star p.alert{margin-top:12px;padding-left:16px;border-left:3px solid var(--acc);color:var(--ink);font-weight:500}
+.chips{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
+.chip{border-left:2px solid var(--acc);padding-left:14px}
+.chip .v{font-weight:600;font-size:27px;letter-spacing:-.026em;line-height:1;color:var(--acc)}
+.chip .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px;display:block}
+.plate{border:1px solid var(--hair);background:#fff;padding:26px;margin-bottom:34px}
+.plate figcaption{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:16px}
+.back{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:inline-block;margin-bottom:26px}
+.back:hover{color:var(--ink)}
+.pager{display:flex;justify-content:space-between;gap:20px;border-top:1px solid var(--ink);padding-top:24px;margin-top:12px;flex-wrap:wrap}
+
+.close{background:var(--sand);border-top:1px solid var(--hair);padding:clamp(62px,8vw,112px) 0;text-align:center}
+footer{border-top:1px solid var(--ink);padding:44px 0 56px;display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap}
+footer .fl{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+svg text.m{font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:1.2px;fill:#6E6B65}
+svg text.nm{font-family:'Archivo',sans-serif;font-size:21px;font-weight:600;fill:#1F2024}
+#chrome{background:var(--ink);color:rgba(250,247,239,.5);font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;padding:8px var(--gut)}
+
+/* hero drawing — tangle straightens into a line */
+.hero .g2{align-items:center;grid-template-columns:1.2fr .8fr;gap:clamp(28px,4vw,56px)}
+.hero h1{font-size:clamp(38px,5vw,60px)}
+@media(max-width:900px){.hero .g2{grid-template-columns:1fr}}
+.draw path.ink,.draw path.line{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.15s cubic-bezier(.5,0,.2,1) forwards}
+.draw path.line{animation-delay:.85s;animation-duration:.9s}
+.draw path.fall{stroke-dasharray:1;stroke-dashoffset:1;animation:draw .35s ease .8s forwards}
+.draw .pop{opacity:0;animation:pop .5s ease forwards}
+.draw .n1{animation-delay:1.35s}.draw .n2{animation-delay:1.5s}
+.draw .n3{animation-delay:1.65s}.draw .n4{animation-delay:1.8s}
+.draw .cap{opacity:0;animation:pop .6s ease 2s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pop{to{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  .draw path.ink,.draw path.line,.draw path.fall{animation:none;stroke-dashoffset:0}
+  .draw .pop,.draw .cap{animation:none;opacity:1}
+}
+</style>
 </head>
 <body>
-
-<div class="nav">
-  <div class="wrap">
-  <a href="index.html" class="nav-brand">
-    <svg width="30" height="30" viewBox="-100 -100 200 200">
-      <circle cx="0" cy="0" r="92" fill="none" stroke="#1F2024" stroke-width="7"></circle>
-      <line x1="-92" y1="0" x2="92" y2="0" stroke="#1F2024" stroke-width="6"></line>
-      <line x1="-46" y1="-79.7" x2="46" y2="79.7" stroke="#1F2024" stroke-width="6"></line>
-      <line x1="46" y1="-79.7" x2="-46" y2="79.7" stroke="#1F2024" stroke-width="6"></line>
-      <circle cx="0" cy="0" r="12" fill="#1F2024"></circle>
-    </svg>
-    <span>Calidescope</span>
-  </a>
-  <div class="nav-links">
-    <a href="promise.html">Promise</a>
-    <a href="perform.html">Perform</a>
-    <a href="proof.html" class="is-active">Proof</a>
-    <a href="case-studies.html">Case Studies</a>
-      <a href="why.html">About</a>
-      <a href="contact.html" class="is-contact">Contact</a>
-  </div>
-  </div>
-</div>
-
-<div style="background:#FFDDF0;border-bottom:1px solid #E4E0D6">
-<div class="wrap" style="padding-top:clamp(56px,9vh,84px);padding-bottom:clamp(44px,8vh,64px)">
-  <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#E933A6;margin:0 0 18px">PROOF · THE EVIDENCE</div>
-
-<div style="background:#fff;border:1px solid #E4E0D6;border-radius:12px;padding:34px 32px;margin:0 0 34px">
-  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:20px">
-    <div style="flex:1 1 300px">
-      <div style="font:500 10px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#6E6B65;margin-bottom:10px">BEFORE CALIDESCOPE</div>
-      <div style="background:#FCFAF4;border:1px solid #E4E0D6;border-radius:8px;padding:14px;height:170px">
-        <svg width="100%" height="100%" viewBox="0 0 220 140" fill="none" preserveAspectRatio="xMidYMid meet">
-          <g transform="rotate(-6 44 54)">
-            <rect x="18" y="22" width="52" height="64" rx="4" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
-            <rect x="25" y="30" width="28" height="5" rx="1.5" fill="#D9D5CA"/>
-            <rect x="25" y="62" width="7" height="14" fill="#EAE6DB"/>
-            <rect x="35" y="54" width="7" height="22" fill="#D9D5CA"/>
-            <rect x="45" y="58" width="7" height="18" fill="#EAE6DB"/>
-          </g>
-          <g transform="rotate(4 116 34)">
-            <rect x="86" y="12" width="60" height="44" rx="4" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
-            <rect x="93" y="19" width="26" height="4.5" rx="1.5" fill="#D9D5CA"/>
-            <polyline points="93,44 104,36 115,41 126,31 138,35" stroke="#B9B4A7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </g>
-          <g transform="rotate(-3 189 60)">
-            <rect x="162" y="26" width="54" height="68" rx="4" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
-            <circle cx="180" cy="48" r="8" stroke="#EAE6DB" stroke-width="3.5"/>
-            <circle cx="180" cy="48" r="8" stroke="#B9B4A7" stroke-width="3.5" stroke-dasharray="19 32" transform="rotate(-90 180 48)"/>
-            <rect x="170" y="66" width="36" height="4" rx="1.5" fill="#EAE6DB"/>
-            <rect x="170" y="74" width="30" height="4" rx="1.5" fill="#EAE6DB"/>
-          </g>
-          <g transform="rotate(5 92 100)">
-            <rect x="64" y="76" width="56" height="52" rx="4" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
-            <rect x="71" y="84" width="24" height="4.5" rx="1.5" fill="#D9D5CA"/>
-            <rect x="71" y="108" width="7" height="12" fill="#D9D5CA"/>
-            <rect x="81" y="102" width="7" height="18" fill="#EAE6DB"/>
-            <rect x="91" y="112" width="7" height="8" fill="#EAE6DB"/>
-          </g>
-          <g transform="rotate(-5 166 112)">
-            <rect x="138" y="98" width="56" height="34" rx="4" fill="#fff" stroke="#D9D5CA" stroke-width="1.5"/>
-            <polyline points="145,122 155,114 165,118 175,110 187,116" stroke="#B9B4A7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </g>
-          <path d="M70 44 C76 40 80 38 86 36" stroke="#D9D5CA" stroke-width="1.5" stroke-dasharray="3 5" stroke-linecap="round"/>
-          <path d="M120 62 C124 68 126 72 128 78" stroke="#D9D5CA" stroke-width="1.5" stroke-dasharray="3 5" stroke-linecap="round"/>
-          <path d="M152 46 C158 52 160 58 160 64" stroke="#D9D5CA" stroke-width="1.5" stroke-dasharray="3 5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div style="font:400 11.5px/1.45 'Archivo',sans-serif;color:#6E6B65;margin-top:8px">Report after report — and the answer to "did you deliver?" is not clear.</div>
-    </div>
-    <div class="ba-arrow">
-      <svg width="36" height="24" viewBox="0 0 36 24" fill="none" stroke="#E933A6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h30"></path><path d="M25 5l7 7-7 7"></path></svg>
-    </div>
-    <div style="flex:1 1 300px">
-      <div style="font:500 10px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#E933A6;margin-bottom:10px">AFTER CALIDESCOPE</div>
-      <div style="background:#fff;border:2px solid #1F2024;border-radius:8px;padding:14px;height:170px">
-        <svg width="100%" height="100%" viewBox="0 0 220 140" fill="none" preserveAspectRatio="xMidYMid meet">
-          <path d="M12 70 C60 66 160 66 208 70" stroke="#E933A6" stroke-width="2.6" stroke-linecap="round"></path>
-          <circle cx="12" cy="70" r="5" fill="#1E40FF"></circle>
-          <circle cx="76" cy="68" r="5" fill="#FAF7EF" stroke="#1F2024" stroke-width="2"></circle>
-          <circle cx="142" cy="67" r="5" fill="#FAF7EF" stroke="#1F2024" stroke-width="2"></circle>
-          <circle cx="208" cy="70" r="5" fill="#E933A6"></circle>
-          <text x="2" y="94" font-family="IBM Plex Mono,monospace" font-size="9" fill="#6E6B65">PROMISES</text>
-          <text x="76" y="92" font-family="IBM Plex Mono,monospace" font-size="9" fill="#6E6B65" text-anchor="middle">EVIDENCE</text>
-          <text x="142" y="91" font-family="IBM Plex Mono,monospace" font-size="9" fill="#6E6B65" text-anchor="middle">EVIDENCE</text>
-          <text x="216" y="94" font-family="IBM Plex Mono,monospace" font-size="9" fill="#6E6B65" text-anchor="end">RENEWED</text>
-        </svg>
-      </div>
-      <div style="font:400 11.5px/1.45 'Archivo',sans-serif;color:#6E6B65;margin-top:8px">One line from promise to renewal — every number earns its place.</div>
-    </div>
-  </div>
-</div>
-
-  <div style="font:600 clamp(32px,4.5vw,46px)/1.14 'Archivo',sans-serif;letter-spacing:-.02em;max-width:740px">How you prove decides who keeps choosing you.</div>
-  <div style="font:400 18px/1.6 'Archivo',sans-serif;color:#1F2024;margin:18px 0 0;max-width:600px">Every QBR, case study, and renewal deck has to show the performance you promised, clearly enough that nobody has to take your word for it.</div>
-  <div style="font:600 20px/1.5 'Archivo',sans-serif;color:#1F2024;margin:14px 0 0;max-width:600px">Get the proof right, and buyers stay — because you proved it.</div>
-</div>
-</div>
-
-<div class="wrap" style="padding-top:56px;padding-bottom:20px">
-  <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#6E6B65;margin:0 0 8px">MADE ATTRACTIVE</div>
-  <div style="font:600 26px 'Archivo',sans-serif">What getting it right earns you</div>
-</div>
-<div class="wrap" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;padding-bottom:60px">
-  <div style="border:1px solid #E4E0D6;background:#fff;border-radius:12px;padding:26px 24px;display:flex;flex-direction:column">
-    <svg width="86" height="120" viewBox="0 0 110 160" fill="none" stroke="#1F2024" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 0 14px">
-      <path d="M58 10 c-5 0 -8 4 -7 9 c1 5 9 5 11 0 c2 -5 0 -9 -4 -9"></path>
-      <path d="M46 26 c8 -4 18 -4 26 1"></path>
-      <path d="M46 26 c-2 14 -3 28 -2 40"></path>
-      <path d="M72 27 c2 14 2 30 0 44"></path>
-      <path d="M44 70 c8 2 17 2 26 -1"></path>
-      <path d="M70 30 c-4 8 -10 12 -16 13"></path>
-      <path d="M62 34 l9 -6 M60 44 l10 -7"></path>
-      <path d="M53 71 c-2 20 -3 40 -2 60"></path>
-      <path d="M66 70 c4 12 2 24 -2 36 c-2 8 -2 16 -1 24"></path>
-      <path d="M49 133 l9 2 M61 132 l9 2"></path>
-      <path d="M20 140 c16 4 34 -2 50 0 c12 2 22 -1 30 0"></path>
-    </svg>
-    <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#55524C;margin:0 0 10px">For the client sponsor</div>
-    <div style="font:700 22px/1.25 'Archivo',sans-serif;color:#E933A6;margin:0 0 8px">They renew.</div>
-    <div style="font:400 15px/1.6 'Archivo',sans-serif;color:#4A4740">A straight answer to "should I renew," instead of twenty slides of metrics.</div>
-  </div>
-  <div style="border:1px solid #E4E0D6;background:#fff;border-radius:12px;padding:26px 24px;display:flex;flex-direction:column">
-    <svg width="98" height="120" viewBox="0 0 130 160" fill="none" stroke="#1F2024" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 0 14px">
-      <path d="M60 22 c-5 0 -8 4 -7 9 c1 5 9 5 11 0 c2 -5 0 -9 -4 -9"></path>
-      <path d="M54 38 c3 -3 9 -3 12 -1"></path>
-      <path d="M66 38 c1 16 1 32 0 48"></path>
-      <path d="M54 38 c-2 14 -2 28 -1 42"></path>
-      <path d="M56 46 c-7 5 -14 8 -21 9"></path>
-      <path d="M58 52 c-7 5 -13 8 -19 9"></path>
-      <path d="M20 40 l22 -5 3 18 -22 5 z" stroke-width="1.8"></path>
-      <path d="M26 47 l13 -3 M27 54 l9 -2" stroke-width="1.4"></path>
-      <path d="M56 60 l9 -6 M55 70 l10 -7"></path>
-      <path d="M54 80 c-8 1 -16 2 -24 3"></path>
-      <path d="M31 84 c0 12 0 26 -1 38"></path>
-      <path d="M58 84 c-7 1 -14 3 -20 4"></path>
-      <path d="M39 88 c0 11 0 23 -1 33"></path>
-      <path d="M30 122 l-9 3 M38 121 l-9 3"></path>
-      <path d="M70 32 c1 17 1 34 1 50 M75 36 c1 15 1 30 1 46"></path>
-      <path d="M50 84 c10 -2 20 -2 28 -1"></path>
-      <path d="M54 86 c0 12 -1 24 -1 36 M74 86 c1 12 1 24 2 35 M78 84 c2 12 3 24 4 35"></path>
-      <path d="M14 128 c16 4 34 -2 50 0 c14 2 26 -1 36 0"></path>
-    </svg>
-    <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#55524C;margin:0 0 10px">For the client's CFO</div>
-    <div style="font:700 22px/1.25 'Archivo',sans-serif;color:#E933A6;margin:0 0 8px">They verify it themselves.</div>
-    <div style="font:400 15px/1.6 'Archivo',sans-serif;color:#4A4740">A number with its source attached.</div>
-  </div>
-  <div style="border:1px solid #E4E0D6;background:#fff;border-radius:12px;padding:26px 24px;display:flex;flex-direction:column">
-    <svg width="86" height="120" viewBox="0 0 110 160" fill="none" stroke="#1F2024" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 0 14px">
-      <path d="M56 8 c-5 0 -8 4 -7 9 c1 5 9 5 11 0 c2 -5 0 -9 -4 -9"></path>
-      <path d="M46 30 c7 -4 17 -4 24 -1"></path>
-      <path d="M46 30 c-1 22 -2 42 -1 62"></path>
-      <path d="M70 29 c2 22 3 42 2 63"></path>
-      <path d="M46 92 c8 2 17 2 26 0"></path>
-      <path d="M54 31 l4 8 5 -9"></path>
-      <path d="M47 34 c-3 13 -4 26 -3 38 c0 4 2 6 5 5"></path>
-      <path d="M70 34 c3 13 3 26 2 38 c0 4 -2 6 -5 5"></path>
-      <path d="M52 93 c-1 16 -1 30 -1 42"></path>
-      <path d="M64 93 c1 16 1 30 1 42"></path>
-      <path d="M51 135 l-8 3 M65 135 l8 3"></path>
-      <path d="M40 142 c11 2 24 0 36 0"></path>
-    </svg>
-    <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#55524C;margin:0 0 10px">For the next prospect</div>
-    <div style="font:700 22px/1.25 'Archivo',sans-serif;color:#E933A6;margin:0 0 8px">They see it delivered.</div>
-    <div style="font:400 15px/1.6 'Archivo',sans-serif;color:#4A4740">The exact performance that was promised.</div>
-  </div>
-</div>
-
-<div class="wrap" style="padding-bottom:20px">
-  <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#6E6B65;margin:0 0 8px">TWO WAYS IN</div>
-  <div style="font:600 26px 'Archivo',sans-serif">The consulting today, the application soon</div>
-</div>
-<div class="wrap" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;padding-top:20px;padding-bottom:48px">
-  <div style="background:#fff;border:1.5px solid #1F2024;border-radius:12px;padding:34px 32px">
-    <div style="width:52px;height:52px;border-radius:50%;background:#F3EEE2;display:flex;align-items:center;justify-content:center;margin:0 0 14px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1F2024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="1.5"></rect><path d="M9.2 4V3.2A1.2 1.2 0 0110.4 2h3.2a1.2 1.2 0 011.2 1.2V4"></path><line x1="9" y1="10.5" x2="15" y2="10.5" stroke="#E933A6"></line><line x1="9" y1="14.5" x2="15" y2="14.5" stroke="#E933A6"></line></svg></div>
-    <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#E933A6;margin:0 0 10px">THE CONSULTING</div>
-    <h3 style="font:600 24px 'Archivo',sans-serif;margin:0 0 10px">Campaign performance stories</h3>
-    <p style="font:400 14.5px/1.65 'Archivo',sans-serif;margin:0">Not a fixed product yet — a working conversation. Bring the QBR, case study, or renewal deck that isn't landing.</p>
-  </div>
-  <div style="background:#FCFAF4;border:1.5px dashed #E4E0D6;border-radius:12px;padding:34px 32px">
-    <div style="width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 0 14px"><svg width="24" height="27" viewBox="0 0 64 72" fill="none"><polygon points="32,14 56,62 8,62" stroke="#1F2024" stroke-width="4" stroke-linejoin="miter"></polygon><line x1="32" y1="12.8" x2="32" y2="62" stroke="#E933A6" stroke-width="3"></line><circle cx="32" cy="6" r="5" fill="#1F2024"></circle></svg></div>
-    <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#6E6B65;margin:0 0 10px">THE APPLICATION — COMING SOON</div>
-    <h3 style="font:600 24px 'Archivo',sans-serif;margin:0 0 10px">A Proof-side Throughline</h3>
-    <p style="font:400 14.5px/1.65 'Archivo',sans-serif;margin:0">The same software discipline, built for Proof artifacts next. Not live yet.</p>
-  </div>
-</div>
-
-<div class="wrap" style="padding-bottom:20px">
-  <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#6E6B65;margin:0 0 8px">CASE STUDIES</div>
-  <div style="font:600 26px 'Archivo',sans-serif">Where the Proof discipline has worked</div>
-</div>
-<div class="wrap" style="padding-top:20px;padding-bottom:18px">
-    <div class="cstile-grid">
-      <a href="case-study-amex.html" class="cstile on-pink">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0113-6" stroke="#1F2024" stroke-width="1.8"></path><path d="M20 12a8 8 0 01-13 6" stroke="#E933A6" stroke-width="1.8"></path></svg></div>
-        <div class="cstile-headline">One more bad review from losing the account.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z" stroke="#1F2024" stroke-width="1.6"></path><path d="M9 12l2 2 4-4" stroke="#E933A6" stroke-width="2"></path></svg>
-          <div class="cstile-stat">Avoided<span class="u">the formal review</span></div>
-        </div>
-        <div class="cstile-tag">AMERICAN EXPRESS · UM WORLDWIDE · 2022–2023</div>
-      </a>
-
-      <a href="case-study-usheru.html" class="cstile on-pink">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" stroke="#1F2024" stroke-width="1.6"></rect><path d="M10 9.5l5 2.5-5 2.5z" stroke="#E933A6" stroke-width="1.6" stroke-linejoin="round"></path></svg></div>
-        <div class="cstile-headline">A platform delivering value — and unable to show it.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" fill="#FFDDF0"></rect><rect x="16" y="14" width="8" height="20" fill="#E933A6"></rect></svg>
-          <div class="cstile-stat">Show<span class="u">replaced tell</span></div>
-        </div>
-        <div class="cstile-tag">USHERU · CALIDESCOPE ENGAGEMENT</div>
-      </a>
-
-      <a href="case-study-barkley.html" class="cstile on-pink">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4 6c4 0 5 4 8 4M4 12h8M4 18c4 0 5-4 8-4" stroke="#1F2024" stroke-width="1.5"></path><path d="M12 12h8" stroke="#E933A6" stroke-width="2"></path></svg></div>
-        <div class="cstile-headline">Data capabilities that grew faster than clients could follow.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" fill="#FFDDF0"></rect><rect x="16" y="14" width="8" height="20" fill="#E933A6"></rect></svg>
-          <div class="cstile-stat">Retention<span class="u">up, complexity down</span></div>
-        </div>
-        <div class="cstile-tag">BARKLEY · CALIDESCOPE ENGAGEMENT</div>
-      </a>
-
-      <a href="case-study-initiative.html" class="cstile on-pink">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="10" cy="10" r="6" stroke="#1F2024" stroke-width="1.6"></circle><line x1="14.2" y1="14.2" x2="19" y2="19" stroke="#1F2024" stroke-width="1.8" stroke-linecap="round"></line><rect x="7" y="10" width="2.2" height="4" fill="#E933A6"></rect><rect x="10.5" y="7" width="2.2" height="7" fill="#E933A6"></rect></svg></div>
-        <div class="cstile-headline">Five analytics teams — some paid, some given away.</div>
-        <div class="cstile-chartrow">
-          <svg width="52" height="34" viewBox="0 0 60 40"><rect x="2" y="28" width="8" height="8" fill="#E4E0D6"></rect><rect x="13" y="25" width="8" height="11" fill="#E4E0D6"></rect><rect x="24" y="21" width="8" height="15" fill="#D9D5CA"></rect><rect x="35" y="15" width="8" height="21" fill="#D9D5CA"></rect><rect x="46" y="4" width="8" height="32" fill="#E933A6"></rect></svg>
-          <div class="cstile-stat">+150%<span class="u">analytics revenue</span></div>
-        </div>
-        <div class="cstile-tag">INITIATIVE · 2010–2017</div>
-      </a>
-
-      <a href="case-study-sprint.html" class="cstile on-pink">
-        <div class="cstile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-linecap="round"><ellipse cx="12" cy="5" rx="7" ry="2.3" stroke="#1F2024" stroke-width="1.6"></ellipse><path d="M5 5v6c0 1.3 3 2.3 7 2.3s7-1 7-2.3V5" stroke="#1F2024" stroke-width="1.6"></path><path d="M5 11v6c0 1.3 3 2.3 7 2.3s7-1 7-2.3v-6" stroke="#E933A6" stroke-width="1.6"></path></svg></div>
-        <div class="cstile-headline">Forecasting demand before the tools existed to do it.</div>
-        <div class="cstile-chartrow">
-          <svg width="38" height="38" viewBox="0 0 40 40"><rect x="4" y="13" width="32" height="14" rx="4" fill="#E933A6" fill-opacity="0.22"></rect><line x1="4" y1="20" x2="36" y2="20" stroke="#E933A6" stroke-width="2.5"></line></svg>
-          <div class="cstile-stat">±3%<span class="u">30-day forecast accuracy</span></div>
-        </div>
-        <div class="cstile-tag">SPRINT CORPORATION · 1995–1999</div>
-      </a>
-    </div>
-</div>
-<div class="wrap" style="padding-bottom:48px"><a href="case-studies.html" style="font:600 14px 'Archivo',sans-serif">All fifteen case studies &rarr;</a></div>
-
-<div class="wrap" style="padding-bottom:48px"><a href="contact.html" class="btn-outline on-proof">Start a conversation →</a></div>
-
-<div class="site-footer">
-  <div class="wrap">
-  <div>
-    <div class="brand">Calidescope LLC</div>
-    <div class="tagline">Promise to Proof. The same discipline, all the way around.</div>
+<a href="#main" style="position:absolute;left:-9999px" onfocus="this.style.left='12px';this.style.top='12px';this.style.background='#1F2024';this.style.color='#FAF7EF';this.style.padding='10px 16px';this.style.zIndex='999'">Skip to content</a>
+<nav>
+  <div class="wrap in">
+    <a class="logo" href="index.html">
+      <svg width="23" height="23" viewBox="0 0 40 40" fill="none" stroke="#1F2024" stroke-width="1.8" aria-hidden="true">
+        <circle cx="20" cy="20" r="17"/><path d="M20 3v34M5 11.5l30 17M5 28.5l30-17"/>
+        <circle cx="20" cy="20" r="3.2" fill="#1F2024" stroke="none"/></svg>
+      Calidescope</a>
     <div class="links">
-      <a href="promise.html">PROMISE</a>
-        <a href="perform.html">PERFORM</a>
-      <a href="case-studies.html">CASE STUDIES</a>
-        <a href="why.html">ABOUT</a>
-        <a href="contact.html">CONTACT</a>
-      <a href="privacy.html">PRIVACY</a>
-      <a href="terms.html">TERMS</a>
-      <a href="#" data-cookie-prefs>COOKIE PREFERENCES</a>
+      <a href="throughline.html">Throughline</a><a href="promise.html">Promise</a><a href="perform.html">Perform</a>
+      <a href="proof.html">Proof</a><a href="case-studies.html">Case studies</a><a href="why.html">About</a>
+      <a href="https://throughline.builders" target="_blank" rel="noopener" class="btn">Try it on your page ↗</a>
     </div>
   </div>
-  <a href="promise.html" style="font:600 14px 'Archivo',sans-serif">The other side: Promise →</a>
-  </div>
-</div>
+</nav>
+<main id="main">
 
-<script src="assets/consent.js"></script>
+  <header class="hero tint">
+    <div class="wrap">
+      <svg class="shape" width="38" height="38" viewBox="0 0 40 40" style="margin-bottom:22px"><circle cx="20" cy="20" r="13" fill="none" stroke="#E933A6" stroke-width="2.6"></circle></svg>
+      <h1>Earn the renewal.</h1>
+      <p class="lede">Everything you send after the contract has one job: show what was delivered, clearly enough to check.</p>
+      <div class="acts"><a href="contact.html" class="btn lg acc">Start a conversation</a></div>
+    </div>
+  </header>
+
+  <section class="sec">
+    <div class="wrap g2">
+      <div><h2>One claim, held up.</h2>
+        <p class="say">Twenty slides of metrics asks your sponsor to build the argument. One claim with evidence under it asks them to decide.</p></div>
+      <div>
+        <svg viewBox="0 0 420 270" width="100%" style="display:block;max-width:440px;margin:0 auto" aria-label="Metrics compared with one claim held up">
+          <text x="16" y="30" class="m">TWENTY SLIDES OF METRICS</text>
+          <g stroke="#E4E0D6" stroke-width="3">
+            <path d="M16 52h62M88 52h42M140 52h72M222 52h32M264 52h58"></path>
+            <path d="M16 72h36M62 72h72M144 72h42M196 72h62M268 72h42"></path>
+            <path d="M16 92h82M108 92h32M150 92h62M222 92h46M278 92h36"></path></g>
+          <text x="16" y="158" class="m" fill="#E933A6">ONE CLAIM, HELD UP</text>
+          <rect x="16" y="172" width="322" height="36" fill="#FFDDF0" stroke="#E933A6" stroke-width="1.8"></rect>
+          <text x="177" y="196" text-anchor="middle" font-family="Archivo,sans-serif" font-size="16" font-weight="600" fill="#1F2024">Renew. Here is why.</text>
+          <path d="M70 208v22M177 208v22M284 208v22" stroke="#E933A6" stroke-width="2.2"></path>
+          <rect x="34" y="230" width="72" height="26" fill="none" stroke="#1F2024" stroke-width="1.6"></rect>
+          <rect x="141" y="230" width="72" height="26" fill="none" stroke="#1F2024" stroke-width="1.6"></rect>
+          <rect x="248" y="230" width="72" height="26" fill="none" stroke="#1F2024" stroke-width="1.6"></rect>
+          <text x="70" y="248" text-anchor="middle" class="m">PROOF</text>
+          <text x="177" y="248" text-anchor="middle" class="m">PROOF</text>
+          <text x="284" y="248" text-anchor="middle" class="m">PROOF</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec tint">
+    <div class="wrap">
+      <div class="hr" style="border-color:rgba(31,32,36,.2)"><h2>What that earns you.</h2></div>
+      <div class="g3">
+        <div class="card p"><h3>A straight answer on renewal.</h3><p class="say">For the sponsor reading the review.</p></div>
+        <div class="card p"><h3>A number they can check themselves.</h3><p class="say">For the finance lead scrutinising it.</p></div>
+        <div class="card p"><h3>Delivered exactly what was promised.</h3><p class="say">For the next prospect reading the case study.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="hr"><h2>How this starts.</h2></div>
+      <div class="g2" style="gap:26px;align-items:stretch">
+        <div class="offer lead"><h3>Performance stories</h3>
+          <p class="say">Scoped per piece, against the same discipline. Bring the review, the case study, or the renewal deck that has to land — and the number it has to make believable.</p>
+          <a href="contact.html" class="btn acc" style="align-self:flex-start;margin-top:16px">Start a conversation</a></div>
+        <div class="offer dash"><p class="say" style="margin:0;color:var(--muted)">A Proof-side Throughline is next.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sand"><div class="wrap">
+    <div class="hr" style="border-color:var(--ink)"><h2>Where it has worked.</h2><a href="case-studies.html" class="tag" style="color:var(--ink)">All fifteen →</a></div>
+    <div class="g3" id="proof-cases"><a class="stat p" href="case-study-sprint.html"><p class="n">±3%</p><h3>Forecasting demand before the tools existed to do it.</h3><p class="tag">Sprint Corporation</p></a><a class="stat p" href="case-study-amex.html"><p class="n">Retained</p><h3>One more bad review from losing the account.</h3><p class="tag">American Express · UM Worldwide</p></a><a class="stat p" href="case-study-initiative.html"><p class="n">+150%</p><h3>Five analytics teams — some paid, some given away.</h3><p class="tag">Initiative</p></a></div></div></section>
+
+  <section class="close"><div class="wrap"><h2 style="max-width:20ch;margin:0 auto 28px">Bring the one that has to renew.</h2>
+    <a href="contact.html" class="btn lg acc">Start a conversation</a></div></section>
+
+</main>
+<div class="wrap">
+  <footer>
+    <div>
+      <a class="logo" href="index.html" style="margin-bottom:14px">
+        <svg width="21" height="21" viewBox="0 0 40 40" fill="none" stroke="#1F2024" stroke-width="1.9" aria-hidden="true">
+          <circle cx="20" cy="20" r="17"/><path d="M20 3v34M5 11.5l30 17M5 28.5l30-17"/>
+          <circle cx="20" cy="20" r="3.2" fill="#1F2024" stroke="none"/></svg>
+        Calidescope</a>
+      <p style="margin:0;font-weight:600;letter-spacing:-.014em;max-width:30ch">Promise to Proof. The same discipline, all the way around.</p>
+    </div>
+    <div class="fl">
+      <a href="throughline.html">Throughline</a><a href="promise.html">Promise</a><a href="perform.html">Perform</a><a href="proof.html">Proof</a>
+      <a href="case-studies.html">Case studies</a><a href="why.html">About</a><a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>
+    </div>
+  </footer>
+</div>
 </body>
 </html>
