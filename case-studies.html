@@ -51,7 +51,18 @@ nav .links a.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--acc)}
 .btn.out{background:none;color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .btn.out:hover{background:var(--ink);color:var(--paper)}
 .btn.acc{background:var(--acc);color:#fff}.btn.acc:hover{background:var(--ink)}
-@media(max-width:1080px){nav .links a:not(.btn){display:none}}
+.navtog{display:none}
+.navcb{display:none}
+@media(max-width:1080px){
+.navtog{display:inline-flex;align-items:center;margin-left:auto;margin-right:-6px;padding:8px;cursor:pointer;color:#1F2024}
+.navcb{display:block;position:absolute;width:1px;height:1px;opacity:0;margin:0;pointer-events:none}
+nav .links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;margin:0;padding:4px var(--gut) 18px;background:var(--paper);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);box-shadow:0 18px 30px -22px rgba(31,32,36,.55)}
+.navcb:checked~.links{display:flex}
+.navcb:focus-visible~.navtog{outline:2px solid var(--acc);outline-offset:2px}
+nav .links a{padding:15px 2px;font-size:18px;border-bottom:1px solid var(--hair)}
+nav .links a:last-child{border-bottom:none}
+nav .links a.btn{margin-top:14px;padding:15px 22px;text-align:center;color:var(--paper);border-bottom:none}
+}
 
 .page{display:none}.page.on{display:block}
 .hero{padding:clamp(64px,9vw,124px) 0 clamp(48px,6vw,78px)}
@@ -175,10 +186,12 @@ svg text.nm{font-family:'Archivo',sans-serif;font-size:21px;font-weight:600;fill
         <circle cx="20" cy="20" r="17"/><path d="M20 3v34M5 11.5l30 17M5 28.5l30-17"/>
         <circle cx="20" cy="20" r="3.2" fill="#1F2024" stroke="none"/></svg>
       Calidescope</a>
+    <input type="checkbox" id="navcb" class="navcb" aria-label="Menu">
+    <label for="navcb" class="navtog" aria-label="Open menu"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#1F2024" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 8h18M4 13h18M4 18h18"/></svg></label>
     <div class="links">
       <a href="throughline.html">Throughline</a><a href="promise.html">Promise</a><a href="perform.html">Perform</a>
       <a href="proof.html">Proof</a><a href="case-studies.html">Case studies</a><a href="why.html">About</a>
-      <a href="https://throughline.builders" target="_blank" rel="noopener" class="btn">Try it on your page ↗</a>
+      <a href="https://throughline.builders/basic" target="_blank" rel="noopener" class="btn">Try it on your page ↗</a>
     </div>
   </div>
 </nav>
@@ -192,7 +205,7 @@ svg text.nm{font-family:'Archivo',sans-serif;font-size:21px;font-weight:600;fill
   </header>
   <section class="sec" style="padding-top:clamp(16px,3vw,36px)"><div class="wrap" id="cases-index"><div class="hr" style="align-items:center"><h2 style="display:flex;align-items:center;gap:14px"><svg width="26" height="26" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 7 L34 32 L6 32 Z" fill="none" stroke="#1E40FF" stroke-width="3" stroke-linejoin="round"></path></svg>Win the business</h2><span class="tag">Four</span></div><div class="caserow"><a class="case b" href="case-study-m1.html"><p class="n">300%</p><h3>A platform built. Barely used.</h3><p class="tag">M1 · Dentsu Aegis Network · 2018</p><span class="go">Read it →</span></a><a class="case b" href="case-study-marketshare.html"><p class="n">$2M</p><h3>Proving search drove store sales — through the Great Recession.</h3><p class="tag">MarketShare Partners · London · 2007–2010</p><span class="go">Read it →</span></a><a class="case b" href="case-study-dentsu.html"><p class="n">+70%</p><h3>A data business, renamed three times.</h3><p class="tag">dentsu · 2025–2026</p><span class="go">Read it →</span></a><a class="case b" href="case-study-rnbw.html"><p class="n">40+</p><h3>A launch with no category playbook to borrow.</h3><p class="tag">RNBW · Calidescope engagement · 2020–2025</p><span class="go">Read it →</span></a></div><div class="hr" style="align-items:center;margin-top:64px"><h2 style="display:flex;align-items:center;gap:14px"><svg width="26" height="26" viewBox="0 0 40 40" aria-hidden="true"><rect x="8" y="8" width="24" height="24" fill="none" stroke="#7A3AD2" stroke-width="3"></rect></svg>Keep the promise</h2><span class="tag">Six</span></div><div class="caserow"><a class="case v" href="case-study-motherboard.html"><p class="n">Coca-Cola</p><h3>A job that had failed three times before.</h3><p class="tag">Motherboard · IPG Mediabrands · 2015–2017</p><span class="go">Read it →</span></a><a class="case v" href="case-study-disney.html"><p class="n">4 groups</p><h3>Personalisation, before it had a name.</h3><p class="tag">Walt Disney Internet Group · 1999–2001</p><span class="go">Read it →</span></a><a class="case v" href="case-study-hob.html"><p class="n">$25M</p><h3>A merger, and no shared customer record.</h3><p class="tag">House of Blues · 2001–2002</p><span class="go">Read it →</span></a><a class="case v" href="case-study-aeg.html"><p class="n">$50M</p><h3>A portfolio of venues with no shared system.</h3><p class="tag">AEG · 2003–2007</p><span class="go">Read it →</span></a><a class="case v" href="case-study-havas.html"><p class="n">$40M+</p><h3>Five CEOs, each with their own audience platform.</h3><p class="tag">Havas · Converged · 2018–2020</p><span class="go">Read it →</span></a><a class="case v" href="case-study-comscore.html"><p class="n">−25%</p><h3>One video market. Two org charts.</h3><p class="tag">comScore · 2017–2018</p><span class="go">Read it →</span></a></div><div class="hr" style="align-items:center;margin-top:64px"><h2 style="display:flex;align-items:center;gap:14px"><svg width="26" height="26" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="13" fill="none" stroke="#E933A6" stroke-width="3"></circle></svg>Earn the renewal</h2><span class="tag">Five</span></div><div class="caserow"><a class="case p" href="case-study-sprint.html"><p class="n">±3%</p><h3>Forecasting demand before the tools existed to do it.</h3><p class="tag">Sprint Corporation · 1995–1999</p><span class="go">Read it →</span></a><a class="case p" href="case-study-amex.html"><p class="n">Retained</p><h3>One more bad review from losing the account.</h3><p class="tag">American Express · UM Worldwide · 2022–2023</p><span class="go">Read it →</span></a><a class="case p" href="case-study-initiative.html"><p class="n">+150%</p><h3>Five analytics teams — some paid, some given away.</h3><p class="tag">Initiative · 2010–2017</p><span class="go">Read it →</span></a><a class="case p" href="case-study-usheru.html"><p class="n">Show</p><h3>A platform delivering value — and unable to show it.</h3><p class="tag">usheru · Calidescope engagement · 2020–2025</p><span class="go">Read it →</span></a><a class="case p" href="case-study-barkley.html"><p class="n">Retention</p><h3>Data capabilities that grew faster than clients could follow.</h3><p class="tag">Barkley · Calidescope engagement · 2020–2025</p><span class="go">Read it →</span></a></div></div></section>
   <section class="close"><div class="wrap"><h2 style="max-width:22ch;margin:0 auto 28px">See what yours scores.</h2>
-    <a href="https://throughline.builders" target="_blank" rel="noopener" class="btn lg">Try it on your own page ↗</a></div></section>
+    <a href="https://throughline.builders/basic" target="_blank" rel="noopener" class="btn lg">Try it on your own page ↗</a></div></section>
 
 </main>
 <div class="wrap">
