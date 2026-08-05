@@ -102,6 +102,9 @@ module.exports = async function handler(req, res) {
   }
 
   const body = await readBody(req);
+  /* ?debug=1 passes Resend's own refusal back in the response instead of
+     burying it in a log we cannot read from here. Never includes the key. */
+  const debug = new URL(req.url, 'https://x').searchParams.has('debug');
   const wantsJson = String(req.headers['accept'] || '').includes('application/json') ||
                     String(req.headers['content-type'] || '').includes('application/json');
 
@@ -185,8 +188,11 @@ module.exports = async function handler(req, res) {
     });
 
     if (!r.ok) {
-      console.error('contact: resend said', r.status, await r.text());
-      return done(502, { error: 'The mail did not go out.' });
+      const said = await r.text();
+      console.error('contact: resend said', r.status, said);
+      return done(502, debug
+        ? { error: 'The mail did not go out.', resend: { status: r.status, said: said.slice(0, 300) } }
+        : { error: 'The mail did not go out.' });
     }
   } catch (err) {
     console.error('contact: could not reach resend', err);
