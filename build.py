@@ -522,6 +522,101 @@ PAGES["thanks.html"] = dict(cls="promise", noindex=True,
 </div></section>
 """)
 
+# ══════════ LEGAL ══════════
+EFFECTIVE = "August 4, 2026"
+
+def legal(kicker, lead, sections):
+    """A legal page in the site's own hand: hero, then hairline-ruled sections."""
+    secs = "".join(f"<section><h2>{h}</h2>{''.join(f'<p>{p}</p>' for p in ps)}</section>"
+                   for h, ps in sections)
+    return f"""
+<section class="hero"><div class="wrap">
+  <p class="mono">{kicker}</p>
+  <h1>{lead[0]}</h1>
+  <p class="lead">{lead[1]}</p>
+</div></section>
+
+<section class="sec" style="padding-top:0"><div class="wrap"><div class="legal">
+  <p class="eff">Effective {EFFECTIVE}</p>
+  {secs}
+</div></div></section>
+"""
+
+PAGES["privacy.html"] = dict(cls="promise", noindex=True,
+ title="Privacy policy &middot; Calidescope",
+ desc="What Calidescope collects, which is very little, and what you can ask us to do about it.",
+ body=legal("Calidescope LLC",
+   ("Privacy policy.", "This site collects almost nothing, and we would like to keep it that way."),
+   [("Who we are", [
+      'Calidescope LLC, a California limited liability company. For anything in this policy, '
+      'use the <a href="contact.html">contact form</a> and say it is about privacy.']),
+    ("What we collect", [
+      "<b>If you just read:</b> this site sets no tracking cookies and has no accounts. Our host keeps "
+      "standard server logs — IP address, browser, pages, timestamps — for security and reliability, as "
+      "every website's host does. We do not use those logs to identify or profile you.",
+      "<b>Fonts:</b> served from this site directly, so reading it sends your IP address to no font network.",
+      "<b>If you use the form:</b> we collect your name, your email, what the thing is, the link if you "
+      "give one, and the line about what it has to do. It reaches us as an email and we use it to answer "
+      "you. Our mail provider handles that delivery and holds nothing else.",
+      "<b>If you subscribe to something</b> — a newsletter, once one exists — we collect your email with "
+      "your consent, use it for that alone, and put a working unsubscribe in every issue."]),
+    ("Cookies and measurement", [
+      "Today: none. No analytics, no advertising pixels, no tracking cookies.",
+      "If we ever add measurement, it is opt-in. A banner asks first, nothing loads until you agree, "
+      "declining takes the same one click as accepting, and your answer holds for twelve months. The "
+      "banner brings its own preferences link so you can change your mind. The only thing kept before "
+      "you answer is the answer itself, in your own browser."]),
+    ("What we never do", [
+      "We do not sell personal information. We do not share it for cross-context behavioural advertising. "
+      "We do not buy lists, scrape inboxes, or add anyone to outreach they did not invite."]),
+    ("Your rights", [
+      "Depending on where you live — the EU and UK under GDPR, California under CCPA and CPRA, and a "
+      "growing list of other states — you may have rights to see, correct, delete, or export what we hold, "
+      "and to object to some processing. Our policy is simpler than the map: ask through the "
+      '<a href="contact.html">contact form</a> and we honour any reasonable request wherever you live, '
+      "within thirty days. We hold so little that most of these are short conversations."]),
+    ("Other services, how long we keep things, children", [
+      'Links here — to <a href="https://throughline.builders" target="_blank" rel="noopener">Throughline</a> '
+      "or LinkedIn, say — lead to services with their own policies. Correspondence is kept as long as it is "
+      "useful to our working relationship and then deleted in the ordinary course. This is a business site, "
+      "not directed at children under sixteen, and we do not knowingly collect their information."]),
+    ("Changes", [
+      "If this changes in any way that matters — especially if measurement is ever turned on — the date "
+      "above moves and the banner does its job before anything else does."])]))
+
+PAGES["terms.html"] = dict(cls="promise", noindex=True,
+ title="Terms of use &middot; Calidescope",
+ desc="The terms that come with reading calidescope.llc.",
+ body=legal("Calidescope LLC",
+   ("Terms of use.", "The short version: read it, link to it, keep it as ours."),
+   [("The site", [
+      'calidescope.llc is the business website of Calidescope LLC ("we", "us"). Using it means you agree '
+      "to these terms. If you do not, the fix is easy: do not use the site."]),
+    ("What is ours", [
+      "The text, the design, the Calidescope name and mark, the case studies and the drawings belong to "
+      "Calidescope LLC unless we say otherwise. You are welcome to read it, link to it and share it. You "
+      "may not republish it as your own, use it to train a competing product, or use our name or mark "
+      "without permission. The case studies describe real engagements without naming the clients."]),
+    ("Not advice, and not yet an engagement", [
+      "What is here is general information about our work, not professional advice for your situation. "
+      'Reading it starts no client relationship. That takes a conversation and an agreement, which is what '
+      'the <a href="contact.html">contact form</a> is for.']),
+    ("The figures in the case studies", [
+      "They are real outcomes from specific engagements, reported accurately and in context. They are "
+      "history, not a promise of the same result for you — every situation is its own situation, which is "
+      "rather the point of the work."]),
+    ("Warranties and liability", [
+      'The site is provided "as is". We work to keep it accurate and available, but we make no warranty '
+      "about completeness, accuracy or uninterrupted access, and to the fullest extent the law allows, "
+      "Calidescope LLC is not liable for damages arising from its use. Links out are a convenience; what "
+      "is on the other end is not ours."]),
+    ("Governing law", [
+      "These terms are governed by the laws of the State of California, without regard to conflict-of-law "
+      "rules. Any dispute belongs to the state or federal courts sitting in California."]),
+    ("Changes", [
+      "We may update these terms. The date above says when we last did. Using the site after a change "
+      "means you accept it."])]))
+
 # ─────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     here = os.path.dirname(os.path.abspath(__file__))

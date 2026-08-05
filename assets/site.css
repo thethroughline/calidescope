@@ -155,6 +155,19 @@ h2{font-weight:600;font-size:clamp(30px,3.8vw,46px);letter-spacing:-.032em;line-
 .sent:focus{outline:0}
 .sent h2{margin-bottom:10px}
 
+/* legal pages — long prose, the same line work at a calmer size */
+.legal{max-width:70ch}
+.legal .eff{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+.legal section{border-top:1px solid var(--hair);padding-top:26px;margin-top:34px}
+.legal section:first-of-type{border-top:1px solid var(--ink);margin-top:0}
+.legal h2{font-size:clamp(22px,2.4vw,26px);letter-spacing:-.022em;line-height:1.15;margin:0 0 14px}
+.legal p{margin:0 0 14px;font-size:18px;line-height:1.62;color:#3a3b40;max-width:66ch}
+.legal p:last-child{margin-bottom:0}
+.legal b{color:var(--ink)}
+.legal a{font-weight:600;color:var(--ink);border-bottom:1px solid var(--hair)}
+.legal a:hover{border-color:var(--ink)}
+
 footer{border-top:1px solid var(--ink);padding:32px 0 48px;display:flex;justify-content:space-between;
   gap:20px;flex-wrap:wrap;align-items:baseline}
 footer .m{font-weight:600;letter-spacing:-.014em}
