@@ -181,6 +181,8 @@ module.exports = async function handler(req, res) {
         from: FROM,
         to: [TO],
         reply_to: form.email,
+        replyTo: form.email,   /* the REST API takes reply_to; send both so a
+                                  camelCase-only reader cannot drop it either */
         subject: `${form.what} — ${form.name}`,
         text,
         html
@@ -193,6 +195,21 @@ module.exports = async function handler(req, res) {
       return done(502, debug
         ? { error: 'The mail did not go out.', resend: { status: r.status, said: said.slice(0, 300) } }
         : { error: 'The mail did not go out.' });
+    }
+
+    if (debug) {
+      /* Ask Resend what it actually stored, so Reply-To is confirmed at the
+         source rather than inferred from a mail client's behaviour. */
+      const { id } = await r.json().catch(() => ({}));
+      let stored = null;
+      if (id) {
+        const back = await fetch(`https://api.resend.com/emails/${id}`, {
+          headers: { Authorization: `Bearer ${key}` }
+        });
+        const rec = await back.json().catch(() => ({}));
+        stored = { id, from: rec.from, to: rec.to, reply_to: rec.reply_to, subject: rec.subject };
+      }
+      return done(200, { ok: true, stored });
     }
   } catch (err) {
     console.error('contact: could not reach resend', err);
