@@ -68,6 +68,19 @@ const escape = (s) => String(s).replace(/[&<>"]/g, (c) =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 module.exports = async function handler(req, res) {
+  /* /api/contact?check=1 — says whether the function can see its settings.
+     Names and destinations only; the key itself is never returned. */
+  if (req.method === 'GET' && new URL(req.url, 'https://x').searchParams.has('check')) {
+    return res.status(200).json({
+      configured: !!process.env.RESEND_API_KEY,
+      keyLooksRight: /^re_/.test(process.env.RESEND_API_KEY || ''),
+      to: TO,
+      from: FROM,
+      sawTheseNames: Object.keys(process.env)
+        .filter((k) => /RESEND|CONTACT/i.test(k)).sort()
+    });
+  }
+
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Send it as a POST.' });
