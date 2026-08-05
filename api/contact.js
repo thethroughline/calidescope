@@ -21,6 +21,19 @@
 const TO   = process.env.CONTACT_TO   || 'bret@calidescope.llc';
 const FROM = process.env.CONTACT_FROM || 'Calidescope <onboarding@resend.dev>';
 
+/* The key. `RESEND_API_KEY` is the name to use, but a key saved under `Resend`
+   or `RESEND` is obviously the same key, so take it rather than sit there
+   silent. Read at request time — the variable can change under us between
+   deploys. Trimmed, because a pasted key often carries a newline. */
+const KEY_NAMES = ['RESEND_API_KEY', 'RESEND', 'Resend', 'resend'];
+function apiKey() {
+  for (const name of KEY_NAMES) {
+    const v = (process.env[name] || '').trim();
+    if (v) return { key: v, name };
+  }
+  return { key: '', name: null };
+}
+
 const LIMITS = { name: 120, email: 200, what: 80, link: 500, job: 4000 };
 const WHAT = [
   'A homepage', 'A pitch deck', 'A proposal', 'Sales material', 'A case study',
@@ -71,9 +84,11 @@ module.exports = async function handler(req, res) {
   /* /api/contact?check=1 — says whether the function can see its settings.
      Names and destinations only; the key itself is never returned. */
   if (req.method === 'GET' && new URL(req.url, 'https://x').searchParams.has('check')) {
+    const { key, name } = apiKey();
     return res.status(200).json({
-      configured: !!process.env.RESEND_API_KEY,
-      keyLooksRight: /^re_/.test(process.env.RESEND_API_KEY || ''),
+      configured: !!key,
+      readFrom: name,
+      keyLooksRight: /^re_/.test(key),
       to: TO,
       from: FROM,
       sawTheseNames: Object.keys(process.env)
@@ -128,8 +143,9 @@ module.exports = async function handler(req, res) {
     return done(429, { error: 'We already have that one. Give it a minute.' });
   }
 
-  if (!process.env.RESEND_API_KEY) {
-    console.error('contact: RESEND_API_KEY is not set — nothing was sent');
+  const { key } = apiKey();
+  if (!key) {
+    console.error('contact: no Resend key in the environment — nothing was sent');
     return done(500, { error: 'The form is not connected yet.' });
   }
 
@@ -155,7 +171,7 @@ module.exports = async function handler(req, res) {
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        Authorization: `Bearer ${key}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({

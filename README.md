@@ -50,6 +50,15 @@ In the Vercel project, add:
 RESEND_API_KEY = <from resend.com>
 ```
 
+`RESEND_API_KEY` is the name to use, but a key saved as `RESEND`, `Resend` or `resend`
+is taken too — the same key under a different label should not leave the form dead.
+Surrounding whitespace is trimmed, since a pasted key often carries a newline.
+
+**To see what the function actually has**, open
+[`/api/contact?check=1`](https://calidescope.llc/api/contact?check=1). It reports whether a
+key is present, which name it came from, whether it starts with `re_`, and where mail would
+go. It never returns the key.
+
 That is the whole setup. Two optional overrides, both with sane defaults:
 
 | | default | |
