@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /work-with.html
-Disallow: /library.html
 
 Sitemap: https://calidescope.llc/sitemap.xml

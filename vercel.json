@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/case-study-aeg(.html)?", "destination": "/case-study-venue-portfolio.html", "permanent": true },
+    { "source": "/case-study-amex(.html)?", "destination": "/case-study-account-at-risk.html", "permanent": true },
+    { "source": "/case-study-dentsu(.html)?", "destination": "/case-study-data-business-renamed.html", "permanent": true },
+    { "source": "/case-study-havas(.html)?", "destination": "/case-study-five-ceos.html", "permanent": true },
+    { "source": "/case-study-hob(.html)?", "destination": "/case-study-merger-records.html", "permanent": true },
+    { "source": "/case-study-initiative(.html)?", "destination": "/case-study-analytics-revenue.html", "permanent": true },
+    { "source": "/case-study-m1(.html)?", "destination": "/case-study-platform-adoption.html", "permanent": true },
+    { "source": "/case-study-marketshare(.html)?", "destination": "/case-study-search-to-store.html", "permanent": true },
+    { "source": "/case-study-sprint(.html)?", "destination": "/case-study-demand-forecast.html", "permanent": true },
+
+    { "source": "/case-study-barkley(.html)?", "destination": "/case-studies.html", "permanent": true },
+    { "source": "/case-study-comscore(.html)?", "destination": "/case-studies.html", "permanent": true },
+    { "source": "/case-study-disney(.html)?", "destination": "/case-studies.html", "permanent": true },
+    { "source": "/case-study-motherboard(.html)?", "destination": "/case-studies.html", "permanent": true },
+    { "source": "/case-study-rnbw(.html)?", "destination": "/case-studies.html", "permanent": true },
+    { "source": "/case-study-usheru(.html)?", "destination": "/case-studies.html", "permanent": true },
+
+    { "source": "/example(.html)?", "destination": "/", "permanent": true },
+    { "source": "/workflow(.html)?", "destination": "/", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/assets/fonts/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}
