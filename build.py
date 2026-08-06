@@ -5,7 +5,9 @@ one word per idea, no timing promises, no client names, natural language."""
 import os
 
 SITE = "https://calidescope.llc"
-TL   = "https://throughline.builders"
+# Every "get a read" CTA lands on Throughline Custom's data-entry gate — the reader
+# names their page (or picks a demo) and the first result view is the before/after.
+TL   = "https://throughline.builders/custom"
 FORM = "/api/contact"   # our own endpoint — api/contact.js mails it to bret@calidescope.llc
 
 # ── the offer ───────────────────────────────────────────────────────
