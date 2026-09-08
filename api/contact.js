@@ -123,20 +123,24 @@ module.exports = async function handler(req, res) {
      Answer as though it worked — a bot told it failed just tries again. */
   if (clean(body._gotcha, 200)) return done(200, { ok: true });
 
+  /* Two forms post here. contact.html sends name / email / what / link / job.
+     The /next card sends only email + message, so name and what are optional
+     and `message` is read as `job`. An address and a line about the job are
+     the floor. */
   const form = {
     name:  clean(body.name,  LIMITS.name),
     email: clean(body.email, LIMITS.email),
     what:  clean(body.what,  LIMITS.what),
     link:  clean(body.link,  LIMITS.link),
-    job:   String(body.job == null ? '' : body.job).trim().slice(0, LIMITS.job)
+    job:   String(body.job ?? body.message ?? '').trim().slice(0, LIMITS.job)
   };
 
-  const missing = ['name', 'email', 'what', 'job'].filter((k) => !form[k]);
-  if (missing.length) return done(400, { error: 'Fill in every field except the link.' });
+  const missing = ['email', 'job'].filter((k) => !form[k]);
+  if (missing.length) return done(400, { error: 'We need an email address and a line about what it has to do.' });
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email)) {
     return done(400, { error: 'That email address does not look right.' });
   }
-  if (!WHAT.includes(form.what)) form.what = 'Something else';
+  if (form.what && !WHAT.includes(form.what)) form.what = 'Something else';
   if (form.link && !/^https?:\/\//i.test(form.link)) form.link = 'https://' + form.link;
 
   if (throttled(form.email.toLowerCase())) {
@@ -149,9 +153,11 @@ module.exports = async function handler(req, res) {
     return done(500, { error: 'The form is not connected yet.' });
   }
 
+  const who = form.name || form.email;
+  const subject = form.what ? `${form.what} — ${who}` : `New enquiry — ${who}`;
   const rows = [
-    ['From',  `${form.name} <${form.email}>`],
-    ['What',  form.what],
+    ['From',  form.name ? `${form.name} <${form.email}>` : form.email],
+    ['What',  form.what || '—'],
     ['Link',  form.link || '—'],
     ['Job',   form.job]
   ];
@@ -180,7 +186,7 @@ module.exports = async function handler(req, res) {
         reply_to: form.email,
         replyTo: form.email,   /* the REST API takes reply_to; send both so a
                                   camelCase-only reader cannot drop it either */
-        subject: `${form.what} — ${form.name}`,
+        subject,
         text,
         html
       })

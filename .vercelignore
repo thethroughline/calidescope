@@ -1,0 +1,7 @@
+# Source and tooling that has no business being a public URL.
+# (Everything else in the repo is the site.)
+README.md
+build.py
+next/source
+next/build.py
+next/app.js
