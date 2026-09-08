@@ -33,3 +33,16 @@ Typed arrows (→, ↗, ↓) were swapped for drawn ones in the same stroke weig
 
 Flagged: at 1440px the content still hugs the left while the right-hand label sits at the far
 edge. That is the existing asymmetry; centring the content block is the fix if desktop matters.
+
+---
+
+## Phone scale — 8 September, after the first look
+
+Bret: the text and icons read small on a phone, and the headline sat as close to its subtext as
+to the icon above it. Measured at 375×812: headline 29px, body 16px, icon 44px, kickers 11.5px,
+and one 14px gap between every element.
+
+Now, in a delimited block at the end of the stylesheet, for **phones narrower than 760px and taller
+than 660px** — short phones keep the designer's compact rules: headline 33px, body 17px,
+icon 54px, kickers 12px, nav labels 14px; icon → headline 16px, headline → subtext 22px. The
+contact card scrolls rather than clips, since its height is the device's to decide.

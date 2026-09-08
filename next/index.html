@@ -263,6 +263,23 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
 @media (prefers-reduced-motion:reduce){
   #grid,#markbtn,#prog,.navlbl{transition:none}.open .hint{transition:none}
 }
+
+/* ── phone scale, 8 Sept — text and icons read small on a phone, and the headline
+   sat as close to its subtext as to the icon above it. Below 760px only; every
+   rule above is the designer's and untouched. ── */
+@media (max-width:759px) and (min-height:661px){   /* short phones keep the compact rules above */
+  :root{--d2:33px;--d3:27px;--p:17px;--lbl:12px}
+  .ico-svg{width:54px}.ico-svg.tl{width:44px}
+  .cell{gap:16px}
+  .cell h2+.line{margin-top:6px}          /* headline → subtext: 22px, icon → headline stays 16px */
+  .open .two{margin-top:18px}
+  .open .hint{font-size:16px;margin-top:30px}
+  .navlbl{font-size:14px}
+  /* the form card is the one whose height the device decides: let it scroll, never clip */
+  .is-contact{overflow-y:auto;touch-action:pan-y;justify-content:safe center}
+  .is-contact form{gap:6px}
+  .is-contact input,.is-contact textarea{padding:8px 10px;margin-top:4px}
+}
 [hidden]{display:none!important}
 .btn[disabled]{opacity:.5;cursor:default}
 #csent:focus{outline:0}
