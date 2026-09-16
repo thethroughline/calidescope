@@ -373,6 +373,87 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
   .ix-sub{padding-bottom:13px}
 }
 
+/* 4. The services table. The rows did not line up: the name column is sized to
+      its own text, so "Show" (49px on a phone) pushed its description 17px
+      further right than "Say" (33px), and the column read as ragged at every
+      width.
+
+      Three ranges, because the constraint changes with the shape of the screen:
+
+      wide, or short-and-wide   a real table. The names share a width derived
+        (>=760px, or <=660px     from their own type scale, so every description
+         tall)                   starts on one line and an opened list indents
+                                 onto that same column.
+      portrait phone            the column costs more than it buys -- it took
+        (<760px, >=661px tall)   24px off the description and pushed all three
+                                 rows to two ragged lines on a 375px phone. The
+                                 row breaks instead: name and count on the first
+                                 line, description across the second. Every row
+                                 is then the same height, which is what makes a
+                                 list scannable.
+      short portrait phone      breaking the row costs 24px each, which a 667px
+        (<=730px tall)           screen does not have once a group is open. The
+                                 card carried 218px of padding; the index row is
+                                 the one card with no left or right move, so its
+                                 side rails are hidden and it never needed that
+                                 much. The height comes out of the padding, not
+                                 the type or the rows.
+
+      Separation, in all three: the stack was open at the bottom (top borders
+      only) and trailed off into whitespace. It is closed now, and an opened
+      list sits under its own header instead of floating between two rows. */
+.grp-c{align-self:center}
+.grps{border-bottom:1.5px solid var(--hair)}
+
+@media (min-width:760px), (max-height:660px){
+  .grps{--col:calc(var(--p) * 1.16 * 2.9)}
+  .grp-n{min-width:var(--col)}
+  .grp-s{padding-left:calc(var(--col) + 16px)}
+}
+@media (min-height:661px){
+  .grp+.grp{margin-top:13px}
+  .grp[data-open="yes"]{padding-bottom:3px}
+  .grp-s{padding-top:2px;padding-bottom:11px}
+  .grp-s button,.gs-out{padding:8px 0}
+}
+@media (max-width:759px) and (min-height:661px){
+  .grp-h{flex-wrap:wrap;align-items:center;row-gap:4px;padding:11px 0 12px}
+  .grp-n{flex:1 1 auto;min-width:0}
+  .grp-c{order:2;flex:none}
+  .grp-w{order:3;flex:1 0 100%;width:100%}
+  .grp-s{padding-left:2px}
+}
+@media (max-width:759px) and (min-height:661px) and (max-height:730px){
+  /* Measured at 375x667: the up chevron ends at 94px and the down chevron
+     starts at 609px, so the content has 515px to live in and it wanted 550.
+     The padding stays clear of both -- it is what keeps the chevrons off the
+     text -- and the 39px comes out of the air between things. The lead drops
+     to one line at this width rather than being hidden, which is what the
+     designer's own <=620px rule does. */
+  .cell.index{padding-top:96px;padding-bottom:60px;gap:7px}
+  .cell.index h2{margin-top:14px}
+  .ix-sub{font-size:14.5px;padding-bottom:8px}
+  .grps{margin-top:10px}
+  .grp-h{padding:7px 0 8px}
+  .grp+.grp{margin-top:7px}
+  .grp-s{padding-bottom:3px}
+  .grp-s button,.gs-out{padding:4px 0}
+  .ix-out{margin-top:8px}
+}
+
+/* Phone landscape. Pre-existing, and not caused by the table: the content
+   exactly filled the band between the two chevrons, so the first row sat under
+   the up arrow. A few pixels of air, taken from the same places. */
+@media (max-width:759px) and (max-height:660px){
+  /* The card centres its content in the padding box, not in the band between
+     the chevrons, so symmetric padding put the first row under the up arrow
+     even once the content fit. The box is offset to match the band instead. */
+  .cell.index{padding-top:88px;padding-bottom:50px}
+  .grp-h{padding:4px 0 4px}
+  .grp+.grp{margin-top:3px}
+  .grps{margin-top:8px}
+}
+
 /* 2. Phone portrait. calidescope-situations_2.html carried this block after
       Bret's first look ("the text and icons read small on a phone"); the
       revision dropped it and the kickers went back to 11.5px. Restored, and
