@@ -6,7 +6,7 @@ all three verbatim and changes only what a public URL needs:
 
   head     doctype, viewport, noindex, favicon; Google Fonts → assets/fonts
   order    each row's cards sorted into column order in the DOM, so Tab and a
-           screen reader walk backward → situation → result → solution → case
+           screen reader walk backward → situation → opportunity → solution → case
            (the grid already places them that way; the source's DOM did not)
   form     the Formspree placeholder → /api/contact, a honeypot, an in-card reply
   size()   falls back to the window when the stage reads 0 wide (a hidden frame)
@@ -17,7 +17,7 @@ Never hand-edit next/index.html — change the source or app.js and rebuild."""
 import re, pathlib
 
 HERE = pathlib.Path(__file__).resolve().parent
-SRC  = HERE / "source" / "calidescope-situations_2.html"
+SRC  = HERE / "source" / "calidescope-situations_3.html"
 OUT  = HERE / "index.html"
 src  = SRC.read_text()
 
@@ -34,7 +34,7 @@ body = src[src.index('<div id="stage">'): src.index("<script>")]
 grid_end = body.index("</div></div>")
 grid, rest = body[:grid_end], body[grid_end:]
 sections = re.findall(r"<section\b.*?</section>", grid, re.S)
-assert len(sections) == 40, len(sections)
+assert len(sections) == 41, len(sections)
 key = lambda s: (int(re.search(r'data-row="(\d+)"', s).group(1)), int(re.search(r'data-col="(\d+)"', s).group(1)))
 sections.sort(key=key)
 body = '<div id="stage"><div id="grid">\n' + "\n".join(sections) + "\n" + rest
@@ -67,7 +67,7 @@ OUT.write_text(f"""<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Calidescope &mdash; next</title>
-<meta name="description" content="Growth advisory, software and services. Eight situations, and the two ways each one ends.">
+<meta name="description" content="Growth advisory, software and services. Seven situations, and what changes when each one goes right.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <!-- Local fonts only. No third-party call anywhere — see /privacy.html -->

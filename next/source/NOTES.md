@@ -46,3 +46,25 @@ Now, in a delimited block at the end of the stylesheet, for **phones narrower th
 than 660px** — short phones keep the designer's compact rules: headline 33px, body 17px,
 icon 54px, kickers 12px, nav labels 14px; icon → headline 16px, headline → subtext 22px. The
 contact card scrolls rather than clips, since its height is the device's to decide.
+
+---
+
+# calidescope-situations_3.html — what changed, 16 September 2026
+
+`next/build.py` now builds from this file; `calidescope-situations_2.html` stays for reference.
+
+The page went from **eight situations and the two ways each one ends** to **seven situations and
+what changes when each one goes right**. Structurally that is a new row and a renamed beat:
+
+- The horizontal axis reads *backward · situation · opportunity · solution · project in action*.
+  The third beat was *result*; it is now *opportunity*, which is the forward half of the old fork
+  rather than a neutral outcome.
+- The grid is 41 cards, not 40: row 0 is the home screen as before, **row 1 is a new single-card
+  row**, rows 2–8 are the seven situations at five cards each, and row 9 is the contact row at four.
+  `build.py`'s section count assert moved 40 → 41 to match.
+
+The build still does what it did: it keeps the source's CSS, markup and script verbatim, sorts each
+row's cards into column order so Tab and a screen reader walk the beats left to right, swaps the
+Formspree placeholder for `/api/contact` plus a honeypot and an in-card reply, and appends
+`app.js`. The source's Google Fonts call is dropped with the rest of its head — `/next` serves
+Archivo and IBM Plex Mono from `/assets/fonts`, so the page still makes no third-party request.
