@@ -98,7 +98,8 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
 .grp-s button:hover .gs-t b,.gs-out:hover .gs-t b{text-decoration:underline;
   text-underline-offset:4px;text-decoration-thickness:1px}
 
-.ix-out{display:flex;align-items:center;margin-top:24px}
+.ix-out{display:flex;align-items:center;flex-wrap:wrap;gap:10px 22px;margin-top:24px}
+.ix-out .ix-go{padding:4px 0}
 .ix-go{padding:0;background:none;border:0;cursor:pointer;font-family:inherit;
   font-size:14.5px;font-weight:500;color:var(--muted);letter-spacing:-.008em;
   display:inline-flex;align-items:center;gap:7px;
@@ -434,6 +435,12 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
      text -- and the 39px comes out of the air between things. The lead drops
      to one line at this width rather than being hidden, which is what the
      designer's own <=620px rule does. */
+  /* The About link makes the contact intro wrap from one line to three, which
+     tips that card into scrolling on a 375x667 screen -- there is no room
+     between the chevrons for three lines plus the form. The glyph stands down
+     instead, exactly as the designer's own <=660px rule does for this card:
+     the kicker above it already names it. */
+  .is-contact .ico{display:none}
   .cell.index{padding-top:96px;padding-bottom:60px;gap:7px}
   .cell.index h2{margin-top:14px}
   .ix-sub{font-size:14.5px;padding-bottom:8px}
@@ -553,6 +560,7 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
   </div>
   <div class="ix-out">
     <button class="ix-go primary" type="button" onclick="jump(2,1)">Situations We Solve <svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v13M6 13l6 6 6-6"/></svg></button>
+    <a class="ix-go" href="about.html">About</a>
   </div>
 </section>
 <section class="cell bad k-blue" style="grid-row:3;grid-column:1" data-row="2" data-col="0"
@@ -849,7 +857,7 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
   <p class="kind">Calidescope LLC &middot; New York</p>
   <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 24c20 13 37 24 47 32"></path><path d="M12 102c20 -13 37 -24 47 -32"></path><path d="M84 70c8 4 16 9 24 15" opacity=".55"></path><circle class="f" cx="72" cy="62" r="11"></circle></svg></div>
   <h2 class="svc">Start</h2>
-  <p class="line">A five minute conversation.</p>
+  <p class="line">A five minute conversation. <a class="lnk" href="about.html">About Bret Leece</a></p>
   <form action="/api/contact" method="post" data-cform="1">
     <label>Email<input name="email" type="email" autocomplete="email" required></label>
     <label>What has to land, and when<textarea name="message" rows="2" required></textarea></label>

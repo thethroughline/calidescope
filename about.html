@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>About — Calidescope</title>
+<meta name="description" content="Bret Leece. Thirty years inside agencies, holding companies and measurement firms, building the analytics organizations and the software that ran inside them.">
+<meta name="theme-color" content="#FAF7EF">
+<meta name="color-scheme" content="light">
+<meta property="og:title" content="About — Calidescope">
+<meta property="og:description" content="Calidescope is one person. Thirty years on both sides of the promise and the proof.">
+<meta property="og:type" content="profile">
+<!--
+  Calidescope LLC — about page.
+  Same design tokens and type as index.html. Single file, no build, no dependencies.
+  The mark top-left links back to index.html.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAF7EF; --ink:#1F2024; --sand:#F3EEE2; --desk:#EFEBE1;
+  --muted:#6E6B65; --hair:#E4E0D6;
+  --blue:#1E40FF; --violet:#7A3AD2; --pink:#E933A6;
+  --sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --d1:34px; --d2:24px; --p:16px; --lede:17px; --small:15px; --lbl:11.5px;
+  --pad:22px; --barh:46px; --acc:var(--blue);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:var(--p);line-height:1.45;-webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent}
+h1,h2,h3,p,ul,dl,dd,dt{margin:0}
+svg{display:block}
+a{color:var(--acc);line-height:1.4}
+::selection{background:var(--blue);color:var(--paper)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+#bar{position:sticky;top:0;z-index:20;min-height:var(--barh);background:var(--paper);
+  display:flex;align-items:center;gap:12px;padding:11px var(--pad);
+  border-bottom:1px solid var(--hair)}
+#home{width:26px;height:26px;flex:none;color:var(--ink);display:block}
+#home svg{width:100%;height:100%}
+#here{font-family:var(--mono);font-size:var(--lbl);font-weight:500;letter-spacing:.14em;line-height:1.4;
+  text-transform:uppercase;color:var(--ink);opacity:.7;margin-left:auto}
+
+main{max-width:46rem;margin:0 auto;padding:0 var(--pad) 72px}
+section{padding-top:38px}
+.kind{font-family:var(--mono);font-size:var(--lbl);font-weight:500;letter-spacing:.16em;line-height:1.4;
+  text-transform:uppercase;color:var(--ink);opacity:.72;
+  border-top:1.5px solid var(--acc);padding-top:9px;margin-bottom:16px;display:block}
+
+h1{font-size:var(--d1);font-weight:600;letter-spacing:-.03em;line-height:1.08}
+.role{font-size:var(--p);color:var(--muted);margin-top:8px;letter-spacing:-.006em;line-height:1.45}
+.lede{font-size:var(--lede);line-height:1.45;margin-top:22px;max-width:44ch;
+  letter-spacing:-.008em}
+.lede + .lede{margin-top:14px}
+
+.rec{border-top:1px solid var(--hair)}
+.rec .row{display:grid;grid-template-columns:1fr;gap:3px;padding:15px 0;
+  border-bottom:1px solid var(--hair)}
+.rec .who{font-weight:600;letter-spacing:-.012em;line-height:1.35}
+.rec .who em{font-style:normal;font-weight:400;color:var(--muted)}
+.rec .when{font-family:var(--mono);font-size:var(--lbl);letter-spacing:.04em;
+  color:var(--ink);opacity:.72}
+.rec .what{color:var(--muted);line-height:1.4;font-size:var(--small)}
+.more{color:var(--muted);font-size:var(--small);line-height:1.45;margin-top:14px;
+  max-width:44ch}
+
+.facts{display:grid;gap:13px}
+.fact{display:grid;grid-template-columns:1fr;gap:2px}
+.fact dt{font-family:var(--mono);font-size:var(--lbl);font-weight:500;letter-spacing:.14em;line-height:1.4;
+  text-transform:uppercase;color:var(--ink);opacity:.72}
+.fact dd{margin:0;line-height:1.4}
+.fact dd i{font-style:italic}
+.fact dd + dd{margin-top:6px}
+.fact dd a{color:var(--ink);text-decoration:underline;text-decoration-color:rgba(31,32,36,.32);
+  text-underline-offset:4px;text-decoration-thickness:1px;transition:text-decoration-color .2s ease}
+.fact dd a:hover{text-decoration-color:currentColor}
+.fact dd .ar{width:.8em;height:.8em;margin-left:.2em;vertical-align:-.02em;opacity:.5}
+
+.out{margin-top:30px;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 22px;line-height:1.4}
+.out a{font-weight:500;letter-spacing:-.01em;text-decoration:underline;
+  text-underline-offset:5px;text-decoration-thickness:1px}
+.out a.quiet{color:var(--muted)}
+.ar{width:1.02em;height:1.02em;display:inline-block;vertical-align:-.13em}
+footer{margin-top:44px;padding-top:14px;border-top:1px solid var(--hair);
+  font-family:var(--mono);font-size:var(--lbl);letter-spacing:.04em;line-height:1.4;
+  color:var(--ink);opacity:.72}
+
+@media (min-width:760px){
+  :root{--pad:40px;--barh:56px;--d1:52px;--d2:30px;--p:19px;--lede:20.5px;--small:18px;--lbl:12px}
+  #home{width:30px;height:30px}
+  main{padding-bottom:96px}
+  section{padding-top:52px}
+  .rec .row{grid-template-columns:1fr 8.5rem;gap:4px 24px;align-items:baseline;padding:18px 0}
+  .rec .when{grid-column:2;grid-row:1;text-align:right}
+  .rec .what{grid-column:1}
+  .facts{grid-template-columns:repeat(3,1fr);gap:26px}
+}
+</style>
+</head>
+<body>
+
+<div id="bar">
+  <a id="home" href="index.html" aria-label="Calidescope home"><svg viewBox="-100 -100 200 200" aria-hidden="true"><circle cx="0" cy="0" r="92" fill="none" stroke="currentColor" stroke-width="9"></circle> <line x1="-92" y1="0" x2="92" y2="0" stroke="currentColor" stroke-width="8"></line> <line x1="-46" y1="-79.7" x2="46" y2="79.7" stroke="currentColor" stroke-width="8"></line> <line x1="46" y1="-79.7" x2="-46" y2="79.7" stroke="currentColor" stroke-width="8"></line> <circle cx="0" cy="0" r="10" fill="currentColor"></circle></svg></a>
+  <span id="here">About</span>
+</div>
+
+<main>
+
+<section>
+  <h1>Bret Leece</h1>
+  <p class="role">Growth advisory services and software.</p>
+  <p class="lede">At this since 1995, trained in philosophy and in analytics &mdash; which turns out to be one training.</p>
+  <p class="lede">Thirty years inside agencies, holding companies and measurement firms, building the analytics and data organizations and the software that ran inside them. Both sides of the table: the pitch that has to win, and the number that has to hold up a year later.</p>
+</section>
+
+<section>
+  <span class="kind">The record</span>
+  <div class="rec">
+    <div class="row">
+      <p class="who">EVP, Client Development &amp; Success <em>&middot; dentsu</em></p>
+      <p class="when">2025&ndash;</p>
+      <p class="what">Revenue and client success for the principal and proprietary media business. Data targeting and technology revenue up 70% year on year.</p>
+    </div>
+    <div class="row">
+      <p class="who">Managing Partner, Analytics &amp; Research <em>&middot; UM Worldwide, IPG Mediabrands</em></p>
+      <p class="when">2022&ndash;2023</p>
+      <p class="what">Analytics and research across American Express, Exxon Mobil, Accenture, Dyson and Emirates.</p>
+    </div>
+    <div class="row">
+      <p class="who">Global Chief Data &amp; Innovation Officer <em>&middot; Havas Media Network</em></p>
+      <p class="when">2018&ndash;2020</p>
+      <p class="what">A 20-person global team, and the identity platform underneath planning, buying and measurement.</p>
+    </div>
+    <div class="row">
+      <p class="who">President, M1 <em>&middot; Dentsu Aegis Network</em></p>
+      <p class="when">2018</p>
+      <p class="what">Usage and revenue on the identity platform up 300%.</p>
+    </div>
+    <div class="row">
+      <p class="who">Head of TV and Video Product <em>&middot; comScore</em></p>
+      <p class="when">2017&ndash;2018</p>
+      <p class="what">Merged the television and digital product groups. Cost down 25%.</p>
+    </div>
+    <div class="row">
+      <p class="who">Global Chief Product Officer, then Chief Analytics Officer <em>&middot; Initiative, IPG Mediabrands</em></p>
+      <p class="when">2010&ndash;2017</p>
+      <p class="what">Pan-agency tools and workflow for 40-plus people, and a product integration with Google worth $7M a year.</p>
+    </div>
+    <div class="row">
+      <p class="who">SVP Managing Director, International <em>&middot; MarketShare Partners</em></p>
+      <p class="when">2008&ndash;2010</p>
+      <p class="what">Europe and Asia from London, with no case studies to point to. Renewal rate tripled, $2M new business.</p>
+    </div>
+    <div class="row">
+      <p class="who">Principal <em>&middot; Calidescope LLC</em></p>
+      <p class="when">2020&ndash;</p>
+      <p class="what">Two brands launched, one repositioned. And Throughline, the software.</p>
+    </div>
+  </div>
+  <p class="more">Before that: econometric demand models for a national telecom, built before the tools existed. Kansas City, 1995.</p>
+</section>
+
+<section>
+  <span class="kind">Also</span>
+  <dl class="facts">
+    <div class="fact"><dt>Studied</dt><dd><a href="https://www.marshall.usc.edu/programs/graduate-programs/mba-programs/full-time-mba" target="_blank" rel="noopener">MBA, University of Southern California<svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16l8-8M16 8h-6M16 8v6"/></svg></a></dd><dd><a href="https://seaver.pepperdine.edu/social-science/undergraduate/economics/" target="_blank" rel="noopener">Economics, Pepperdine<svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16l8-8M16 8h-6M16 8v6"/></svg></a></dd></div>
+    <div class="fact"><dt>Published</dt><dd><a href="https://cimm-us.org/brave-new-world-best-practices-for-planning-buying-and-measuring-ctv-and-streaming-ad-campaigns/" target="_blank" rel="noopener">Co-author, <i>Brave New World</i> &mdash; planning, buying and measuring CTV, for CIMM<svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16l8-8M16 8h-6M16 8v6"/></svg></a></dd></div>
+    <div class="fact"><dt>Based</dt><dd>New York. Replies within a business day.</dd></div>
+  </dl>
+  <div class="out">
+    <a href="mailto:bret@calidescope.llc">bret@calidescope.llc</a>
+    <a class="quiet" href="https://www.linkedin.com/in/bretleece" target="_blank" rel="noopener">LinkedIn <svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16l8-8M16 8h-6M16 8v6"/></svg></a>
+    <a class="quiet" href="index.html">Situations we solve</a>
+  </div>
+</section>
+
+<footer>Calidescope LLC &middot; New York</footer>
+
+</main>
+</body>
+</html>
