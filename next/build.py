@@ -66,7 +66,10 @@ assert "formspree" not in body and "_subject" not in body
 script = src[src.index("<script>") + len("<script>"): src.index("</script>")]
 old_size = "W=stage.clientWidth;H=stage.clientHeight;"
 assert old_size in script
-script = script.replace(old_size, "W=stage.clientWidth||window.innerWidth;H=stage.clientHeight||window.innerHeight;")
+script = script.replace(old_size,
+  "W=stage.clientWidth||window.innerWidth;"
+  "H=Math.min(stage.clientHeight||1/0,(window.visualViewport&&window.visualViewport.height)||1/0)"
+  "||window.innerHeight;")
 script += "\n" + (HERE / "app.js").read_text()
 
 SITE  = "https://calidescope.llc"

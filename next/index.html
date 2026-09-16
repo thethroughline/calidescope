@@ -36,7 +36,15 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
 ::selection{background:var(--blue);color:var(--paper)}
 :focus-visible{outline:2px solid var(--chrome);outline-offset:3px}
 
-#stage{position:fixed;inset:0;overflow:hidden;touch-action:none}
+#stage{position:fixed;inset:0;overflow:hidden;touch-action:none;
+  /* iOS Safari lays a fixed inset:0 box out against the LAYOUT viewport --
+     the tall one, with the toolbars collapsed -- while it visually pins
+     bottom-anchored fixed elements to the bottom the reader can actually
+     see. The cards were sized from the tall number and the nav rail from
+     the short one, so on a phone the rail rode up over the last line of
+     the card. dvh is the height the reader has, which is the one both
+     should use. Browsers without dvh keep inset:0 and are unaffected. */
+  height:100dvh}
 #grid{position:absolute;top:0;left:0;display:grid;
   grid-template-columns:var(--w) var(--w) var(--w) var(--w) var(--w);grid-auto-rows:var(--h);
   transform:translate3d(0,0,0);will-change:transform;
@@ -915,7 +923,7 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
   function minCol(r){return full(r)?1:0;}
   function maxCol(r){return MAXC[r];}
   function size(){
-    W=stage.clientWidth||window.innerWidth;H=stage.clientHeight||window.innerHeight;
+    W=stage.clientWidth||window.innerWidth;H=Math.min(stage.clientHeight||1/0,(window.visualViewport&&window.visualViewport.height)||1/0)||window.innerHeight;
     root.style.setProperty('--w',W+'px'); root.style.setProperty('--h',H+'px');
     grid.classList.add('dragging');settle();
     requestAnimationFrame(function(){grid.classList.remove('dragging');});
