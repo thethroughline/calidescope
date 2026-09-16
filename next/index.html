@@ -350,7 +350,10 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
       a tall window reads as a short one. Phones are excluded — they never
       clipped, and rule 2 below takes them the other way. */
 @media (min-width:760px) and (min-height:661px) and (max-height:820px){
-  :root{--d2:24px;--d3:20px;--p:15px;--lbl:11px}
+  /* --lbl stays at its full-size 11.5px: the kicker is one line, so it buys
+     almost no height, and 11px on a 1366x768 laptop is the compact tier's
+     size on a screen that is not compact. */
+  :root{--d2:24px;--d3:20px;--p:15px}
   .cell{padding-top:64px;padding-bottom:92px;gap:9px}
   .open{padding-top:60px}
   .open .mark{width:78px;height:78px}
@@ -358,7 +361,6 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
   .ico-svg{width:32px}.ico-svg.tl{width:26px}
   .cell .line{max-width:52ch}
   .cell.case .stats{font-size:13.5px}
-  .cell.case .case-tag{font-size:11px}
   .out{padding-top:8px;margin-top:3px}
   .cell.index h2{margin-top:12px}
   .ix-sub{padding-bottom:9px;margin-top:5px}
@@ -414,6 +416,7 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
   .lnk,.ix-sw{min-height:44px;display:inline-flex;align-items:center}
   .navlbl{min-height:44px;display:flex;align-items:center}
   .btn{min-height:44px}
+  .is-contact input{min-height:44px}
 }
 [hidden]{display:none!important}
 .btn[disabled]{opacity:.5;cursor:default}
@@ -990,9 +993,21 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
     var seal = function () {
       var on = onscreen();
       if (!on) return;
+      /* Where the reader was standing, before the seal can take it away:
+         pressing "Better positioning" moves the grid, so the card holding
+         that button is about to go inert and focus would fall to <body>,
+         sending the next Tab back to the top of the document. If that is
+         what is happening, hand focus to the card the button led to. */
+      var had = document.activeElement;
+      var losing = had && had !== document.body && on.contains && !on.contains(had) &&
+                   had.closest && had.closest('section.cell');
       for (var i = 0; i < cells.length; i++) {
         if (cells[i] === on) cells[i].removeAttribute('inert');
         else cells[i].setAttribute('inert', '');
+      }
+      if (losing) {
+        if (!on.hasAttribute('tabindex')) on.setAttribute('tabindex', '-1');
+        try { on.focus({ preventScroll: true }); } catch (e) { on.focus(); }
       }
     };
     var pending;

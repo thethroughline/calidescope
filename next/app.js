@@ -45,9 +45,21 @@
     var seal = function () {
       var on = onscreen();
       if (!on) return;
+      /* Where the reader was standing, before the seal can take it away:
+         pressing "Better positioning" moves the grid, so the card holding
+         that button is about to go inert and focus would fall to <body>,
+         sending the next Tab back to the top of the document. If that is
+         what is happening, hand focus to the card the button led to. */
+      var had = document.activeElement;
+      var losing = had && had !== document.body && on.contains && !on.contains(had) &&
+                   had.closest && had.closest('section.cell');
       for (var i = 0; i < cells.length; i++) {
         if (cells[i] === on) cells[i].removeAttribute('inert');
         else cells[i].setAttribute('inert', '');
+      }
+      if (losing) {
+        if (!on.hasAttribute('tabindex')) on.setAttribute('tabindex', '-1');
+        try { on.focus({ preventScroll: true }); } catch (e) { on.focus(); }
       }
     };
     var pending;
