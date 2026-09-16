@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Build next/index.html from the designer's page in next/source/.
+"""Build the Calidescope homepage from the designer's page in next/source/.
+
+Emits TWO files from one source: index.html (the homepage, canonical and
+indexable) and next/index.html (the same page, noindex, kept as the staging
+path where the next revision is reviewed before it reaches the root).
 
 The source is a complete page — its own CSS, markup and script — so this keeps
 all three verbatim and changes only what a public URL needs:
@@ -16,12 +20,13 @@ all three verbatim and changes only what a public URL needs:
   script   next/app.js appended: the typing guard and the form handler
 
 Run from anywhere:  python3 next/build.py
-Never hand-edit next/index.html — change the source or app.js and rebuild."""
+Never hand-edit either output — change the source or app.js and rebuild."""
 import re, pathlib
 
 HERE = pathlib.Path(__file__).resolve().parent
 SRC  = HERE / "source" / "calidescope-situations_3.html"
-OUT  = HERE / "index.html"
+OUT  = HERE / "index.html"                 # /next — noindex staging
+ROOT = HERE.parent / "index.html"          # /      — the indexable homepage
 src  = SRC.read_text()
 
 # ── CSS, verbatim, plus the three rules the additions need ──
@@ -64,16 +69,36 @@ assert old_size in script
 script = script.replace(old_size, "W=stage.clientWidth||window.innerWidth;H=stage.clientHeight||window.innerHeight;")
 script += "\n" + (HERE / "app.js").read_text()
 
-OUT.write_text(f"""<!DOCTYPE html>
+SITE  = "https://calidescope.llc"
+TITLE = "Calidescope &mdash; Situations We Solve For"
+DESC  = ("Growth advisory services and software. Seven situations, "
+         "and what changes when each one goes right.")
+
+# The two outputs differ ONLY in the head. Same CSS, same markup, same script:
+#   /       the homepage — canonical, Open Graph, indexable
+#   /next   the staging copy — noindex, so a draft can be seen without being found
+TARGETS = [
+    (ROOT, f'''<title>{TITLE}</title>
+<meta name="description" content="{DESC}">
+<link rel="canonical" href="{SITE}/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{SITE}/">
+<meta property="og:title" content="{TITLE}">
+<meta property="og:description" content="{DESC}">'''),
+    (OUT, f'''<title>Calidescope &mdash; next</title>
+<meta name="description" content="{DESC}">
+<meta name="robots" content="noindex, nofollow">'''),
+]
+
+for target, head in TARGETS:
+    target.write_text(f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#FAF7EF">
-<title>Calidescope &mdash; next</title>
-<meta name="description" content="Growth advisory, software and services. Seven situations, and what changes when each one goes right.">
-<meta name="robots" content="noindex, nofollow">
+{head}
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <!-- Local fonts only. No third-party call anywhere — see /privacy.html -->
 <link rel="stylesheet" href="/assets/fonts/fonts.css">
@@ -84,4 +109,4 @@ OUT.write_text(f"""<!DOCTYPE html>
 </body>
 </html>
 """)
-print("wrote", OUT.name, OUT.stat().st_size, "bytes")
+    print("wrote", target.relative_to(HERE.parent), target.stat().st_size, "bytes")

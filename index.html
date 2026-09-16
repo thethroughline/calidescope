@@ -3,113 +3,1072 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Calidescope &mdash; Win it. Then keep it.</title>
-<meta name="description" content="You're good at the work. The hard part is getting people to see it when you're not in the room. Calidescope works on the pitch, the process and the proof.">
-
-<meta property="og:title" content="Calidescope &mdash; Win it. Then keep it.">
-<meta property="og:description" content="You're good at the work. The hard part is getting people to see it when you're not in the room. Calidescope works on the pitch, the process and the proof.">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#FAF7EF">
+<title>Calidescope &mdash; Situations We Solve For</title>
+<meta name="description" content="Growth advisory services and software. Seven situations, and what changes when each one goes right.">
+<link rel="canonical" href="https://calidescope.llc/">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://calidescope.llc/index.html">
-<link rel="canonical" href="https://calidescope.llc/index.html">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<!-- Local fonts only. No third-party font call anywhere — see privacy.html -->
-<link rel="stylesheet" href="assets/fonts/fonts.css">
-<link rel="stylesheet" href="assets/site.css">
-</head>
-<body class="">
-<a class="skip" href="#main">Skip to content</a>
-<nav><div class="wrap in">
-  <a class="logo" href="index.html"><svg width="23" height="23" viewBox="0 0 40 40" fill="none" stroke="#1F2024" stroke-width="1.8" aria-hidden="true"><circle cx="20" cy="20" r="17"/><path d="M20 3v34M5 11.5l30 17M5 28.5l30-17"/><circle cx="20" cy="20" r="3.2" fill="#1F2024" stroke="none"/></svg>Calidescope</a>
-  <div class="links"><a href="promise.html">Promise</a><a href="perform.html">Perform</a><a href="proof.html">Proof</a><a href="case-studies.html">Case studies</a><a href="why.html">About</a><a href="https://throughline.builders/custom" target="_blank" rel="noopener" class="btn">Get a read &nearr;</a></div>
-</div></nav>
-<main id="main">
+<meta property="og:url" content="https://calidescope.llc/">
+<meta property="og:title" content="Calidescope &mdash; Situations We Solve For">
+<meta property="og:description" content="Growth advisory services and software. Seven situations, and what changes when each one goes right.">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<!-- Local fonts only. No third-party call anywhere — see /privacy.html -->
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+<style>
+:root{
+  --paper:#FAF7EF; --ink:#1F2024; --sand:#F3EEE2; --desk:#EFEBE1;
+  --muted:#6E6B65; --hair:#E4E0D6;
+  --blue:#1E40FF; --violet:#7A3AD2; --pink:#E933A6;
+  --bt:#DDE6FF; --vt:#EBDFFA; --pt:#FFDDF0;
+  --sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --d2:29px; --d3:25px; --p:16px; --lbl:11.5px;
+  --pad:22px; --barh:46px; --chrome:var(--ink); --sw:2.8; --rowacc:var(--blue);
+  --ease:cubic-bezier(.22,.61,.16,1);
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:var(--p);line-height:1.45;-webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent}
+h1,h2,p{margin:0}
+svg{display:block}
+u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px;
+  text-decoration-skip-ink:none}
+::selection{background:var(--blue);color:var(--paper)}
+:focus-visible{outline:2px solid var(--chrome);outline-offset:3px}
 
-<section class="hero"><div class="wrap grid">
-  <div>
-    <h1>Win it.<br>Then keep it.</h1>
-    <p class="lead">You're good at the work. The hard part is getting people to see it when you're not in the room.</p>
-    <div class="acts">
-      <a href="https://throughline.builders/custom" target="_blank" rel="noopener" class="btn lg">Get a read on your page &nearr;</a>
-      <a href="#get" class="plain">Or see what you get</a>
+#stage{position:fixed;inset:0;overflow:hidden;touch-action:none}
+#grid{position:absolute;top:0;left:0;display:grid;
+  grid-template-columns:var(--w) var(--w) var(--w) var(--w) var(--w);grid-auto-rows:var(--h);
+  transform:translate3d(0,0,0);will-change:transform;
+  transition:transform .5s var(--ease)}
+#grid.dragging{transition:none}
+.cell{width:var(--w);height:var(--h);padding:96px 22px 122px;
+  display:flex;flex-direction:column;justify-content:center;gap:14px;overflow:hidden}
+
+.ico-svg{width:44px;height:auto;stroke-width:var(--sw);vector-effect:non-scaling-stroke}
+.ico-svg *{vector-effect:non-scaling-stroke}
+.ico-svg.tl{width:36px}
+
+.open{background:var(--paper);gap:0;padding:46px 22px 122px;justify-content:flex-start}
+.open h1{margin-top:auto}
+
+/* page two: three moves, each unpacking to its services in place */
+.index{background:var(--sand);gap:0;justify-content:center}
+.ix-brand{font-size:var(--d3);font-weight:600;letter-spacing:-.028em;line-height:1}
+.ix-sub{font-size:calc(var(--p) * .94);line-height:1.35;color:var(--muted);
+  letter-spacing:-.006em;margin-top:7px;padding-bottom:16px;border-bottom:1px solid var(--hair);
+  width:100%;max-width:34rem}
+.cell.index h2{max-width:none;margin-top:26px}
+.ix-lead{font-size:calc(var(--p) * .94);line-height:1.4;color:var(--muted);
+  letter-spacing:-.006em;margin-top:10px;max-width:40ch}
+
+.grps{width:100%;max-width:34rem;margin-top:22px}
+.grp{border-top:1.5px solid var(--acc)}
+.grp+.grp{margin-top:9px}
+.g-say{--acc:var(--blue)} .g-sell{--acc:var(--violet)} .g-show{--acc:var(--pink)}
+.grp-h{width:100%;display:flex;align-items:baseline;gap:11px;padding:10px 0 11px;
+  background:none;border:0;cursor:pointer;font-family:inherit;color:inherit;text-align:left}
+.grp-n{font-size:calc(var(--p) * 1.16);font-weight:600;letter-spacing:-.024em;
+  line-height:1.1;flex:none;color:var(--ink)}
+.grp-w{font-size:14.5px;line-height:1.32;color:var(--muted);letter-spacing:-.006em;flex:1}
+.grp-c{display:flex;align-items:center;gap:6px;flex:none;color:var(--acc)}
+.grp-c em{font-family:var(--mono);font-size:var(--lbl);font-style:normal;font-weight:500;
+  letter-spacing:.08em;color:var(--ink);opacity:.6}
+.chev{width:15px;height:15px;transition:transform .28s var(--ease)}
+.grp[data-open="yes"] .chev{transform:rotate(180deg)}
+.grp-h:hover .grp-n{text-decoration:underline;text-underline-offset:4px;
+  text-decoration-thickness:1px}
+
+.grp-s{list-style:none;margin:0;padding:0 0 9px}
+.grp-s button,.gs-out{width:100%;display:flex;align-items:center;gap:11px;padding:7px 0;
+  background:none;border:0;cursor:pointer;font-family:inherit;color:inherit;text-align:left;
+  text-decoration:none}
+.gs-out .ar{width:15px;height:15px;color:var(--acc);margin-left:2px;flex:none}
+.gs-i{width:20px;flex:none;color:var(--acc);display:flex}
+.gs-svg{width:20px;height:auto;stroke-width:1.9;vector-effect:non-scaling-stroke}
+.gs-svg *{vector-effect:non-scaling-stroke}
+.gs-svg.tl{width:15px}
+.gs-t{font-size:14.5px;line-height:1.3;letter-spacing:-.008em}
+.gs-t b{font-weight:600}
+.gs-t i{font-style:normal;color:var(--muted)}
+.grp-s button:hover .gs-t b,.gs-out:hover .gs-t b{text-decoration:underline;
+  text-underline-offset:4px;text-decoration-thickness:1px}
+
+.ix-out{display:flex;align-items:center;margin-top:24px}
+.ix-go{padding:0;background:none;border:0;cursor:pointer;font-family:inherit;
+  font-size:14.5px;font-weight:500;color:var(--muted);letter-spacing:-.008em;
+  display:inline-flex;align-items:center;gap:7px;
+  text-decoration:underline;text-decoration-color:rgba(110,107,101,.4);
+  text-underline-offset:5px;text-decoration-thickness:1px;transition:text-decoration-color .2s ease}
+.ix-go.primary{font-size:calc(var(--p) * .94);font-weight:600;color:var(--blue);
+  text-decoration-color:rgba(30,64,255,.4)}
+.ix-go:hover{text-decoration-color:currentColor}
+.open .mark{width:104px;height:104px;color:var(--ink)}
+.open h1{font-size:var(--d2);font-weight:600;letter-spacing:-.03em;line-height:1}
+.open .two{font-size:var(--d3);line-height:1.24;color:var(--muted);margin-top:14px;letter-spacing:-.018em}
+
+.cell h2{font-size:var(--d2);font-weight:600;letter-spacing:-.028em;line-height:1.1;
+  max-width:17ch;text-wrap:balance}
+.cell .line{font-size:var(--p);line-height:1.45;max-width:32ch;letter-spacing:-.006em}
+
+.sit{background:var(--sand)}
+.sit .ico-svg{color:var(--ink)}
+.sit .line{color:var(--muted)}
+
+.bad{background:var(--ink);color:var(--paper)}
+.bad .ico-svg{color:var(--paper);opacity:.38}
+.bad .line{color:var(--bt)}
+.bad .kind{color:var(--paper);opacity:.8;border-top-color:var(--bt)}
+
+.good .ico-svg{color:var(--acc)}
+.good .line{color:var(--ink)}
+
+/* the fourth card: the service, named, in its own colour */
+.how .ico-svg{color:var(--acc)}
+.how .svc{font-size:calc(var(--d2) * 1.3);letter-spacing:-.035em;max-width:none}
+.how .line{color:var(--ink);max-width:30ch}
+
+.is-long .line{max-width:38ch;font-size:calc(var(--p) * .94)}
+.is-long .svc{font-size:var(--d2)}
+/* what kind of card this is, said before you read it — the rule is the label's own */
+.kind{align-self:flex-start;font-family:var(--mono);font-size:var(--lbl);font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink);opacity:.72;
+  border-top:1.5px solid var(--acc);padding-top:9px;margin-bottom:2px}
+.svc-tag{font-family:var(--mono);font-size:var(--lbl);font-weight:500;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink);opacity:.55;margin-top:2px}
+
+.cell.case{background:var(--desk)}
+.case .ico-svg{color:var(--acc)}
+.case .case-h{font-size:calc(var(--d2) * .84);max-width:19ch}
+.case .line{color:var(--ink);opacity:.78;font-size:calc(var(--p) * .94);max-width:38ch}
+.case .stats{font-size:calc(var(--p) * .96);line-height:1.5;color:var(--ink);max-width:34ch;
+  letter-spacing:-.004em}
+.case .stats b{font-weight:600}
+.case-tag{font-family:var(--mono);font-size:var(--lbl);font-weight:500;letter-spacing:.02em;
+  color:var(--ink);opacity:.55;margin-top:2px}
+
+.lnk{color:var(--acc);text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1px}
+.ix-sw{color:var(--blue);text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px;white-space:nowrap;padding:3px 0}
+.ix-sw .ar{width:.86em;height:.86em;margin-left:.16em;vertical-align:-.06em}
+.ar{width:1.02em;height:1.02em;display:inline-block;vertical-align:-.13em;flex:none}
+/* the way out of the dark card: name the service, and land on it */
+.out{align-self:flex-start;margin-top:4px;padding:10px 0 0;background:none;border:0;
+  border-top:1.5px solid var(--bt);font-family:var(--sans);font-size:var(--p);font-weight:500;
+  letter-spacing:-.012em;line-height:1.3;color:var(--paper);cursor:pointer;text-align:left;
+  display:inline-flex;align-items:baseline;gap:9px;
+  text-decoration:underline;text-decoration-color:rgba(221,230,255,.45);
+  text-underline-offset:5px;text-decoration-thickness:1px;
+  transition:text-decoration-color .2s ease}
+.out:hover{text-decoration-color:var(--paper)}
+.out .ar{opacity:.72}
+.k-blue{--acc:var(--blue)}
+.k-violet{--acc:var(--violet)}
+.k-pink{--acc:var(--pink)}
+.a-blue{background:var(--bt);--acc:var(--blue)}
+.a-violet{background:var(--vt);--acc:var(--violet)}
+.a-pink{background:var(--pt);--acc:var(--pink)}
+
+.is-contact form{display:grid;gap:9px;max-width:400px;width:100%;margin-top:4px}
+.is-contact label{display:block;font-size:14px;line-height:1.35;color:var(--ink);opacity:.72}
+.is-contact input,.is-contact textarea{width:100%;margin-top:6px;font-family:var(--sans);
+  font-size:16px;line-height:1.4;color:var(--ink);background:var(--paper);
+  border:1px solid rgba(31,32,36,.22);border-radius:2px;padding:10px 11px;
+  caret-color:var(--acc);resize:none}
+.is-contact input:focus,.is-contact textarea:focus{outline:2px solid var(--ink);outline-offset:2px}
+.btn{justify-self:start;font-family:inherit;font-size:16px;font-weight:500;padding:11px 22px;
+  background:var(--ink);color:var(--paper);border:1px solid var(--ink);border-radius:2px;
+  cursor:pointer;transition:background .2s ease,border-color .2s ease}
+.btn:hover{background:var(--acc);border-color:var(--acc)}
+
+#bar{position:fixed;top:0;left:0;right:0;height:var(--barh);z-index:30;
+  display:flex;align-items:center;gap:12px;padding:0 var(--pad);
+  color:var(--chrome);pointer-events:none}
+#markbtn{width:26px;height:26px;padding:0;background:none;border:0;cursor:pointer;
+  color:inherit;flex:none;pointer-events:auto;
+  opacity:0;transform:scale(.55);transition:opacity .42s var(--ease),transform .42s var(--ease)}
+#markbtn svg{width:100%;height:100%}
+[data-at-home="no"] #markbtn{opacity:1;transform:scale(1)}
+#where{font-family:var(--mono);font-size:var(--lbl);font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;opacity:.7;margin-left:auto;text-align:right;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+#beat{display:flex;gap:4px;flex:none}
+#beat i{display:block;width:12px;height:2px;background:currentColor;opacity:.2;
+  transition:opacity .3s ease}
+#beat i.on{opacity:1}
+#prog{position:fixed;top:calc(var(--barh) - 1px);left:0;right:0;height:1.5px;z-index:30;
+  background:currentColor;color:var(--chrome);opacity:.28;
+  transform:scaleX(0);transform-origin:left center;transition:transform .5s var(--ease)}
+
+.arrow{width:46px;height:46px;padding:11px;background:none;border:0;cursor:pointer;
+  color:var(--chrome);opacity:.85;transition:opacity .25s ease,color .3s ease}
+.arrow[disabled]{opacity:.14;cursor:default}
+.arrow:not([disabled]):hover{opacity:1}
+#right:not([disabled]){color:var(--rowacc);opacity:1}
+[data-tone="dark"] #right:not([disabled]){color:var(--rowtint)}
+#left:not([disabled]){opacity:1}
+/* the two axes, each drawn where it points and named for where it lands */
+#navrow{position:fixed;left:0;right:0;bottom:62px;z-index:20;color:var(--chrome);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding-left:11px;padding-right:11px;pointer-events:none}
+.navside{display:flex;align-items:center;gap:1px;pointer-events:auto;max-width:47%}
+#navright{justify-content:flex-end;text-align:right}
+#downrow{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:20;
+  color:var(--chrome);display:flex;align-items:center;gap:3px}
+#up{position:fixed;top:calc(var(--barh) + 2px);left:50%;transform:translateX(-50%);z-index:20}
+[data-at-home="yes"] #up,[data-full="yes"] #navrow{display:none}
+[data-at-home="yes"] #where{opacity:0}
+.navlbl{font-family:var(--sans);font-size:13.5px;line-height:1.22;font-weight:500;
+  letter-spacing:-.01em;max-width:15ch;transition:opacity .3s ease}
+.navlbl:empty{display:none}
+#lbll{color:var(--chrome);opacity:.66}
+#lbld{color:var(--chrome);opacity:.66;max-width:none;white-space:nowrap}
+#lblr{color:var(--chrome);opacity:1}
+[data-tone="dark"] #lblr{color:var(--bt)}
+
+
+[data-tone="dark"]{--chrome:var(--paper)}
+
+@media (min-width:760px){
+  :root{--pad:40px;--barh:56px;--d2:46px;--d3:30px;--p:19px;--lbl:12px;--sw:2.4}
+  .cell{padding:96px 88px 150px;gap:18px}
+  .open,.index{padding-left:56px;padding-right:56px}
+  .open{padding-top:56px}
+  /* tablet: the rail stays, at reading size */
+  #navrow{bottom:80px;padding-left:calc(var(--pad) - 11px);padding-right:calc(var(--pad) - 11px)}
+  #downrow{bottom:calc(var(--pad) - 10px)}
+  #up{top:calc(var(--barh) + 6px)}
+  .navlbl{font-size:16px;max-width:20ch}
+  #markbtn{width:30px;height:30px}
+  .open .mark{width:168px;height:168px}
+  .open .two{margin-top:19px}
+  .ico-svg{width:66px}.ico-svg.tl{width:52px}
+  .cell .line{max-width:36ch}
+  .cell.index h2{font-size:var(--d3);max-width:none;margin-top:34px}
+  .ix-sub{max-width:58rem;padding-bottom:20px}
+  .grps{max-width:46rem;margin-top:28px}
+  .grp+.grp{margin-top:13px}
+  .grp-h{padding:13px 0 14px;gap:16px}
+  .grp-w{font-size:17px}
+  .gs-i,.gs-svg{width:24px}
+  .gs-svg.tl{width:18px}
+  .gs-t{font-size:17px}
+  .grp-s button{padding:9px 0;gap:14px}
+  .ix-out{margin-top:30px}
+  .ix-go{font-size:16px}
+  .how::before{width:76px}
+}
+/* wide enough to give each axis its own edge: the arrow sits where it points */
+@media (min-width:1100px){
+  .cell{padding:102px 208px 112px;gap:20px}
+  .open,.index{padding-left:120px;padding-right:120px}
+  .open{padding-top:62px}
+  #navrow{position:static;display:contents}
+  .navside{position:fixed;top:50%;transform:translateY(-50%);max-width:none;width:148px;
+    flex-direction:column;align-items:center;gap:5px;text-align:center}
+  #navleft{left:30px}
+  #navright{right:30px;text-align:center;flex-direction:column-reverse}
+  #downrow{flex-direction:column;gap:3px;bottom:calc(var(--pad) - 12px)}
+  .navlbl{font-size:15px;max-width:14ch;line-height:1.28}
+}
+@media (min-width:1200px){
+  :root{--pad:56px;--barh:62px;--d2:56px;--d3:36px;--sw:2.2}
+  .ico-svg{width:82px}.ico-svg.tl{width:64px}
+}
+@media (max-height:660px){
+  :root{--d2:20px;--d3:16px;--p:14px;--lbl:11px;--sw:3;--barh:40px}
+  .cell{padding-top:44px;padding-bottom:60px;padding-left:22px;padding-right:22px;gap:6px}
+  /* short landscape: the kicker already names the card, so the glyph steps aside */
+  .cell.case .ico,.is-contact .ico,.bad .ico{display:none}
+  .out{padding-top:7px;margin-top:2px}
+  .cell.case .stats{font-size:13px}
+  .cell.case .case-tag{font-size:11px}
+  .open{padding-top:40px}
+  .open .mark{width:56px;height:56px}
+  .open .two{margin-top:6px}
+  .ico-svg{width:24px}.ico-svg.tl{width:19px}
+  .cell .line{max-width:48ch}
+  .cell.index h2{margin-top:10px}
+  .ix-sub{padding-bottom:8px;margin-top:4px}
+  .grps{margin-top:10px;max-width:none}
+  .grp+.grp{margin-top:4px}
+  .grp-h{padding:5px 0 6px}
+  .grp-w{font-size:12.5px}
+  .gs-t{font-size:12.5px}
+  .gs-i,.gs-svg{width:15px}
+  .grp-s button{padding:3px 0}
+  .ix-out{margin-top:12px}
+  .ix-go{font-size:12.5px}
+  .how::before{width:44px;height:2px}
+  #navrow{bottom:50px}
+  #downrow{bottom:4px}
+  .navlbl{font-size:12.5px;max-width:16ch}
+  .is-contact{overflow-y:auto;touch-action:pan-y;justify-content:flex-start}
+  .is-contact .svc{font-size:var(--d2)}
+  .is-contact label{font-size:12.5px}
+  .is-contact form{gap:3px}
+  .is-contact .line{margin-bottom:0}
+  .is-contact input,.is-contact textarea{font-size:15px;padding:6px 9px;margin-top:3px}
+  .is-contact label{font-size:13px}
+  .btn{padding:9px 16px;font-size:15px}
+}
+@media (min-width:760px) and (max-height:660px){
+  #navrow{bottom:44px}
+  #downrow{bottom:0}
+  .cell,.open{padding-top:40px;padding-bottom:88px}
+  .is-contact form{gap:4px}
+  .is-contact input,.is-contact textarea{padding:5px 9px;margin-top:2px}
+}
+@media (max-height:620px){
+  /* the three group names already say it; the masthead and lead stand down */
+  .ix-sub{display:none}
+  .ix-brand{display:none}
+  .grps{margin-top:8px}
+  .ix-out{margin-top:8px}
+}
+@media (min-width:760px) and (max-height:620px){
+  .is-contact .kind{display:none}
+}
+@media (min-width:1100px) and (max-height:660px){
+  .navside{width:132px;gap:1px}
+  .cell{padding-left:186px;padding-right:186px;padding-bottom:58px}
+  .open,.index{padding-left:96px;padding-right:96px;padding-bottom:58px}
+}
+@media (prefers-reduced-motion:reduce){
+  #grid,#markbtn,#prog,.navlbl{transition:none}
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   UX pass, 16 September 2026 — three seams the revision left open.
+   Measured in Chromium against the original file, all 41 cards.
+   ───────────────────────────────────────────────────────────────────── */
+
+/* 1. Laptop and short-desktop windows. Measured against the original file:
+      at 1440x770 only two cards overflowed, by 20px; at 1366x700, nine by up
+      to 55px; from 820px tall, nothing overflowed at all. The room is in the
+      padding, not the type -- at 1100px+ a card carries 214px of it -- so the
+      display scale is left where the designer set it for as long as it fits.
+
+      741px and up  the full 56px headline, padding trimmed. This is where a
+                    1440x900 laptop lands once browser chrome is subtracted.
+      661-740px     one step down, to the design's OWN tablet scale (46/30/19,
+                    66px icons) rather than an invented one. */
+@media (min-width:760px) and (min-height:741px) and (max-height:920px){
+  .cell{padding-top:76px;padding-bottom:84px;gap:15px}
+  .open{padding-top:48px}
+  .open .mark{width:140px;height:140px}
+  .cell.index h2{margin-top:24px}
+  .grps{margin-top:22px}
+  .ix-out{margin-top:22px}
+  .ix-sub{padding-bottom:16px}
+}
+@media (min-width:760px) and (min-height:661px) and (max-height:740px){
+  :root{--d2:46px;--d3:30px;--p:19px}
+  .ico-svg{width:66px}.ico-svg.tl{width:52px}
+  .cell{padding-top:74px;padding-bottom:80px;gap:14px}
+  .open{padding-top:44px}
+  .open .mark{width:124px;height:124px}
+  .cell.index h2{margin-top:20px}
+  .grps{margin-top:18px}
+  .ix-out{margin-top:18px}
+  .ix-sub{padding-bottom:13px}
+}
+
+/* 2. Phone portrait. calidescope-situations_2.html carried this block after
+      Bret's first look ("the text and icons read small on a phone"); the
+      revision dropped it and the kickers went back to 11.5px. Restored, and
+      extended to the index row's group list, which _2 did not have. Short
+      phones keep the compact rules above. */
+@media (max-width:759px) and (min-height:661px){
+  :root{--d2:33px;--d3:27px;--p:17px;--lbl:12px}
+  .ico-svg{width:54px}.ico-svg.tl{width:44px}
+  .cell{gap:16px}
+  .cell h2+.line{margin-top:6px}       /* headline -> subtext 22px; icon -> headline stays 16px */
+  .open .two{margin-top:18px}
+  .navlbl{font-size:14px}
+  .grp-w,.gs-t{font-size:15px}
+  .gs-i,.gs-svg{width:20px}
+  .ix-go{font-size:15px}
+  .ix-go.primary{font-size:16px}
+  /* the form card is the one whose height the device decides: let it scroll, never clip */
+  .is-contact{overflow-y:auto;touch-action:pan-y;justify-content:safe center}
+  .is-contact form{gap:6px}
+  .is-contact input,.is-contact textarea{padding:8px 10px;margin-top:4px}
+}
+
+/* 3. Touch targets. On a finger the group rows measured 42px, the "better X"
+      buttons 33px, the index footer link 16px and the Software link 22px —
+      all under the 44px minimum. Height is added inside the existing box, so
+      nothing reflows on a mouse. Short screens are left alone: there the
+      compact tier is already fighting for the same pixels. */
+@media (pointer:coarse) and (min-height:661px){
+  .grp-s button,.gs-out{min-height:44px}
+  .grp-h{min-height:44px}
+  .out{min-height:44px;padding-top:11px;align-items:center}
+  .ix-go{min-height:44px;padding:6px 0}
+  .lnk,.ix-sw{min-height:44px;display:inline-flex;align-items:center}
+  .navlbl{min-height:44px;display:flex;align-items:center}
+  .btn{min-height:44px}
+  .is-contact input{min-height:44px}
+}
+[hidden]{display:none!important}
+.btn[disabled]{opacity:.5;cursor:default}
+#csent:focus{outline:0}
+</style>
+</head>
+<body>
+<div id="stage"><div id="grid">
+<section class="cell open" style="grid-row:1;grid-column:2" data-row="0" data-col="1"
+  aria-label="Calidescope — growth advisory, services and software">
+  <svg class="mark" viewBox="-100 -100 200 200" aria-hidden="true"><circle cx="0" cy="0" r="92" fill="none" stroke="currentColor" stroke-width="3.2"></circle> <line x1="-92" y1="0" x2="92" y2="0" stroke="currentColor" stroke-width="2.8"></line> <line x1="-46" y1="-79.7" x2="46" y2="79.7" stroke="currentColor" stroke-width="2.8"></line> <line x1="46" y1="-79.7" x2="-46" y2="79.7" stroke="currentColor" stroke-width="2.8"></line> <circle cx="0" cy="0" r="10" fill="currentColor"></circle></svg>
+  <h1>Calidescope</h1>
+  <p class="two">Growth Advisory<br>Services and Software</p>
+</section>
+<section class="cell index" style="grid-row:2;grid-column:2" data-row="1" data-col="1"
+  aria-label="Say it, sell it, show it">
+  <p class="ix-brand">Calidescope</p>
+  <p class="ix-sub">Growth Advisory Services and <a class="ix-sw" href="https://throughline.builders/basic" target="_blank" rel="noopener">Software<svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16l8-8M16 8h-6M16 8v6"/></svg></a></p>
+  <div class="grps">
+    <div class="grp g-say" data-g="say">
+      <button class="grp-h" type="button" aria-expanded="false" aria-controls="s-say">
+        <span class="grp-n">Say</span>
+        <span class="grp-w">One message, everywhere it goes.</span>
+        <span class="grp-c"><em>3</em>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></span>
+      </button>
+      <ul class="grp-s" id="s-say" hidden>
+        <li><button type="button" onclick="jump(2,3)"><span class="gs-i"><svg class="gs-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 14c26 1 47 21 46 47 -1 25 -21 45 -47 45 -25 0 -46 -20 -45 -46 1 -25 21 -45 45 -46"></path><circle cx="60" cy="61" r="9" fill="currentColor" stroke="none"></circle></svg></span><span class="gs-t"><b>Better positioning</b> <i>one message they repeat</i></span></button></li>
+        <li><button type="button" onclick="jump(3,3)"><span class="gs-i"><svg class="gs-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16c19 -2 38 -2 56 0 2 26 2 52 0 76 -19 2 -38 2 -56 0 -2 -25 -2 -51 0 -76"></path><path d="M44 30c19 -2 38 -2 56 1 2 26 1 51 -1 74 -18 2 -37 2 -55 0 -2 -25 -2 -50 0 -75"></path><circle cx="72" cy="68" r="8" fill="currentColor" stroke="none"></circle></svg></span><span class="gs-t"><b>Better collateral</b> <i>it travels without you</i></span></button></li>
+        <li><a class="gs-out" href="https://throughline.builders/basic" target="_blank" rel="noopener"><span class="gs-i"><svg class="gs-svg tl" viewBox="0 0 64 72" fill="none" aria-hidden="true"><circle cx="32" cy="6" r="5" fill="currentColor"></circle> <path d="M32 11.5V62" stroke="currentColor" stroke-width="1.6"></path> <polygon points="32,14 56,62 8,62" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="miter"></polygon></svg></span><span class="gs-t"><b>Throughline</b> <i>software that reads any page</i></span><svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16l8-8M16 8h-6M16 8v6"/></svg></a></li>
+      </ul>
+    </div>
+    <div class="grp g-sell" data-g="sell">
+      <button class="grp-h" type="button" aria-expanded="false" aria-controls="s-sell">
+        <span class="grp-n">Sell</span>
+        <span class="grp-w">More people can close it than just you.</span>
+        <span class="grp-c"><em>2</em>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></span>
+      </button>
+      <ul class="grp-s" id="s-sell" hidden>
+        <li><button type="button" onclick="jump(4,3)"><span class="gs-i"><svg class="gs-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 20c17 0 30 13 29 30 -1 14 -18 33 -29 47 -11 -14 -27 -32 -28 -46 -1 -17 12 -31 28 -31"></path><path d="M34 110c17 3 36 3 53 0"></path><circle cx="60" cy="50" r="9" fill="currentColor" stroke="none"></circle></svg></span><span class="gs-t"><b>Better presence</b> <i>the room decides your way</i></span></button></li>
+        <li><button type="button" onclick="jump(5,3)"><span class="gs-i"><svg class="gs-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 42c11 0 19 8 18 19 -1 10 -9 17 -19 17 -10 0 -18 -8 -17 -18 1 -10 8 -18 18 -18"></path><path d="M47 48c-4 -5 -9 -9 -13 -12M77 55c5 -1 10 -2 15 -4M55 77c-2 6 -4 12 -5 18"></path><path d="M26 17c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><path d="M100 38c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><path d="M48 92c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><circle cx="60" cy="60" r="7.5" fill="currentColor" stroke="none"></circle></svg></span><span class="gs-t"><b>Better enablement</b> <i>everyone closes like your best</i></span></button></li>
+      </ul>
+    </div>
+    <div class="grp g-show" data-g="show">
+      <button class="grp-h" type="button" aria-expanded="false" aria-controls="s-show">
+        <span class="grp-n">Show</span>
+        <span class="grp-w">Your client can prove it without you.</span>
+        <span class="grp-c"><em>2</em>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></span>
+      </button>
+      <ul class="grp-s" id="s-show" hidden>
+        <li><button type="button" onclick="jump(6,3)"><span class="gs-i"><svg class="gs-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 100c24 -4 48 -18 68 -34 8 -7 16 -14 24 -22"></path><path d="M30 99l4 -11M52 88l5 -11M96 50l5 -11"></path><circle cx="76" cy="70" r="8" fill="currentColor" stroke="none"></circle></svg></span><span class="gs-t"><b>Better workflow</b> <i>you deliver what you sold</i></span></button></li>
+        <li><button type="button" onclick="jump(7,3)"><span class="gs-i"><svg class="gs-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60.0 20.0C80.2 20.0 97.2 35.1 99.7 55.1C102.2 75.2 89.3 93.9 69.7 98.8C50.1 103.7 29.9 93.2 22.7 74.3C15.4 55.5 23.4 34.2 41.2 24.7 M35.2 40.6L41.2 24.7L24.7 20.8"></path><circle cx="60.0" cy="20.0" r="8" fill="currentColor" stroke="none"></circle></svg></span><span class="gs-t"><b>Better proof</b> <i>a number that renews</i></span></button></li>
+      </ul>
     </div>
   </div>
-  <div><svg class="draw" viewBox="0 0 440 340" width="100%" style="display:block;max-width:450px;margin:0 auto"
-     aria-label="A tangled pitch, doubling back on itself, straightened into one line">
-  <path class="ink" pathLength="1" d="M28 78 C70 26 128 34 148 82 C168 130 96 156 74 118 C52 80 132 46 214 74
-        C286 98 268 158 206 148 C144 138 190 60 268 62 C318 63 340 96 326 124"
-        fill="none" stroke="#1F2024" stroke-width="2.6" stroke-linecap="round"/>
-  <circle class="knot k1" cx="28"  cy="78"  r="5" fill="#1F2024"/>
-  <circle class="knot k2" cx="148" cy="82"  r="5" fill="#1F2024"/>
-  <circle class="knot k3" cx="74"  cy="118" r="5" fill="#1F2024"/>
-  <circle class="knot k4" cx="206" cy="148" r="5" fill="#1F2024"/>
-  <circle class="knot k5" cx="326" cy="124" r="5" fill="#1F2024"/>
-  <path class="fall" pathLength="1" d="M220 196 v40" fill="none" stroke="#6E6B65" stroke-width="2" stroke-linecap="round"/>
-  <path class="pop n1" d="M212 234 L220 250 L228 234 z" fill="#6E6B65"/>
-  <path class="line" pathLength="1" d="M34 292 H386" fill="none" stroke="#1E40FF" stroke-width="3.4" stroke-linecap="round"/>
-  <circle class="pop n2" cx="34"  cy="292" r="7.5" fill="#1E40FF"/>
-  <circle class="pop n3" cx="152" cy="292" r="7.5" fill="#7A3AD2"/>
-  <circle class="pop n4" cx="270" cy="292" r="7.5" fill="#E933A6"/>
-  <path class="pop n4" d="M386 281 L414 292 L386 303 z" fill="#1E40FF"/>
-</svg></div>
-</div></section>
-
-<div class="strip"><div class="wrap"><p>For people with deep expertise who also have to sell.</p></div></div>
-
-<section class="sec"><div class="wrap">
-  <div class="row3">
-    <div><svg width="30" height="30" viewBox="0 0 40 40" aria-hidden="true" style="display:block;margin-bottom:18px"><path d="M20 7 L34 32 L6 32 Z" fill="none" stroke="var(--blue)" stroke-width="2.6" stroke-linejoin="round"/></svg><p class="p">Promise</p><span class="do mono b">Win it</span>
-      <p class="d">Your deck and your homepage, so they hold up when you're not there.</p></div>
-    <div><svg width="30" height="30" viewBox="0 0 40 40" aria-hidden="true" style="display:block;margin-bottom:18px"><rect x="8" y="8" width="24" height="24" fill="none" stroke="var(--violet)" stroke-width="2.6"/></svg><p class="p">Perform</p><span class="do mono v">Keep it</span>
-      <p class="d">Your handoffs and your meetings, so work moves between teams.</p></div>
-    <div><svg width="30" height="30" viewBox="0 0 40 40" aria-hidden="true" style="display:block;margin-bottom:18px"><circle cx="20" cy="20" r="13" fill="none" stroke="var(--pink)" stroke-width="2.6"/></svg><p class="p">Proof</p><span class="do mono k">Renew it</span>
-      <p class="d">Your reviews and case studies, so a client can see what they got.</p></div>
+  <div class="ix-out">
+    <button class="ix-go primary" type="button" onclick="jump(2,1)">Situations We Solve <svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v13M6 13l6 6 6-6"/></svg></button>
   </div>
-  <p class="note">We do all three by hand. The first one is also software:
-    <a href="throughline.html">Throughline</a> reads your page and scores it. Free, and live now.</p>
-</div></section>
+</section>
+<section class="cell bad k-blue" style="grid-row:3;grid-column:1" data-row="2" data-col="0"
+  aria-label="Positioning — what happens now">
+  <p class="kind">When it doesn&rsquo;t work out</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 14c26 1 47 21 46 47 -1 25 -21 45 -47 45 -25 0 -46 -20 -45 -46 1 -25 21 -45 45 -46"></path><circle cx="60" cy="61" r="9" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>The buyer repeated none of it.</h2>
+  <p class="line">Three good answers, and no way to tell which one to carry upstairs.</p>
+  <button class="out" type="button" onclick="jump(2,3)">Better positioning <svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16l8-8M16 8h-6M16 8v6"/></svg></button>
+</section>
+<section class="cell sit k-blue" style="grid-row:3;grid-column:2" data-row="2" data-col="1"
+  aria-label="Positioning — the situation">
+  <p class="kind">A positioning situation</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 14c26 1 47 21 46 47 -1 25 -21 45 -47 45 -25 0 -46 -20 -45 -46 1 -25 21 -45 45 -46"></path><circle cx="60" cy="61" r="9" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>Your CEO, your head of sales and your best engineer describe the business to the same buyer.</h2>
+  <p class="line">Three fluent answers, all of them right. But which <u>one</u> does the buyer repeat?</p>
+</section>
+<section class="cell good a-blue k-blue" style="grid-row:3;grid-column:3" data-row="2" data-col="2"
+  aria-label="Positioning — the opportunity">
+  <p class="kind">The opportunity</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 14c26 1 47 21 46 47 -1 25 -21 45 -47 45 -25 0 -46 -20 -45 -46 1 -25 21 -45 45 -46"></path><circle cx="60" cy="61" r="9" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>The deal keeps moving when you leave the room.</h2>
+  <p class="line">One version to remember, so your buyer can carry it upstairs in your words.</p>
+</section>
+<section class="cell how a-blue" style="grid-row:3;grid-column:4" data-row="2" data-col="3"
+  aria-label="Positioning — the solution">
+  <p class="kind">A Calidescope service</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 14c26 1 47 21 46 47 -1 25 -21 45 -47 45 -25 0 -46 -20 -45 -46 1 -25 21 -45 45 -46"></path><circle cx="60" cy="61" r="9" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2 class="svc">Better positioning</h2>
+  <p class="line">One message about the value you create. Short enough to repeat, true enough to defend. Everyone who speaks for you gets the same one.</p>
+</section>
+<section class="cell case a-blue" style="grid-row:3;grid-column:5" data-row="2" data-col="4"
+  aria-label="Positioning — project in action">
+  <p class="kind">Project in action</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 14c26 1 47 21 46 47 -1 25 -21 45 -47 45 -25 0 -46 -20 -45 -46 1 -25 21 -45 45 -46"></path><circle cx="60" cy="61" r="9" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2 class="case-h">A platform built. Barely used.</h2>
+  <p class="line">An identity platform at a holding company, repriced and repositioned for the audience that actually needed to buy it, with a commercial team put against a real number.</p>
+  <p class="stats"><b>+300%</b> usage &middot; <b>+500%</b> revenue &middot; <b>9 months</b></p>
+  <p class="case-tag">New York, 2018</p>
+</section>
+<section class="cell bad k-blue" style="grid-row:4;grid-column:1" data-row="3" data-col="0"
+  aria-label="Collateral — what happens now">
+  <p class="kind">When it doesn&rsquo;t work out</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16c19 -2 38 -2 56 0 2 26 2 52 0 76 -19 2 -38 2 -56 0 -2 -25 -2 -51 0 -76"></path><path d="M44 30c19 -2 38 -2 56 1 2 26 1 51 -1 74 -18 2 -37 2 -55 0 -2 -25 -2 -50 0 -75"></path><circle cx="72" cy="68" r="8" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>Nobody forwarded it.</h2>
+  <p class="line">It answered the buyer&rsquo;s questions, not her boss&rsquo;s, and it needed her voice over the top of it.</p>
+  <button class="out" type="button" onclick="jump(3,3)">Better collateral <svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16l8-8M16 8h-6M16 8v6"/></svg></button>
+</section>
+<section class="cell sit k-blue" style="grid-row:4;grid-column:2" data-row="3" data-col="1"
+  aria-label="Collateral — the situation">
+  <p class="kind">A collateral situation</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16c19 -2 38 -2 56 0 2 26 2 52 0 76 -19 2 -38 2 -56 0 -2 -25 -2 -51 0 -76"></path><path d="M44 30c19 -2 38 -2 56 1 2 26 1 51 -1 74 -18 2 -37 2 -55 0 -2 -25 -2 -50 0 -75"></path><circle cx="72" cy="68" r="8" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>The deck went out on Thursday. It was <u>very, very thorough</u>.</h2>
+  <p class="line">It lands every time you present it. But does it land when you don&rsquo;t?</p>
+</section>
+<section class="cell good a-blue k-blue" style="grid-row:4;grid-column:3" data-row="3" data-col="2"
+  aria-label="Collateral — the opportunity">
+  <p class="kind">The opportunity</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16c19 -2 38 -2 56 0 2 26 2 52 0 76 -19 2 -38 2 -56 0 -2 -25 -2 -51 0 -76"></path><path d="M44 30c19 -2 38 -2 56 1 2 26 1 51 -1 74 -18 2 -37 2 -55 0 -2 -25 -2 -50 0 -75"></path><circle cx="72" cy="68" r="8" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>It reaches the room where they decide.</h2>
+  <p class="line">Short enough to send on, and it answers what the next reader will actually ask.</p>
+</section>
+<section class="cell how a-blue" style="grid-row:4;grid-column:4" data-row="3" data-col="3"
+  aria-label="Collateral — the solution">
+  <p class="kind">A Calidescope service</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16c19 -2 38 -2 56 0 2 26 2 52 0 76 -19 2 -38 2 -56 0 -2 -25 -2 -51 0 -76"></path><path d="M44 30c19 -2 38 -2 56 1 2 26 1 51 -1 74 -18 2 -37 2 -55 0 -2 -25 -2 -50 0 -75"></path><circle cx="72" cy="68" r="8" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2 class="svc">Better collateral</h2>
+  <p class="line">The deck, the one-pager and the email, rebuilt around the one line a buyer will repeat.</p>
+</section>
+<section class="cell case a-blue" style="grid-row:4;grid-column:5" data-row="3" data-col="4"
+  aria-label="Collateral — project in action">
+  <p class="kind">Project in action</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16c19 -2 38 -2 56 0 2 26 2 52 0 76 -19 2 -38 2 -56 0 -2 -25 -2 -51 0 -76"></path><path d="M44 30c19 -2 38 -2 56 1 2 26 1 51 -1 74 -18 2 -37 2 -55 0 -2 -25 -2 -50 0 -75"></path><circle cx="72" cy="68" r="8" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2 class="case-h">A new market, a pulled budget, and a financial crisis.</h2>
+  <p class="line">One person in London with no case studies to point to. Built closed-loop measurement examples with a platform partner that made the value concrete, then sold it across Europe and Asia.</p>
+  <p class="stats"><b>$2M</b> new business &middot; <b>team of 8</b> &middot; <b>EMEA and APAC</b></p>
+  <p class="case-tag">London, 2007&ndash;2010</p>
+</section>
+<section class="cell bad k-violet" style="grid-row:5;grid-column:1" data-row="4" data-col="0"
+  aria-label="Presence — what happens now">
+  <p class="kind">When it doesn&rsquo;t work out</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 20c17 0 30 13 29 30 -1 14 -18 33 -29 47 -11 -14 -27 -32 -28 -46 -1 -17 12 -31 28 -31"></path><path d="M34 110c17 3 36 3 53 0"></path><circle cx="60" cy="50" r="9" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>Turns out they don&rsquo;t have the weight.</h2>
+  <p class="line">They were making it from memory, without the numbers, in a room they were not sent in to win.</p>
+  <button class="out" type="button" onclick="jump(4,3)">Better presence <svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16l8-8M16 8h-6M16 8v6"/></svg></button>
+</section>
+<section class="cell sit k-violet" style="grid-row:5;grid-column:2" data-row="4" data-col="1"
+  aria-label="Presence — the situation">
+  <p class="kind">A presence situation</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 20c17 0 30 13 29 30 -1 14 -18 33 -29 47 -11 -14 -27 -32 -28 -46 -1 -17 12 -31 28 -31"></path><path d="M34 110c17 3 36 3 53 0"></path><circle cx="60" cy="50" r="9" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>You have somebody on the inside making your case.</h2>
+  <p class="line">They believe it, and they say so. But how much <u>weight</u> do they carry?</p>
+</section>
+<section class="cell good a-violet k-violet" style="grid-row:5;grid-column:3" data-row="4" data-col="2"
+  aria-label="Presence — the opportunity">
+  <p class="kind">The opportunity</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 20c17 0 30 13 29 30 -1 14 -18 33 -29 47 -11 -14 -27 -32 -28 -46 -1 -17 12 -31 28 -31"></path><path d="M34 110c17 3 36 3 53 0"></path><circle cx="60" cy="50" r="9" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>You know the right person to take to dinner.</h2>
+  <p class="line">They have the numbers, the words, and the reason to say it again &mdash; in every room you are not in.</p>
+</section>
+<section class="cell how a-violet" style="grid-row:5;grid-column:4" data-row="4" data-col="3"
+  aria-label="Presence — the solution">
+  <p class="kind">A Calidescope service</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 20c17 0 30 13 29 30 -1 14 -18 33 -29 47 -11 -14 -27 -32 -28 -46 -1 -17 12 -31 28 -31"></path><path d="M34 110c17 3 36 3 53 0"></path><circle cx="60" cy="50" r="9" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2 class="svc">Better presence</h2>
+  <p class="line">Who decides, who is arguing for you, and what they are up against. Then the words, the room and the introductions.</p>
+</section>
+<section class="cell case a-violet" style="grid-row:5;grid-column:5" data-row="4" data-col="4"
+  aria-label="Presence — project in action">
+  <p class="kind">Project in action</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 20c17 0 30 13 29 30 -1 14 -18 33 -29 47 -11 -14 -27 -32 -28 -46 -1 -17 12 -31 28 -31"></path><path d="M34 110c17 3 36 3 53 0"></path><circle cx="60" cy="50" r="9" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2 class="case-h">Five CEOs. Five roadmaps. No reason to agree.</h2>
+  <p class="line">One global data platform five independent markets would actually join &mdash; built to work with each market&rsquo;s existing supplier rather than forcing one on them.</p>
+  <p class="stats"><b>$40M+</b> retained &middot; <b>5 cities</b> &middot; <b>18 months</b></p>
+  <p class="case-tag">Europe, 2018&ndash;2020</p>
+</section>
+<section class="cell bad k-violet" style="grid-row:6;grid-column:1" data-row="5" data-col="0"
+  aria-label="Enablement — what happens now">
+  <p class="kind">When it doesn&rsquo;t work out</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 42c11 0 19 8 18 19 -1 10 -9 17 -19 17 -10 0 -18 -8 -17 -18 1 -10 8 -18 18 -18"></path><path d="M47 48c-4 -5 -9 -9 -13 -12M77 55c5 -1 10 -2 15 -4M55 77c-2 6 -4 12 -5 18"></path><path d="M26 17c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><path d="M100 38c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><path d="M48 92c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><circle cx="60" cy="60" r="7.5" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>The deal waited three weeks for one calendar.</h2>
+  <p class="line">By the time the meeting happened, the buyer had already heard two other firms.</p>
+  <button class="out" type="button" onclick="jump(5,3)">Better enablement <svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16l8-8M16 8h-6M16 8v6"/></svg></button>
+</section>
+<section class="cell sit k-violet" style="grid-row:6;grid-column:2" data-row="5" data-col="1"
+  aria-label="Enablement — the situation">
+  <p class="kind">An enablement situation</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 42c11 0 19 8 18 19 -1 10 -9 17 -19 17 -10 0 -18 -8 -17 -18 1 -10 8 -18 18 -18"></path><path d="M47 48c-4 -5 -9 -9 -13 -12M77 55c5 -1 10 -2 15 -4M55 77c-2 6 -4 12 -5 18"></path><path d="M26 17c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><path d="M100 38c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><path d="M48 92c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><circle cx="60" cy="60" r="7.5" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>The pitch works. <u>One</u> person delivers it.</h2>
+  <p class="line">She is your best closer. But how many deals are waiting on her calendar?</p>
+</section>
+<section class="cell good a-violet k-violet" style="grid-row:6;grid-column:3" data-row="5" data-col="2"
+  aria-label="Enablement — the opportunity">
+  <p class="kind">The opportunity</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 42c11 0 19 8 18 19 -1 10 -9 17 -19 17 -10 0 -18 -8 -17 -18 1 -10 8 -18 18 -18"></path><path d="M47 48c-4 -5 -9 -9 -13 -12M77 55c5 -1 10 -2 15 -4M55 77c-2 6 -4 12 -5 18"></path><path d="M26 17c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><path d="M100 38c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><path d="M48 92c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><circle cx="60" cy="60" r="7.5" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>Every deal gets the pitch that works.</h2>
+  <p class="line">Written down once, rehearsed by everybody. Revenue stops depending on one calendar.</p>
+</section>
+<section class="cell how a-violet" style="grid-row:6;grid-column:4" data-row="5" data-col="3"
+  aria-label="Enablement — the solution">
+  <p class="kind">A Calidescope service</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 42c11 0 19 8 18 19 -1 10 -9 17 -19 17 -10 0 -18 -8 -17 -18 1 -10 8 -18 18 -18"></path><path d="M47 48c-4 -5 -9 -9 -13 -12M77 55c5 -1 10 -2 15 -4M55 77c-2 6 -4 12 -5 18"></path><path d="M26 17c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><path d="M100 38c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><path d="M48 92c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><circle cx="60" cy="60" r="7.5" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2 class="svc">Better enablement</h2>
+  <p class="line">A playbook, a rehearsal, and a team that makes the same case after we go.</p>
+</section>
+<section class="cell case a-violet" style="grid-row:6;grid-column:5" data-row="5" data-col="4"
+  aria-label="Enablement — project in action">
+  <p class="kind">Project in action</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 42c11 0 19 8 18 19 -1 10 -9 17 -19 17 -10 0 -18 -8 -17 -18 1 -10 8 -18 18 -18"></path><path d="M47 48c-4 -5 -9 -9 -13 -12M77 55c5 -1 10 -2 15 -4M55 77c-2 6 -4 12 -5 18"></path><path d="M26 17c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><path d="M100 38c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><path d="M48 92c7 0 11 5 11 11 0 6 -5 11 -12 10 -6 -1 -9 -6 -8 -11 1 -6 5 -10 9 -10"></path><circle cx="60" cy="60" r="7.5" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2 class="case-h">Analytics, treated as a cost centre. Until it wasn&rsquo;t.</h2>
+  <p class="line">A global analytics practice built across five cities, then packaged so clients would pay for it on its own merits.</p>
+  <p class="stats"><b>200+</b> people &middot; <b>$4M to $10M</b> &middot; <b>$7M a year</b> from a platform partner</p>
+  <p class="case-tag">Five cities, 2010&ndash;2017</p>
+</section>
+<section class="cell bad k-pink" style="grid-row:7;grid-column:1" data-row="6" data-col="0"
+  aria-label="Workflow — what happens now">
+  <p class="kind">When it doesn&rsquo;t work out</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 100c24 -4 48 -18 68 -34 8 -7 16 -14 24 -22"></path><path d="M30 99l4 -11M52 88l5 -11M96 50l5 -11"></path><circle cx="76" cy="70" r="8" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>By week nine the handoff has no owner.</h2>
+  <p class="line">Everyone is busy, the meeting that decides keeps moving, and the promise drifts a little each week.</p>
+  <button class="out" type="button" onclick="jump(6,3)">Better workflow <svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16l8-8M16 8h-6M16 8v6"/></svg></button>
+</section>
+<section class="cell sit k-pink" style="grid-row:7;grid-column:2" data-row="6" data-col="1"
+  aria-label="Workflow — the situation">
+  <p class="kind">A workflow situation</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 100c24 -4 48 -18 68 -34 8 -7 16 -14 24 -22"></path><path d="M30 99l4 -11M52 88l5 -11M96 50l5 -11"></path><circle cx="76" cy="70" r="8" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>You won it on a promise about how the work would <u>run</u>.</h2>
+  <p class="line">The promise was specific, and everyone meant it. But who owns it in week nine?</p>
+</section>
+<section class="cell good a-pink k-pink" style="grid-row:7;grid-column:3" data-row="6" data-col="2"
+  aria-label="Workflow — the opportunity">
+  <p class="kind">The opportunity</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 100c24 -4 48 -18 68 -34 8 -7 16 -14 24 -22"></path><path d="M30 99l4 -11M52 88l5 -11M96 50l5 -11"></path><circle cx="76" cy="70" r="8" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>The next conversation is about more work.</h2>
+  <p class="line">What you sold is what gets delivered, so the account expands on its own record.</p>
+</section>
+<section class="cell how a-pink" style="grid-row:7;grid-column:4" data-row="6" data-col="3"
+  aria-label="Workflow — the solution">
+  <p class="kind">A Calidescope service</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 100c24 -4 48 -18 68 -34 8 -7 16 -14 24 -22"></path><path d="M30 99l4 -11M52 88l5 -11M96 50l5 -11"></path><circle cx="76" cy="70" r="8" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2 class="svc">Better workflow</h2>
+  <p class="line">The cadence that decides. The handoff with a name on it. An operating rhythm the work can keep.</p>
+</section>
+<section class="cell case a-pink" style="grid-row:7;grid-column:5" data-row="6" data-col="4"
+  aria-label="Workflow — project in action">
+  <p class="kind">Project in action</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 100c24 -4 48 -18 68 -34 8 -7 16 -14 24 -22"></path><path d="M30 99l4 -11M52 88l5 -11M96 50l5 -11"></path><circle cx="76" cy="70" r="8" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2 class="case-h">Renamed three times, and sold mid-engagement.</h2>
+  <p class="line">Repositioned around client value instead of a fourth rebrand. Sales and service split so sellers could sell, on a weekly cadence of accountability.</p>
+  <p class="stats"><b>+70%</b> year on year &middot; <b>12 months</b> &middot; during an active sale</p>
+  <p class="case-tag">New York, 2025&ndash;2026</p>
+</section>
+<section class="cell bad k-pink" style="grid-row:8;grid-column:1" data-row="7" data-col="0"
+  aria-label="Proof — what happens now">
+  <p class="kind">When it doesn&rsquo;t work out</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60.0 20.0C80.2 20.0 97.2 35.1 99.7 55.1C102.2 75.2 89.3 93.9 69.7 98.8C50.1 103.7 29.9 93.2 22.7 74.3C15.4 55.5 23.4 34.2 41.2 24.7 M35.2 40.6L41.2 24.7L24.7 20.8"></path><circle cx="60.0" cy="20.0" r="8" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>The renewal goes to committee.</h2>
+  <p class="line">She has a year of activity and no single number she can hand over.</p>
+  <button class="out" type="button" onclick="jump(7,3)">Better proof <svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16l8-8M16 8h-6M16 8v6"/></svg></button>
+</section>
+<section class="cell sit k-pink" style="grid-row:8;grid-column:2" data-row="7" data-col="1"
+  aria-label="Proof — the situation">
+  <p class="kind">A proof situation</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60.0 20.0C80.2 20.0 97.2 35.1 99.7 55.1C102.2 75.2 89.3 93.9 69.7 98.8C50.1 103.7 29.9 93.2 22.7 74.3C15.4 55.5 23.4 34.2 41.2 24.7 M35.2 40.6L41.2 24.7L24.7 20.8"></path><circle cx="60.0" cy="20.0" r="8" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>The work delivered. Now your client has to <u>show</u> it.</h2>
+  <p class="line">The numbers make sense to you. But will they make sense to her boss?</p>
+</section>
+<section class="cell good a-pink k-pink" style="grid-row:8;grid-column:3" data-row="7" data-col="2"
+  aria-label="Proof — the opportunity">
+  <p class="kind">The opportunity</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60.0 20.0C80.2 20.0 97.2 35.1 99.7 55.1C102.2 75.2 89.3 93.9 69.7 98.8C50.1 103.7 29.9 93.2 22.7 74.3C15.4 55.5 23.4 34.2 41.2 24.7 M35.2 40.6L41.2 24.7L24.7 20.8"></path><circle cx="60.0" cy="20.0" r="8" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2>It renews at a higher number.</h2>
+  <p class="line">One number, one source, and your sponsor can defend both to a committee.</p>
+</section>
+<section class="cell how a-pink" style="grid-row:8;grid-column:4" data-row="7" data-col="3"
+  aria-label="Proof — the solution">
+  <p class="kind">A Calidescope service</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60.0 20.0C80.2 20.0 97.2 35.1 99.7 55.1C102.2 75.2 89.3 93.9 69.7 98.8C50.1 103.7 29.9 93.2 22.7 74.3C15.4 55.5 23.4 34.2 41.2 24.7 M35.2 40.6L41.2 24.7L24.7 20.8"></path><circle cx="60.0" cy="20.0" r="8" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2 class="svc">Better proof</h2>
+  <p class="line">One claim about the value delivered, held up by evidence a finance lead can check without calling you.</p>
+</section>
+<section class="cell case a-pink" style="grid-row:8;grid-column:5" data-row="7" data-col="4"
+  aria-label="Proof — project in action">
+  <p class="kind">Project in action</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60.0 20.0C80.2 20.0 97.2 35.1 99.7 55.1C102.2 75.2 89.3 93.9 69.7 98.8C50.1 103.7 29.9 93.2 22.7 74.3C15.4 55.5 23.4 34.2 41.2 24.7 M35.2 40.6L41.2 24.7L24.7 20.8"></path><circle cx="60.0" cy="20.0" r="8" fill="currentColor" stroke="none"></circle></svg></div>
+  <h2 class="case-h">One review away from losing the account.</h2>
+  <p class="line">Four disciplines were each producing reports that did not agree, and the client was reconciling them. One weekly cadence, one story, assembled from everyone&rsquo;s ingredients.</p>
+  <p class="stats">The review <b>never happened</b> &middot; the account <b>grew</b> &middot; <b>3 months</b></p>
+  <p class="case-tag">2022&ndash;2023</p>
+</section>
+<section class="cell bad k-blue" style="grid-row:9;grid-column:1" data-row="8" data-col="0"
+  aria-label="Throughline — what happens now">
+  <p class="kind">When it doesn&rsquo;t work out</p>
+  <div class="ico"><svg class="ico-svg tl" viewBox="0 0 64 72" fill="none" aria-hidden="true"><circle cx="32" cy="6" r="5" fill="currentColor"></circle> <path d="M32 11.5V62" stroke="currentColor" stroke-width="1.6"></path> <polygon points="32,14 56,62 8,62" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="miter"></polygon></svg></div>
+  <h2>It speaks to everyone, so it lands for no one.</h2>
+  <p class="line">Three audiences, four promises, and evidence for none of them. A buyer reads it, finds the part that is not about her, and stops.</p>
+  <button class="out" type="button" onclick="jump(8,3)">Throughline <svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16l8-8M16 8h-6M16 8v6"/></svg></button>
+</section>
+<section class="cell sit k-blue" style="grid-row:9;grid-column:2" data-row="8" data-col="1"
+  aria-label="Throughline — the situation">
+  <p class="kind">A throughline situation</p>
+  <div class="ico"><svg class="ico-svg tl" viewBox="0 0 64 72" fill="none" aria-hidden="true"><circle cx="32" cy="6" r="5" fill="currentColor"></circle> <path d="M32 11.5V62" stroke="currentColor" stroke-width="1.6"></path> <polygon points="32,14 56,62 8,62" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="miter"></polygon></svg></div>
+  <h2>The homepage went through six people before it went live.</h2>
+  <p class="line">Everyone got a line in, and every one of them is <u>true</u>. But does it all hold together?</p>
+</section>
+<section class="cell good a-blue k-blue" style="grid-row:9;grid-column:3" data-row="8" data-col="2"
+  aria-label="Throughline — the opportunity">
+  <p class="kind">The opportunity</p>
+  <div class="ico"><svg class="ico-svg tl" viewBox="0 0 64 72" fill="none" aria-hidden="true"><circle cx="32" cy="6" r="5" fill="currentColor"></circle> <path d="M32 11.5V62" stroke="currentColor" stroke-width="1.6"></path> <polygon points="32,14 56,62 8,62" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="miter"></polygon></svg></div>
+  <h2>Readers you never meet still get it.</h2>
+  <p class="line">One reader, one promise, and the proof underneath it. A stranger gets it on the first pass.</p>
+</section>
+<section class="cell how a-blue is-long" style="grid-row:9;grid-column:4" data-row="8" data-col="3"
+  aria-label="Throughline — the solution">
+  <p class="kind">Calidescope software</p>
+  <div class="ico"><svg class="ico-svg tl" viewBox="0 0 64 72" fill="none" aria-hidden="true"><circle cx="32" cy="6" r="5" fill="currentColor"></circle> <path d="M32 11.5V62" stroke="currentColor" stroke-width="1.6"></path> <polygon points="32,14 56,62 8,62" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="miter"></polygon></svg></div>
+  <h2 class="svc">Throughline</h2>
+  <p class="line">Paste the page in. It reads back who the page speaks to, what it promises, and what backs the claim. Then it scores the appeals, the beats and the structure. Run it on the page you keep losing to.</p>
+  <p class="line"><a class="lnk" href="https://throughline.builders/basic" target="_blank" rel="noopener">Three reads a month, free <svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16l8-8M16 8h-6M16 8v6"/></svg></a></p>
+</section>
+<section class="cell case a-blue" style="grid-row:9;grid-column:5" data-row="8" data-col="4"
+  aria-label="Throughline — project in action">
+  <p class="kind">Project in action</p>
+  <div class="ico"><svg class="ico-svg tl" viewBox="0 0 64 72" fill="none" aria-hidden="true"><circle cx="32" cy="6" r="5" fill="currentColor"></circle> <path d="M32 11.5V62" stroke="currentColor" stroke-width="1.6"></path> <polygon points="32,14 56,62 8,62" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="miter"></polygon></svg></div>
+  <h2 class="case-h">Where &ldquo;we think&rdquo; became &ldquo;we know.&rdquo;</h2>
+  <p class="line">Demand forecasting for a national telecom before the tools existed &mdash; econometric models first, then the datamart built to serve them.</p>
+  <p class="stats"><b>27GB</b> datamart &middot; <b>2 businesses</b> &middot; <b>4 roles</b> in under 4 years</p>
+  <p class="case-tag">Kansas City, 1995&ndash;1999</p>
+</section>
+<section class="cell bad k-blue" style="grid-row:10;grid-column:1" data-row="9" data-col="0"
+  aria-label="Contact — what happens now">
+  <p class="kind">When it doesn&rsquo;t work out</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 24c20 13 37 24 47 32"></path><path d="M12 102c20 -13 37 -24 47 -32"></path><path d="M84 70c8 4 16 9 24 15" opacity=".55"></path><circle class="f" cx="72" cy="62" r="11"></circle></svg></div>
+  <h2>It goes to the firm they could repeat.</h2>
+  <p class="line">Yours was the better argument. Theirs was the one that survived the walk back to the office.</p>
+  <button class="out" type="button" onclick="jump(9,3)">Start <svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16l8-8M16 8h-6M16 8v6"/></svg></button>
+</section>
+<section class="cell sit k-blue" style="grid-row:10;grid-column:2" data-row="9" data-col="1"
+  aria-label="Contact — the situation">
+  <p class="kind">The situation</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 24c20 13 37 24 47 32"></path><path d="M12 102c20 -13 37 -24 47 -32"></path><path d="M84 70c8 4 16 9 24 15" opacity=".55"></path><circle class="f" cx="72" cy="62" r="11"></circle></svg></div>
+  <h2>Your big pitch is in <u>three weeks</u>.</h2>
+  <p class="line">The deck exists. The team is good. But is this the version that wins it?</p>
+</section>
+<section class="cell good a-blue k-blue" style="grid-row:10;grid-column:3" data-row="9" data-col="2"
+  aria-label="Contact — the opportunity">
+  <p class="kind">The opportunity</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 24c20 13 37 24 47 32"></path><path d="M12 102c20 -13 37 -24 47 -32"></path><path d="M84 70c8 4 16 9 24 15" opacity=".55"></path><circle class="f" cx="72" cy="62" r="11"></circle></svg></div>
+  <h2>You win it.</h2>
+  <p class="line">Because the room could repeat your case after you left, and did.</p>
+</section>
+<section class="cell how a-blue is-contact" style="grid-row:10;grid-column:4" data-row="9" data-col="3"
+  aria-label="Contact — the solution">
+  <p class="kind">Calidescope LLC &middot; New York</p>
+  <div class="ico"><svg class="ico-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 24c20 13 37 24 47 32"></path><path d="M12 102c20 -13 37 -24 47 -32"></path><path d="M84 70c8 4 16 9 24 15" opacity=".55"></path><circle class="f" cx="72" cy="62" r="11"></circle></svg></div>
+  <h2 class="svc">Start</h2>
+  <p class="line">A five minute conversation.</p>
+  <form action="/api/contact" method="post" data-cform="1">
+    <label>Email<input name="email" type="email" autocomplete="email" required></label>
+    <label>What has to land, and when<textarea name="message" rows="2" required></textarea></label>
+    <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+    <button class="btn" type="submit">Send</button>
+  </form>
+  <p class="line" id="cmsg" role="status" aria-live="polite" hidden style="color:var(--acc)"></p>
+  <div id="csent" hidden><h2 class="svc">Got it.</h2><p class="line">We read it and come back with what we see.</p></div>
+</section>
+</div></div>
 
-<section class="sec sand"><div class="wrap">
-  <h2>Three jobs, in order.</h2>
-  <div class="arc"><div class="zone lit b"><span class="zn">Promise</span><div class="stops"><span class="stop"><i></i><em>Homepage</em></span><span class="stop"><i></i><em>Deck</em></span><span class="stop"><i></i><em>Proposal</em></span></div></div><div class="zone lit v"><span class="zn">Perform</span><div class="stops"><span class="stop"><i></i><em>Kickoff</em></span><span class="stop"><i></i><em>Handoff</em></span><span class="stop"><i></i><em>Cadence</em></span></div></div><div class="zone lit k"><span class="zn">Proof</span><div class="stops"><span class="stop"><i></i><em>Review</em></span><span class="stop"><i></i><em>Renewal</em></span></div></div><div class="tip" aria-hidden="true"><svg viewBox="0 0 34 16" width="34" height="16"><path d="M0 8h26M22 2l8 6-8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-</div></section>
+<div id="bar">
+  <button id="markbtn" type="button" onclick="jump(1,1)" aria-label="Back to services"><svg class="barmark" viewBox="-100 -100 200 200" aria-hidden="true"><circle cx="0" cy="0" r="92" fill="none" stroke="currentColor" stroke-width="9"></circle> <line x1="-92" y1="0" x2="92" y2="0" stroke="currentColor" stroke-width="8"></line> <line x1="-46" y1="-79.7" x2="46" y2="79.7" stroke="currentColor" stroke-width="8"></line> <line x1="46" y1="-79.7" x2="-46" y2="79.7" stroke="currentColor" stroke-width="8"></line> <circle cx="0" cy="0" r="10" fill="currentColor"></circle></svg></button>
+  <span id="where"></span>
+  <span id="beat" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+</div>
+<div id="prog" aria-hidden="true"></div>
 
-<section class="sec" id="get"><div class="wrap">
-  <h2>What you get back.</h2><div class="list"><div class="i"><span class="ic"><svg class="gl" viewBox="0 0 56 56" width="40" height="40" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="5" width="40" height="46" rx="1"/><path d="M17 17h22M17 35h22M17 43h13"/><path d="M17 26h22"/><circle cx="28" cy="26" r="9"/></svg></span><span class="no">01</span><p class="t"><b>Your deck or page, marked up.</b> <span>Line by line, where a reader speeds up and where they stop.</span></p></div><div class="i"><span class="ic"><svg class="gl" viewBox="0 0 56 56" width="40" height="40" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 42a21 21 0 0 1 42 0"/><path d="M28 42 40 27"/><circle cx="28" cy="42" r="3" fill="currentColor" stroke="none"/><path d="M7 47h42"/></svg></span><span class="no">02</span><p class="t"><b>A score out of 100.</b> <span>So you can tell if the next version is better.</span></p></div><div class="i"><span class="ic"><svg class="gl" viewBox="0 0 56 56" width="40" height="40" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="5" width="32" height="46" rx="1"/><path d="M17 17h14M17 26h9"/><path d="M47 22 27 42l-7 2 2-7z"/></svg></span><span class="no">03</span><p class="t"><b>The section that matters, rewritten.</b> <span>Copy you can paste in.</span></p></div></div><p class="note">Workflow and review work come back the same way.</p>
-</div></section>
+<div id="navrow">
+  <span class="navside" id="navleft"><button id="left" class="arrow" type="button" onclick="move(0,-1)" aria-label="Backward"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8L8 16M8 16h6M8 16v-6"/></svg></button><span class="navlbl" id="lbll"></span></span>
+  <span class="navside" id="navright"><span class="navlbl" id="lblr"></span><button id="right" class="arrow" type="button" onclick="move(0,1)" aria-label="Forward"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16l8-8M16 8h-6M16 8v6"/></svg></button></span>
+</div>
+<div id="downrow"><button id="down" class="arrow" type="button" onclick="move(1,0)" aria-label="Next situation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"/></svg></button><span class="navlbl" id="lbld"></span></div>
+<button id="up" class="arrow" type="button" onclick="move(-1,0)" aria-label="Previous situation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15l7-7 7 7"/></svg></button>
 
-<section class="nums"><div class="wrap g">
-  <a href="case-study-data-business-renamed.html"><p class="n">+70%</p><p class="c">revenue in a year &middot; holding company one</p><span class="go">Read it &rarr;</span></a>
-  <a href="case-study-five-ceos.html"><p class="n">$40M+</p><p class="c">in accounts kept &middot; holding company two</p><span class="go">Read it &rarr;</span></a>
-  <a href="case-studies.html"><p class="n">300+</p><p class="c">pitches and reviews since 2001</p><span class="go">All nine &rarr;</span></a>
-</div></section>
+<script>
+(function(){
+  var MAXC=[1, 1, 4, 4, 4, 4, 4, 4, 4, 3], NAME=["Calidescope", "Services", "Positioning", "Collateral", "Presence", "Enablement", "Workflow", "Proof", "Throughline", "Contact"], ACC=["blue", "blue", "blue", "blue", "violet", "violet", "pink", "pink", "blue", "blue"], FULL=[0,1], NROWS=10, BEAT=["Backward","Situation","Opportunity","Solution","In action"], NCOL=4;
+  var stage=document.getElementById('stage'), grid=document.getElementById('grid');
+  var beat=document.getElementById('beat'), where=document.getElementById('where');
+  var prog=document.getElementById('prog'), root=document.documentElement;
+  var A={up:document.getElementById('up'),down:document.getElementById('down'),
+         left:document.getElementById('left'),right:document.getElementById('right')};
+  var lbll=document.getElementById('lbll'), lblr=document.getElementById('lblr'),
+      lbld=document.getElementById('lbld');
+  /* a label only where the move opens new ground; retreat needs no name.
+     the situation card is the one real fork, so it is the one that gets both. */
+  function DOWN(r){
+    if(r===0) return 'seven services';
+    var n=r+1; if(n>NROWS-1) return '';
+    if(n===NROWS-1) return 'start a conversation';
+    var s=NAME[n].toLowerCase();
+    return ('aeiou'.indexOf(s.charAt(0))>-1?'an ':'a ')+s+' situation';
+  }
+  /* every arrow names the card on the other side of it.
+     the situation is the one fork, so it keeps its matched pair. */
+  function COL(r,c){
+    if(c===0) return 'when it doesn\u2019t work out';
+    if(c===1) return 'the situation';
+    if(c===2) return 'the opportunity';
+    if(c===3) return r===NROWS-1 ? 'talk to us' : 'how we do it';
+    return 'a project in action';
+  }
+  function LEFT(r,c){ return c===1 ? 'when it doesn\u2019t work out' : COL(r,c-1); }
+  function RIGHT(r,c){ return c===1 ? 'when it works out' : COL(r,c+1); }
+  var row=0,col=1,W=0,H=0,moved=false;
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function full(r){return FULL.indexOf(r)>-1;}
+  function minCol(r){return full(r)?1:0;}
+  function maxCol(r){return MAXC[r];}
+  function size(){
+    W=stage.clientWidth||window.innerWidth;H=stage.clientHeight||window.innerHeight;
+    root.style.setProperty('--w',W+'px'); root.style.setProperty('--h',H+'px');
+    grid.classList.add('dragging');settle();
+    requestAnimationFrame(function(){grid.classList.remove('dragging');});
+  }
+  function settle(){grid.style.transform='translate3d('+(-col*W)+'px,'+(-row*H)+'px,0)';}
+  function paint(){
+    A.up.disabled=row===0; A.down.disabled=row===NROWS-1;
+    A.left.disabled=col<=minCol(row); A.right.disabled=col>=maxCol(row);
+    [].forEach.call(beat.children,function(b,i){
+      b.classList.toggle('on', !full(row) && i===col);
+      b.style.visibility = (full(row) || i>maxCol(row))?'hidden':'visible';
+    });
+    where.textContent = full(row) ? NAME[row] : NAME[row]+' \u00b7 '+BEAT[col];
+    lbll.textContent = A.left.disabled ? '' : LEFT(row,col);
+    lblr.textContent = A.right.disabled ? '' : RIGHT(row,col);
+    lbld.textContent = A.down.disabled ? '' : DOWN(row);
+    A.left.setAttribute('aria-label', lbll.textContent || 'Back');
+    A.right.setAttribute('aria-label', lblr.textContent || 'Forward');
+    A.down.setAttribute('aria-label', lbld.textContent || 'Next situation');
+    prog.style.transform = 'scaleX('+(row/(NROWS-1))+')';
+    root.style.setProperty('--rowacc','var(--'+ACC[row]+')');
+    root.style.setProperty('--rowtint','var(--'+ACC[row].charAt(0)+'t)');
+    root.dataset.atHome = row===0 ? 'yes' : 'no';
+    root.dataset.full = full(row) ? 'yes' : 'no';
+    var cell=document.querySelector('[data-row="'+row+'"][data-col="'+col+'"]');
+    root.dataset.tone=(cell&&cell.classList.contains('bad'))?'dark':'light';
+  }
+  function to(r,c){
+    r=Math.max(0,Math.min(NROWS-1,r)); c=Math.max(minCol(r),Math.min(maxCol(r),c));
+    if(r===row&&c===col){settle();return;}
+    row=r;col=c;moved=true;settle();paint();
+  }
+  /* leaving a row vertically zags back to the situation — never land mid-story */
+  function vert(d){var r=row+d; if(r<0||r>NROWS-1){settle();return;} to(r,1);}
+  function horz(d){to(row,col+d);}
+  window.move=function(dr,dc){ if(dr)vert(dr); else horz(dc); };
+  window.jump=window.go=to;
 
-<section class="sec sand"><div class="wrap">
-  <h2>Which one could be better?</h2>
-  <div class="tiles">
-    <div class="tile"><svg class="gl" viewBox="0 0 56 56" width="52" height="52" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="48" height="32" rx="1"/><path d="M14 20h20M14 28h12"/><path d="M28 40v6M20 46h16"/></svg><b>The deck</b><p>One line the room repeats.</p></div>
-    <div class="tile"><svg class="gl" viewBox="0 0 56 56" width="52" height="52" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="48" height="40" rx="1"/><path d="M4 18h48"/><circle cx="11" cy="13" r="1.6" fill="currentColor" stroke="none"/><path d="M14 28h26M14 36h16"/></svg><b>The homepage</b><p>Traffic that turns into calls.</p></div>
-    <div class="tile"><svg class="gl" viewBox="0 0 56 56" width="52" height="52" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="4" width="36" height="48" rx="1"/><path d="M19 16h18M19 25h18M19 34h11"/></svg><b>The sales material</b><p>The thing only you can say.</p></div>
-    <div class="tile"><svg class="gl" viewBox="0 0 56 56" width="52" height="52" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="44" height="44" rx="1"/><path d="M15 40V29M25 40V22M35 40V33M45 40V15"/></svg><b>The case study</b><p>What changed for the client.</p></div>
-    <div class="tile"><svg class="gl" viewBox="0 0 56 56" width="52" height="52" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="16" width="18" height="18" rx="1"/><rect x="35" y="16" width="18" height="18" rx="1"/><path d="M23 25h8M27 21l5 4-5 4"/></svg><b>The workflow</b><p>A clean handoff, every time.</p></div>
-  </div>
-  <p class="punch">Your work is the best in the room. <span>When the collateral is too, they choose you twice.</span></p>
-  <div class="acts" style="margin-top:44px">
-    <a href="contact.html" class="btn lg">Show us something that could be better</a>
-    <a href="https://throughline.builders/custom" target="_blank" rel="noopener" class="plain">Or score it yourself first &nearr;</a>
-  </div>
-</div></section>
+  /* the three unpack in place: one open at a time keeps all three on screen */
+  var grps=[].slice.call(document.querySelectorAll('.grp'));
+  function openGrp(g){
+    grps.forEach(function(x){
+      var on=x===g, h=x.querySelector('.grp-h'), s=x.querySelector('.grp-s');
+      x.dataset.open=on?'yes':'no'; h.setAttribute('aria-expanded',on?'true':'false'); s.hidden=!on;
+    });
+  }
+  grps.forEach(function(g){
+    g.querySelector('.grp-h').addEventListener('click',function(){
+      openGrp(g.dataset.open==='yes'?null:g);
+    });
+  });
+  openGrp(null);
 
-</main>
-<div class="wrap"><footer>
-  <span class="m">Calidescope &middot; Promise to Proof.</span>
-  <div class="fl">
-    <a href="promise.html">Promise</a><a href="perform.html">Perform</a><a href="proof.html">Proof</a>
-    <a href="throughline.html">Throughline</a><a href="case-studies.html">Case studies</a>
-    <a href="why.html">About</a><a href="contact.html">Contact</a>
-    <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>
-  </div>
-</footer></div>
-<script src="assets/consent.js" defer></script>
+  var sx=0,sy=0,dx=0,dy=0,dn=false,t0=0,axis=null;
+  function isUI(t){return !!(t&&t.closest&&t.closest('button,a,input,textarea,label,form'));}
+  stage.addEventListener('pointerdown',function(e){
+    if(isUI(e.target))return;
+    dn=true;axis=null;dx=dy=0;sx=e.clientX;sy=e.clientY;t0=Date.now();
+    grid.classList.add('dragging');
+    try{stage.setPointerCapture(e.pointerId);}catch(err){}
+  });
+  stage.addEventListener('pointermove',function(e){
+    if(!dn)return;
+    dx=e.clientX-sx;dy=e.clientY-sy;
+    if(!axis&&(Math.abs(dx)>10||Math.abs(dy)>10))axis=Math.abs(dx)>Math.abs(dy)?'x':'y';
+    if(!axis)return;
+    var ox=0,oy=0;
+    if(axis==='x'){ox=dx;if((dx>0&&col<=minCol(row))||(dx<0&&col>=maxCol(row)))ox=dx*0.28;}
+    else{oy=dy;if((dy>0&&row===0)||(dy<0&&row===NROWS-1))oy=dy*0.28;}
+    grid.style.transform='translate3d('+(-col*W+ox)+'px,'+(-row*H+oy)+'px,0)';
+  });
+  function release(e){
+    if(!dn)return;dn=false;grid.classList.remove('dragging');
+    var dt=Date.now()-t0, dist=Math.max(Math.abs(dx),Math.abs(dy));
+    var thr=dt<300?36:Math.min(W,H)*0.22;
+    if(axis==='x'){ if(dx<=-thr)horz(1); else if(dx>=thr)horz(-1); else settle(); }
+    else if(axis==='y'){ if(dy<=-thr)vert(1); else if(dy>=thr)vert(-1); else settle(); }
+    else settle();
+  }
+  stage.addEventListener('pointerup',release);
+  stage.addEventListener('pointercancel',function(){dn=false;grid.classList.remove('dragging');settle();});
 
+  var wlock=false;
+  stage.addEventListener('wheel',function(e){
+    e.preventDefault(); if(wlock)return;
+    var ax=Math.abs(e.deltaX),ay=Math.abs(e.deltaY);
+    if(Math.max(ax,ay)<14)return;
+    wlock=true;setTimeout(function(){wlock=false;},430);
+    if(ax>ay)horz(e.deltaX>0?1:-1); else vert(e.deltaY>0?1:-1);
+  },{passive:false});
+
+  document.addEventListener('keydown',function(e){
+    var k=e.key;
+    if(k==='ArrowUp'){e.preventDefault();vert(-1);}
+    else if(k==='ArrowDown'){e.preventDefault();vert(1);}
+    else if(k==='ArrowLeft'){e.preventDefault();horz(-1);}
+    else if(k==='ArrowRight'){e.preventDefault();horz(1);}
+    else if(k==='Home'){e.preventDefault();to(0,1);}
+    else if(k==='Escape'){e.preventDefault();to(1,1);}
+  });
+
+  window.addEventListener('resize',size);
+  if(window.visualViewport)window.visualViewport.addEventListener('resize',size);
+  size();paint();
+  if(!reduce)setTimeout(function(){
+    if(moved)return;
+    grid.style.transform='translate3d('+(-col*W)+'px,-18px,0)';
+    setTimeout(function(){if(!moved)settle();},540);
+  },1200);
+})();
+
+/* Calidescope — /next additions. The page's own logic lives in the source file
+   and is inlined verbatim by build.py; this runs after it and adds two things
+   the source does not have:
+     1. a typing guard — keys typed into the form edit text, they do not move
+        the grid or open the menu (the source's keydown listener would take
+        an "m" in the email field as the menu shortcut);
+     2. a focus seal — only the card on screen is reachable by keyboard;
+     3. deep links — a hash opens a named card, so other pages can point at one;
+     4. the contact form — posts JSON to /api/contact and swaps itself for
+        "Got it." in place; with JavaScript off the form posts normally and
+        the endpoint redirects to /thanks.html. */
+(function () {
+  'use strict';
+
+  /* 1. Runs in the capture phase on document, so it is ahead of the source's
+        bubble-phase listener on the same node and can stop it. */
+  var typing = function (t) { return !!(t && t.closest && t.closest('input,textarea,select')); };
+  document.addEventListener('keydown', function (e) {
+    if (typing(e.target) && (/^Arrow|^Home$/.test(e.key) || e.key === 'm' || e.key === 'M')) {
+      e.stopImmediatePropagation();
+    }
+  }, true);
+
+  /* 2. All 41 cards sit in the DOM at once, so Tab walked straight off the
+        card on screen and into the 24 controls on cards the reader cannot
+        see — from "Better positioning" the next stop was "Software", three
+        rows away. Everything but the settled card is marked inert, which
+        takes it out of the tab order and the accessibility tree together.
+        Recomputed after the grid settles, never mid-gesture: during a drag
+        the neighbouring cards are meant to be visible, and a reader is not
+        tabbing. The observer covers reduced motion too, where the transition
+        is 0s and transitionend never fires. */
+  var grid = document.getElementById('grid');
+  var cells = [].slice.call(document.querySelectorAll('section.cell'));
+  if (grid && cells.length) {
+    var onscreen = function () {
+      var best = null, area = 0, i, r, w, h;
+      for (i = 0; i < cells.length; i++) {
+        r = cells[i].getBoundingClientRect();
+        w = Math.max(0, Math.min(r.right, window.innerWidth) - Math.max(r.left, 0));
+        h = Math.max(0, Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0));
+        if (w * h > area) { area = w * h; best = cells[i]; }
+      }
+      return best;
+    };
+    var seal = function () {
+      var on = onscreen();
+      if (!on) return;
+      /* Where the reader was standing, before the seal can take it away:
+         pressing "Better positioning" moves the grid, so the card holding
+         that button is about to go inert and focus would fall to <body>,
+         sending the next Tab back to the top of the document. If that is
+         what is happening, hand focus to the card the button led to. */
+      var had = document.activeElement;
+      var losing = had && had !== document.body && on.contains && !on.contains(had) &&
+                   had.closest && had.closest('section.cell');
+      for (var i = 0; i < cells.length; i++) {
+        if (cells[i] === on) cells[i].removeAttribute('inert');
+        else cells[i].setAttribute('inert', '');
+      }
+      if (losing) {
+        if (!on.hasAttribute('tabindex')) on.setAttribute('tabindex', '-1');
+        try { on.focus({ preventScroll: true }); } catch (e) { on.focus(); }
+      }
+    };
+    var pending;
+    var settle = function () {
+      clearTimeout(pending);
+      var d = 0;
+      try { d = (parseFloat(getComputedStyle(grid).transitionDuration) || 0) * 1000; } catch (e) {}
+      pending = setTimeout(seal, d + 60);
+    };
+    if (window.MutationObserver) {
+      new MutationObserver(settle).observe(grid, { attributes: true, attributeFilter: ['style'] });
+    }
+    window.addEventListener('resize', settle);
+    seal();
+  }
+
+  /* 3. The grid is one document with no URL state, so nothing outside it could
+        ever point at a particular card. Retiring the old site made that a real
+        problem: privacy.html and terms.html both say "use the contact form",
+        and the form is a card, not a page. A small map of names to coordinates
+        gives the cards worth linking a stable address. Unknown hashes are
+        ignored, so the page still opens at home. */
+  var NAMED = { contact: [9, 3], start: [9, 3], services: [1, 1] };
+  var fromHash = function () {
+    var key = (window.location.hash || '').replace(/^#/, '').toLowerCase();
+    var at = Object.prototype.hasOwnProperty.call(NAMED, key) ? NAMED[key] : null;
+    if (at && typeof window.go === 'function') window.go(at[0], at[1]);
+  };
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
+
+  /* 4. */
+  var form = document.querySelector('[data-cform]');
+  if (!form) return;
+  var btn = form.querySelector('button[type="submit"]');
+  var msg = document.getElementById('cmsg');
+  var sent = document.getElementById('csent');
+  var label = btn ? btn.textContent : 'Send';
+
+  form.addEventListener('submit', function (e) {
+    if (!form.reportValidity()) return;
+    e.preventDefault();
+    var data = {};
+    new FormData(form).forEach(function (v, k) { data[k] = v; });
+    btn.disabled = true; btn.textContent = 'Sending'; if (msg) msg.hidden = true;
+    fetch(form.getAttribute('action'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    })
+      .then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (b) { return { ok: r.ok, body: b }; });
+      })
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.body.error || 'That did not go through.');
+        form.hidden = true;
+        if (sent) { sent.hidden = false; sent.setAttribute('tabindex', '-1'); sent.focus({ preventScroll: true }); }
+      })
+      .catch(function (err) {
+        btn.disabled = false; btn.textContent = label;
+        if (msg) { msg.textContent = err.message + ' Try it again in a moment.'; msg.hidden = false; }
+      });
+  });
+})();
+</script>
 </body>
 </html>

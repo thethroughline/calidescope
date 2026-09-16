@@ -5,7 +5,8 @@
         the grid or open the menu (the source's keydown listener would take
         an "m" in the email field as the menu shortcut);
      2. a focus seal — only the card on screen is reachable by keyboard;
-     3. the contact form — posts JSON to /api/contact and swaps itself for
+     3. deep links — a hash opens a named card, so other pages can point at one;
+     4. the contact form — posts JSON to /api/contact and swaps itself for
         "Got it." in place; with JavaScript off the form posts normally and
         the endpoint redirects to /thanks.html. */
 (function () {
@@ -76,7 +77,22 @@
     seal();
   }
 
-  /* 3. */
+  /* 3. The grid is one document with no URL state, so nothing outside it could
+        ever point at a particular card. Retiring the old site made that a real
+        problem: privacy.html and terms.html both say "use the contact form",
+        and the form is a card, not a page. A small map of names to coordinates
+        gives the cards worth linking a stable address. Unknown hashes are
+        ignored, so the page still opens at home. */
+  var NAMED = { contact: [9, 3], start: [9, 3], services: [1, 1] };
+  var fromHash = function () {
+    var key = (window.location.hash || '').replace(/^#/, '').toLowerCase();
+    var at = Object.prototype.hasOwnProperty.call(NAMED, key) ? NAMED[key] : null;
+    if (at && typeof window.go === 'function') window.go(at[0], at[1]);
+  };
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
+
+  /* 4. */
   var form = document.querySelector('[data-cform]');
   if (!form) return;
   var btn = form.querySelector('button[type="submit"]');
