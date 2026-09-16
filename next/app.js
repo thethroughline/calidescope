@@ -4,7 +4,8 @@
      1. a typing guard — keys typed into the form edit text, they do not move
         the grid or open the menu (the source's keydown listener would take
         an "m" in the email field as the menu shortcut);
-     2. the contact form — posts JSON to /api/contact and swaps itself for
+     2. a focus seal — only the card on screen is reachable by keyboard;
+     3. the contact form — posts JSON to /api/contact and swaps itself for
         "Got it." in place; with JavaScript off the form posts normally and
         the endpoint redirects to /thanks.html. */
 (function () {
@@ -19,7 +20,51 @@
     }
   }, true);
 
-  /* 2. */
+  /* 2. All 41 cards sit in the DOM at once, so Tab walked straight off the
+        card on screen and into the 24 controls on cards the reader cannot
+        see — from "Better positioning" the next stop was "Software", three
+        rows away. Everything but the settled card is marked inert, which
+        takes it out of the tab order and the accessibility tree together.
+        Recomputed after the grid settles, never mid-gesture: during a drag
+        the neighbouring cards are meant to be visible, and a reader is not
+        tabbing. The observer covers reduced motion too, where the transition
+        is 0s and transitionend never fires. */
+  var grid = document.getElementById('grid');
+  var cells = [].slice.call(document.querySelectorAll('section.cell'));
+  if (grid && cells.length) {
+    var onscreen = function () {
+      var best = null, area = 0, i, r, w, h;
+      for (i = 0; i < cells.length; i++) {
+        r = cells[i].getBoundingClientRect();
+        w = Math.max(0, Math.min(r.right, window.innerWidth) - Math.max(r.left, 0));
+        h = Math.max(0, Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0));
+        if (w * h > area) { area = w * h; best = cells[i]; }
+      }
+      return best;
+    };
+    var seal = function () {
+      var on = onscreen();
+      if (!on) return;
+      for (var i = 0; i < cells.length; i++) {
+        if (cells[i] === on) cells[i].removeAttribute('inert');
+        else cells[i].setAttribute('inert', '');
+      }
+    };
+    var pending;
+    var settle = function () {
+      clearTimeout(pending);
+      var d = 0;
+      try { d = (parseFloat(getComputedStyle(grid).transitionDuration) || 0) * 1000; } catch (e) {}
+      pending = setTimeout(seal, d + 60);
+    };
+    if (window.MutationObserver) {
+      new MutationObserver(settle).observe(grid, { attributes: true, attributeFilter: ['style'] });
+    }
+    window.addEventListener('resize', settle);
+    seal();
+  }
+
+  /* 3. */
   var form = document.querySelector('[data-cform]');
   if (!form) return;
   var btn = form.querySelector('button[type="submit"]');

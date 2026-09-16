@@ -4,7 +4,10 @@
 The source is a complete page — its own CSS, markup and script — so this keeps
 all three verbatim and changes only what a public URL needs:
 
-  head     doctype, viewport, noindex, favicon; Google Fonts → assets/fonts
+  head     doctype, viewport, colour-scheme, theme-colour, noindex, favicon;
+           Google Fonts → assets/fonts. viewport-fit=cover is deliberately NOT
+           carried over: nothing in the page uses env(safe-area-inset-*), so
+           cover would put the nav under the iPhone home indicator.
   order    each row's cards sorted into column order in the DOM, so Tab and a
            screen reader walk backward → situation → opportunity → solution → case
            (the grid already places them that way; the source's DOM did not)
@@ -66,6 +69,8 @@ OUT.write_text(f"""<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#FAF7EF">
 <title>Calidescope &mdash; next</title>
 <meta name="description" content="Growth advisory, software and services. Seven situations, and what changes when each one goes right.">
 <meta name="robots" content="noindex, nofollow">
