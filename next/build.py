@@ -24,53 +24,45 @@ Never hand-edit either output — change the source or app.js and rebuild."""
 import re, pathlib
 
 HERE = pathlib.Path(__file__).resolve().parent
-SRC  = HERE / "source" / "calidescope-situations_3.html"
-OUT  = HERE / "index.html"                 # /next — noindex staging
-ROOT = HERE.parent / "index.html"          # /      — the indexable homepage
-src  = SRC.read_text()
+UX   = (HERE / "ux.css").read_text()
+APP  = (HERE / "app.js").read_text()
 
-# ── CSS, verbatim, plus the three rules the additions need ──
-style = src[src.index("<style>"): src.index("</style>") + len("</style>")]
-style = style.replace("</style>",
-  "[hidden]{display:none!important}\n"
-  ".btn[disabled]{opacity:.5;cursor:default}\n"
-  "#csent:focus{outline:0}\n"
-  "</style>")
-
-# ── markup ──
-body = src[src.index('<div id="stage">'): src.index("<script>")]
-grid_end = body.index("</div></div>")
-grid, rest = body[:grid_end], body[grid_end:]
-sections = re.findall(r"<section\b.*?</section>", grid, re.S)
-assert len(sections) == 41, len(sections)
-key = lambda s: (int(re.search(r'data-row="(\d+)"', s).group(1)), int(re.search(r'data-col="(\d+)"', s).group(1)))
-sections.sort(key=key)
-body = '<div id="stage"><div id="grid">\n' + "\n".join(sections) + "\n" + rest
-
-# the form
-old_form = re.search(r"<form.*?</form>", body, re.S).group(0)
-new_form = old_form
-new_form = new_form.replace('<form action="https://formspree.io/f/YOUR-FORM-ID" method="post">',
-                            '<form action="/api/contact" method="post" data-cform="1">')
-new_form = re.sub(r'\s*<input type="hidden" name="_subject"[^>]*>', '', new_form)
-new_form = new_form.replace('<button class="btn" type="submit">',
-  '<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">\n'
-  '    <button class="btn" type="submit">')
-new_form += ('\n  <p class="line" id="cmsg" role="status" aria-live="polite" hidden style="color:var(--acc)"></p>'
-             '\n  <div id="csent" hidden><h2 class="svc">Got it.</h2><p class="line">We read it and come back with what we see.</p></div>')
-assert new_form != old_form
-body = body.replace(old_form, new_form)
-assert "formspree" not in body and "_subject" not in body
-
-# ── script, verbatim but for one fallback, then the additions ──
-script = src[src.index("<script>") + len("<script>"): src.index("</script>")]
-old_size = "W=stage.clientWidth;H=stage.clientHeight;"
-assert old_size in script
-script = script.replace(old_size,
-  "W=stage.clientWidth||window.innerWidth;"
-  "H=Math.min(stage.clientHeight||1/0,(window.visualViewport&&window.visualViewport.height)||1/0)"
-  "||window.innerHeight;")
-script += "\n" + (HERE / "app.js").read_text()
+def render(src_path, n_sections):
+    """The designer's page, verbatim but for what a public URL needs. Returns (style, body, script)."""
+    src = src_path.read_text()
+    style = src[src.index("<style>"): src.index("</style>") + len("</style>")]
+    style = style.replace("</style>",
+      "[hidden]{display:none!important}\n"
+      ".btn[disabled]{opacity:.5;cursor:default}\n"
+      "#csent:focus{outline:0}\n" + UX + "\n</style>")
+    body = src[src.index('<div id="stage">'): src.index("<script>")]
+    grid_end = body.index("</div></div>")
+    grid, rest = body[:grid_end], body[grid_end:]
+    sections = re.findall(r"<section\b.*?</section>", grid, re.S)
+    assert len(sections) == n_sections, (src_path.name, len(sections))
+    key = lambda s: (int(re.search(r'data-row="(\d+)"', s).group(1)), int(re.search(r'data-col="(\d+)"', s).group(1)))
+    sections.sort(key=key)
+    body = '<div id="stage"><div id="grid">\n' + "\n".join(sections) + "\n" + rest
+    old_form = re.search(r"<form.*?</form>", body, re.S).group(0)
+    new_form = old_form.replace('<form action="https://formspree.io/f/YOUR-FORM-ID" method="post">',
+                                '<form action="/api/contact" method="post" data-cform="1">')
+    new_form = re.sub(r'\s*<input type="hidden" name="_subject"[^>]*>', '', new_form)
+    new_form = new_form.replace('<button class="btn" type="submit">',
+      '<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">\n'
+      '    <button class="btn" type="submit">')
+    new_form += ('\n  <p class="line" id="cmsg" role="status" aria-live="polite" hidden style="color:var(--acc)"></p>'
+                 '\n  <div id="csent" hidden><h2 class="svc">Got it.</h2><p class="line">We read it and come back with what we see.</p></div>')
+    assert new_form != old_form
+    body = body.replace(old_form, new_form)
+    assert "formspree" not in body and "_subject" not in body
+    script = src[src.index("<script>") + len("<script>"): src.index("</script>")]
+    old_size = "W=stage.clientWidth;H=stage.clientHeight;"
+    assert old_size in script
+    script = script.replace(old_size,
+      "W=stage.clientWidth||window.innerWidth;"
+      "H=Math.min(stage.clientHeight||1/0,(window.visualViewport&&window.visualViewport.height)||1/0)"
+      "||window.innerHeight;")
+    return style, body, script + "\n" + APP
 
 SITE  = "https://calidescope.llc"
 TITLE = "Calidescope &mdash; Situations We Solve For"
@@ -80,20 +72,26 @@ DESC  = ("Growth advisory services and software. Seven situations, "
 # The two outputs differ ONLY in the head. Same CSS, same markup, same script:
 #   /       the homepage — canonical, Open Graph, indexable
 #   /next   the staging copy — noindex, so a draft can be seen without being found
+LIVE = HERE / "source" / "calidescope-situations_3.html"   # /  and /next  · 41 cards
+DEV  = HERE / "source" / "calidescope-situations_4.html"   # /dev          · 42 cards, the outcomes row
 TARGETS = [
-    (ROOT, f'''<title>{TITLE}</title>
+    (LIVE, 41, HERE.parent / "index.html", f'''<title>{TITLE}</title>
 <meta name="description" content="{DESC}">
 <link rel="canonical" href="{SITE}/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{SITE}/">
 <meta property="og:title" content="{TITLE}">
 <meta property="og:description" content="{DESC}">'''),
-    (OUT, f'''<title>Calidescope &mdash; next</title>
+    (LIVE, 41, HERE / "index.html", f'''<title>Calidescope &mdash; next</title>
+<meta name="description" content="{DESC}">
+<meta name="robots" content="noindex, nofollow">'''),
+    (DEV, 42, HERE.parent / "dev" / "index.html", f'''<title>Calidescope &mdash; dev</title>
 <meta name="description" content="{DESC}">
 <meta name="robots" content="noindex, nofollow">'''),
 ]
 
-for target, head in TARGETS:
+for src_path, n, target, head in TARGETS:
+    style, body, script = render(src_path, n)
     target.write_text(f"""<!DOCTYPE html>
 <html lang="en">
 <head>

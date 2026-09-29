@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>The Outcomes Landscape v2</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<!-- Local fonts only. No third-party call anywhere — see /privacy.html -->
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+<meta name="robots" content="noindex, nofollow">
+<style>:root{--paper:#FAF7EF;--desk:#EFEBE1;--sand:#F3EEE2;--hair:#E4E0D6;--ink:#1F2024;--muted:#6E6B65;--faint:#9B968D;--blue:#1E40FF;--tint:#DDE6FF;
+--arch:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--desk);color:var(--ink);font-family:var(--arch);-webkit-font-smoothing:antialiased}
+body{padding:40px 20px}
+.stage{max-width:1200px;margin:0 auto 44px;aspect-ratio:16/9;background:var(--paper);border-top:2px solid var(--ink);box-shadow:0 1px 5px rgba(31,32,36,.06);padding:44px 66px 40px;display:flex;flex-direction:column;overflow:hidden}
+.stage.dark{background:var(--ink);border-top-color:var(--blue);color:var(--paper)}
+.toprow{display:flex;align-items:center;justify-content:space-between}
+.brandmark{display:flex;align-items:center;gap:11px}
+.wm{font-weight:600;letter-spacing:.05em;font-size:14px}.wm .thin{font-weight:400;color:var(--muted)}
+.dark .wm{color:var(--paper)}.dark .wm .thin{color:var(--faint)}
+.mono{font-family:var(--mono);font-weight:500;text-transform:uppercase;letter-spacing:.18em;font-size:10.5px;color:var(--muted)}
+.mono.ac{color:var(--blue)}.dark .mono{color:var(--faint)}.dark .mono.ac{color:var(--tint)}
+h1{font-weight:600;letter-spacing:-.018em;line-height:1.06;text-wrap:balance}
+.dark h1{color:var(--paper)}
+.hero{font-size:clamp(32px,4.6vw,56px);max-width:22ch}
+.big{font-size:clamp(26px,3.6vw,44px);max-width:26ch}
+h1 .ac{color:var(--blue)}.dark h1 .ac{color:var(--tint)}
+.say{font-weight:400;font-size:clamp(14px,1.6vw,18px);line-height:1.5;color:var(--muted);max-width:60ch;margin-top:18px}
+.dark .say{color:var(--faint)}.say b{color:var(--ink);font-weight:500}.dark .say b{color:var(--paper)}
+.mid{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0;gap:22px}
+.foot{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-top:14px;border-top:1px solid var(--hair)}
+.dark .foot{border-top-color:rgba(250,247,239,.16)}
+.foot .fv,.foot .tag{font-size:12px;color:var(--muted)}.dark .foot .fv,.dark .foot .tag{color:var(--faint)}
+.pageno{font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.dark .pageno{color:var(--faint)}
+/* question spine */
+.qs{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border-top:1.5px solid var(--ink)}
+.qs .q{padding:18px 18px 0 0;border-right:1px solid var(--hair)}
+.qs .q:last-child{border-right:0}
+.qs .qn{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--blue);margin-bottom:10px}
+.qs .qt{font-weight:600;font-size:clamp(15px,1.7vw,21px);line-height:1.18;letter-spacing:-.01em;max-width:15ch}
+.qs .qd{font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:10px;max-width:22ch}
+/* ladders and bars */
+.rows{display:flex;flex-direction:column;gap:12px}
+.row{display:grid;grid-template-columns:minmax(150px,1.1fr) 3fr 64px;gap:16px;align-items:center}
+.row .lab{font-size:14.5px;font-weight:500}
+.row .lab small{display:block;font-weight:400;font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4}
+.bar{height:16px;background:var(--sand);border:1px solid var(--hair);position:relative}
+.bar i{display:block;height:100%;background:var(--faint)}
+.bar i.ac{background:var(--blue)}.bar i.ink{background:var(--ink)}
+.num{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;color:var(--ink);text-align:right}
+.num.mu{color:var(--muted);font-size:11.5px}
+/* cards */
+.cards{display:grid;gap:18px}
+.cards.c2{grid-template-columns:1fr 1fr}.cards.c3{grid-template-columns:repeat(3,1fr)}.cards.c4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--sand);border:1px solid var(--hair);padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+.card.ink{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.card.dash{background:transparent;border:1px dashed var(--blue)}
+.card .k{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.card.ink .k{color:var(--tint)}.card.dash .k{color:var(--blue)}
+.card h3{font-weight:600;font-size:19px;line-height:1.14;letter-spacing:-.01em}
+.card.ink h3{color:var(--paper)}
+.card p{font-size:13px;line-height:1.5;color:var(--muted)}.card.ink p{color:rgba(250,247,239,.75)}
+.card .fig{font-family:var(--mono);font-size:26px;font-weight:500;letter-spacing:-.02em}
+.card .fig.ac{color:var(--blue)}
+/* stack */
+.stack{display:flex;height:34px;border:1px solid var(--ink)}
+.stack span{display:block;position:relative}
+.stack .s1{background:var(--sand)}.stack .s2{background:#D8D3C6}.stack .s3{background:var(--faint)}.stack .s4{background:var(--blue)}.stack .s5{background:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:12.5px;color:var(--muted)}
+.legend li{list-style:none;display:flex;align-items:center;gap:7px}
+.sw{width:11px;height:11px;display:inline-block;border:1px solid var(--hair)}
+.sw.s1{background:var(--sand)}.sw.s2{background:#D8D3C6}.sw.s3{background:var(--faint)}.sw.s4{background:var(--blue);border-color:var(--blue)}.sw.s5{background:var(--ink);border-color:var(--ink)}
+/* notsay list */
+.notsay{display:flex;flex-direction:column;gap:10px}
+.notsay div{display:grid;grid-template-columns:22px 1fr;gap:12px;align-items:start;padding-bottom:10px;border-bottom:1px solid rgba(250,247,239,.14)}
+.notsay .x{font-family:var(--mono);color:var(--tint);font-size:13px}
+.notsay q{font-size:15.5px;quotes:'“' '”';display:block;color:var(--paper)}
+.notsay em{display:block;font-style:normal;font-size:12.5px;color:var(--faint);margin-top:4px}
+.srcline{font-family:var(--mono);font-size:9.5px;letter-spacing:.03em;color:var(--faint);line-height:1.7;max-width:96ch;text-transform:none}
+.srcline b{color:var(--paper);font-weight:500;letter-spacing:.14em;text-transform:uppercase;font-size:9px}
+@media(max-width:900px){.stage{aspect-ratio:auto;padding:26px 24px}.qs{grid-template-columns:1fr}.qs .q{border-right:0;border-bottom:1px solid var(--hair);padding-bottom:14px}
+.cards.c2,.cards.c3,.cards.c4{grid-template-columns:1fr}.row{grid-template-columns:1fr 60px}.row .bar{grid-column:1/-1;order:3}}
+</style></head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><g id="cwheel"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="2.4"/><g stroke="currentColor" stroke-width="1.9"><line x1="24" y1="24" x2="45" y2="24"/><line x1="24" y1="24" x2="34.5" y2="42.19"/><line x1="24" y1="24" x2="13.5" y2="42.19"/><line x1="24" y1="24" x2="3" y2="24"/><line x1="24" y1="24" x2="13.5" y2="5.81"/><line x1="24" y1="24" x2="34.5" y2="5.81"/></g><circle cx="24" cy="24" r="5" fill="currentColor"/></g></defs></svg>
+<div class="stage"><div class="toprow"><div class="brandmark"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><use href="#cwheel"/></svg><span class="wm">Calidescope <span class="thin">· Landscape</span></span></div><span class="mono ac">Promise · The Pitch</span></div>
+<div class="mid"><h1 class="hero">Everyone says outcomes.<br><span class="ac">Almost nobody means the same thing.</span></h1>
+<p class="say">A second read of the outcomes market, after every claim was put through evidence adjudication. The question is no longer who promises outcomes. It is where each seller's authority begins, and where it stops.</p>
+<p class="mono" style="margin-top:22px">The outcomes market · September 2026 · v2, evidence-adjudicated</p></div>
+<div class="foot"><span class="fv">Promise to Proof.</span><span class="pageno">01 / 12</span></div></div><div class="stage"><div class="toprow"><div class="brandmark"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><use href="#cwheel"/></svg><span class="wm">Calidescope <span class="thin">· Landscape</span></span></div><span class="mono ac">But · What changed</span></div>
+<div class="mid"><h1 class="big">The first read counted <span class="ac">who guarantees.</span> This one reads <span class="ac">what the evidence permits.</span></h1>
+<div class="cards c2" style="margin-top:8px">
+<div class="card"><span class="k">August · v1</span><h3>An incidence story</h3><p>60+ promise outcomes. About seven guarantee something. Two reach a business outcome. The argument rests on a market count, and any private contract can rebut it.</p></div>
+<div class="card ink"><span class="k">September · v2</span><h3>An authority story</h3><p>740 outcome claims and 536 arguments adjudicated for what the evidence establishes, how far it travels, and what the seller puts at risk. The argument rests on the public record, and states where it stops.</p></div></div>
+<p class="say">The convergence on the word is real. The convergence underneath it is not.</p></div>
+<div class="foot"><span class="fv">Promise to Proof.</span><span class="pageno">02 / 12</span></div></div><div class="stage"><div class="toprow"><div class="brandmark"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><use href="#cwheel"/></svg><span class="wm">Calidescope <span class="thin">· Landscape</span></span></div><span class="mono ac">Therefore · The spine</span></div>
+<div class="mid"><h1 class="big">Five questions separate <span class="ac">two decks that use the same word.</span></h1>
+<div class="qs">
+<div class="q"><div class="qn">01</div><div class="qt">What do you mean by outcome?</div><div class="qd">Reach, attention, a click, an attributed conversion, a sale, an incremental sale.</div></div>
+<div class="q"><div class="qn">02</div><div class="qt">How do you know it happened?</div><div class="qd">Who observed it, and on whose numbers.</div></div>
+<div class="q"><div class="qn">03</div><div class="qt">How do you know advertising caused it?</div><div class="qd">Attributed, or measured against a control.</div></div>
+<div class="q"><div class="qn">04</div><div class="qt">Why should I expect it for me?</div><div class="qd">How far the result travels to another buyer.</div></div>
+<div class="q"><div class="qn">05</div><div class="qt">What do you put at risk?</div><div class="qd">What the seller owes if the number is missed.</div></div></div>
+<p class="say">Each question is answered by a different kind of evidence. A strong answer to one is not an answer to the next.</p></div>
+<div class="foot"><span class="fv">Promise to Proof.</span><span class="pageno">03 / 12</span></div></div><div class="stage"><div class="toprow"><div class="brandmark"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><use href="#cwheel"/></svg><span class="wm">Calidescope <span class="thin">· Landscape</span></span></div><span class="mono ac">This</span></div>
+<div class="mid"><span class="mono">Question 01 · the outcome construct</span>
+<h1 class="big">Most of the market's evidence stops <span class="ac">at the conversion, not the sale.</span></h1>
+<div class="rows">
+<div class="row"><div class="lab">Downstream performance observed or attributed<small>conversions, purchases, revenue, ROAS as reported</small></div><span class="bar"><i class="ink" style="width:69%"></i></span><span class="num">511</span></div>
+<div class="row"><div class="lab">Causal or incremental business effect<small>measured against a control or holdout</small></div><span class="bar"><i class="ac" style="width:5.5%"></i></span><span class="num">41</span></div>
+<div class="row"><div class="lab">Prospective business result<small>what the buyer should expect next time</small></div><span class="bar"><i style="width:0.6%"></i></span><span class="num">0</span></div>
+</div>
+<p class="say">Of 740 outcome claims. The ladder runs from what was delivered, to what happened, to what advertising caused, to what a buyer can expect. The market's evidence is dense at the bottom and thin at the top.</p></div>
+<div class="foot"><span class="fv">Promise to Proof.</span><span class="pageno">04 / 12</span></div></div><div class="stage"><div class="toprow"><div class="brandmark"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><use href="#cwheel"/></svg><span class="wm">Calidescope <span class="thin">· Landscape</span></span></div><span class="mono ac">Therefore</span></div>
+<div class="mid"><span class="mono">Question 02 · how you know it happened</span>
+<h1 class="big">There is plenty of evidence. <span class="ac">“Only 28 have proof” was the wrong reading.</span></h1>
+<div class="cards c3">
+<div class="card"><span class="k">Independent provenance</span><div class="fig">28</div><p>claims carry third-party evidence. It strengthens who established the result.</p></div>
+<div class="card"><span class="k">Of those 28</span><div class="fig">26</div><p>still sit at the second of five transfer levels. Two reach the third. None goes higher.</p></div>
+<div class="card dash"><span class="k">The distinction</span><h3>Independent is not the same as repeatable</h3><p>A commissioned study can establish what happened without establishing what happens next, for someone else.</p></div></div>
+<p class="say">Third-party provenance, causal authority and transfer are three separate questions. Collapsing them into one proof ladder is what made the first read too tidy.</p></div>
+<div class="foot"><span class="fv">Promise to Proof.</span><span class="pageno">05 / 12</span></div></div><div class="stage"><div class="toprow"><div class="brandmark"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><use href="#cwheel"/></svg><span class="wm">Calidescope <span class="thin">· Landscape</span></span></div><span class="mono ac">But</span></div>
+<div class="mid"><span class="mono">Question 03 · attribution or causality</span>
+<h1 class="big">Attribution says <span class="ac">it was counted.</span> Incrementality says <span class="ac">it would not have happened anyway.</span></h1>
+<div class="cards c2">
+<div class="card"><span class="k">Attributed</span><h3>The result is assigned to the ad</h3><p>Platform reporting, matched panels, modeled conversions. Abundant across the landscape, and the basis of most named-client numbers.</p></div>
+<div class="card ink"><span class="k">Incremental · 41 claims</span><h3>The result is compared with a control</h3><p>Geo holdouts, ghost bidding, matched markets. Rare on public pages, and almost always inside one client's test.</p></div></div>
+<p class="say">Both are legitimate. They answer different questions, and only one of them survives the CFO asking what the advertising changed.</p></div>
+<div class="foot"><span class="fv">Promise to Proof.</span><span class="pageno">06 / 12</span></div></div><div class="stage"><div class="toprow"><div class="brandmark"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><use href="#cwheel"/></svg><span class="wm">Calidescope <span class="thin">· Landscape</span></span></div><span class="mono ac">This</span></div>
+<div class="mid"><span class="mono">Question 04 · transfer</span>
+<h1 class="big">The evidence says <span class="ac">this happened here.</span> It rarely says <span class="ac">expect it there.</span></h1>
+<div class="stack" role="img" aria-label="Transfer strength across 740 claims"><span class="s1" style="flex:495"></span><span class="s3" style="flex:214"></span><span class="s4" style="flex:31"></span></div>
+<ul class="legend"><li><b class="sw s1"></b>Level 1 · 495 claims</li><li><b class="sw s3"></b>Level 2 · 214</li><li><b class="sw s4"></b>Level 3 · 31</li><li><b class="sw s5" style="background:transparent;border-style:dashed"></b>Levels 4 and 5 · none</li></ul>
+<div class="cards c2" style="margin-top:6px">
+<div class="card"><span class="k">Named clients</span><h3>277 of 290 named-client results sit at level 1</h3><p>Strong evidence that something happened for that client. Little authority for the next one.</p></div>
+<div class="card dash"><span class="k">What would move it</span><h3>Repeat results, stated conditions, a named population</h3><p>Nobody in the captured material publishes the conditions under which a result should recur.</p></div></div></div>
+<div class="foot"><span class="fv">Promise to Proof.</span><span class="pageno">07 / 12</span></div></div><div class="stage"><div class="toprow"><div class="brandmark"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><use href="#cwheel"/></svg><span class="wm">Calidescope <span class="thin">· Landscape</span></span></div><span class="mono ac">Therefore</span></div>
+<div class="mid"><span class="mono">Question 05 · what is at risk</span>
+<h1 class="big">Eight guarantees. <span class="ac">All of them sit upstream of the sale.</span></h1>
+<div class="cards c4">
+<div class="card"><span class="k">Guaranteed object</span><h3>Fraud</h3><p>Unbilled or refunded invalid traffic. Real risk transfer, no business result.</p></div>
+<div class="card"><span class="k">Guaranteed object</span><h3>Attention</h3><p>A metric commitment, not the sale the attention is said to lead to.</p></div>
+<div class="card"><span class="k">Guaranteed object</span><h3>Incremental reach</h3><p>Pay only for incremental impressions. Economically real, still delivery.</p></div>
+<div class="card"><span class="k">Guaranteed object</span><h3>Currency and delivery</h3><p>The sixty-year television norm, carried into streaming.</p></div></div>
+<p class="say">The candidates split the same way. <b>Samba TV's</b> incremental CPM is a genuine mechanism over incremental reach. <b>MiQ's</b> “Guaranteed Performance” does not disclose a threshold or a remedy on the page. <b>Channel Factory's</b> guarantee language sits over media performance. <b>Rokt</b> can say “only pay for outcomes” and price on clicks, as long as the outcome is named as engagement.</p></div>
+<div class="foot"><span class="fv">Promise to Proof.</span><span class="pageno">08 / 12</span></div></div><div class="stage"><div class="toprow"><div class="brandmark"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><use href="#cwheel"/></svg><span class="wm">Calidescope <span class="thin">· Landscape</span></span></div><span class="mono ac">But</span></div>
+<div class="mid"><span class="mono">The argument layer</span>
+<h1 class="big">Claims can hold while <span class="ac">the argument built on them adds meaning.</span></h1>
+<div class="stack" role="img" aria-label="536 pillars adjudicated"><span class="s5" style="flex:100"></span><span class="s3" style="flex:245"></span><span class="s4" style="flex:101"></span><span class="s1" style="flex:90"></span></div>
+<ul class="legend"><li><b class="sw s5"></b>Holds · 100</li><li><b class="sw s3"></b>Holds with a boundary · 245</li><li><b class="sw s4"></b>Partially holds · 101</li><li><b class="sw s1"></b>Not enough public evidence · 90</li><li><b class="sw s1" style="background:transparent;border-style:dashed"></b>Does not hold · 0</li></ul>
+<p class="say">Across 536 arguments assembled from the same claims. Nothing collapsed. What the audit found is the step where meaning enters: a named client becomes a general performance promise, an attributed result becomes a causal one, a capability becomes a claim of superiority.</p>
+<p class="mono">Compression is inevitable. Loss of reasoning is not.</p></div>
+<div class="foot"><span class="fv">Promise to Proof.</span><span class="pageno">09 / 12</span></div></div><div class="stage dark"><div class="toprow"><div class="brandmark"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><use href="#cwheel"/></svg><span class="wm">Calidescope <span class="thin">· Landscape</span></span></div><span class="mono ac">The boundary</span></div>
+<div class="mid"><h1 class="big">What this evidence <span class="ac">does not let us say.</span></h1>
+<div class="notsay">
+<div><span class="x">01</span><div><q>The outcomes market has no proof.</q><em>It holds a great deal of evidence. The question is what each piece establishes.</em></div></div>
+<div><span class="x">02</span><div><q>Only 28 of 740 claims are proven.</q><em>Third-party provenance is not a synonym for proof.</em></div></div>
+<div><span class="x">03</span><div><q>Only two companies guarantee a business outcome.</q><em>A market-wide count needs a denominator this crawl does not have.</em></div></div>
+<div><span class="x">04</span><div><q>Nobody puts a fee at risk.</q><em>Private contracts, make-goods and negotiated terms are not public.</em></div></div>
+<div><span class="x">05</span><div><q>The missing model is the market opportunity.</q><em>An absence in public material is not evidence of demand.</em></div></div></div></div>
+<div class="foot"><span class="fv">Promise to Proof.</span><span class="pageno">10 / 12</span></div></div><div class="stage"><div class="toprow"><div class="brandmark"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><use href="#cwheel"/></svg><span class="wm">Calidescope <span class="thin">· Landscape</span></span></div><span class="mono ac">Therefore</span></div>
+<div class="mid"><h1 class="big">The open ground, <span class="ac">stated at the size the evidence allows.</span></h1>
+<div class="cards c2">
+<div class="card dash"><span class="k">Not found in the public material</span><h3>One configuration appears nowhere</h3><p>A named business outcome, measured against an independent control, with a stated remedy when it is missed. Parts of it exist separately. The whole does not appear on any captured page.</p></div>
+<div class="card"><span class="k">What that is worth</span><h3>A question, not a claim</h3><p>Whether buyers want to pay for that configuration, and whether a seller can carry the risk at scale, is not something a read of public pages can settle. It is the next thing worth testing with buyers.</p></div></div>
+<p class="say">The honest version of the open corner is smaller than the first one, and harder to argue with.</p></div>
+<div class="foot"><span class="fv">Promise to Proof.</span><span class="pageno">11 / 12</span></div></div><div class="stage"><div class="toprow"><div class="brandmark"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><use href="#cwheel"/></svg><span class="wm">Calidescope <span class="thin">· Landscape</span></span></div><span class="mono ac">Where it lands</span></div>
+<div class="mid"><h1 class="big">Ask the five questions. <span class="ac">The differences appear without anyone being accused of anything.</span></h1>
+<p class="say" style="max-width:70ch">What do you mean by outcome? How do you know it happened? How do you know advertising caused it? Why should I expect it for me? What do you put at risk if it does not happen? Every seller can answer. Few can answer all five at the same altitude, and that is the map.</p>
+<p class="mono" style="margin-top:10px">Still unknown · contract terms behind public guarantee language · whether sellers carry business-result risk privately · the current mechanics of Publicis' The Pact · how Pinterest's acquisition changes the tvScientific proposition · buyer demand for each form of risk transfer.</p>
+<p class="srcline" style="margin-top:14px;color:var(--muted)"><b>Sources</b> · 140 companies read 16–17 September 2026 (12 segments × 10, plus 20 outcome sellers); 2,213 claims quoted with source links; 740 outcome claims and 536 arguments adjudicated by MAVEN, 17 September 2026 · company pages as captured · the advertising database (maddb.ai) · figures describe the captured public material, not the whole market.</p></div>
+<div class="foot"><span class="fv">Promise to Proof.</span><span class="pageno">12 / 12</span></div></div>
+<div style="max-width:1200px;margin:0 auto;font-family:var(--mono);font-size:11px;color:#6E6B65;padding:6px 0 40px">A product of Calidescope LLC · The Throughline × MAVEN · throughline.builders</div>
+</body></html>

@@ -40,7 +40,6 @@
   --d2:29px; --d3:25px; --p:16px; --lbl:11.5px;
   --pad:22px; --barh:46px; --chrome:var(--ink); --sw:2.8; --rowacc:var(--blue);
   --ease:cubic-bezier(.22,.61,.16,1);
-  color-scheme:light;
 }
 *,*::before,*::after{box-sizing:border-box}
 html,body{height:100%;overflow:hidden;overscroll-behavior:none}
@@ -54,15 +53,7 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
 ::selection{background:var(--blue);color:var(--paper)}
 :focus-visible{outline:2px solid var(--chrome);outline-offset:3px}
 
-#stage{position:fixed;inset:0;overflow:hidden;touch-action:none;
-  /* iOS Safari lays a fixed inset:0 box out against the LAYOUT viewport --
-     the tall one, with the toolbars collapsed -- while it visually pins
-     bottom-anchored fixed elements to the bottom the reader can actually
-     see. The cards were sized from the tall number and the nav rail from
-     the short one, so on a phone the rail rode up over the last line of
-     the card. dvh is the height the reader has, which is the one both
-     should use. Browsers without dvh keep inset:0 and are unaffected. */
-  height:100dvh}
+#stage{position:fixed;inset:0;overflow:hidden;touch-action:none}
 #grid{position:absolute;top:0;left:0;display:grid;
   grid-template-columns:var(--w) var(--w) var(--w) var(--w) var(--w);grid-auto-rows:var(--h);
   transform:translate3d(0,0,0);will-change:transform;
@@ -121,7 +112,6 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
   text-underline-offset:4px;text-decoration-thickness:1px}
 
 .ix-out{display:flex;align-items:center;flex-wrap:wrap;gap:10px 22px;margin-top:24px}
-.ix-out .ix-go{padding:4px 0}
 .ix-go{padding:0;background:none;border:0;cursor:pointer;font-family:inherit;
   font-size:14.5px;font-weight:500;color:var(--muted);letter-spacing:-.008em;
   display:inline-flex;align-items:center;gap:7px;
@@ -364,166 +354,6 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
   #grid,#markbtn,#prog,.navlbl{transition:none}
 }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   UX pass, 16 September 2026 — three seams the revision left open.
-   Measured in Chromium against the original file, all 41 cards.
-   ───────────────────────────────────────────────────────────────────── */
-
-/* 1. Laptop and short-desktop windows. Measured against the original file:
-      at 1440x770 only two cards overflowed, by 20px; at 1366x700, nine by up
-      to 55px; from 820px tall, nothing overflowed at all. The room is in the
-      padding, not the type -- at 1100px+ a card carries 214px of it -- so the
-      display scale is left where the designer set it for as long as it fits.
-
-      741px and up  the full 56px headline, padding trimmed. This is where a
-                    1440x900 laptop lands once browser chrome is subtracted.
-      661-740px     one step down, to the design's OWN tablet scale (46/30/19,
-                    66px icons) rather than an invented one. */
-@media (min-width:760px) and (min-height:741px) and (max-height:920px){
-  .cell{padding-top:76px;padding-bottom:84px;gap:15px}
-  .open{padding-top:48px}
-  .open .mark{width:140px;height:140px}
-  .cell.index h2{margin-top:24px}
-  .grps{margin-top:22px}
-  .ix-out{margin-top:22px}
-  .ix-sub{padding-bottom:16px}
-}
-@media (min-width:760px) and (min-height:661px) and (max-height:740px){
-  :root{--d2:46px;--d3:30px;--p:19px}
-  .ico-svg{width:66px}.ico-svg.tl{width:52px}
-  .cell{padding-top:74px;padding-bottom:80px;gap:14px}
-  .open{padding-top:44px}
-  .open .mark{width:124px;height:124px}
-  .cell.index h2{margin-top:20px}
-  .grps{margin-top:18px}
-  .ix-out{margin-top:18px}
-  .ix-sub{padding-bottom:13px}
-}
-
-/* 4. The services table. The rows did not line up: the name column is sized to
-      its own text, so "Show" (49px on a phone) pushed its description 17px
-      further right than "Say" (33px), and the column read as ragged at every
-      width.
-
-      Three ranges, because the constraint changes with the shape of the screen:
-
-      wide, or short-and-wide   a real table. The names share a width derived
-        (>=760px, or <=660px     from their own type scale, so every description
-         tall)                   starts on one line and an opened list indents
-                                 onto that same column.
-      portrait phone            the column costs more than it buys -- it took
-        (<760px, >=661px tall)   24px off the description and pushed all three
-                                 rows to two ragged lines on a 375px phone. The
-                                 row breaks instead: name and count on the first
-                                 line, description across the second. Every row
-                                 is then the same height, which is what makes a
-                                 list scannable.
-      short portrait phone      breaking the row costs 24px each, which a 667px
-        (<=730px tall)           screen does not have once a group is open. The
-                                 card carried 218px of padding; the index row is
-                                 the one card with no left or right move, so its
-                                 side rails are hidden and it never needed that
-                                 much. The height comes out of the padding, not
-                                 the type or the rows.
-
-      Separation, in all three: the stack was open at the bottom (top borders
-      only) and trailed off into whitespace. It is closed now, and an opened
-      list sits under its own header instead of floating between two rows. */
-.grp-c{align-self:center}
-.grps{border-bottom:1.5px solid var(--hair)}
-
-@media (min-width:760px), (max-height:660px){
-  .grps{--col:calc(var(--p) * 1.16 * 2.9)}
-  .grp-n{min-width:var(--col)}
-  .grp-s{padding-left:calc(var(--col) + 16px)}
-}
-@media (min-height:661px){
-  .grp+.grp{margin-top:13px}
-  .grp[data-open="yes"]{padding-bottom:3px}
-  .grp-s{padding-top:2px;padding-bottom:11px}
-  .grp-s button,.gs-out{padding:8px 0}
-}
-@media (max-width:759px) and (min-height:661px){
-  .grp-h{flex-wrap:wrap;align-items:center;row-gap:4px;padding:11px 0 12px}
-  .grp-n{flex:1 1 auto;min-width:0}
-  .grp-c{order:2;flex:none}
-  .grp-w{order:3;flex:1 0 100%;width:100%}
-  .grp-s{padding-left:2px}
-}
-@media (max-width:759px) and (min-height:661px) and (max-height:730px){
-  /* Measured at 375x667: the up chevron ends at 94px and the down chevron
-     starts at 609px, so the content has 515px to live in and it wanted 550.
-     The padding stays clear of both -- it is what keeps the chevrons off the
-     text -- and the 39px comes out of the air between things. The lead drops
-     to one line at this width rather than being hidden, which is what the
-     designer's own <=620px rule does. */
-  /* The About link makes the contact intro wrap from one line to three, which
-     tips that card into scrolling on a 375x667 screen -- there is no room
-     between the chevrons for three lines plus the form. The glyph stands down
-     instead, exactly as the designer's own <=660px rule does for this card:
-     the kicker above it already names it. */
-  .is-contact .ico{display:none}
-  .cell.index{padding-top:96px;padding-bottom:60px;gap:7px}
-  .cell.index h2{margin-top:14px}
-  .ix-sub{font-size:14.5px;padding-bottom:8px}
-  .grps{margin-top:10px}
-  .grp-h{padding:7px 0 8px}
-  .grp+.grp{margin-top:7px}
-  .grp-s{padding-bottom:3px}
-  .grp-s button,.gs-out{padding:4px 0}
-  .ix-out{margin-top:8px}
-}
-
-/* Phone landscape. Pre-existing, and not caused by the table: the content
-   exactly filled the band between the two chevrons, so the first row sat under
-   the up arrow. A few pixels of air, taken from the same places. */
-@media (max-width:759px) and (max-height:660px){
-  /* The card centres its content in the padding box, not in the band between
-     the chevrons, so symmetric padding put the first row under the up arrow
-     even once the content fit. The box is offset to match the band instead. */
-  .cell.index{padding-top:88px;padding-bottom:50px}
-  .grp-h{padding:4px 0 4px}
-  .grp+.grp{margin-top:3px}
-  .grps{margin-top:8px}
-}
-
-/* 2. Phone portrait. calidescope-situations_2.html carried this block after
-      Bret's first look ("the text and icons read small on a phone"); the
-      revision dropped it and the kickers went back to 11.5px. Restored, and
-      extended to the index row's group list, which _2 did not have. Short
-      phones keep the compact rules above. */
-@media (max-width:759px) and (min-height:661px){
-  :root{--d2:33px;--d3:27px;--p:17px;--lbl:12px}
-  .ico-svg{width:54px}.ico-svg.tl{width:44px}
-  .cell{gap:16px}
-  .cell h2+.line{margin-top:6px}       /* headline -> subtext 22px; icon -> headline stays 16px */
-  .open .two{margin-top:18px}
-  .navlbl{font-size:14px}
-  .grp-w,.gs-t{font-size:15px}
-  .gs-i,.gs-svg{width:20px}
-  .ix-go{font-size:15px}
-  .ix-go.primary{font-size:16px}
-  /* the form card is the one whose height the device decides: let it scroll, never clip */
-  .is-contact{overflow-y:auto;touch-action:pan-y;justify-content:safe center}
-  .is-contact form{gap:6px}
-  .is-contact input,.is-contact textarea{padding:8px 10px;margin-top:4px}
-}
-
-/* 3. Touch targets. On a finger the group rows measured 42px, the "better X"
-      buttons 33px, the index footer link 16px and the Software link 22px —
-      all under the 44px minimum. Height is added inside the existing box, so
-      nothing reflows on a mouse. Short screens are left alone: there the
-      compact tier is already fighting for the same pixels. */
-@media (pointer:coarse) and (min-height:661px){
-  .grp-s button,.gs-out{min-height:44px}
-  .grp-h{min-height:44px}
-  .out{min-height:44px;padding-top:11px;align-items:center}
-  .ix-go{min-height:44px;padding:6px 0}
-  .lnk,.ix-sw{min-height:44px;display:inline-flex;align-items:center}
-  .navlbl{min-height:44px;display:flex;align-items:center}
-  .btn{min-height:44px}
-  .is-contact input{min-height:44px}
-}
 </style>
 
 <div id="stage"><div id="grid">

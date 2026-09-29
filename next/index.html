@@ -22,7 +22,6 @@
   --d2:29px; --d3:25px; --p:16px; --lbl:11.5px;
   --pad:22px; --barh:46px; --chrome:var(--ink); --sw:2.8; --rowacc:var(--blue);
   --ease:cubic-bezier(.22,.61,.16,1);
-  color-scheme:light;
 }
 *,*::before,*::after{box-sizing:border-box}
 html,body{height:100%;overflow:hidden;overscroll-behavior:none}
@@ -36,15 +35,7 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
 ::selection{background:var(--blue);color:var(--paper)}
 :focus-visible{outline:2px solid var(--chrome);outline-offset:3px}
 
-#stage{position:fixed;inset:0;overflow:hidden;touch-action:none;
-  /* iOS Safari lays a fixed inset:0 box out against the LAYOUT viewport --
-     the tall one, with the toolbars collapsed -- while it visually pins
-     bottom-anchored fixed elements to the bottom the reader can actually
-     see. The cards were sized from the tall number and the nav rail from
-     the short one, so on a phone the rail rode up over the last line of
-     the card. dvh is the height the reader has, which is the one both
-     should use. Browsers without dvh keep inset:0 and are unaffected. */
-  height:100dvh}
+#stage{position:fixed;inset:0;overflow:hidden;touch-action:none}
 #grid{position:absolute;top:0;left:0;display:grid;
   grid-template-columns:var(--w) var(--w) var(--w) var(--w) var(--w);grid-auto-rows:var(--h);
   transform:translate3d(0,0,0);will-change:transform;
@@ -103,7 +94,6 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
   text-underline-offset:4px;text-decoration-thickness:1px}
 
 .ix-out{display:flex;align-items:center;flex-wrap:wrap;gap:10px 22px;margin-top:24px}
-.ix-out .ix-go{padding:4px 0}
 .ix-go{padding:0;background:none;border:0;cursor:pointer;font-family:inherit;
   font-size:14.5px;font-weight:500;color:var(--muted);letter-spacing:-.008em;
   display:inline-flex;align-items:center;gap:7px;
@@ -346,6 +336,19 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
   #grid,#markbtn,#prog,.navlbl{transition:none}
 }
 
+[hidden]{display:none!important}
+.btn[disabled]{opacity:.5;cursor:default}
+#csent:focus{outline:0}
+/* Calidescope — the UX work the build lays over the designer's page.
+   Appended to the stylesheet of every target by next/build.py, so a new source
+   file inherits all of it and nothing has to be re-applied by hand. */
+:root{color-scheme:light}
+/* iOS Safari lays a fixed inset:0 box out against the LAYOUT viewport (the
+   tall one, toolbars collapsed) while pinning bottom-anchored fixed elements
+   to the bottom the reader can see. dvh is the height the reader has. */
+#stage{height:100dvh}
+.ix-out{flex-wrap:wrap;gap:10px 22px}
+.ix-out .ix-go{padding:4px 0}
 /* ─────────────────────────────────────────────────────────────────────────
    UX pass, 16 September 2026 — three seams the revision left open.
    Measured in Chromium against the original file, all 41 cards.
@@ -506,9 +509,7 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
   .btn{min-height:44px}
   .is-contact input{min-height:44px}
 }
-[hidden]{display:none!important}
-.btn[disabled]{opacity:.5;cursor:default}
-#csent:focus{outline:0}
+
 </style>
 </head>
 <body>
@@ -1120,7 +1121,8 @@ u{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offse
         and the form is a card, not a page. A small map of names to coordinates
         gives the cards worth linking a stable address. Unknown hashes are
         ignored, so the page still opens at home. */
-  var NAMED = { contact: [9, 3], start: [9, 3], services: [1, 1] };
+  var at = function (sel) { var el = document.querySelector(sel); return el ? [+el.dataset.row, +el.dataset.col] : null; };
+  var NAMED = { contact: at('.is-contact'), start: at('.is-contact'), services: at('.cell.index'), outcomes: at('.cell.opp') };
   var fromHash = function () {
     var key = (window.location.hash || '').replace(/^#/, '').toLowerCase();
     var at = Object.prototype.hasOwnProperty.call(NAMED, key) ? NAMED[key] : null;

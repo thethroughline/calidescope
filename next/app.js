@@ -83,7 +83,8 @@
         and the form is a card, not a page. A small map of names to coordinates
         gives the cards worth linking a stable address. Unknown hashes are
         ignored, so the page still opens at home. */
-  var NAMED = { contact: [9, 3], start: [9, 3], services: [1, 1] };
+  var at = function (sel) { var el = document.querySelector(sel); return el ? [+el.dataset.row, +el.dataset.col] : null; };
+  var NAMED = { contact: at('.is-contact'), start: at('.is-contact'), services: at('.cell.index'), outcomes: at('.cell.opp') };
   var fromHash = function () {
     var key = (window.location.hash || '').replace(/^#/, '').toLowerCase();
     var at = Object.prototype.hasOwnProperty.call(NAMED, key) ? NAMED[key] : null;
