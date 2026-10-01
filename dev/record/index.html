@@ -91,6 +91,71 @@ footer{border-top:1px solid var(--hair);padding:28px 0 60px;font-family:var(--mo
 .qv{font-style:normal}
 .src{font-family:var(--mono);font-size:11.5px;white-space:nowrap;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px}
 </style>
+<style>/* responsive repairs: next/record/fix/hub.css */
+/* Hub pages (record/index.html, method.html, sectors/*.html). Desktop (>=1101px)
+   is unchanged except RIM-5 (line length). Colours use the hub's own variables
+   so the prefers-color-scheme:dark theme carries through. */
+
+/* RIM-5 · long reading lines on laptops: cap the numbered lists and note boxes
+   near the lede's measure (Archivo ch = .573em, so 72ch ~ 91 characters). */
+ol.ref .cl,ol.ref .wh{max-width:72ch}
+.note{max-width:84ch}
+
+/* RIM-7 · 744-803px tablets: three cards across instead of two plus an orphan. */
+.cards{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+
+/* RIM-8 · 641-760px: the hub's 640px table floor sat in a 609-728px wrapper and
+   wobbled 1-31px; every hub table now fits there, and stacks below 641px. */
+@media(max-width:760px){.tw table{min-width:0}}
+
+/* RIM-1 / RIM-3 · tables that are reading content (method: terms, capture gaps;
+   index: the two file tables) become one record per row on phones: the leading
+   cells on one line, the prose cell full width beneath. */
+@media(max-width:640px){
+  .tw table,.tw tbody{display:block}
+  .tw thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .tw tbody tr{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;padding:11px 0;border-bottom:1px solid var(--hair)}
+  .tw tbody tr:last-child{border-bottom:0}
+  .tw td{display:block;border:0;padding:0}
+  .tw td[style]{width:auto!important}
+  .tw td.num{text-align:left;padding:0;color:var(--muted);font-size:13px}
+  .tw td.num:first-child{color:var(--ink);font-weight:600;font-size:14px}
+  .tw td.name{color:var(--ink);flex:1 1 0;min-width:0}
+  .tw td:last-child{flex:0 0 100%;color:var(--muted);font-size:13.5px;line-height:1.5;margin-top:2px}
+
+  /* RIM-2 · the thirteen categories: each row a card (name + meaning, the five
+     counts labelled inline, then read / claims on their own line). */
+  #categories tbody tr{gap:4px 14px;padding:12px 0}
+  #categories td:last-child{color:inherit;font-size:inherit;line-height:inherit}
+  #categories td:first-child{flex:0 0 100%;margin-bottom:4px}
+  #categories td.num{color:var(--ink);font-weight:400;font-size:13.5px;white-space:nowrap}
+  #categories td.num::before{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim);margin-right:5px}
+  #categories td:nth-child(2)::before{content:"cos"}
+  #categories td:nth-child(3)::before{content:"claims"}
+  #categories td:nth-child(4)::before{content:"outcome"}
+  #categories td:nth-child(5)::before{content:"figure"}
+  #categories td:nth-child(6)::before{content:"outside"}
+  #categories td.flinks{flex:0 0 100%;margin-top:2px}
+}
+
+/* RIM-6 · 11.5px mono labels -> 12px on phones (portrait, and landscape/tablet
+   touch screens up to 932px). */
+@media(max-width:640px),(pointer:coarse) and (max-width:932px){
+  th,.card .k,.back,footer,.flinks a,.src{font-size:12px}
+}
+
+/* RIM-4 / RSN-5 · touch: hit boxes >=24px without moving any glyph. Negative
+   margins cancel the padding in layout; td.flinks keeps "read . claims" on one
+   line so the enlarged boxes never stack and overlap. */
+@media(pointer:coarse){
+  .back{padding:8px 0;margin:-8px 0 18px}
+  td.flinks{white-space:nowrap}
+  .flinks a{font-size:12.5px;display:inline-block;padding:7px 4px;margin:-7px -4px}
+  footer a{padding:6px 0}
+  .src{position:relative}
+  .src::after{content:"";position:absolute;left:0;right:0;top:-6px;bottom:-6px}
+}
+</style>
 </head><body><div class="wrap">
 <header class="top">
 <a class="back" href="../landscape.html">&larr; The Outcomes Opportunity</a>

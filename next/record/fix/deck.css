@@ -1,0 +1,63 @@
+/* Responsive repairs for record/deck.html. Everything is scoped below 1200px so the desktop
+   (>=1200) rendering is unchanged. The page's own switch to auto-height stages is at 1100px. */
+
+/* RD-05 stage 6: the <=1100 rule '.lr,.pr{28px 1fr}' squeezed the profile names into 28px */
+/* RD-08 stage 4: '.lr.top' (two classes) kept its desktop 300px/54px grid below 1100 */
+/* RD-07 stage 9: header and rows become name / bar+value / bar+value, header labels stack */
+@media(max-width:1100px){
+ .pr{grid-template-columns:112px 1fr;gap:12px}
+ .lr.top{grid-template-columns:28px 1fr;gap:10px}
+ .lgh,.lgr{grid-template-columns:1fr 48px;gap:4px 12px}
+ .lgh>span{display:none}
+ .lgh em{grid-column:1/-1}
+ .lgr .lgn{grid-column:1/-1}
+ .lgr .lgv{text-align:right}
+}
+
+/* RD-03 stage 11: four history cards -> two-up on tablets, one column on phones */
+@media(max-width:900px){.hist{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){
+ .hist{grid-template-columns:1fr}
+ /* RD-05 phones: name above its bar */
+ .pr{grid-template-columns:1fr;gap:2px 0;padding:6px 0}
+ .pn{font-size:13px}
+}
+
+@media(max-width:700px){
+ /* RD-04 stage 2: label above paragraph instead of a 230px label column */
+ .br{grid-template-columns:1fr;gap:4px 0}
+ .br:last-child{margin:2px 0 14px}
+ /* RD-01 stage 12: name + year on one line, description underneath */
+ .dr{grid-template-columns:1fr auto;gap:4px 14px}
+ .dr .dm{grid-column:1/-1}
+ /* RD-06 stage 13: label full width, two bars side by side, note full width */
+ .agh,.agr{grid-template-columns:1fr 1fr;gap:4px 12px}
+ .agh>span{display:none}
+ .agr .agt,.agr .agn{grid-column:1/-1}
+ /* RD-02 stage 14: the three position cards stack */
+ .agq{grid-template-columns:1fr}
+ /* RD-09 stage 17: sources table two-up with title and link full width */
+ .tr{grid-template-columns:1fr 1fr;gap:2px 14px;align-items:start}
+ .tr .t1,.tr .t4{grid-column:1/-1}
+ .hub b{overflow-wrap:anywhere}
+}
+
+/* RD-10 stage 17: 24px+ touch target for the maddb.ai link without moving its underline
+   or the surrounding text (an invisible hit area, not padding) */
+@media(pointer:coarse){
+ .crb a{position:relative}
+ .crb a::after{content:"";position:absolute;left:-4px;right:-4px;top:-8px;bottom:-8px}
+}
+
+/* RD-11 the fixed-16:9 band 1101-1199: a stage keeps its 16:9 height but may grow past it
+   when its content needs more room (stages 2, 4, 6, 17 hit the footer rule here).
+   Same mechanism as the page's own <=1100 rule; min-height is the 16:9 height of the stage. */
+@media(min-width:1101px) and (max-width:1199px){
+ .wrap{container-type:inline-size}
+ .stage{aspect-ratio:auto;display:flex;flex-direction:column;
+  min-height:calc((min(100vw,1180px) - 48px) * .5625);min-height:56.25cqw}
+ .inner{position:static;flex:1 1 auto}
+}
+
+/* RD-17 stage 17: cap the mono method line at a readable measure below desktop */
+@media(max-width:1199px){.meth{max-width:110ch}}

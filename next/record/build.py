@@ -52,6 +52,14 @@ def must(s, old, new, n=1):
     assert s.count(old) == n, (old[:60], s.count(old))
     return s.replace(old, new)
 
+FIX = HERE / "fix"
+def fix(key, s):
+    """Append next/record/fix/<key>.css (responsive repairs) as the last <style> in <head>."""
+    f = FIX / (key + ".css")
+    if not f.exists() or not f.read_text(encoding="utf-8").strip():
+        return s
+    return must(s, "</head>", "<style>/* responsive repairs: next/record/fix/%s.css */\n%s</style>\n</head>" % (key, f.read_text(encoding="utf-8")))
+
 def write(rel, s):
     p = OUT / rel
     p.parent.mkdir(parents=True, exist_ok=True)
@@ -67,6 +75,7 @@ for name in ["deck.html", "deep-dive.html", "method.html"]:
         s = must(s, "140 advertising and media companies were read page by page", "138 advertising and media companies were read page by page")
     if name == "method.html":
         s = must(s, '<section><div class="note thanks">', notes_section() + '<section><div class="note thanks">')
+    s = fix({"deck.html": "deck", "deep-dive.html": "deep-dive", "method.html": "hub"}[name], s)
     write(name, s)
 
 # ---------- sector pages: fonts + hrefs ----------
@@ -74,6 +83,7 @@ for p in sorted((HUB / "sectors").glob("*.html")):
     s = p.read_text(encoding="utf-8")
     s, n = GF.subn(LOCAL, s); assert n == 1, p.name
     s = re.sub(r'href="(?!https?:|#|\.\./|/)', 'href="../', s)
+    s = fix("hub", s)
     write("sectors/" + p.name, s)
 
 # ---------- index: rebuild the head, add ids, the back link, the notes ----------
@@ -98,7 +108,7 @@ s = must(s, '<section><h2>The adjudication</h2>', '<section id="adjudication"><h
 s = must(s, '<section><h2>The full data</h2>', '<section id="data"><h2>The full data</h2>')
 s = must(s, '<section><h2>Five things the record will not support</h2>',
             notes_section() + '<section><h2>Five things the record will not support</h2>')
-s = must(s, '</body></html>', '</body></html>')
+s = fix("hub", s)
 write("index.html", s)
 
 # ---------- the two research notes ----------
@@ -121,6 +131,33 @@ PROSE = """
 .prose td,.prose th{padding:9px 12px 9px 0;line-height:1.45}
 .prose th{white-space:nowrap}
 </style>"""
+def phone_table(m):
+    """Wrap a note table in .tw and say how it reads on a phone (next/record/fix/notes.css).
+    tw-stack: one record per row, each cell labelled with its header (data-label) -- for
+    tables that link out, have more than four columns, or carry more than one long-text
+    column; short link-free columns (class "s") flow as LABEL value pairs on shared lines.
+    tw-wide (more than eight columns) tightens cell padding so it fits the desktop column.
+    tw-fit: everything else drops the 640px floor and fits the screen."""
+    t = m.group(0)
+    heads = [html.unescape(re.sub(r'<[^>]+>', '', h)).strip()
+             for h in re.findall(r'(?s)<th[^>]*>(.*?)</th>', t)]
+    rows = [re.findall(r'(?s)<td[^>]*>(.*?)</td>', r) for r in re.findall(r'(?s)<tr>(.*?)</tr>', t)]
+    rows = [r for r in rows if r]
+    cols = [[r[j] for r in rows if j < len(r)] for j in range(len(heads))]
+    text = lambda c: html.unescape(re.sub(r'<[^>]+>', '', c)).strip()
+    linked = [any('http' in c for c in col) for col in cols]
+    longest = [max([len(text(c)) for c in col] or [0]) for col in cols]
+    stack = any(linked) or len(heads) > 4 or sum(n > 40 for n in longest) > 1
+    if not stack:
+        return '<div class="tw tw-fit">%s</div>' % t
+    def cell(j):
+        cls = ' class="s"' if not linked[j] and longest[j] <= 40 else ''
+        return '<td%s data-label="%s"' % (cls, html.escape(heads[j], quote=True))
+    def row(rm):
+        j = iter(range(len(heads)))
+        return re.sub(r'<td(?=[ >])', lambda _: cell(next(j)), rm.group(0))
+    t = re.sub(r'(?s)<tr>.*?</tr>', row, t)
+    return '<div class="tw tw-stack%s">%s</div>' % (' tw-wide' if len(heads) > 8 else '', t)
 FOOT = ('<footer>Calidescope LLC &middot; a research note behind <a href="../../landscape.html">The Outcomes Opportunity</a>'
         '<br>Sources are linked where they were read. Counts describe the pages read, not the market.</footer>')
 for rel, k, t, d in NOTES:
@@ -129,8 +166,7 @@ for rel, k, t, d in NOTES:
     assert lines[0].startswith("# "), rel
     title = lines[0][2:].strip()
     body = markdown.markdown("\n".join(lines[1:]), extensions=["tables", "sane_lists", "fenced_code"])
-    body = re.sub(r'<table>', '<div class="tw"><table>', body)
-    body = re.sub(r'</table>', '</table></div>', body)
+    body = re.sub(r'(?s)<table>.*?</table>', phone_table, body)
     body = re.sub(r'<a href="(https?://[^"]+)"', r'<a href="\1" rel="noopener"', body)
     # bare URLs in the notes are written as text; make them links (trailing punctuation stays text)
     def auto(m):
@@ -146,4 +182,5 @@ for rel, k, t, d in NOTES:
             '<p class="eyebrow">%s</p>\n<h1>%s</h1>\n<p class="lede">%s</p>\n</header>\n'
             '<div class="prose">\n%s\n</div>\n%s\n</div></body></html>'
             % (html.escape(title), LOCAL, STYLE, PROSE, k, html.escape(title), d, body, FOOT))
+    page = fix("notes", page)
     write(rel, page)

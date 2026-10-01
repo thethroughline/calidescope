@@ -1,0 +1,140 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Responsive audit, 1 October 2026 (OA-01..OA-11). Each rule is gated to
+   the shape of screen it was measured on. Nothing here touches a window
+   >=760px wide and >=661px tall, except OA-08's padded source link on touch
+   screens, which never reflows. Short laptop windows (<=660px tall) get
+   OA-04, OA-10 and OA-11. Kept last so it wins the equal-specificity ties
+   with the tiers above.
+   ───────────────────────────────────────────────────────────────────── */
+
+/* OA-01. The outcomes card on phone portrait. Row 1 is a FULL row (no side
+   rails), so only the down arrow needs clearing at the bottom. At 375x667 the
+   content was 83px taller than its box and the headline ran under the up
+   chevron; the 44px buttons stay, the height comes out of the air and the
+   headline takes the tier's own --d3. At 360 wide "Read the deck" wrapped by
+   4px: a tighter column gap keeps the pair on one row. */
+@media (max-width:759px) and (min-height:661px){
+  .cell.opp{padding-bottom:80px}
+}
+@media (max-width:374px) and (min-height:661px){
+  .opp-out{column-gap:14px}
+}
+@media (max-width:759px) and (min-height:661px) and (max-height:730px){
+  .cell.opp{padding-top:96px;padding-bottom:64px}
+  .opp-h{font-size:var(--d3)}
+  .opp-lede{margin-top:10px}
+  .opp-say{margin-top:8px}
+  .opp-src{margin-top:6px}
+  .opp-kick{margin-top:12px;padding-top:10px}
+  .opp-out{margin-top:8px}
+}
+
+/* OA-03. The services card with a group open, phone portrait 731-845px tall
+   (360x744 is where a 360x800 Android lands with its URL bar). Say open was
+   up to 125px over and the wordmark met the up chevron. Calibrated at the
+   tier's floor; the 44px rows are untouched. */
+@media (max-width:759px) and (min-height:731px) and (max-height:845px){
+  .cell.index{padding-top:96px;padding-bottom:64px;gap:10px}
+  .ix-sub{padding-bottom:8px}
+  .grps{margin-top:10px}
+  .grp-h{padding:9px 0 10px}
+  .grp+.grp{margin-top:8px}
+  .grp-s{padding-bottom:4px}
+  .ix-out{margin-top:10px}
+}
+
+/* OA-02 / OA-05. Short screens under 760 wide (320x568, 360x640, landscape
+   phones). The contact card started 4px under the bar with its kicker under
+   the up chevron; in landscape its Send button sat on the back arrow. The
+   17ch headline cap made 5-line headlines in a 620px-wide card, so case tags
+   reached the left arrow. */
+@media (max-width:759px) and (max-height:660px){
+  .cell h2{max-width:30ch}
+  .case .case-h{max-width:30ch}
+  .cell.case{padding-bottom:84px}
+}
+@media (max-width:759px) and (max-height:660px) and (orientation:portrait){
+  /* bar 40 + 2 + the 46px chevron + 6px of air: the kicker sits under it */
+  .is-contact{padding-top:94px;padding-bottom:92px}
+}
+@media (max-width:759px) and (max-height:660px) and (orientation:landscape){
+  /* no room for the kicker between the chevrons; the headline names the card */
+  .is-contact .kind{display:none}
+  .is-contact{padding-top:50px;padding-bottom:91px}
+  .is-contact form{gap:4px}
+  .is-contact input,.is-contact textarea{padding:5px 9px;margin-top:2px}
+}
+
+/* OA-04 / OA-11. Short screens 760px and wider. The services card is a FULL
+   row, so only the down arrow (bottom:0) needs clearing: the box is offset so
+   an opened group no longer sits under the up chevron. The contact card's
+   first line was flush against the bar rule. */
+@media (min-width:760px) and (max-height:660px){
+  .cell.index{padding-top:92px;padding-bottom:50px}
+  .is-contact{padding-top:50px}
+}
+/* Landscape phones (<=400px tall): the form stacked email over message over
+   Send and ran into the back arrow (667x375) or scrolled (760x360). Side by
+   side, the two fields cost one row instead of two. */
+@media (min-width:600px) and (max-height:400px){
+  .is-contact form{grid-template-columns:1fr 1fr;column-gap:14px;max-width:560px}
+  .is-contact form .btn{grid-column:1/-1}
+}
+@media (min-width:760px) and (max-height:380px){
+  .cell.index{padding-top:90px;padding-bottom:40px}   /* 760x360 with Say open */
+}
+
+/* OA-06. The bar label truncated on phones up to 390 wide ("POSITIONING ·
+   OPP…"). The mark stays on the 22px content column; the label and the beat
+   dots give up the slack. 393 and wider are as designed. */
+@media (max-width:390px){
+  #bar{padding:0 16px 0 22px;gap:10px}
+  #where{letter-spacing:.06em}
+  #beat{gap:3px}
+  #beat i{width:8px}
+}
+
+/* OA-09. Card kickers and case tags at 11px on short portrait phones. */
+@media (max-width:759px) and (max-height:660px) and (orientation:portrait){
+  .kind,.cell.case .case-tag{font-size:12px}
+}
+
+/* OA-07 / OA-08. Touch targets where the 44px tier above does not reach.
+   Short portrait phones have the height, so the rows grow; short landscape
+   does not, so inline controls get a 40px hit area that never reflows. The
+   source link in the outcomes card is padded on every touch screen
+   (position:relative so its padding wins the hit test over the wrapped line). */
+@media (pointer:coarse) and (max-height:660px) and (orientation:portrait){
+  .grp-h{min-height:40px;flex-wrap:wrap;align-content:center}
+  .grp-s button,.gs-out{min-height:36px}
+  .ix-go{min-height:36px}
+}
+@media (pointer:coarse) and (max-height:660px) and (orientation:landscape){
+  .grp-s button{padding:4px 0}
+}
+@media (pointer:coarse) and (max-height:660px){
+  .ix-go,.lnk,.ix-sw,.src-lnk,.out{position:relative}
+  .ix-go::after,.lnk::after,.ix-sw::after,.src-lnk::after,.out::after{content:"";position:absolute;
+    left:0;right:0;top:50%;height:40px;transform:translateY(-50%)}
+}
+@media (pointer:coarse){
+  .opp-src .src-lnk{position:relative;padding:12px 0}
+}
+
+/* OA-10. Short laptop windows. A 1366x768 laptop with browser chrome lands at
+   about 1366x625-660, which is the phone-landscape tier: 20px headlines and
+   14px body in a 1366px-wide window. One step back up, to a trimmed tablet
+   scale, where the window is wide enough to be a laptop. */
+@media (min-width:1100px) and (min-height:600px) and (max-height:660px){
+  :root{--d2:38px;--d3:26px;--p:18px;--lbl:12px}
+  .ico-svg{width:48px}.ico-svg.tl{width:38px}
+  .open .mark{width:84px;height:84px}
+  .cell .line{max-width:42ch}
+  .cell h2{max-width:22ch}
+  .opp-say,.grp-w,.gs-t,.ix-go{font-size:16px}
+  .cell.case .stats{font-size:16px}
+  .cell.case .case-tag{font-size:12px}
+  .gs-i,.gs-svg{width:20px}
+  .navlbl{font-size:15px}
+  .is-contact label{font-size:15px}
+}

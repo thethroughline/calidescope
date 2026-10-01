@@ -534,6 +534,72 @@ a.dr:hover .dt,a.dr:focus-visible .dt{color:var(--blue)}
  .vlab.lb .vd{margin-left:0}
  .vwrap{flex-direction:column;gap:14px}
  .vn{display:none}
+ /* ---- responsive repairs (audit 1 Oct 2026). Nothing below touches >=1180px. ---- */
+ .cvr .grow{flex:0 0 28px}
+ .pq{min-height:0}
+ .fine,.meth{font-size:12.5px;line-height:1.6;max-width:72ch}
+ .cred{max-width:80ch}
+ .sys,.agqs,.agqh,.caph,.caps,.tqh,.tqs,.pn,.pp span,.gw,.gpl,.bn,.sqt span{font-size:12.5px}
+ .dr{gap:4px;padding:14px 0}
+ .dt::after{content:" →";color:var(--blue)}
+}
+/* phones: charts keep their numbers, the precedent table keeps its column names */
+@media(max-width:699px){
+ .fbh{overflow-wrap:anywhere}
+ .fbh span{display:block;margin:4px 0 0}
+ .lr,.agr{grid-template-columns:1fr auto;gap:6px 12px;align-items:start}
+ .lr .lnw,.agr .agt{grid-column:1;grid-row:1}
+ .lr .lv,.agr .agv{display:block;grid-column:2;grid-row:1;font-size:15px}
+ .lr .lb,.agr .agb{display:block;grid-column:1/-1;grid-row:2;height:10px}
+ .lr .lk{grid-column:1/-1;grid-row:3}
+ .lr .lk:empty{display:none}
+ .sqm::before,.sqg::before{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--muted);font-weight:400;margin:6px 0 1px}
+ .sqm::before{content:"Who measured it"}
+ .sqg::before{content:"What you got if it missed"}
+ .sqr.open .sqm::before,.sqr.open .sqg::before{color:var(--blue)}
+}
+@media(max-width:400px){
+ .wrap{padding:18px 10px 40px}
+ .stage{margin-bottom:18px}
+}
+/* landscape phones and tablets: two-up card grids instead of a stretched phone column */
+@media(min-width:600px) and (max-width:1100px){
+ .wi,.gpg,.ps,.slg.c4,.slg.c2,.agq{grid-template-columns:repeat(2,1fr)}
+ .ws{grid-template-columns:repeat(3,1fr)}
+ .sy,.bd{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+ .proc{flex-direction:row;flex-wrap:wrap}
+ .pbox{flex:1 1 calc(50% - 10px)}
+ .agr{grid-template-columns:200px 1fr 54px;gap:16px}
+ .ag1{grid-template-columns:200px 1fr;gap:20px}
+}
+/* tablets and zoomed laptops: the ladder, the precedent table and the record rows go back to columns */
+@media(min-width:700px) and (max-width:1100px){
+ .inner{padding:32px 36px 24px}
+ h1{font-size:30px}
+ .lr{grid-template-columns:minmax(200px,1.3fr) 1fr 54px 150px;gap:14px}
+ .lr .lb,.lr .lv{display:block}
+ .sqh{display:grid;grid-template-columns:minmax(150px,200px) 22px 1fr 22px 1fr;gap:12px}
+ .sqr{grid-template-columns:minmax(150px,200px) 22px 1fr 22px 1fr;gap:12px;align-items:center}
+ .sqa{display:block}
+ .dr{grid-template-columns:180px max-content 1fr;gap:18px;padding:11px 0}
+ .dm{white-space:nowrap}
+ .dt::after{content:none}
+ .dr:hover .dt,.dr:focus-visible .dt{color:var(--blue)}
+ .dd{text-decoration:underline;text-decoration-color:var(--hair);text-underline-offset:3px}
+}
+@media(min-width:900px) and (max-width:1100px){
+ .wi,.ps,.slg.c4{grid-template-columns:repeat(4,1fr)}
+ .agq{grid-template-columns:repeat(3,1fr)}
+ .proc{flex-wrap:nowrap}
+ .pbox{flex:1 1 0}
+ .gp{grid-template-columns:240px 1fr;gap:28px}
+ .bd{grid-template-columns:repeat(5,1fr)}
+}
+/* narrow laptops (1101-1179px): the 16:9 stage is smaller than the 1132px design, so a stage
+   may grow past 16:9 when its content needs it; stages with room stay 16:9 */
+@media(min-width:1101px) and (max-width:1179px){
+ .stage{aspect-ratio:auto;container-type:inline-size}
+ .inner{position:static;min-height:calc(100cqw * 9 / 16)}
 }
 """
 

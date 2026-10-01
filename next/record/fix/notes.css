@@ -1,0 +1,71 @@
+/* Research notes (record/notes/*.html). Appended after the hub style and the
+   PROSE block, so equal-specificity rules here win by order. Colours use the
+   hub's variables so the prefers-color-scheme:dark theme carries through. */
+
+/* RSN-1 · URLs in table cells were broken to one character per line at every
+   width: break-word dropped the url column's min-content to a single glyph.
+   Prose links wrap normally; a table link keeps an 11em floor. */
+.prose a{word-break:normal;overflow-wrap:break-word}
+.prose td a[href]{display:inline-block;min-width:11em;max-width:100%;overflow-wrap:anywhere}
+
+/* RSN-1 / RSN-2 · let the table wrappers use the full column (968px) while the
+   prose keeps its 76ch measure. --measure is registered as a <length>, so 76ch
+   is resolved once on .prose and every child gets the same width as before. */
+@property --measure{syntax:"<length>";inherits:true;initial-value:0px}
+.prose{--measure:76ch;max-width:none}
+.prose>:not(.tw){max-width:var(--measure)}
+
+/* RSN-2 · a table that still scrolls shows it: a shadow on whichever edge has
+   more to see, covered by paper-coloured caps that travel with the content.
+   The shadows stop 1px short of top and bottom so a sub-pixel offset between
+   the two attachments never leaves a sliver showing on a table that fits. */
+.prose .tw{
+  --cue:color-mix(in srgb,var(--ink) 20%,transparent);
+  background:
+    linear-gradient(to right,var(--paper) 30%,transparent) 0 0/48px 100% no-repeat local,
+    linear-gradient(to left,var(--paper) 30%,transparent) 100% 0/48px 100% no-repeat local,
+    linear-gradient(to right,var(--cue),transparent) 0 1px/18px calc(100% - 2px) no-repeat scroll,
+    linear-gradient(to left,var(--cue),transparent) 100% 1px/18px calc(100% - 2px) no-repeat scroll}
+
+/* RSN-1 / RSN-2 · the 13-column claims table: 8px cell gaps instead of 12px bring
+   it from 1010px to 958px, so it fits the 968px desktop column with no scroll. */
+.tw-wide td,.tw-wide th{padding-right:8px}
+
+/* RSN-3 · phones. Short tables (tw-fit) drop the 640px floor and fit from 760px
+   down; tables that link out or run wide (tw-stack) keep scrolling, with the
+   cue, at 641-743px (704px floor so the url column does not starve the prose
+   columns) and become one labelled record per row at 640px and below. */
+@media(max-width:760px){
+  .tw-fit table{min-width:0}
+  .tw-fit th{white-space:normal}
+  .tw-stack table{min-width:704px}
+}
+@media(max-width:640px){
+  .tw-fit td,.tw-fit th{padding-right:6px}
+  .tw-stack table{min-width:0}
+  .tw-stack thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .tw-stack table,.tw-stack tbody,.tw-stack tr,.tw-stack td{display:block;width:auto}
+  .tw-stack tr{border-bottom:1px solid var(--hair);padding:12px 0}
+  .tw-stack tr:last-child{border-bottom:0}
+  .tw-stack td{border:0;padding:2px 0}
+  .tw-stack td::before{content:attr(data-label);display:block;font-family:var(--mono);font-size:12px;
+    letter-spacing:.05em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+  .tw-stack td:first-child::before{margin-top:0}
+  .tw-stack td.s{display:inline-block;padding:2px 16px 2px 0;vertical-align:baseline}
+  .tw-stack td.s::before{display:inline;margin:0 .5em 0 0}
+  .tw-stack td:empty{display:none}
+  .tw-stack td a[href]{min-width:0}
+}
+
+/* RSN-6 · 11.5px mono labels -> 12px on phones (portrait, and landscape/tablet
+   touch screens up to 932px). */
+@media(max-width:640px),(pointer:coarse) and (max-width:932px){
+  .prose th,.back,footer{font-size:12px}
+}
+
+/* RSN-5 · touch: the back link and footer link get >=24px hit boxes without
+   moving any glyph (padding on an inline box does not change line layout). */
+@media(pointer:coarse){
+  .back{padding:8px 0;margin:-8px 0 18px}
+  footer a{padding:6px 0}
+}

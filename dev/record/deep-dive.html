@@ -119,7 +119,91 @@ h1 .ac{color:var(--blue)}.dark h1 .ac{color:var(--tint)}
 .notsay>div>.x{flex:0 0 22px}
 .notsay>div>div{flex:1 1 auto;min-width:0}
 .notsay>div>div{display:block!important;grid-template-columns:none!important}
-</style></head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><g id="cwheel"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="2.4"/><g stroke="currentColor" stroke-width="1.9"><line x1="24" y1="24" x2="45" y2="24"/><line x1="24" y1="24" x2="34.5" y2="42.19"/><line x1="24" y1="24" x2="13.5" y2="42.19"/><line x1="24" y1="24" x2="3" y2="24"/><line x1="24" y1="24" x2="13.5" y2="5.81"/><line x1="24" y1="24" x2="34.5" y2="5.81"/></g><circle cx="24" cy="24" r="5" fill="currentColor"/></g></defs></svg><div class="stage"><div class="toprow"><div class="brandmark"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><use href="#cwheel"/></svg><span class="wm">Calidescope <span class="thin">· Deep dive</span></span></div><span class="mono ac">The pitch</span></div>
+</style><style>/* responsive repairs: next/record/fix/deep-dive.css */
+/* Responsive repairs for record/deep-dive.html. Everything is scoped below 1200px so the
+   desktop (>=1200) rendering is unchanged. The page's own auto-height switch is at 900px. */
+
+/* RD-12 the fixed-16:9 band 901-1199: a stage keeps its 16:9 height but may grow past it
+   when its content needs more room, instead of spilling over the brandmark and the footer.
+   (.stage.tall keeps its own min-height:62vh.) */
+@media(min-width:901px) and (max-width:1199px){
+ .stage{aspect-ratio:auto;min-height:calc((100vw - 40px) * .5625)}
+ /* RD-13 the map gets a real height instead of what is left of a 16:9 stage */
+ .mx{flex:none;height:clamp(220px,30vw,330px)}
+ /* RD-17 boundary notes at a readable measure */
+ .bnd{max-width:84ch}
+ /* a grown stage keeps some air between the brandmark, the content and the footer rule
+    (symmetric, so a stage whose content fits is centred exactly as before) */
+ .mid{padding:12px 0}
+}
+
+/* RD-13 map labels below desktop: the box is narrower than the desktop map, so the central
+   cluster (SSPs, Data & identity, Workflow, DSPs) and CTV / Creative tech collide. Each label
+   is placed on the side that is free, and the transform puts the dot itself (not the centre of
+   dot + label) on its coordinate. Dot order is fixed in the markup:
+   1 Walled gardens, 2 DSPs, 3 SSPs, 4 Retail media, 5 CTV, 6 Measurement, 7 Verification,
+   8 Data & identity, 9 Marketing clouds, 10 Creative tech, 11 Workflow, 12 Agencies, 13 Outcome sellers */
+@media(max-width:1199px){
+ .mx .dot{transform:translate(-50%,calc(100% - 7px))}                       /* label below */
+ .mx .dot.up,.mx .dot:nth-child(3),.mx .dot:nth-child(10){flex-direction:column-reverse;transform:translate(-50%,7px)} /* above */
+ .mx .dot:nth-child(4),.mx .dot:nth-child(5){flex-direction:column;transform:translate(-50%,calc(100% - 7px))}      /* below */
+ .mx .dot:nth-child(2){flex-direction:row;transform:translate(-7px,50%)}                  /* DSPs: right */
+ .mx .dot:nth-child(8){flex-direction:row-reverse;transform:translate(calc(-100% + 7px),50%)} /* Data & identity: left */
+ .mx .dot:nth-child(13){transform:translate(-50%,calc(100% - 13.5px))}
+}
+
+@media(max-width:900px){
+ /* RD-13 stage 16: once stages are auto-height the map collapsed to 1px; give it a height
+    (taller on narrow phones, where the cluster needs vertical room) and let labels wrap */
+ .mx{flex:none;height:clamp(300px,calc(560px - 40vw),420px);margin:10px 16px 0 6px}
+ .mx .dot span{white-space:normal;max-width:10ch;text-align:center;line-height:1.1}
+ .mx .dot:nth-child(2) span{text-align:left}
+ .mx .dot:nth-child(8) span{text-align:right;max-width:8ch}
+ .mx .dot:nth-child(10) span{width:min-content}
+ .axl{font-size:11px;letter-spacing:.06em;text-transform:none}
+ .bnd{max-width:84ch}
+ /* RD-15 label system up to 11px on phones and tablets (td.sid is already 12px in .dense) */
+ .mono,.quote cite{font-size:11px;letter-spacing:.12em}
+ .card .k,.vd,.mvn,.qs .qn,.pageno{font-size:11px}
+ .srcline{font-size:11px;letter-spacing:.02em;line-height:1.6}
+ .srcline b{font-size:10px}
+ /* RD-15 stage 6: the method SVG scaled its 15px/10.5px text down to 3-4px; keep it at a
+    readable size and let it scroll sideways, with the same edge cue as the tables */
+ .mid>.fig:not([style]){overflow-x:auto}
+ .mid>.fig>svg{display:block;min-width:860px}
+}
+
+/* RD-14 the six dense tables (and the stage-6 figure) scroll sideways on phones: run the
+   scroll box to the stage edge and shade whichever edge has more to see */
+@media(max-width:900px){
+ .mid>.fig:has(>svg){margin:0 -24px;padding:0 24px;
+  background:linear-gradient(90deg,var(--paper) 30%,rgba(250,247,239,0)),
+   linear-gradient(270deg,var(--paper) 30%,rgba(250,247,239,0)) 100% 0,
+   radial-gradient(farthest-side at 0 50%,rgba(31,32,36,.3),rgba(31,32,36,0)),
+   radial-gradient(farthest-side at 100% 50%,rgba(31,32,36,.3),rgba(31,32,36,0)) 100% 0;
+  background-repeat:no-repeat;background-size:40px 100%,40px 100%,20px 100%,20px 100%;
+  background-attachment:local,local,scroll,scroll}
+}
+@media(max-width:700px){
+ .fig[style*="overflow"]{margin:0 -24px;padding:0 24px;
+  background:linear-gradient(90deg,var(--paper) 30%,rgba(250,247,239,0)),
+   linear-gradient(270deg,var(--paper) 30%,rgba(250,247,239,0)) 100% 0,
+   radial-gradient(farthest-side at 0 50%,rgba(31,32,36,.3),rgba(31,32,36,0)),
+   radial-gradient(farthest-side at 100% 50%,rgba(31,32,36,.3),rgba(31,32,36,0)) 100% 0;
+  background-repeat:no-repeat;background-size:40px 100%,40px 100%,20px 100%,20px 100%;
+  background-attachment:local,local,scroll,scroll}
+}
+
+/* RD-16 header row on phones: brandmark and eyebrow each stay on one line, eyebrow drops to
+   its own row when needed, and the h1 gets room beneath it */
+@media(max-width:600px){
+ .toprow{flex-wrap:wrap;gap:4px 12px;margin-bottom:12px}
+ .brandmark{white-space:nowrap}
+ .wm{font-size:13px}
+ .toprow .mono{letter-spacing:.12em}
+}
+</style>
+</head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><g id="cwheel"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="2.4"/><g stroke="currentColor" stroke-width="1.9"><line x1="24" y1="24" x2="45" y2="24"/><line x1="24" y1="24" x2="34.5" y2="42.19"/><line x1="24" y1="24" x2="13.5" y2="42.19"/><line x1="24" y1="24" x2="3" y2="24"/><line x1="24" y1="24" x2="13.5" y2="5.81"/><line x1="24" y1="24" x2="34.5" y2="5.81"/></g><circle cx="24" cy="24" r="5" fill="currentColor"/></g></defs></svg><div class="stage"><div class="toprow"><div class="brandmark"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><use href="#cwheel"/></svg><span class="wm">Calidescope <span class="thin">· Deep dive</span></span></div><span class="mono ac">The pitch</span></div>
 <div class="mid"><h1 class="hero">Everyone sells outcomes.<br><span class="ac">Almost nobody is selling the same thing.</span></h1>
 <p class="say">A read of what 140 companies across the advertising and marketing ecosystem claim on their own pages, what evidence sits beside each claim, and where the open ground is. 2,213 claims quoted with their source links; 740 of them about outcomes. Every claim, every argument and every conclusion in this deck was adjudicated by MAVEN for what the evidence establishes and how far it travels.</p>
 <p class="mono" style="margin-top:22px">The outcomes market · September 2026 · Calidescope LLC · The Throughline × MAVEN</p></div><div class="foot"><span class="fv">Promise to Proof.</span><span class="pageno">1</span></div></div><div class="stage"><div class="toprow"><div class="brandmark"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><use href="#cwheel"/></svg><span class="wm">Calidescope <span class="thin">· Deep dive</span></span></div><span class="mono ac">This</span></div>

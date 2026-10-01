@@ -25,16 +25,17 @@ import re, pathlib
 
 HERE = pathlib.Path(__file__).resolve().parent
 UX   = (HERE / "ux.css").read_text()
+UXDEV = (HERE / "ux-dev.css").read_text()   # /dev only: responsive repairs staged ahead of the live site
 APP  = (HERE / "app.js").read_text()
 
-def render(src_path, n_sections):
+def render(src_path, n_sections, extra=""):
     """The designer's page, verbatim but for what a public URL needs. Returns (style, body, script)."""
     src = src_path.read_text()
     style = src[src.index("<style>"): src.index("</style>") + len("</style>")]
     style = style.replace("</style>",
       "[hidden]{display:none!important}\n"
       ".btn[disabled]{opacity:.5;cursor:default}\n"
-      "#csent:focus{outline:0}\n" + UX + "\n</style>")
+      "#csent:focus{outline:0}\n" + UX + extra + "\n</style>")
     body = src[src.index('<div id="stage">'): src.index("<script>")]
     grid_end = body.index("</div></div>")
     grid, rest = body[:grid_end], body[grid_end:]
@@ -91,7 +92,7 @@ TARGETS = [
 ]
 
 for src_path, n, target, head in TARGETS:
-    style, body, script = render(src_path, n)
+    style, body, script = render(src_path, n, ("\n" + UXDEV) if src_path == DEV else "")
     target.write_text(f"""<!DOCTYPE html>
 <html lang="en">
 <head>

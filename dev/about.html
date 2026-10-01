@@ -25,7 +25,7 @@
   --blue:#1E40FF; --violet:#7A3AD2; --pink:#E933A6;
   --sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  --d1:34px; --d2:24px; --p:16px; --lede:17px; --small:15px; --lbl:11.5px;
+  --d1:34px; --d2:24px; --p:16px; --lede:17px; --small:15px; --lbl:12px;
   --pad:22px; --barh:46px; --acc:var(--blue);
 }
 *,*::before,*::after{box-sizing:border-box}
@@ -104,6 +104,24 @@ footer{margin-top:44px;padding-top:14px;border-top:1px solid var(--hair);
   .rec .when{grid-column:2;grid-row:1;text-align:right}
   .rec .what{grid-column:1}
   .facts{grid-template-columns:repeat(3,1fr);gap:26px}
+}
+/* Just under the 760 breakpoint (iPad mini portrait, landscape phones) the
+   single column ran the record to 90-100 characters a line; desktop sets it
+   at about 63. Held to the same measure. */
+@media (min-width:560px) and (max-width:759px){
+  .rec .who,.rec .what,.fact dd,.more{max-width:50ch}
+}
+/* Touch: the links that stand alone were 17-23px tall, with an 8px dead band
+   between the wrapped contact rows. Padding on an inline link grows the hit
+   area without moving a line; on the flex row a matching negative margin
+   keeps the row where it was. */
+@media (pointer:coarse){
+  .out{gap:20px 22px}
+  .out a{padding:10px 0;margin:-10px 0}
+  .fact dd a{padding:10px 0}
+  .fact dd + dd{margin-top:10px}   /* stacked links: padded boxes no longer overlap */
+  #home{position:relative}
+  #home::after{content:"";position:absolute;top:-9px;right:-9px;bottom:-9px;left:-9px}
 }
 </style>
 </head>

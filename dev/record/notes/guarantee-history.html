@@ -108,6 +108,79 @@ footer{border-top:1px solid var(--hair);padding:28px 0 60px;font-family:var(--mo
 .prose td,.prose th{padding:9px 12px 9px 0;line-height:1.45}
 .prose th{white-space:nowrap}
 </style>
+<style>/* responsive repairs: next/record/fix/notes.css */
+/* Research notes (record/notes/*.html). Appended after the hub style and the
+   PROSE block, so equal-specificity rules here win by order. Colours use the
+   hub's variables so the prefers-color-scheme:dark theme carries through. */
+
+/* RSN-1 · URLs in table cells were broken to one character per line at every
+   width: break-word dropped the url column's min-content to a single glyph.
+   Prose links wrap normally; a table link keeps an 11em floor. */
+.prose a{word-break:normal;overflow-wrap:break-word}
+.prose td a[href]{display:inline-block;min-width:11em;max-width:100%;overflow-wrap:anywhere}
+
+/* RSN-1 / RSN-2 · let the table wrappers use the full column (968px) while the
+   prose keeps its 76ch measure. --measure is registered as a <length>, so 76ch
+   is resolved once on .prose and every child gets the same width as before. */
+@property --measure{syntax:"<length>";inherits:true;initial-value:0px}
+.prose{--measure:76ch;max-width:none}
+.prose>:not(.tw){max-width:var(--measure)}
+
+/* RSN-2 · a table that still scrolls shows it: a shadow on whichever edge has
+   more to see, covered by paper-coloured caps that travel with the content.
+   The shadows stop 1px short of top and bottom so a sub-pixel offset between
+   the two attachments never leaves a sliver showing on a table that fits. */
+.prose .tw{
+  --cue:color-mix(in srgb,var(--ink) 20%,transparent);
+  background:
+    linear-gradient(to right,var(--paper) 30%,transparent) 0 0/48px 100% no-repeat local,
+    linear-gradient(to left,var(--paper) 30%,transparent) 100% 0/48px 100% no-repeat local,
+    linear-gradient(to right,var(--cue),transparent) 0 1px/18px calc(100% - 2px) no-repeat scroll,
+    linear-gradient(to left,var(--cue),transparent) 100% 1px/18px calc(100% - 2px) no-repeat scroll}
+
+/* RSN-1 / RSN-2 · the 13-column claims table: 8px cell gaps instead of 12px bring
+   it from 1010px to 958px, so it fits the 968px desktop column with no scroll. */
+.tw-wide td,.tw-wide th{padding-right:8px}
+
+/* RSN-3 · phones. Short tables (tw-fit) drop the 640px floor and fit from 760px
+   down; tables that link out or run wide (tw-stack) keep scrolling, with the
+   cue, at 641-743px (704px floor so the url column does not starve the prose
+   columns) and become one labelled record per row at 640px and below. */
+@media(max-width:760px){
+  .tw-fit table{min-width:0}
+  .tw-fit th{white-space:normal}
+  .tw-stack table{min-width:704px}
+}
+@media(max-width:640px){
+  .tw-fit td,.tw-fit th{padding-right:6px}
+  .tw-stack table{min-width:0}
+  .tw-stack thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .tw-stack table,.tw-stack tbody,.tw-stack tr,.tw-stack td{display:block;width:auto}
+  .tw-stack tr{border-bottom:1px solid var(--hair);padding:12px 0}
+  .tw-stack tr:last-child{border-bottom:0}
+  .tw-stack td{border:0;padding:2px 0}
+  .tw-stack td::before{content:attr(data-label);display:block;font-family:var(--mono);font-size:12px;
+    letter-spacing:.05em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+  .tw-stack td:first-child::before{margin-top:0}
+  .tw-stack td.s{display:inline-block;padding:2px 16px 2px 0;vertical-align:baseline}
+  .tw-stack td.s::before{display:inline;margin:0 .5em 0 0}
+  .tw-stack td:empty{display:none}
+  .tw-stack td a[href]{min-width:0}
+}
+
+/* RSN-6 · 11.5px mono labels -> 12px on phones (portrait, and landscape/tablet
+   touch screens up to 932px). */
+@media(max-width:640px),(pointer:coarse) and (max-width:932px){
+  .prose th,.back,footer{font-size:12px}
+}
+
+/* RSN-5 · touch: the back link and footer link get >=24px hit boxes without
+   moving any glyph (padding on an inline box does not change line layout). */
+@media(pointer:coarse){
+  .back{padding:8px 0;margin:-8px 0 18px}
+  footer a{padding:6px 0}
+}
+</style>
 </head><body><div class="wrap">
 <header class="top">
 <a class="back" href="../index.html">&larr; The record</a>
@@ -124,7 +197,7 @@ footer{border-top:1px solid var(--hair);padding:28px 0 60px;font-family:var(--mo
 <p>Second correction: "outcome-priced" and "outcome-guaranteed" are different mechanisms. Pay-per-inquiry, affiliate, CPC and CPA make the price contingent on the result (the seller carries all the risk from the first dollar). The audience guarantee is a prepaid buy with a make-good. The outcome pricing lineage is old and lives in the lower-status corners, as you suspected. What is rare is the high-status version: a prepaid brand buy where the seller guarantees a business result and pays a remedy on a miss.</p>
 <hr />
 <h2>1. Timeline (dated, sourced)</h2>
-<div class="tw"><table>
+<div class="tw tw-stack"><table>
 <thead>
 <tr>
 <th>Date</th>
@@ -134,184 +207,184 @@ footer{border-top:1px solid var(--hair);padding:28px 0 60px;font-family:var(--mo
 </thead>
 <tbody>
 <tr>
-<td>1956-02-20</td>
-<td>Mutual Broadcasting (network RADIO) announces a broad circulation guarantee: guarantees number of home tune-ins; unmet guarantees remedied with make-good time, not rebates. Trade press says NBC offered a limited version "a little more than four years ago" (about 1952), limited to participations in three programs.</td>
-<td>Broadcasting-Telecasting, Feb 20 1956: <a href="https://lantern.mediahist.org/catalog/broadcastingtele50unse_0860" rel="noopener">https://lantern.mediahist.org/catalog/broadcastingtele50unse_0860</a></td>
+<td class="s" data-label="Date">1956-02-20</td>
+<td data-label="Event">Mutual Broadcasting (network RADIO) announces a broad circulation guarantee: guarantees number of home tune-ins; unmet guarantees remedied with make-good time, not rebates. Trade press says NBC offered a limited version "a little more than four years ago" (about 1952), limited to participations in three programs.</td>
+<td data-label="Source">Broadcasting-Telecasting, Feb 20 1956: <a href="https://lantern.mediahist.org/catalog/broadcastingtele50unse_0860" rel="noopener">https://lantern.mediahist.org/catalog/broadcastingtele50unse_0860</a></td>
 </tr>
 <tr>
-<td>1956-07-25</td>
-<td>Mutual ad in Variety: "an audience whose size is predetermined, and whose cost-per-thousand commercial impressions is guaranteed"</td>
-<td><a href="https://lantern.mediahist.org/catalog/variety203-1956-07_0250" rel="noopener">https://lantern.mediahist.org/catalog/variety203-1956-07_0250</a></td>
+<td class="s" data-label="Date">1956-07-25</td>
+<td data-label="Event">Mutual ad in Variety: "an audience whose size is predetermined, and whose cost-per-thousand commercial impressions is guaranteed"</td>
+<td data-label="Source"><a href="https://lantern.mediahist.org/catalog/variety203-1956-07_0250" rel="noopener">https://lantern.mediahist.org/catalog/variety203-1956-07_0250</a></td>
 </tr>
 <tr>
-<td>1962</td>
-<td>ABC schedules all premieres in one September week; the spring-buy for fall inventory ("upfront") takes shape</td>
-<td>AdExchanger, David Kaplan, 2013-07-26: <a href="https://www.adexchanger.com/online-advertising/a-brief-history-of-the-upfront/" rel="noopener">https://www.adexchanger.com/online-advertising/a-brief-history-of-the-upfront/</a> ; Digiday 2022-05: <a href="https://digiday.com/future-of-tv/wtf-is-the-tv-upfront/" rel="noopener">https://digiday.com/future-of-tv/wtf-is-the-tv-upfront/</a></td>
+<td class="s" data-label="Date">1962</td>
+<td data-label="Event">ABC schedules all premieres in one September week; the spring-buy for fall inventory ("upfront") takes shape</td>
+<td data-label="Source">AdExchanger, David Kaplan, 2013-07-26: <a href="https://www.adexchanger.com/online-advertising/a-brief-history-of-the-upfront/" rel="noopener">https://www.adexchanger.com/online-advertising/a-brief-history-of-the-upfront/</a> ; Digiday 2022-05: <a href="https://digiday.com/future-of-tv/wtf-is-the-tv-upfront/" rel="noopener">https://digiday.com/future-of-tv/wtf-is-the-tv-upfront/</a></td>
 </tr>
 <tr>
-<td>1967</td>
-<td>First guaranteed CPM in network TV: American Home Products with ABC. "An informal commitment by a network to protect a buyer who bought early." [FOLKLORE-RISK: single-source, attributed to Erwin Ephron]</td>
-<td>Ad Age (Ephron text; byline and date absent in fetch): <a href="https://adage.com/article/special-report-hoagtest01/tv-nets-upfront/54781/" rel="noopener">https://adage.com/article/special-report-hoagtest01/tv-nets-upfront/54781/</a> ; repeated by Pierre Bouvard, Westwood One, 2017: <a href="https://westwoodone.com/?p=6223" rel="noopener">https://westwoodone.com/?p=6223</a></td>
+<td class="s" data-label="Date">1967</td>
+<td data-label="Event">First guaranteed CPM in network TV: American Home Products with ABC. "An informal commitment by a network to protect a buyer who bought early." [FOLKLORE-RISK: single-source, attributed to Erwin Ephron]</td>
+<td data-label="Source">Ad Age (Ephron text; byline and date absent in fetch): <a href="https://adage.com/article/special-report-hoagtest01/tv-nets-upfront/54781/" rel="noopener">https://adage.com/article/special-report-hoagtest01/tv-nets-upfront/54781/</a> ; repeated by Pierre Bouvard, Westwood One, 2017: <a href="https://westwoodone.com/?p=6223" rel="noopener">https://westwoodone.com/?p=6223</a></td>
 </tr>
 <tr>
-<td>1970s-1985</td>
-<td>CPM guarantees spread; "By 1985, guaranteed upfront buys accounted for 85% of prime-time sales"</td>
-<td>Ad Age/Ephron text, same URL</td>
+<td class="s" data-label="Date">1970s-1985</td>
+<td data-label="Event">CPM guarantees spread; "By 1985, guaranteed upfront buys accounted for 85% of prime-time sales"</td>
+<td data-label="Source">Ad Age/Ephron text, same URL</td>
 </tr>
 <tr>
-<td>1990-06-04/08</td>
-<td>Networks unilaterally rewrite guarantee formulas after first drop in TV viewing; make-goods cost networks $150-200M that year; buyers angry</td>
-<td>Christian Science Monitor, Daniel B. Wood, 1990-06-08: <a href="https://csmonitor.com/1990/0608/labc.html" rel="noopener">https://csmonitor.com/1990/0608/labc.html</a> ; Tampa Bay Times 1990-06-04 (headline only): <a href="https://www.tampabay.com/archive/1990/06/04/abc-imposing-new-system-for-ratings" rel="noopener">https://www.tampabay.com/archive/1990/06/04/abc-imposing-new-system-for-ratings</a></td>
+<td class="s" data-label="Date">1990-06-04/08</td>
+<td data-label="Event">Networks unilaterally rewrite guarantee formulas after first drop in TV viewing; make-goods cost networks $150-200M that year; buyers angry</td>
+<td data-label="Source">Christian Science Monitor, Daniel B. Wood, 1990-06-08: <a href="https://csmonitor.com/1990/0608/labc.html" rel="noopener">https://csmonitor.com/1990/0608/labc.html</a> ; Tampa Bay Times 1990-06-04 (headline only): <a href="https://www.tampabay.com/archive/1990/06/04/abc-imposing-new-system-for-ratings" rel="noopener">https://www.tampabay.com/archive/1990/06/04/abc-imposing-new-system-for-ratings</a></td>
 </tr>
 <tr>
-<td>1994-10-27</td>
-<td>First banner ads on HotWired; flat monthly fee, "no traffic commitments whatsoever"</td>
-<td>Digiday, 2017-11-08: <a href="https://digiday.com/media/history-of-the-banner-ad/" rel="noopener">https://digiday.com/media/history-of-the-banner-ad/</a></td>
+<td class="s" data-label="Date">1994-10-27</td>
+<td data-label="Event">First banner ads on HotWired; flat monthly fee, "no traffic commitments whatsoever"</td>
+<td data-label="Source">Digiday, 2017-11-08: <a href="https://digiday.com/media/history-of-the-banner-ad/" rel="noopener">https://digiday.com/media/history-of-the-banner-ad/</a></td>
 </tr>
 <tr>
-<td>1995-06</td>
-<td>CNET: "first to sell banner ads with guaranteed audience deliveries" (Lon Otremba, EVP CNET)</td>
-<td>same URL</td>
+<td class="s" data-label="Date">1995-06</td>
+<td data-label="Event">CNET: "first to sell banner ads with guaranteed audience deliveries" (Lon Otremba, EVP CNET)</td>
+<td data-label="Source">same URL</td>
 </tr>
 <tr>
-<td>1998-02</td>
-<td>GoTo.com unveils pay-per-click at TED8 [CONTESTED: source text also says launched 1997]</td>
-<td><a href="https://thehistoryoftheweb.com/goto-forgotten-search-engine/" rel="noopener">https://thehistoryoftheweb.com/goto-forgotten-search-engine/</a></td>
+<td class="s" data-label="Date">1998-02</td>
+<td data-label="Event">GoTo.com unveils pay-per-click at TED8 [CONTESTED: source text also says launched 1997]</td>
+<td data-label="Source"><a href="https://thehistoryoftheweb.com/goto-forgotten-search-engine/" rel="noopener">https://thehistoryoftheweb.com/goto-forgotten-search-engine/</a></td>
 </tr>
 <tr>
-<td>2002</td>
-<td>Google launches cost-per-click ads (dating from Google counsel's statement)</td>
-<td>InfoWorld, 2006-03-09: <a href="https://www.infoworld.com/article/2188140/google-to-settle-click-fraud-lawsuit-for--90m.html" rel="noopener">https://www.infoworld.com/article/2188140/google-to-settle-click-fraud-lawsuit-for--90m.html</a></td>
+<td class="s" data-label="Date">2002</td>
+<td data-label="Event">Google launches cost-per-click ads (dating from Google counsel's statement)</td>
+<td data-label="Source">InfoWorld, 2006-03-09: <a href="https://www.infoworld.com/article/2188140/google-to-settle-click-fraud-lawsuit-for--90m.html" rel="noopener">https://www.infoworld.com/article/2188140/google-to-settle-click-fraud-lawsuit-for--90m.html</a></td>
 </tr>
 <tr>
-<td>2006-03-09</td>
-<td>Google agrees to pay up to $90M in fees and ad credits to advertisers charged for invalid clicks since 2002 (Lane's Gifts class action)</td>
-<td>same URL</td>
+<td class="s" data-label="Date">2006-03-09</td>
+<td data-label="Event">Google agrees to pay up to $90M in fees and ad credits to advertisers charged for invalid clicks since 2002 (Lane's Gifts class action)</td>
+<td data-label="Source">same URL</td>
 </tr>
 <tr>
-<td>2006-06-21</td>
-<td>Google tests cost-per-action pricing</td>
-<td>Battelle Media, 2006-06-21: <a href="https://battellemedia.com/archives/2006/06/updated_-_news_google_pay_per_action_network_test" rel="noopener">https://battellemedia.com/archives/2006/06/updated_-_news_google_pay_per_action_network_test</a></td>
+<td class="s" data-label="Date">2006-06-21</td>
+<td data-label="Event">Google tests cost-per-action pricing</td>
+<td data-label="Source">Battelle Media, 2006-06-21: <a href="https://battellemedia.com/archives/2006/06/updated_-_news_google_pay_per_action_network_test" rel="noopener">https://battellemedia.com/archives/2006/06/updated_-_news_google_pay_per_action_network_test</a></td>
 </tr>
 <tr>
-<td>2011-07-25</td>
-<td>Meredith "Engagement Dividend": guaranteed increase in sales, Nielsen Homescan measured</td>
-<td>Meredith release: <a href="https://news.people.inc/2011-07-25-Meredith-Introduces-Magazine-Advertising-Performance-Guarantee" rel="noopener">https://news.people.inc/2011-07-25-Meredith-Introduces-Magazine-Advertising-Performance-Guarantee</a> ; MediaPost 2011-07-25: <a href="https://www.mediapost.com/publications/article/154647/meredith-teams-with-nielsen-to-guarantee-sales-to.html" rel="noopener">https://www.mediapost.com/publications/article/154647/meredith-teams-with-nielsen-to-guarantee-sales-to.html</a></td>
+<td class="s" data-label="Date">2011-07-25</td>
+<td data-label="Event">Meredith "Engagement Dividend": guaranteed increase in sales, Nielsen Homescan measured</td>
+<td data-label="Source">Meredith release: <a href="https://news.people.inc/2011-07-25-Meredith-Introduces-Magazine-Advertising-Performance-Guarantee" rel="noopener">https://news.people.inc/2011-07-25-Meredith-Introduces-Magazine-Advertising-Performance-Guarantee</a> ; MediaPost 2011-07-25: <a href="https://www.mediapost.com/publications/article/154647/meredith-teams-with-nielsen-to-guarantee-sales-to.html" rel="noopener">https://www.mediapost.com/publications/article/154647/meredith-teams-with-nielsen-to-guarantee-sales-to.html</a></td>
 </tr>
 <tr>
-<td>2011-11-28</td>
-<td>Kimberly-Clark signs; Meredith to "make good any shortfalls on these guarantees with additional advertising"</td>
-<td><a href="https://www.mediapost.com/publications/article/163094/meredith-signs-kimberly-clark-for-roi-guarantees.html" rel="noopener">https://www.mediapost.com/publications/article/163094/meredith-signs-kimberly-clark-for-roi-guarantees.html</a></td>
+<td class="s" data-label="Date">2011-11-28</td>
+<td data-label="Event">Kimberly-Clark signs; Meredith to "make good any shortfalls on these guarantees with additional advertising"</td>
+<td data-label="Source"><a href="https://www.mediapost.com/publications/article/163094/meredith-signs-kimberly-clark-for-roi-guarantees.html" rel="noopener">https://www.mediapost.com/publications/article/163094/meredith-signs-kimberly-clark-for-roi-guarantees.html</a></td>
 </tr>
 <tr>
-<td>2013-05-06</td>
-<td>Meredith ROI guarantee: &gt;$1 incremental sales per $1 spent; shortfall remedied with free pages or possibly cash</td>
-<td><a href="https://www.mediapost.com/publications/article/199773/magazine-publisher-offers-roi-guarantee.html" rel="noopener">https://www.mediapost.com/publications/article/199773/magazine-publisher-offers-roi-guarantee.html</a></td>
+<td class="s" data-label="Date">2013-05-06</td>
+<td data-label="Event">Meredith ROI guarantee: &gt;$1 incremental sales per $1 spent; shortfall remedied with free pages or possibly cash</td>
+<td data-label="Source"><a href="https://www.mediapost.com/publications/article/199773/magazine-publisher-offers-roi-guarantee.html" rel="noopener">https://www.mediapost.com/publications/article/199773/magazine-publisher-offers-roi-guarantee.html</a></td>
 </tr>
 <tr>
-<td>2013-12-12</td>
-<td>Google Display Network moves to viewable CPM (pay for impressions likely to be seen)</td>
-<td>The Drum: <a href="https://www.thedrum.com/news/2013/12/12/google-rolls-out-viewability-based-ad-trading-across-display-ad-network" rel="noopener">https://www.thedrum.com/news/2013/12/12/google-rolls-out-viewability-based-ad-trading-across-display-ad-network</a></td>
+<td class="s" data-label="Date">2013-12-12</td>
+<td data-label="Event">Google Display Network moves to viewable CPM (pay for impressions likely to be seen)</td>
+<td data-label="Source">The Drum: <a href="https://www.thedrum.com/news/2013/12/12/google-rolls-out-viewability-based-ad-trading-across-display-ad-network" rel="noopener">https://www.thedrum.com/news/2013/12/12/google-rolls-out-viewability-based-ad-trading-across-display-ad-network</a></td>
 </tr>
 <tr>
-<td>2014-03-31</td>
-<td>MRC lifts advisory on transacting on viewable display impressions (50% pixels, 1 second; video 2 seconds)</td>
-<td>MediaPost: <a href="https://www.mediapost.com/publications/article/222569/updated-rating-council-lifts-lid-on-viewability.html" rel="noopener">https://www.mediapost.com/publications/article/222569/updated-rating-council-lifts-lid-on-viewability.html</a></td>
+<td class="s" data-label="Date">2014-03-31</td>
+<td data-label="Event">MRC lifts advisory on transacting on viewable display impressions (50% pixels, 1 second; video 2 seconds)</td>
+<td data-label="Source">MediaPost: <a href="https://www.mediapost.com/publications/article/222569/updated-rating-council-lifts-lid-on-viewability.html" rel="noopener">https://www.mediapost.com/publications/article/222569/updated-rating-council-lifts-lid-on-viewability.html</a></td>
 </tr>
 <tr>
-<td>2014-06-30</td>
-<td>MRC ends gating period, lifts viewability advisory for video</td>
-<td><a href="https://www.mediapost.com/publications/article/229053/mrc-ends-gating-period-lifts-viewability-advisory.html" rel="noopener">https://www.mediapost.com/publications/article/229053/mrc-ends-gating-period-lifts-viewability-advisory.html</a></td>
+<td class="s" data-label="Date">2014-06-30</td>
+<td data-label="Event">MRC ends gating period, lifts viewability advisory for video</td>
+<td data-label="Source"><a href="https://www.mediapost.com/publications/article/229053/mrc-ends-gating-period-lifts-viewability-advisory.html" rel="noopener">https://www.mediapost.com/publications/article/229053/mrc-ends-gating-period-lifts-viewability-advisory.html</a></td>
 </tr>
 <tr>
-<td>2014-12-09</td>
-<td>ANA/White Ops Bot Baseline: $6.3B projected bot fraud loss in 2015</td>
-<td><a href="https://ana.net/content/show/id/pr-2014-bot-fraud" rel="noopener">https://ana.net/content/show/id/pr-2014-bot-fraud</a></td>
+<td class="s" data-label="Date">2014-12-09</td>
+<td data-label="Event">ANA/White Ops Bot Baseline: $6.3B projected bot fraud loss in 2015</td>
+<td data-label="Source"><a href="https://ana.net/content/show/id/pr-2014-bot-fraud" rel="noopener">https://ana.net/content/show/id/pr-2014-bot-fraud</a></td>
 </tr>
 <tr>
-<td>2015-03-05</td>
-<td>Simulmedia guarantees better ROAS than the advertiser's concurrent TV; remedy: make-good inventory in proportion to the shortfall</td>
-<td>Simulmedia: <a href="https://www.simulmedia.com/blog/simulmedia-offers-brands-guarantee-data-driven-tv-ads-work" rel="noopener">https://www.simulmedia.com/blog/simulmedia-offers-brands-guarantee-data-driven-tv-ads-work</a> ; VideoWeek 2015-05-11: <a href="https://videoweek.com/2015/05/11/simulmedia-the-tv-targeting-company-putting-1-million-of-its-money-where-its-mouth-is/" rel="noopener">https://videoweek.com/2015/05/11/simulmedia-the-tv-targeting-company-putting-1-million-of-its-money-where-its-mouth-is/</a></td>
+<td class="s" data-label="Date">2015-03-05</td>
+<td data-label="Event">Simulmedia guarantees better ROAS than the advertiser's concurrent TV; remedy: make-good inventory in proportion to the shortfall</td>
+<td data-label="Source">Simulmedia: <a href="https://www.simulmedia.com/blog/simulmedia-offers-brands-guarantee-data-driven-tv-ads-work" rel="noopener">https://www.simulmedia.com/blog/simulmedia-offers-brands-guarantee-data-driven-tv-ads-work</a> ; VideoWeek 2015-05-11: <a href="https://videoweek.com/2015/05/11/simulmedia-the-tv-targeting-company-putting-1-million-of-its-money-where-its-mouth-is/" rel="noopener">https://videoweek.com/2015/05/11/simulmedia-the-tv-targeting-company-putting-1-million-of-its-money-where-its-mouth-is/</a></td>
 </tr>
 <tr>
-<td>2015-04-27</td>
-<td>ANA tells members to pay only for measurably viewable ads (CEO Bob Liodice)</td>
-<td><a href="https://ana.net/content/show/id/pr-2015-measurably-viewable" rel="noopener">https://ana.net/content/show/id/pr-2015-measurably-viewable</a></td>
+<td class="s" data-label="Date">2015-04-27</td>
+<td data-label="Event">ANA tells members to pay only for measurably viewable ads (CEO Bob Liodice)</td>
+<td data-label="Source"><a href="https://ana.net/content/show/id/pr-2015-measurably-viewable" rel="noopener">https://ana.net/content/show/id/pr-2015-measurably-viewable</a></td>
 </tr>
 <tr>
-<td>2015-10</td>
-<td>MPA "Print Magazine Sales Guarantee": 16 publishers (Time Inc., Hearst, Conde Nast, Meredith); money back or free pages if sales do not rise</td>
-<td>Retail Dive 2015-10-13: <a href="https://www.retaildive.com/news/magazine-publishers-offer-money-back-guarantee-for-ads/407223" rel="noopener">https://www.retaildive.com/news/magazine-publishers-offer-money-back-guarantee-for-ads/407223</a> ; Associations Now 2015-10: <a href="https://associationsnow.com/2015/10/magazine-industry-ad-buyers-roi-money-back/" rel="noopener">https://associationsnow.com/2015/10/magazine-industry-ad-buyers-roi-money-back/</a></td>
+<td class="s" data-label="Date">2015-10</td>
+<td data-label="Event">MPA "Print Magazine Sales Guarantee": 16 publishers (Time Inc., Hearst, Conde Nast, Meredith); money back or free pages if sales do not rise</td>
+<td data-label="Source">Retail Dive 2015-10-13: <a href="https://www.retaildive.com/news/magazine-publishers-offer-money-back-guarantee-for-ads/407223" rel="noopener">https://www.retaildive.com/news/magazine-publishers-offer-money-back-guarantee-for-ads/407223</a> ; Associations Now 2015-10: <a href="https://associationsnow.com/2015/10/magazine-industry-ad-buyers-roi-money-back/" rel="noopener">https://associationsnow.com/2015/10/magazine-industry-ad-buyers-roi-money-back/</a></td>
 </tr>
 <tr>
-<td>2015-10-29</td>
-<td>MRC final Invalid Traffic (IVT) Detection and Filtration Guidelines v1.0</td>
-<td><a href="https://www.iab.com/news/invalidtraffic/" rel="noopener">https://www.iab.com/news/invalidtraffic/</a></td>
+<td class="s" data-label="Date">2015-10-29</td>
+<td data-label="Event">MRC final Invalid Traffic (IVT) Detection and Filtration Guidelines v1.0</td>
+<td data-label="Source"><a href="https://www.iab.com/news/invalidtraffic/" rel="noopener">https://www.iab.com/news/invalidtraffic/</a></td>
 </tr>
 <tr>
-<td>2015-11-17</td>
-<td>Google Display Network upgrades all CPM campaigns to viewable CPM</td>
-<td><a href="https://adwords.googleblog.com/2015/11/the-google-display-network-ups-its.html" rel="noopener">https://adwords.googleblog.com/2015/11/the-google-display-network-ups-its.html</a></td>
+<td class="s" data-label="Date">2015-11-17</td>
+<td data-label="Event">Google Display Network upgrades all CPM campaigns to viewable CPM</td>
+<td data-label="Source"><a href="https://adwords.googleblog.com/2015/11/the-google-display-network-ups-its.html" rel="noopener">https://adwords.googleblog.com/2015/11/the-google-display-network-ups-its.html</a></td>
 </tr>
 <tr>
-<td>2017-10-25</td>
-<td>Westwood One ROI guarantee (radio): no-cost supplemental media if ROI not met</td>
-<td>GlobeNewswire: <a href="https://www.globenewswire.com/news-release/2017/10/25/1153547/0/en/Westwood-One-Introduces-The-First-Industry-Wide-ROI-Guarantee-In-The-Audio-Space.html" rel="noopener">https://www.globenewswire.com/news-release/2017/10/25/1153547/0/en/Westwood-One-Introduces-The-First-Industry-Wide-ROI-Guarantee-In-The-Audio-Space.html</a></td>
+<td class="s" data-label="Date">2017-10-25</td>
+<td data-label="Event">Westwood One ROI guarantee (radio): no-cost supplemental media if ROI not met</td>
+<td data-label="Source">GlobeNewswire: <a href="https://www.globenewswire.com/news-release/2017/10/25/1153547/0/en/Westwood-One-Introduces-The-First-Industry-Wide-ROI-Guarantee-In-The-Audio-Space.html" rel="noopener">https://www.globenewswire.com/news-release/2017/10/25/1153547/0/en/Westwood-One-Introduces-The-First-Industry-Wide-ROI-Guarantee-In-The-Audio-Space.html</a></td>
 </tr>
 <tr>
-<td>2018-02-01</td>
-<td>Matt O'Grady (CEO, Nielsen Catalina Solutions): "Will the ad industry move to a sales guarantee?"</td>
-<td><a href="https://www.adexchanger.com/data-driven-thinking/will-ad-industry-move-sales-guarantee/" rel="noopener">https://www.adexchanger.com/data-driven-thinking/will-ad-industry-move-sales-guarantee/</a></td>
+<td class="s" data-label="Date">2018-02-01</td>
+<td data-label="Event">Matt O'Grady (CEO, Nielsen Catalina Solutions): "Will the ad industry move to a sales guarantee?"</td>
+<td data-label="Source"><a href="https://www.adexchanger.com/data-driven-thinking/will-ad-industry-move-sales-guarantee/" rel="noopener">https://www.adexchanger.com/data-driven-thinking/will-ad-industry-move-sales-guarantee/</a></td>
 </tr>
 <tr>
-<td>2018-06-18</td>
-<td>Exchanges (AppNexus, TrustX) eat the cost of unviewed impressions; GroupM the driver</td>
-<td><a href="https://www.adexchanger.com/online-advertising/exchanges-are-under-pressure-to-pony-up-for-guaranteed-viewability/" rel="noopener">https://www.adexchanger.com/online-advertising/exchanges-are-under-pressure-to-pony-up-for-guaranteed-viewability/</a></td>
+<td class="s" data-label="Date">2018-06-18</td>
+<td data-label="Event">Exchanges (AppNexus, TrustX) eat the cost of unviewed impressions; GroupM the driver</td>
+<td data-label="Source"><a href="https://www.adexchanger.com/online-advertising/exchanges-are-under-pressure-to-pony-up-for-guaranteed-viewability/" rel="noopener">https://www.adexchanger.com/online-advertising/exchanges-are-under-pressure-to-pony-up-for-guaranteed-viewability/</a></td>
 </tr>
 <tr>
-<td>2019-02-08</td>
-<td>NBCU "Upside" (film): first NBCU business-outcome guarantee, tied to ticket sales; remedy not stated in coverage</td>
-<td><a href="https://www.mediapost.com/publications/article/331713/" rel="noopener">https://www.mediapost.com/publications/article/331713/</a></td>
+<td class="s" data-label="Date">2019-02-08</td>
+<td data-label="Event">NBCU "Upside" (film): first NBCU business-outcome guarantee, tied to ticket sales; remedy not stated in coverage</td>
+<td data-label="Source"><a href="https://www.mediapost.com/publications/article/331713/" rel="noopener">https://www.mediapost.com/publications/article/331713/</a></td>
 </tr>
 <tr>
-<td>2020-05-26</td>
-<td>Digiday: business-outcome guarantees "stalled" (COVID); Simulmedia says such deals are about 25% of its business</td>
-<td><a href="https://digiday.com/future-of-tv/why-the-tv-ad-industry-is-resisting-guarantees-commercials-will-lead-to-sales/" rel="noopener">https://digiday.com/future-of-tv/why-the-tv-ad-industry-is-resisting-guarantees-commercials-will-lead-to-sales/</a></td>
+<td class="s" data-label="Date">2020-05-26</td>
+<td data-label="Event">Digiday: business-outcome guarantees "stalled" (COVID); Simulmedia says such deals are about 25% of its business</td>
+<td data-label="Source"><a href="https://digiday.com/future-of-tv/why-the-tv-ad-industry-is-resisting-guarantees-commercials-will-lead-to-sales/" rel="noopener">https://digiday.com/future-of-tv/why-the-tv-ad-industry-is-resisting-guarantees-commercials-will-lead-to-sales/</a></td>
 </tr>
 <tr>
-<td>2022-01-26</td>
-<td>LG Ads Solutions: guaranteed outcome-based media, pay only when goals met, including app installs; third-party validation</td>
-<td><a href="https://www.businesswire.com/news/home/20220126005302/en/LG-Ads-Solutions-Introduces-First-of-Its-Kind-Suite-of-Guaranteed-Outcome-Based-Media-Offerings-With-Third-Party-Validation" rel="noopener">https://www.businesswire.com/news/home/20220126005302/en/LG-Ads-Solutions-Introduces-First-of-Its-Kind-Suite-of-Guaranteed-Outcome-Based-Media-Offerings-With-Third-Party-Validation</a></td>
+<td class="s" data-label="Date">2022-01-26</td>
+<td data-label="Event">LG Ads Solutions: guaranteed outcome-based media, pay only when goals met, including app installs; third-party validation</td>
+<td data-label="Source"><a href="https://www.businesswire.com/news/home/20220126005302/en/LG-Ads-Solutions-Introduces-First-of-Its-Kind-Suite-of-Guaranteed-Outcome-Based-Media-Offerings-With-Third-Party-Validation" rel="noopener">https://www.businesswire.com/news/home/20220126005302/en/LG-Ads-Solutions-Introduces-First-of-Its-Kind-Suite-of-Guaranteed-Outcome-Based-Media-Offerings-With-Third-Party-Validation</a></td>
 </tr>
 <tr>
-<td>2022-12-16</td>
-<td>Netflix reported delivering about 80% of guaranteed audience to early ad buyers; offered refunds/release of unspent funds rather than classic make-goods</td>
-<td>eMarketer/Digiday: <a href="https://www.emarketer.com/content/netflix-has-missed-initial-viewership-guarantees-its-first-ever-advertisers-in-some-cases-by-wide-margin" rel="noopener">https://www.emarketer.com/content/netflix-has-missed-initial-viewership-guarantees-its-first-ever-advertisers-in-some-cases-by-wide-margin</a></td>
+<td class="s" data-label="Date">2022-12-16</td>
+<td data-label="Event">Netflix reported delivering about 80% of guaranteed audience to early ad buyers; offered refunds/release of unspent funds rather than classic make-goods</td>
+<td data-label="Source">eMarketer/Digiday: <a href="https://www.emarketer.com/content/netflix-has-missed-initial-viewership-guarantees-its-first-ever-advertisers-in-some-cases-by-wide-margin" rel="noopener">https://www.emarketer.com/content/netflix-has-missed-initial-viewership-guarantees-its-first-ever-advertisers-in-some-cases-by-wide-margin</a></td>
 </tr>
 <tr>
-<td>2025</td>
-<td>AMC Networks described as first major network to guarantee outcomes in an upfront [CONTESTED: NBCU 2019 and Simulmedia 2015 predate it]</td>
-<td>The Current, Chris Brooklier, 2026-05-19: <a href="https://www.thecurrent.com/streaming-tv-spent-decades-selling-reach-results-measurement" rel="noopener">https://www.thecurrent.com/streaming-tv-spent-decades-selling-reach-results-measurement</a></td>
+<td class="s" data-label="Date">2025</td>
+<td data-label="Event">AMC Networks described as first major network to guarantee outcomes in an upfront [CONTESTED: NBCU 2019 and Simulmedia 2015 predate it]</td>
+<td data-label="Source">The Current, Chris Brooklier, 2026-05-19: <a href="https://www.thecurrent.com/streaming-tv-spent-decades-selling-reach-results-measurement" rel="noopener">https://www.thecurrent.com/streaming-tv-spent-decades-selling-reach-results-measurement</a></td>
 </tr>
 <tr>
-<td>2026-01-28</td>
-<td>Vevo + Adelaide "Attention Guaranteed": minimum attention score; no remedy stated</td>
-<td><a href="https://www.exchangewire.com/blog/2026/01/28/vevo-partners-with-adelaide-to-launch-attention-guaranteed" rel="noopener">https://www.exchangewire.com/blog/2026/01/28/vevo-partners-with-adelaide-to-launch-attention-guaranteed</a></td>
+<td class="s" data-label="Date">2026-01-28</td>
+<td data-label="Event">Vevo + Adelaide "Attention Guaranteed": minimum attention score; no remedy stated</td>
+<td data-label="Source"><a href="https://www.exchangewire.com/blog/2026/01/28/vevo-partners-with-adelaide-to-launch-attention-guaranteed" rel="noopener">https://www.exchangewire.com/blog/2026/01/28/vevo-partners-with-adelaide-to-launch-attention-guaranteed</a></td>
 </tr>
 <tr>
-<td>2026-06-10</td>
-<td>Digiday: WBD, Paramount, AMC, TelevisaUnivision executives say outcomes are not yet a transactable currency</td>
-<td><a href="https://digiday.com/future-of-tv/future-of-tv-briefing-how-tv-and-streaming-networks-are-laying-the-groundwork-for-outcome-based-buying/" rel="noopener">https://digiday.com/future-of-tv/future-of-tv-briefing-how-tv-and-streaming-networks-are-laying-the-groundwork-for-outcome-based-buying/</a></td>
+<td class="s" data-label="Date">2026-06-10</td>
+<td data-label="Event">Digiday: WBD, Paramount, AMC, TelevisaUnivision executives say outcomes are not yet a transactable currency</td>
+<td data-label="Source"><a href="https://digiday.com/future-of-tv/future-of-tv-briefing-how-tv-and-streaming-networks-are-laying-the-groundwork-for-outcome-based-buying/" rel="noopener">https://digiday.com/future-of-tv/future-of-tv-briefing-how-tv-and-streaming-networks-are-laying-the-groundwork-for-outcome-based-buying/</a></td>
 </tr>
 <tr>
-<td>2026-08-11</td>
-<td>Media Dynamics: 2026-27 prime-time upfront $33.7B (+9%)</td>
-<td><a href="https://www.mediapost.com/publications/article/417166/prime-time-upfront-ad-sales-rise-9-to-337b-cpm.html" rel="noopener">https://www.mediapost.com/publications/article/417166/prime-time-upfront-ad-sales-rise-9-to-337b-cpm.html</a></td>
+<td class="s" data-label="Date">2026-08-11</td>
+<td data-label="Event">Media Dynamics: 2026-27 prime-time upfront $33.7B (+9%)</td>
+<td data-label="Source"><a href="https://www.mediapost.com/publications/article/417166/prime-time-upfront-ad-sales-rise-9-to-337b-cpm.html" rel="noopener">https://www.mediapost.com/publications/article/417166/prime-time-upfront-ad-sales-rise-9-to-337b-cpm.html</a></td>
 </tr>
 <tr>
-<td>2026-09-15</td>
-<td>Duolingo "AU guarantees" with Adelaide; no remedy stated</td>
-<td><a href="https://www.exchangewire.com/blog/2026/09/15/adelaide-introduces-the-au-ecosystem-for-creative-partners-to-align-creative-media-quality" rel="noopener">https://www.exchangewire.com/blog/2026/09/15/adelaide-introduces-the-au-ecosystem-for-creative-partners-to-align-creative-media-quality</a></td>
+<td class="s" data-label="Date">2026-09-15</td>
+<td data-label="Event">Duolingo "AU guarantees" with Adelaide; no remedy stated</td>
+<td data-label="Source"><a href="https://www.exchangewire.com/blog/2026/09/15/adelaide-introduces-the-au-ecosystem-for-creative-partners-to-align-creative-media-quality" rel="noopener">https://www.exchangewire.com/blog/2026/09/15/adelaide-introduces-the-au-ecosystem-for-creative-partners-to-align-creative-media-quality</a></td>
 </tr>
 </tbody>
 </table></div>
@@ -375,12 +448,14 @@ footer{border-top:1px solid var(--hair);padding:28px 0 60px;font-family:var(--mo
 <h3>5a. "Nobody put money at risk on a sale" is false as history</h3>
 <p>Section 4 above. A reader with trade memory (Meredith, MPA, Simulmedia, Westwood One) will remember them.</p>
 <h3>5b. The retrofit test: "we have always sold outcomes"</h3>
-<p>Partly true, mostly in a different form:
-- Contingent pricing (pay only on result) is old and lives in direct response, affiliate and search. Dated anchors I could verify: PC Flowers &amp; Gifts (William Tobin) affiliate program on Prodigy, 1989 (patent filed 1996-01-22, issued 2000-10-31); CDNow BuyWeb, 1994-11; Amazon Associates, 1996-07; LinkShare and BeFree 1996; Commission Junction and ClickBank 1998 (<a href="https://en.wikipedia.org/wiki/Affiliate_marketing" rel="noopener">https://en.wikipedia.org/wiki/Affiliate_marketing</a> ; <a href="https://track360.io/blog/affiliate-marketing-history-timeline-1994-2026" rel="noopener">https://track360.io/blog/affiliate-marketing-history-timeline-1994-2026</a> ; secondary sources, dates not primary-checked). GoTo pay-per-click Feb 1998. Google CPC 2002. Google CPA test 2006-06-21. CPA networks and ValueClick's 2003 purchase of Commission Junction (track360, secondary).
-- Direct-response television: first filmed half-hour infomercial for a commercial product, Vitamix, 1949, WOR-TV (Wikipedia "Infomercial", secondary; not checked to primary). Alvin Eicoff founded his agency in 1959 and pioneered late-night direct response TV; his "...or your money back" book is 1982 (Wikipedia; secondary). Lester Wunderman named "direct marketing" in a 1967 MIT speech (Wikipedia).
-- Per-inquiry (PI): I could NOT source a dated origin. Wikipedia's "Cost per action" says only that radio and TV stations "sometimes offer unsold inventory on a cost per action basis, but this form of advertising is most often referred to as 'per inquiry.'" A modern PI vendor (Target + Response) describes it as: "Marketers pay for their radio advertising based on the number of sales leads (or inquiries) that are generated, regardless of the number of times the ad airs." My searches of trade archives did not return a first instance. Treat "PI dates to the 1950s" as unverified.
-- Risk transfer differs by form. PI/CPA/affiliate: the publisher carries the whole media risk, and (Battelle, 2006) "For Publishers: Risk increased significantly — they became responsible for merchant website performance, landing page quality, and conversion optimization, factors beyond their control." It also shifts fraud risk to the platform (Google's stated attraction of CPA in 2006 per Battelle: reduced click-fraud exposure). Audience guarantee: seller carries a delivery risk only, prepaid, remedied in inventory. Sales/ROI guarantee: seller carries outcome risk on a prepaid buy, remedied in inventory or cash.
-- So "the industry has repeatedly sold on outcomes" is true for the performance corner, and the fair reading is that outcome pricing and brand-media guarantees evolved on separate tracks. The gap your data shows (8 of 2,213 guarantees, all upstream) sits on the brand-media track.</p>
+<p>Partly true, mostly in a different form:</p>
+<ul>
+<li>Contingent pricing (pay only on result) is old and lives in direct response, affiliate and search. Dated anchors I could verify: PC Flowers &amp; Gifts (William Tobin) affiliate program on Prodigy, 1989 (patent filed 1996-01-22, issued 2000-10-31); CDNow BuyWeb, 1994-11; Amazon Associates, 1996-07; LinkShare and BeFree 1996; Commission Junction and ClickBank 1998 (<a href="https://en.wikipedia.org/wiki/Affiliate_marketing" rel="noopener">https://en.wikipedia.org/wiki/Affiliate_marketing</a> ; <a href="https://track360.io/blog/affiliate-marketing-history-timeline-1994-2026" rel="noopener">https://track360.io/blog/affiliate-marketing-history-timeline-1994-2026</a> ; secondary sources, dates not primary-checked). GoTo pay-per-click Feb 1998. Google CPC 2002. Google CPA test 2006-06-21. CPA networks and ValueClick's 2003 purchase of Commission Junction (track360, secondary).</li>
+<li>Direct-response television: first filmed half-hour infomercial for a commercial product, Vitamix, 1949, WOR-TV (Wikipedia "Infomercial", secondary; not checked to primary). Alvin Eicoff founded his agency in 1959 and pioneered late-night direct response TV; his "...or your money back" book is 1982 (Wikipedia; secondary). Lester Wunderman named "direct marketing" in a 1967 MIT speech (Wikipedia).</li>
+<li>Per-inquiry (PI): I could NOT source a dated origin. Wikipedia's "Cost per action" says only that radio and TV stations "sometimes offer unsold inventory on a cost per action basis, but this form of advertising is most often referred to as 'per inquiry.'" A modern PI vendor (Target + Response) describes it as: "Marketers pay for their radio advertising based on the number of sales leads (or inquiries) that are generated, regardless of the number of times the ad airs." My searches of trade archives did not return a first instance. Treat "PI dates to the 1950s" as unverified.</li>
+<li>Risk transfer differs by form. PI/CPA/affiliate: the publisher carries the whole media risk, and (Battelle, 2006) "For Publishers: Risk increased significantly — they became responsible for merchant website performance, landing page quality, and conversion optimization, factors beyond their control." It also shifts fraud risk to the platform (Google's stated attraction of CPA in 2006 per Battelle: reduced click-fraud exposure). Audience guarantee: seller carries a delivery risk only, prepaid, remedied in inventory. Sales/ROI guarantee: seller carries outcome risk on a prepaid buy, remedied in inventory or cash.</li>
+<li>So "the industry has repeatedly sold on outcomes" is true for the performance corner, and the fair reading is that outcome pricing and brand-media guarantees evolved on separate tracks. The gap your data shows (8 of 2,213 guarantees, all upstream) sits on the brand-media track.</li>
+</ul>
 <h3>5c. Structural reasons the guarantee stops at delivery (with quotable people)</h3>
 <ul>
 <li>Control. Charlie Warner (media consultant, 2011-08-09, on Meredith): "Think of the logic of placing the responsibility for results on an advertising agency. What a marketer, in essence, is admitting in this case is that the two most important elements in the sale of a product or service are the placement and creation of advertising. They are not giving any weight to the quality of the product, the packaging, pricing, the distribution channel, consumer or trade promotions, publicity, social networking strategy, the weather, the economy, or the cumulative effect of advertising messages, to name just a few factors that impact sales." (<a href="https://shellypalmer.com/2011/08/behind-the-mask-of-merediths-guaranteed-sales-is-a-discount/" rel="noopener">https://shellypalmer.com/2011/08/behind-the-mask-of-merediths-guaranteed-sales-is-a-discount/</a> ; also MediaVillage)</li>
@@ -396,7 +471,7 @@ footer{border-top:1px solid var(--hair);padding:28px 0 60px;font-family:var(--mo
 </ul>
 <hr />
 <h2>6. Area 4: Per-inquiry and performance pricing: summary</h2>
-<div class="tw"><table>
+<div class="tw tw-stack"><table>
 <thead>
 <tr>
 <th>Form</th>
@@ -407,40 +482,40 @@ footer{border-top:1px solid var(--hair);padding:28px 0 60px;font-family:var(--mo
 </thead>
 <tbody>
 <tr>
-<td>Direct response TV</td>
-<td>Vitamix 30-min film 1949; Eicoff agency 1959; infomercial deregulation 1984 (TV)</td>
-<td>Advertiser pays airtime; measured by orders. Not contingent pricing by itself.</td>
-<td>Wikipedia (secondary)</td>
+<td class="s" data-label="Form">Direct response TV</td>
+<td data-label="Earliest dated evidence I could verify">Vitamix 30-min film 1949; Eicoff agency 1959; infomercial deregulation 1984 (TV)</td>
+<td data-label="Risk transfer">Advertiser pays airtime; measured by orders. Not contingent pricing by itself.</td>
+<td data-label="Source">Wikipedia (secondary)</td>
 </tr>
 <tr>
-<td>Per-inquiry (PI)</td>
-<td>Undated in my search</td>
-<td>Station takes unsold inventory; paid per lead. Seller bears all media risk.</td>
-<td>Wikipedia CPA; Target + Response (modern vendor)</td>
+<td class="s" data-label="Form">Per-inquiry (PI)</td>
+<td data-label="Earliest dated evidence I could verify">Undated in my search</td>
+<td data-label="Risk transfer">Station takes unsold inventory; paid per lead. Seller bears all media risk.</td>
+<td data-label="Source">Wikipedia CPA; Target + Response (modern vendor)</td>
 </tr>
 <tr>
-<td>Affiliate</td>
-<td>1989 (Tobin/Prodigy), 1994-11 CDNow, 1996-07 Amazon</td>
-<td>Commission on sale; publisher bears all risk</td>
-<td>Wikipedia; track360</td>
+<td class="s" data-label="Form">Affiliate</td>
+<td data-label="Earliest dated evidence I could verify">1989 (Tobin/Prodigy), 1994-11 CDNow, 1996-07 Amazon</td>
+<td data-label="Risk transfer">Commission on sale; publisher bears all risk</td>
+<td data-label="Source">Wikipedia; track360</td>
 </tr>
 <tr>
-<td>Pay-per-click</td>
-<td>Feb 1998 GoTo (TED8); 2002 Google</td>
-<td>Advertiser pays on click, not sale; fraud risk moves to platform (2006 settlement)</td>
-<td>History of the Web; InfoWorld</td>
+<td class="s" data-label="Form">Pay-per-click</td>
+<td data-label="Earliest dated evidence I could verify">Feb 1998 GoTo (TED8); 2002 Google</td>
+<td data-label="Risk transfer">Advertiser pays on click, not sale; fraud risk moves to platform (2006 settlement)</td>
+<td data-label="Source">History of the Web; InfoWorld</td>
 </tr>
 <tr>
-<td>CPA</td>
-<td>Google test 2006-06-21; CPA networks 2000s</td>
-<td>Pays on conversion; publisher bears landing-page risk</td>
-<td>Battelle</td>
+<td class="s" data-label="Form">CPA</td>
+<td data-label="Earliest dated evidence I could verify">Google test 2006-06-21; CPA networks 2000s</td>
+<td data-label="Risk transfer">Pays on conversion; publisher bears landing-page risk</td>
+<td data-label="Source">Battelle</td>
 </tr>
 <tr>
-<td>Pay-for-performance agency fee</td>
-<td>Undated</td>
-<td>Agency paid after leads/revenue collected</td>
-<td>Wikipedia "Pay for performance advertising"</td>
+<td class="s" data-label="Form">Pay-for-performance agency fee</td>
+<td data-label="Earliest dated evidence I could verify">Undated</td>
+<td data-label="Risk transfer">Agency paid after leads/revenue collected</td>
+<td data-label="Source">Wikipedia "Pay for performance advertising"</td>
 </tr>
 </tbody>
 </table></div>
