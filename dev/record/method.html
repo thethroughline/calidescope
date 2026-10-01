@@ -1,0 +1,111 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>The Outcomes Market — method</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+<meta name="robots" content="noindex, nofollow">
+<style>
+:root{
+  --paper:#FAF7EF; --desk:#EFEBE1; --sand:#F3EEE2; --hair:#E4E0D6;
+  --ink:#1F2024; --muted:#63605A; --dim:#63605A; --faint:#6E6B64;
+  --blue:#1E40FF; --tint:#DDE6FF; --card:#FFFFFF;
+  --arch:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#16171A; --desk:#1D1F23; --sand:#1B1D21; --hair:#33363C;
+    --ink:#F2F0EA; --muted:#AFABA2; --dim:#AFABA2; --faint:#9B968D;
+    --blue:#8FA6FF; --tint:#232A45; --card:#1E2025;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#16171A; --desk:#1D1F23; --sand:#1B1D21; --hair:#33363C;
+  --ink:#F2F0EA; --muted:#AFABA2; --dim:#AFABA2; --faint:#9B968D;
+  --blue:#8FA6FF; --tint:#232A45; --card:#1E2025;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--arch);
+  font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+a{color:var(--blue)}
+header.top{border-bottom:1px solid var(--hair);padding:56px 0 30px;margin-bottom:38px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--dim);margin:0 0 16px}
+h1{font-size:clamp(30px,5.2vw,46px);line-height:1.08;letter-spacing:-.018em;margin:0 0 6px;font-weight:600}
+h1 .two{display:block;color:var(--muted);font-weight:500}
+.lede{font-size:clamp(16px,2.2vw,18px);color:var(--muted);max-width:60ch;margin:18px 0 0}
+.stamp{font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:22px}
+section{margin:0 0 54px}
+h2{font-size:22px;line-height:1.2;letter-spacing:-.012em;margin:0 0 6px;font-weight:600}
+.sub{color:var(--muted);font-size:15px;margin:0 0 22px;max-width:62ch}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:14px}
+.card{display:block;background:var(--card);border:1px solid var(--hair);border-radius:3px;
+  padding:20px;text-decoration:none;color:inherit}
+.card:hover{border-color:var(--blue)}
+.card .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--blue);margin-bottom:10px}
+.card .t{font-size:17px;font-weight:600;margin-bottom:6px;letter-spacing:-.008em}
+.card .d{font-size:14px;color:var(--muted);line-height:1.5}
+.figs{display:flex;flex-wrap:wrap;gap:1px;background:var(--hair);border:1px solid var(--hair);
+  border-radius:3px;overflow:hidden}
+.fig{background:var(--sand);padding:18px 16px;flex:1 1 132px;min-width:132px}
+.fig .n{font-family:var(--mono);font-size:26px;font-weight:600;letter-spacing:-.02em;display:block}
+.fig .l{font-size:13px;color:var(--muted);margin-top:4px;display:block;line-height:1.4}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--dim);font-weight:500;padding:0 10px 9px 0;
+  border-bottom:1px solid var(--ink)}
+td{padding:11px 10px 11px 0;border-bottom:1px solid var(--hair);vertical-align:top}
+td.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;
+  padding-right:14px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+.tw{overflow-x:auto}
+.name{font-weight:600}
+.mean{color:var(--muted);font-size:13px;display:block;margin-top:2px}
+.flinks a{font-family:var(--mono);font-size:11.5px;white-space:nowrap}
+.flinks span{color:var(--faint);padding:0 5px}
+ol.ref{list-style:none;padding:0;margin:0;border-top:1px solid var(--hair)}
+ol.ref li{border-bottom:1px solid var(--hair);padding:15px 0;display:grid;
+  grid-template-columns:34px 1fr;gap:14px}
+ol.ref .no{font-family:var(--mono);font-size:12px;color:var(--faint);padding-top:2px}
+ol.ref .cl{font-weight:600;margin-bottom:3px}
+ol.ref .wh{color:var(--muted);font-size:14px}
+.note{background:var(--desk);border-radius:3px;padding:20px 22px;font-size:14px;
+  color:var(--muted);line-height:1.6}
+.note b{color:var(--ink)}
+.note.thanks{background:var(--tint);border-left:2px solid var(--blue);border-radius:0 3px 3px 0}
+.note a{color:var(--blue)}
+footer a{color:var(--blue)}
+footer{border-top:1px solid var(--hair);padding:28px 0 60px;font-family:var(--mono);
+  font-size:11.5px;color:var(--dim);line-height:1.7}
+.memo p{max-width:70ch;margin:0 0 15px}
+.memo p:first-of-type{font-size:18px;color:var(--ink);line-height:1.5}
+.back{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;
+  display:inline-block;margin-bottom:26px}
+.qt{border-left:2px solid var(--blue);padding:2px 0 2px 16px;margin:0 0 15px;
+  color:var(--muted);font-size:14.5px}
+@media(max-width:760px){.tw table{min-width:640px}}
+@media(max-width:640px){header.top{padding:34px 0 24px}.card{padding:16px}
+  .fig{flex:1 1 42%;min-width:0}}
+
+.mn{font-family:var(--mono);font-size:.9em;background:var(--desk);padding:1px 5px;border-radius:2px;color:var(--ink)}
+.qv{font-style:normal}
+.src{font-family:var(--mono);font-size:11.5px;white-space:nowrap;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px}
+</style>
+</head><body><div class="wrap">
+<header class="top">
+<a class="back" href="index.html">&larr; The record</a>
+<p class="eyebrow">The method</p>
+<h1>How it was built<span class="two">and where it disagrees with itself</span></h1>
+<p class="lede">140 advertising and media companies, read page by page over two days. Every claim kept verbatim with the URL it came from. A second pass by MAVEN ruled on what each sector statement establishes and how far it travels.</p>
+<p class="stamp">Captured 16&ndash;17 September 2026 &middot; adjudicated 17&ndash;18 September 2026 by Michael Risucci</p>
+</header>
+<section><h2>The sample</h2><p class="sub">Twelve categories of the advertising and media supply chain, ten companies each, chosen for share of attention rather than share of revenue. Plus twenty companies that sell on &ldquo;Outcomes&rdquo; directly, read deeper.</p><div class="figs"><div class="fig"><span class="n">140</span><span class="l">companies</span></div><div class="fig"><span class="n">627</span><span class="l">pages captured</span></div><div class="fig"><span class="n">2,213</span><span class="l">claims kept verbatim</span></div><div class="fig"><span class="n">536</span><span class="l">arguments traced to evidence</span></div></div><p class="sub" style="margin-top:14px">Home page first, then platform, product, pricing, customers, about and press where they exist. The frame is in <a href="data/sample_frame.csv">sample_frame.csv</a> and the twenty in <a href="data/outcomes20_frame.csv">outcomes20_frame.csv</a>.</p></section>
+<section><h2>What the words mean here</h2><p class="sub">Five definitions carry every count in the study.</p><div class="tw"><table><thead><tr><th>Term</th><th>Definition, and the count it produces</th></tr></thead><tbody><tr><td class="name" style="width:30%">An &ldquo;Outcome&rdquo; claim</td><td><span class="mn">claim_type = outcome</span>, plus any claim coded <span class="mn">stated metric</span> or <span class="mn">guaranteed</span> at any level. 740 of 2,213.</td></tr><tr><td class="name" style="width:30%">The four levels</td><td><span class="mn">none</span> &middot; <span class="mn">implied</span> &middot; <span class="mn">stated metric</span> &middot; <span class="mn">guaranteed</span>. Across the 740: 2, 297, 433, 8.</td></tr><tr><td class="name" style="width:30%">Evidence on the page</td><td>What sits beside the claim where it is made: nothing, a bare number, a named client, a method, or a third party. Across the 740: 28 third-party, 290 named client, 42 method.</td></tr><tr><td class="name" style="width:30%">A supported argument</td><td>A pillar with evidence on the page it is made on, or one click away on the same site. 446 of 536.</td></tr><tr><td class="name" style="width:30%">A guarantee</td><td>Language putting something at risk on a stated result. 8 claims. All eight name something upstream of the sale: fraud, attention, reach, delivery, completion.</td></tr></tbody></table></div></section>
+<section><h2>What the second pass found</h2><p class="sub">Each sector statement was split into six parts &mdash; what the word means there, the claim pattern, the evidence pattern, the transfer read, the commercial risk and the white space &mdash; and each part was ruled on separately. 78 rows in <a href="adjudication/sector_propositions.csv">sector_propositions.csv</a>.</p><div class="figs"><div class="fig"><span class="n">13</span><span class="l">hold outright</span></div><div class="fig"><span class="n">46</span><span class="l">hold with a boundary</span></div><div class="fig"><span class="n">19</span><span class="l">partially hold</span></div><div class="fig"><span class="n">0</span><span class="l">fail</span></div></div><ol class="ref" style="margin-top:20px"><li><span class="no">13</span><div><div class="cl">hold outright</div><div class="wh">Every one of the thirteen claim patterns &mdash; the counting itself.</div></div></li><li><span class="no">46</span><div><div class="cl">hold with a boundary</div><div class="wh">The statement stands once the limit is printed with it.</div></div></li><li><span class="no">19</span><div><div class="cl">partially hold</div><div class="wh">Mostly the transfer reads: how far a sector&rsquo;s proof travels.</div></div></li><li><span class="no">0</span><div><div class="cl">fail</div><div class="wh">No sector statement was withdrawn.</div></div></li></ol></section>
+<section><h2>Four headlines the second pass rewrote</h2><p class="sub">Each one claimed more than the capture could carry. The replacement is narrower and holds.</p><ol class="ref"><li><span class="no">01</span><div><div class="cl">The public promise stops before the remedy.</div><div class="wh">Replaced &ldquo;Nobody&rsquo;s fee moves.&rdquo; 103 companies publish no pricing page and no contract was read, so the market-wide version cannot be carried.</div></div></li><li><span class="no">02</span><div><div class="cl">The adjudicators are lightly adjudicated.</div><div class="wh">Replaced &ldquo;least adjudicated.&rdquo; Measurement and verification carry 3 third-party figures across 95 outcome claims, but retail media carries 0 across 44.</div></div></li><li><span class="no">03</span><div><div class="cl">The proposition often appears before the evidence.</div><div class="wh">Replaced &ldquo;the front door asserts, the case study establishes.&rdquo; 230 of 536 arguments rest on evidence elsewhere on the same site, which is not the same as a case study.</div></div></li><li><span class="no">04</span><div><div class="cl">Operational outcomes stand in for market outcomes.</div><div class="wh">Replaced &ldquo;production stands in for performance.&rdquo; Creative tech counts assets; workflow counts pipeline and process time. Those are two different substitutions.</div></div></li></ol></section>
+<section><h2>What the capture could not see</h2><p class="sub">Five gaps apply across the whole read. Each one bounds a particular kind of statement, and each is in <a href="adjudication/uncaptured_evidence.csv">uncaptured_evidence.csv</a> with MAVEN&rsquo;s ruling beside it.</p><div class="tw"><table><thead><tr><th class="num">Count</th><th>Gap</th><th>What it bounds</th></tr></thead><tbody><tr><td class="num">103</td><td class="name">of 140 companies publish no pricing page</td><td>Any fee-at-risk language would live there. MAVEN: this makes &ldquo;nobody&rsquo;s fee moves&rdquo; unsupportable. The finding that survives is narrower and firmer &mdash; no captured page states a remedy tied to a result.</td></tr><tr><td class="num">83</td><td class="name">have no how-it-works or method page</td><td>Those pages hold the machinery that lifts a figure from attributed to causal. The record can say the machinery was not exposed. It cannot say sellers lack it.</td></tr><tr><td class="num">46</td><td class="name">have no reachable case study</td><td>Missing or behind a form. Named clients, third-party figures and method notes live there, so observed patterns are firmer than absences.</td></tr><tr><td class="num">5</td><td class="name">sites need a full browser</td><td>Netflix Ads and Reddit yielded nothing; Warner Bros. Discovery, Epsilon and Adform are partial. A fetch failure is not a market absence.</td></tr><tr><td class="num">6</td><td class="name">pages animate their figures</td><td>Counters that render as zero to a text fetcher, including Disney, Demandbase and Integrate. Metric density is understated for those companies.</td></tr></tbody></table></div></section>
+<section><h2>Eight places the record disagrees with itself</h2><p class="sub">Printed rather than reconciled away. Where a figure on a page differs from a figure in a file, the file is the record.</p><ol class="ref"><li><span class="no">01</span><div><div class="cl">Two figures for the same idea</div><div class="wh">433 of the 740 &ldquo;Outcome&rdquo; claims state a figure. 8 more guarantee one. 441 is the count of claims that state <i>or</i> guarantee. Both appear; they are different definitions, and 433 is the one used for &ldquo;states a figure.&rdquo;</div></div></li><li><span class="no">02</span><div><div class="cl">Two different 90s</div><div class="wh">90 of 536 arguments are unsupported where they stand. Separately, 71 carry no evidence anywhere on the site. Nothing links the two counts.</div></div></li><li><span class="no">03</span><div><div class="cl">A front-door figure that was withdrawn</div><div class="wh">An earlier draft read &ldquo;55 of 131 home pages use the word.&rdquo; 137 home pages were captured, and neither number reproduces. What does reproduce: 41 of 137 home pages print the word inside a captured claim, and 116 of 137 carry a claim about an outcome.</div></div></li><li><span class="no">04</span><div><div class="cl">The adjudication ran at the sector level</div><div class="wh">All four MAVEN columns are blank on all 2,213 claim rows and all three on all 536 pillar rows. The second pass ran on 78 sector propositions, 13 matrix placements, 5 patterns and 5 capture gaps. Those blank columns are dropped from the files published here.</div></div></li><li><span class="no">05</span><div><div class="cl">MiQ is counted two ways</div><div class="wh">companies.csv records a business-result guarantee on MiQ&rsquo;s page. The claim rows code the same sentence <span class="mn">implied</span>, not <span class="mn">guaranteed</span>. The eight guarantee-coded claims therefore exclude it. Both readings are in the files.</div></div></li><li><span class="no">06</span><div><div class="cl">Three verbatims failed their check</div><div class="wh">2,184 of 2,213 matched the captured page exactly, 26 matched ignoring markdown, and 3 did not match. Those three are flagged in <span class="mn">verbatim_check</span> and are quoted nowhere.</div></div></li><li><span class="no">07</span><div><div class="cl">The matrix is judgment</div><div class="wh">The thirteen positions on claim and proof are a reading of the sector memos, not measured scores. MAVEN&rsquo;s ruling: the relative topology holds, the coordinates are not scores. The counts sit in the same row so each placement can be re-argued.</div></div></li><li><span class="no">08</span><div><div class="cl">Sector names differ between files</div><div class="wh">sector_stats.json, the adjudication CSVs and the deck each use a slightly different spelling. <span class="mn">segment_id</span> &mdash; S01 to S12 and O20 &mdash; is the key that holds across all of them.</div></div></li></ol></section>
+<section id="notes"><h2>Two research notes</h2><p class="sub">The reading behind the precedent and the agentic comparison. Each one names its sources and what it could not establish.</p><div class="cards"><a class="card" href="notes/guarantee-history.html"><div class="k">Research note</div><div class="t">The audience guarantee and the make-good</div><div class="d">Dated evidence for the precedent: who guaranteed what, when, and what the remedy was. Every entry carries its source.</div></a><a class="card" href="notes/agentic-capture.html"><div class="k">Research note</div><div class="t">Agentic claims capture: same 64 companies, same instrument</div><div class="d">Sixty-four companies re-read on 30 September for claims about AI agents. Eighty claims coded on the same five rungs.</div></a></div></section><section><div class="note thanks"><b>With thanks to Marketecture.</b> The company records, segment definitions and news history behind this sample came from the <b>Marketecture Advertising Database</b>. Their API is what made a 140-company frame buildable in two days. The frame is better for it, and the errors in it are ours. <a href="https://maddb.ai" rel="noopener">maddb.ai</a> &middot; Marketecture Media</div></section>
+<section><div class="note"><b>Rebuild any figure.</b> <a href="data/claims.csv">claims.csv</a> and <a href="data/sector_stats.json">sector_stats.json</a> generate every number published in this study. If one does not reproduce, it is an error and it will be corrected with credit. &mdash; Bret Leece, bret.leece@gmail.com</div></section>
+<footer>Calidescope LLC &middot; The Throughline &times; MAVEN (Michael Risucci)<br>Counts describe the public pages captured on 16&ndash;17 September 2026, not the market. Company data from the Marketecture Advertising Database &middot; <a href="https://maddb.ai" rel="noopener">maddb.ai</a></footer>
+</div></body></html>

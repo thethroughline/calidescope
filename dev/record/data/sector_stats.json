@@ -1,0 +1,314 @@
+{
+ "O20": {
+  "segment": "Outcome sellers (deep read)",
+  "companies": 20,
+  "claims": 371,
+  "outcome_claims": 153,
+  "ladder": {
+   "none": 1,
+   "implied": 75,
+   "stated metric": 76,
+   "guaranteed": 1
+  },
+  "evidence": {
+   "third_party": 6,
+   "named_client": 51,
+   "methodology": 15
+  },
+  "pillars": 80,
+  "pillars_supported": 69,
+  "pillars_no_evidence": 11,
+  "pillars_evidence_offsite": 30,
+  "complexity_home_avg": 42.2,
+  "complexity_site_avg": 61.8,
+  "home_words_median": 684
+ },
+ "S01": {
+  "segment": "Walled gardens & platforms",
+  "companies": 10,
+  "claims": 144,
+  "outcome_claims": 55,
+  "ladder": {
+   "none": 0,
+   "implied": 18,
+   "stated metric": 37,
+   "guaranteed": 0
+  },
+  "evidence": {
+   "third_party": 2,
+   "named_client": 26,
+   "methodology": 0
+  },
+  "pillars": 36,
+  "pillars_supported": 28,
+  "pillars_no_evidence": 7,
+  "pillars_evidence_offsite": 11,
+  "complexity_home_avg": 37,
+  "complexity_site_avg": 57.1,
+  "home_words_median": 671
+ },
+ "S02": {
+  "segment": "DSPs & buy-side platforms",
+  "companies": 10,
+  "claims": 153,
+  "outcome_claims": 50,
+  "ladder": {
+   "none": 0,
+   "implied": 20,
+   "stated metric": 28,
+   "guaranteed": 2
+  },
+  "evidence": {
+   "third_party": 1,
+   "named_client": 16,
+   "methodology": 3
+  },
+  "pillars": 38,
+  "pillars_supported": 31,
+  "pillars_no_evidence": 3,
+  "pillars_evidence_offsite": 24,
+  "complexity_home_avg": 31.4,
+  "complexity_site_avg": 61.7,
+  "home_words_median": 351
+ },
+ "S03": {
+  "segment": "SSPs & sell-side",
+  "companies": 10,
+  "claims": 166,
+  "outcome_claims": 57,
+  "ladder": {
+   "none": 0,
+   "implied": 24,
+   "stated metric": 33,
+   "guaranteed": 0
+  },
+  "evidence": {
+   "third_party": 7,
+   "named_client": 23,
+   "methodology": 0
+  },
+  "pillars": 39,
+  "pillars_supported": 29,
+  "pillars_no_evidence": 8,
+  "pillars_evidence_offsite": 19,
+  "complexity_home_avg": 41.3,
+  "complexity_site_avg": 63.8,
+  "home_words_median": 442
+ },
+ "S04": {
+  "segment": "Retail & commerce media",
+  "companies": 10,
+  "claims": 158,
+  "outcome_claims": 44,
+  "ladder": {
+   "none": 0,
+   "implied": 21,
+   "stated metric": 23,
+   "guaranteed": 0
+  },
+  "evidence": {
+   "third_party": 0,
+   "named_client": 19,
+   "methodology": 5
+  },
+  "pillars": 39,
+  "pillars_supported": 31,
+  "pillars_no_evidence": 5,
+  "pillars_evidence_offsite": 11,
+  "complexity_home_avg": 38.6,
+  "complexity_site_avg": 56.4,
+  "home_words_median": 470
+ },
+ "S05": {
+  "segment": "CTV & streaming",
+  "companies": 10,
+  "claims": 130,
+  "outcome_claims": 38,
+  "ladder": {
+   "none": 0,
+   "implied": 21,
+   "stated metric": 17,
+   "guaranteed": 0
+  },
+  "evidence": {
+   "third_party": 1,
+   "named_client": 9,
+   "methodology": 3
+  },
+  "pillars": 31,
+  "pillars_supported": 25,
+  "pillars_no_evidence": 4,
+  "pillars_evidence_offsite": 18,
+  "complexity_home_avg": 29.4,
+  "complexity_site_avg": 53.1,
+  "home_words_median": 372
+ },
+ "S06": {
+  "segment": "Measurement & attribution",
+  "companies": 10,
+  "claims": 159,
+  "outcome_claims": 49,
+  "ladder": {
+   "none": 0,
+   "implied": 22,
+   "stated metric": 26,
+   "guaranteed": 1
+  },
+  "evidence": {
+   "third_party": 1,
+   "named_client": 14,
+   "methodology": 3
+  },
+  "pillars": 40,
+  "pillars_supported": 34,
+  "pillars_no_evidence": 6,
+  "pillars_evidence_offsite": 18,
+  "complexity_home_avg": 43.8,
+  "complexity_site_avg": 60.6,
+  "home_words_median": 446
+ },
+ "S07": {
+  "segment": "Verification & brand safety",
+  "companies": 10,
+  "claims": 159,
+  "outcome_claims": 46,
+  "ladder": {
+   "none": 0,
+   "implied": 19,
+   "stated metric": 23,
+   "guaranteed": 4
+  },
+  "evidence": {
+   "third_party": 2,
+   "named_client": 11,
+   "methodology": 2
+  },
+  "pillars": 36,
+  "pillars_supported": 31,
+  "pillars_no_evidence": 3,
+  "pillars_evidence_offsite": 16,
+  "complexity_home_avg": 39.8,
+  "complexity_site_avg": 59.9,
+  "home_words_median": 589
+ },
+ "S08": {
+  "segment": "Data identity & clean rooms",
+  "companies": 10,
+  "claims": 154,
+  "outcome_claims": 46,
+  "ladder": {
+   "none": 0,
+   "implied": 14,
+   "stated metric": 32,
+   "guaranteed": 0
+  },
+  "evidence": {
+   "third_party": 2,
+   "named_client": 21,
+   "methodology": 4
+  },
+  "pillars": 36,
+  "pillars_supported": 28,
+  "pillars_no_evidence": 7,
+  "pillars_evidence_offsite": 12,
+  "complexity_home_avg": 43.2,
+  "complexity_site_avg": 63,
+  "home_words_median": 650
+ },
+ "S09": {
+  "segment": "Marketing clouds CDP & engagement",
+  "companies": 10,
+  "claims": 156,
+  "outcome_claims": 51,
+  "ladder": {
+   "none": 0,
+   "implied": 10,
+   "stated metric": 41,
+   "guaranteed": 0
+  },
+  "evidence": {
+   "third_party": 1,
+   "named_client": 28,
+   "methodology": 3
+  },
+  "pillars": 41,
+  "pillars_supported": 37,
+  "pillars_no_evidence": 3,
+  "pillars_evidence_offsite": 18,
+  "complexity_home_avg": 40.3,
+  "complexity_site_avg": 63.5,
+  "home_words_median": 620
+ },
+ "S10": {
+  "segment": "Creative tech & AI content",
+  "companies": 10,
+  "claims": 172,
+  "outcome_claims": 66,
+  "ladder": {
+   "none": 0,
+   "implied": 13,
+   "stated metric": 53,
+   "guaranteed": 0
+  },
+  "evidence": {
+   "third_party": 3,
+   "named_client": 34,
+   "methodology": 2
+  },
+  "pillars": 42,
+  "pillars_supported": 41,
+  "pillars_no_evidence": 1,
+  "pillars_evidence_offsite": 19,
+  "complexity_home_avg": 49.6,
+  "complexity_site_avg": 62.5,
+  "home_words_median": 788
+ },
+ "S11": {
+  "segment": "Workflow & media operations",
+  "companies": 10,
+  "claims": 159,
+  "outcome_claims": 49,
+  "ladder": {
+   "none": 0,
+   "implied": 11,
+   "stated metric": 38,
+   "guaranteed": 0
+  },
+  "evidence": {
+   "third_party": 1,
+   "named_client": 31,
+   "methodology": 1
+  },
+  "pillars": 39,
+  "pillars_supported": 36,
+  "pillars_no_evidence": 3,
+  "pillars_evidence_offsite": 13,
+  "complexity_home_avg": 53.9,
+  "complexity_site_avg": 64,
+  "home_words_median": 966
+ },
+ "S12": {
+  "segment": "Agencies & holding companies",
+  "companies": 10,
+  "claims": 132,
+  "outcome_claims": 36,
+  "ladder": {
+   "none": 1,
+   "implied": 29,
+   "stated metric": 6,
+   "guaranteed": 0
+  },
+  "evidence": {
+   "third_party": 1,
+   "named_client": 7,
+   "methodology": 1
+  },
+  "pillars": 39,
+  "pillars_supported": 26,
+  "pillars_no_evidence": 10,
+  "pillars_evidence_offsite": 21,
+  "complexity_home_avg": 28.2,
+  "complexity_site_avg": 56,
+  "home_words_median": 221
+ }
+}

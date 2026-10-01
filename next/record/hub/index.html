@@ -1,0 +1,112 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>The Outcomes Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAF7EF; --desk:#EFEBE1; --sand:#F3EEE2; --hair:#E4E0D6;
+  --ink:#1F2024; --muted:#63605A; --dim:#63605A; --faint:#6E6B64;
+  --blue:#1E40FF; --tint:#DDE6FF; --card:#FFFFFF;
+  --arch:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#16171A; --desk:#1D1F23; --sand:#1B1D21; --hair:#33363C;
+    --ink:#F2F0EA; --muted:#AFABA2; --dim:#AFABA2; --faint:#9B968D;
+    --blue:#8FA6FF; --tint:#232A45; --card:#1E2025;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#16171A; --desk:#1D1F23; --sand:#1B1D21; --hair:#33363C;
+  --ink:#F2F0EA; --muted:#AFABA2; --dim:#AFABA2; --faint:#9B968D;
+  --blue:#8FA6FF; --tint:#232A45; --card:#1E2025;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--arch);
+  font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+a{color:var(--blue)}
+header.top{border-bottom:1px solid var(--hair);padding:56px 0 30px;margin-bottom:38px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--dim);margin:0 0 16px}
+h1{font-size:clamp(30px,5.2vw,46px);line-height:1.08;letter-spacing:-.018em;margin:0 0 6px;font-weight:600}
+h1 .two{display:block;color:var(--muted);font-weight:500}
+.lede{font-size:clamp(16px,2.2vw,18px);color:var(--muted);max-width:60ch;margin:18px 0 0}
+.stamp{font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:22px}
+section{margin:0 0 54px}
+h2{font-size:22px;line-height:1.2;letter-spacing:-.012em;margin:0 0 6px;font-weight:600}
+.sub{color:var(--muted);font-size:15px;margin:0 0 22px;max-width:62ch}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:14px}
+.card{display:block;background:var(--card);border:1px solid var(--hair);border-radius:3px;
+  padding:20px;text-decoration:none;color:inherit}
+.card:hover{border-color:var(--blue)}
+.card .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--blue);margin-bottom:10px}
+.card .t{font-size:17px;font-weight:600;margin-bottom:6px;letter-spacing:-.008em}
+.card .d{font-size:14px;color:var(--muted);line-height:1.5}
+.figs{display:flex;flex-wrap:wrap;gap:1px;background:var(--hair);border:1px solid var(--hair);
+  border-radius:3px;overflow:hidden}
+.fig{background:var(--sand);padding:18px 16px;flex:1 1 132px;min-width:132px}
+.fig .n{font-family:var(--mono);font-size:26px;font-weight:600;letter-spacing:-.02em;display:block}
+.fig .l{font-size:13px;color:var(--muted);margin-top:4px;display:block;line-height:1.4}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--dim);font-weight:500;padding:0 10px 9px 0;
+  border-bottom:1px solid var(--ink)}
+td{padding:11px 10px 11px 0;border-bottom:1px solid var(--hair);vertical-align:top}
+td.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;
+  padding-right:14px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+.tw{overflow-x:auto}
+.name{font-weight:600}
+.mean{color:var(--muted);font-size:13px;display:block;margin-top:2px}
+.flinks a{font-family:var(--mono);font-size:11.5px;white-space:nowrap}
+.flinks span{color:var(--faint);padding:0 5px}
+ol.ref{list-style:none;padding:0;margin:0;border-top:1px solid var(--hair)}
+ol.ref li{border-bottom:1px solid var(--hair);padding:15px 0;display:grid;
+  grid-template-columns:34px 1fr;gap:14px}
+ol.ref .no{font-family:var(--mono);font-size:12px;color:var(--faint);padding-top:2px}
+ol.ref .cl{font-weight:600;margin-bottom:3px}
+ol.ref .wh{color:var(--muted);font-size:14px}
+.note{background:var(--desk);border-radius:3px;padding:20px 22px;font-size:14px;
+  color:var(--muted);line-height:1.6}
+.note b{color:var(--ink)}
+.note.thanks{background:var(--tint);border-left:2px solid var(--blue);border-radius:0 3px 3px 0}
+.note a{color:var(--blue)}
+footer a{color:var(--blue)}
+footer{border-top:1px solid var(--hair);padding:28px 0 60px;font-family:var(--mono);
+  font-size:11.5px;color:var(--dim);line-height:1.7}
+.memo p{max-width:70ch;margin:0 0 15px}
+.memo p:first-of-type{font-size:18px;color:var(--ink);line-height:1.5}
+.back{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;
+  display:inline-block;margin-bottom:26px}
+.qt{border-left:2px solid var(--blue);padding:2px 0 2px 16px;margin:0 0 15px;
+  color:var(--muted);font-size:14.5px}
+@media(max-width:760px){.tw table{min-width:640px}}
+@media(max-width:640px){header.top{padding:34px 0 24px}.card{padding:16px}
+  .fig{flex:1 1 42%;min-width:0}}
+
+.mn{font-family:var(--mono);font-size:.9em;background:var(--desk);padding:1px 5px;border-radius:2px;color:var(--ink)}
+.qv{font-style:normal}
+.src{font-family:var(--mono);font-size:11.5px;white-space:nowrap;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px}
+</style>
+<div class="wrap">
+<header class="top">
+<p class="eyebrow">Calidescope LLC &middot; The Throughline &times; MAVEN</p>
+<h1>The Outcomes Market<span class="two">The record underneath</span></h1>
+<p class="lede">Everyone sells &ldquo;Outcomes.&rdquo; How far each seller stands behind it is printed on the page. This is the evidence behind that read: 140 advertising and media companies, read page by page, with every claim kept verbatim and every count reproducible from the files below.</p>
+<p class="stamp">Read 16&ndash;17 September 2026 &middot; adjudicated 17&ndash;18 September 2026 &middot; published 28 September 2026</p>
+</header>
+<section><h2>Start here</h2><p class="sub">Three ways in, shortest first.</p><div class="cards"><a class="card" href="deck.html"><div class="k">17 stages &middot; 12 min</div><div class="t">The argument</div><div class="d">Who sells outcomes, how far each one commits, and the language they use to do it.</div></a><a class="card" href="deep-dive.html"><div class="k">22 stages &middot; 25 min</div><div class="t">The deep dive</div><div class="d">Sector by sector, with the constructs, the evidence pattern and the white space in each one.</div></a><a class="card" href="method.html"><div class="k">How it was built</div><div class="t">The method</div><div class="d">The sample, the coding, the definitions, and the eight places the record contradicts itself.</div></a></div></section>
+<section><h2>The record in figures</h2><p class="sub">Each one is recomputed from the files on this page.</p><div class="figs"><div class="fig"><span class="n">140</span><span class="l">companies read</span></div><div class="fig"><span class="n">627</span><span class="l">pages captured</span></div><div class="fig"><span class="n">2,213</span><span class="l">claims kept verbatim</span></div><div class="fig"><span class="n">740</span><span class="l">about an &ldquo;Outcome&rdquo;</span></div><div class="fig"><span class="n">433</span><span class="l">of those state a figure</span></div><div class="fig"><span class="n">28</span><span class="l">carry a figure from outside the seller</span></div><div class="fig"><span class="n">8</span><span class="l">put something at risk</span></div></div></section>
+<section><h2>The thirteen categories</h2><p class="sub">Twelve categories of the advertising and media supply chain, ten companies each, plus twenty companies that sell on &ldquo;Outcomes&rdquo; directly. Each row opens its own memo and its own claims file.</p><div class="tw"><table><thead><tr><th>Category, and what the word means there</th><th class="num">Cos</th><th class="num">Claims</th><th class="num">Outcome</th><th class="num">Figure</th><th class="num">Outside</th><th>Files</th></tr></thead><tbody><tr><td><span class="name">Walled gardens &amp; platforms</span><span class="mean">A conversion attributed inside the platform&rsquo;s own reporting</span></td><td class="num">10</td><td class="num">144</td><td class="num">55</td><td class="num">37</td><td class="num">2</td><td class="flinks"><a href="sectors/S01.html">read</a><span>&middot;</span><a href="data/claims_by_sector/S01_claims.csv">claims</a></td></tr><tr><td><span class="name">DSPs &amp; buy-side platforms</span><span class="mean">A campaign result attributed by the platform, plus hours saved</span></td><td class="num">10</td><td class="num">153</td><td class="num">50</td><td class="num">28</td><td class="num">1</td><td class="flinks"><a href="sectors/S02.html">read</a><span>&middot;</span><a href="data/claims_by_sector/S02_claims.csv">claims</a></td></tr><tr><td><span class="name">SSPs &amp; sell-side</span><span class="mean">Buyer performance and publisher yield, sold from one page</span></td><td class="num">10</td><td class="num">166</td><td class="num">57</td><td class="num">33</td><td class="num">7</td><td class="flinks"><a href="sectors/S03.html">read</a><span>&middot;</span><a href="data/claims_by_sector/S03_claims.csv">claims</a></td></tr><tr><td><span class="name">Retail &amp; commerce media</span><span class="mean">The sale itself, read from the retailer&rsquo;s purchase data</span></td><td class="num">10</td><td class="num">158</td><td class="num">44</td><td class="num">23</td><td class="num">0</td><td class="flinks"><a href="sectors/S04.html">read</a><span>&middot;</span><a href="data/claims_by_sector/S04_claims.csv">claims</a></td></tr><tr><td><span class="name">CTV &amp; streaming</span><span class="mean">Reach on the TV set, and the attention it holds</span></td><td class="num">10</td><td class="num">130</td><td class="num">38</td><td class="num">17</td><td class="num">1</td><td class="flinks"><a href="sectors/S05.html">read</a><span>&middot;</span><a href="data/claims_by_sector/S05_claims.csv">claims</a></td></tr><tr><td><span class="name">Measurement &amp; attribution</span><span class="mean">The advertiser&rsquo;s ROI, and the lift from adopting the measurement</span></td><td class="num">10</td><td class="num">159</td><td class="num">49</td><td class="num">26</td><td class="num">1</td><td class="flinks"><a href="sectors/S06.html">read</a><span>&middot;</span><a href="data/claims_by_sector/S06_claims.csv">claims</a></td></tr><tr><td><span class="name">Verification &amp; brand safety</span><span class="mean">Performance attributed to screened or scored placements</span></td><td class="num">10</td><td class="num">159</td><td class="num">46</td><td class="num">23</td><td class="num">2</td><td class="flinks"><a href="sectors/S07.html">read</a><span>&middot;</span><a href="data/claims_by_sector/S07_claims.csv">claims</a></td></tr><tr><td><span class="name">Data identity &amp; clean rooms</span><span class="mean">A client result attributed to a better-resolved record</span></td><td class="num">10</td><td class="num">154</td><td class="num">46</td><td class="num">32</td><td class="num">2</td><td class="flinks"><a href="sectors/S08.html">read</a><span>&middot;</span><a href="data/claims_by_sector/S08_claims.csv">claims</a></td></tr><tr><td><span class="name">Marketing clouds CDP &amp; engagement</span><span class="mean">Revenue on channels the buyer already owns</span></td><td class="num">10</td><td class="num">156</td><td class="num">51</td><td class="num">41</td><td class="num">1</td><td class="flinks"><a href="sectors/S09.html">read</a><span>&middot;</span><a href="data/claims_by_sector/S09_claims.csv">claims</a></td></tr><tr><td><span class="name">Creative tech &amp; AI content</span><span class="mean">Production: assets, hours, and cost per asset</span></td><td class="num">10</td><td class="num">172</td><td class="num">66</td><td class="num">53</td><td class="num">3</td><td class="flinks"><a href="sectors/S10.html">read</a><span>&middot;</span><a href="data/claims_by_sector/S10_claims.csv">claims</a></td></tr><tr><td><span class="name">Workflow &amp; media operations</span><span class="mean">Pipeline dollars, and process time</span></td><td class="num">10</td><td class="num">159</td><td class="num">49</td><td class="num">38</td><td class="num">1</td><td class="flinks"><a href="sectors/S11.html">read</a><span>&middot;</span><a href="data/claims_by_sector/S11_claims.csv">claims</a></td></tr><tr><td><span class="name">Agencies &amp; holding companies</span><span class="mean">Growth, unquantified</span></td><td class="num">10</td><td class="num">132</td><td class="num">36</td><td class="num">6</td><td class="num">1</td><td class="flinks"><a href="sectors/S12.html">read</a><span>&middot;</span><a href="data/claims_by_sector/S12_claims.csv">claims</a></td></tr><tr><td><span class="name">Outcome sellers (deep read)</span><span class="mean">A business event credited to exposure</span></td><td class="num">20</td><td class="num">371</td><td class="num">153</td><td class="num">76</td><td class="num">6</td><td class="flinks"><a href="sectors/O20.html">read</a><span>&middot;</span><a href="data/claims_by_sector/O20_claims.csv">claims</a></td></tr><tr><td><span class="name">All thirteen</span></td><td class="num">140</td><td class="num">2213</td><td class="num">740</td><td class="num">433</td><td class="num">28</td><td class="flinks"><a href="data/claims.csv">claims.csv</a></td></tr></tbody></table></div></section>
+<section><h2>The adjudication</h2><p class="sub">MAVEN&rsquo;s second pass ran at the sector-statement level. These are the files it ran against.</p><div class="tw"><table><thead><tr><th>File</th><th class="num">Size</th><th>What it holds</th></tr></thead><tbody><tr><td class="flinks"><a href="adjudication/sector_propositions.csv">sector_propositions.csv</a></td><td class="num">78 rows</td><td>Each sector statement split into its six parts, with the counts it rests on.</td></tr><tr><td class="flinks"><a href="adjudication/five_patterns.csv">five_patterns.csv</a></td><td class="num">5 rows</td><td>The five market-wide patterns, and what each rests on.</td></tr><tr><td class="flinks"><a href="adjudication/matrix_placements.csv">matrix_placements.csv</a></td><td class="num">13 rows</td><td>Where each sector sits on claim and proof. Judgment, with the counts beside it.</td></tr><tr><td class="flinks"><a href="adjudication/uncaptured_by_sector.csv">uncaptured_by_sector.csv</a></td><td class="num">92 rows</td><td>What each sector&rsquo;s read could not see.</td></tr><tr><td class="flinks"><a href="adjudication/uncaptured_evidence.csv">uncaptured_evidence.csv</a></td><td class="num">5 rows</td><td>The five gaps that apply across the whole read.</td></tr></tbody></table></div></section>
+<section><h2>The full data</h2><p class="sub">Open in a spreadsheet. Every figure published anywhere in this study can be rebuilt from these seven files.</p><div class="tw"><table><thead><tr><th>File</th><th class="num">Size</th><th>What it holds</th></tr></thead><tbody><tr><td class="flinks"><a href="data/claims.csv">claims.csv</a></td><td class="num">2,213 rows</td><td>Every claim, verbatim, with the page and URL it came from.</td></tr><tr><td class="flinks"><a href="data/pillars.csv">pillars.csv</a></td><td class="num">536 rows</td><td>Every argument a company makes, and whether evidence sits with it.</td></tr><tr><td class="flinks"><a href="data/companies.csv">companies.csv</a></td><td class="num">140 rows</td><td>One row per company: the read, the hero line, the guarantee check.</td></tr><tr><td class="flinks"><a href="data/pages.csv">pages.csv</a></td><td class="num">627 rows</td><td>Every page captured, with its word count.</td></tr><tr><td class="flinks"><a href="data/sector_stats.json">sector_stats.json</a></td><td class="num">13 objects</td><td>The counts every figure on this site is generated from.</td></tr><tr><td class="flinks"><a href="data/sample_frame.csv">sample_frame.csv</a></td><td class="num">140 rows</td><td>How the sample was chosen.</td></tr><tr><td class="flinks"><a href="data/outcomes20_frame.csv">outcomes20_frame.csv</a></td><td class="num">20 rows</td><td>The twenty outcome sellers, and why each one is in.</td></tr></tbody></table></div></section>
+<section><h2>Five things the record will not support</h2><p class="sub">Each one is available from the figures above. None survives what was captured.</p><ol class="ref"><li><span class="no">01</span><div><div class="cl">The market has no proof.</div><div class="wh">It has plenty. The question is what each number shows, and how far it travels.</div></div></li><li><span class="no">02</span><div><div class="cl">Vague language means weak evidence.</div><div class="wh">Walled gardens use the plainest language of anyone and show a method on none of their claims.</div></div></li><li><span class="no">03</span><div><div class="cl">Outcome sellers are more honest.</div><div class="wh">They show their method twice as often. Honesty was not measured.</div></div></li><li><span class="no">04</span><div><div class="cl">No seller puts a fee at risk.</div><div class="wh">Sellers have guaranteed a business result with a stated remedy at least five times since 2011.</div></div></li><li><span class="no">05</span><div><div class="cl">The gap is the opportunity.</div><div class="wh">An absence on a web page is not proof of demand.</div></div></li></ol></section>
+<section><div class="note thanks"><b>With thanks to Marketecture.</b> The company records, segment definitions and news history behind this sample came from the <b>Marketecture Advertising Database</b>. Their API is what made a 140-company frame buildable in two days. The frame is better for it, and the errors in it are ours. <a href="https://maddb.ai" rel="noopener">maddb.ai</a> &middot; Marketecture Media</div></section>
+<section><div class="note"><b>Use it.</b> The claim text, the coding and the source URLs are yours to check, argue with, or extend. Where a figure here disagrees with a figure elsewhere, the CSV is the record and the page is the summary. Corrections are welcome and will be published with credit. &mdash; Bret Leece, bret.leece@gmail.com</div></section>
+<footer>Calidescope LLC &middot; The Throughline &times; MAVEN (Michael Risucci)<br>140 companies, 627 pages, 2,213 claims. Counts describe the public pages captured on 16&ndash;17 September 2026, not the market. Company data from the Marketecture Advertising Database &middot; <a href="https://maddb.ai" rel="noopener">maddb.ai</a></footer>
+</div>
+</body></html>

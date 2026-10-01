@@ -6,3 +6,5 @@ next/source
 next/build.py
 next/app.js
 next/ux.css
+next/deck
+next/record

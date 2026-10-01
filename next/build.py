@@ -111,3 +111,9 @@ for src_path, n, target, head in TARGETS:
 </html>
 """)
     print("wrote", target.relative_to(HERE.parent), target.stat().st_size, "bytes")
+
+# ---- /dev/landscape.html is The Outcomes Opportunity deck; /dev/record/ is the hub behind it.
+#      Both are generated from next/deck and next/record so a copy change is a source change.
+import subprocess, sys as _sys
+subprocess.run([_sys.executable, str(HERE / "deck" / "build.py"), str(HERE.parent / "dev" / "landscape.html")], check=True)
+subprocess.run([_sys.executable, str(HERE / "record" / "build.py"), str(HERE.parent / "dev" / "record")], check=True)
