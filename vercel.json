@@ -175,6 +175,15 @@
   ],
   "headers": [
     {
+      "source": "/landscape.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
       "source": "/dev",
       "headers": [
         {

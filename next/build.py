@@ -118,3 +118,11 @@ for src_path, n, target, head in TARGETS:
 import subprocess, sys as _sys
 subprocess.run([_sys.executable, str(HERE / "deck" / "build.py"), str(HERE.parent / "dev" / "landscape.html")], check=True)
 subprocess.run([_sys.executable, str(HERE / "record" / "build.py"), str(HERE.parent / "dev" / "record")], check=True)
+
+# ---- /landscape.html is the same deck at the root, for sending. The record stays under /dev,
+#      so its relative links are pointed there; nothing else differs.
+_dev = (HERE.parent / "dev" / "landscape.html").read_text()
+_root = _dev.replace('href="record/', 'href="/dev/record/')
+assert _root != _dev and 'href="record/' not in _root
+(HERE.parent / "landscape.html").write_text(_root)
+print("wrote landscape.html", len(_root.encode()), "bytes")
