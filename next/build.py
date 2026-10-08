@@ -72,27 +72,23 @@ DESC  = ("Growth advisory services and software. Seven situations, "
 
 # The two outputs differ ONLY in the head. Same CSS, same markup, same script:
 #   /       the homepage — canonical, Open Graph, indexable
-#   /next   the staging copy — noindex, so a draft can be seen without being found
-LIVE = HERE / "source" / "calidescope-situations_3.html"   # /  and /next  · 41 cards
-DEV  = HERE / "source" / "calidescope-situations_4.html"   # /dev          · 42 cards, the outcomes row
+#   /dev    the staging mirror — noindex, so a draft can be seen without being found
+SRC = HERE / "source" / "calidescope-situations_4.html"   # 42 cards, the outcomes row — / and /dev
 TARGETS = [
-    (LIVE, 41, HERE.parent / "index.html", f'''<title>{TITLE}</title>
+    (SRC, 42, HERE.parent / "index.html", f'''<title>{TITLE}</title>
 <meta name="description" content="{DESC}">
 <link rel="canonical" href="{SITE}/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{SITE}/">
 <meta property="og:title" content="{TITLE}">
 <meta property="og:description" content="{DESC}">'''),
-    (LIVE, 41, HERE / "index.html", f'''<title>Calidescope &mdash; next</title>
-<meta name="description" content="{DESC}">
-<meta name="robots" content="noindex, nofollow">'''),
-    (DEV, 42, HERE.parent / "dev" / "index.html", f'''<title>Calidescope &mdash; dev</title>
+    (SRC, 42, HERE.parent / "dev" / "index.html", f'''<title>Calidescope &mdash; dev</title>
 <meta name="description" content="{DESC}">
 <meta name="robots" content="noindex, nofollow">'''),
 ]
 
 for src_path, n, target, head in TARGETS:
-    style, body, script = render(src_path, n, ("\n" + UXDEV) if src_path == DEV else "")
+    style, body, script = render(src_path, n, "\n" + UXDEV)
     target.write_text(f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -113,16 +109,17 @@ for src_path, n, target, head in TARGETS:
 """)
     print("wrote", target.relative_to(HERE.parent), target.stat().st_size, "bytes")
 
-# ---- /dev/landscape.html is The Outcomes Opportunity deck; /dev/record/ is the hub behind it.
+# ---- The Outcomes Opportunity deck and the record behind it, at the root and mirrored at /dev.
 #      Both are generated from next/deck and next/record so a copy change is a source change.
-import subprocess, sys as _sys
-subprocess.run([_sys.executable, str(HERE / "deck" / "build.py"), str(HERE.parent / "dev" / "landscape.html")], check=True)
-subprocess.run([_sys.executable, str(HERE / "record" / "build.py"), str(HERE.parent / "dev" / "record")], check=True)
-
-# ---- /landscape.html is the same deck at the root, for sending. The record stays under /dev,
-#      so its relative links are pointed there; nothing else differs.
-_dev = (HERE.parent / "dev" / "landscape.html").read_text()
-_root = _dev.replace('href="record/', 'href="/dev/record/')
-assert _root != _dev and 'href="record/' not in _root
-(HERE.parent / "landscape.html").write_text(_root)
-print("wrote landscape.html", len(_root.encode()), "bytes")
+#      The record's CSV and JSON are the hub's own; they are copied, never rewritten.
+import subprocess, sys as _sys, shutil
+ROOT = HERE.parent
+for deck in (ROOT / "landscape.html", ROOT / "dev" / "landscape.html"):
+    subprocess.run([_sys.executable, str(HERE / "deck" / "build.py"), str(deck)], check=True)
+for rec in (ROOT / "record", ROOT / "dev" / "record"):
+    subprocess.run([_sys.executable, str(HERE / "record" / "build.py"), str(rec)], check=True)
+for sub in ("data", "adjudication"):
+    src = ROOT / "dev" / "record" / sub
+    dst = ROOT / "record" / sub
+    if src.exists() and not dst.exists():
+        shutil.copytree(src, dst)

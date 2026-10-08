@@ -1,0 +1,121 @@
+segment_id,segment,rank_in_segment,company,website,public_private,revenue_band_approx,why_in_sample,overlap_tags
+S01,Walled gardens & platforms,1,Google Ads,https://ads.google.com,public,>$10B,largest ad revenue,DSP;measurement;AI creative
+S01,Walled gardens & platforms,2,Meta for Business,https://www.facebook.com/business,public,>$10B,#2 ad revenue,AI creative;measurement
+S01,Walled gardens & platforms,3,Amazon Ads,https://advertising.amazon.com,public,>$10B,retail + CTV + DSP,retail media;CTV;DSP
+S01,Walled gardens & platforms,4,TikTok for Business,https://ads.tiktok.com,private,>$10B,fastest-growing social,commerce
+S01,Walled gardens & platforms,5,Microsoft Advertising,https://about.ads.microsoft.com,public,>$10B,search + AI copilot ads,
+S01,Walled gardens & platforms,6,LinkedIn Marketing Solutions,https://business.linkedin.com/marketing-solutions,public,$1-10B,B2B default,
+S01,Walled gardens & platforms,7,Pinterest Business,https://business.pinterest.com,public,$1-10B,intent social,
+S01,Walled gardens & platforms,8,Snap for Business,https://forbusiness.snapchat.com,public,$1-10B,Gen Z reach,
+S01,Walled gardens & platforms,9,Reddit for Business,https://www.business.reddit.com,public,$1-10B,community ads growth,
+S01,Walled gardens & platforms,10,Apple Ads,https://ads.apple.com,public,$1-10B,privacy-positioned platform,
+S02,DSPs & buy-side platforms,1,The Trade Desk,https://www.thetradedesk.com,public,$1-10B,largest independent DSP,CTV;identity
+S02,DSPs & buy-side platforms,2,Google Display & Video 360,https://marketingplatform.google.com/about/display-video-360/,public,>$10B (parent),walled-garden DSP,
+S02,DSPs & buy-side platforms,3,Yahoo DSP,https://www.advertising.yahooinc.com,private,$1-10B (parent),legacy scale DSP,
+S02,DSPs & buy-side platforms,4,StackAdapt,https://www.stackadapt.com,private,<$1B,fast-growing mid-market DSP,
+S02,DSPs & buy-side platforms,5,Viant,https://www.viantinc.com,public,<$1B,public CTV-heavy DSP,CTV
+S02,DSPs & buy-side platforms,6,Basis Technologies,https://basis.com,private,<$1B,workflow + DSP,workflow
+S02,DSPs & buy-side platforms,7,Madhive,https://madhive.com,private,<$1B,local CTV buying,CTV
+S02,DSPs & buy-side platforms,8,Simpli.fi,https://simpli.fi,private,<$1B,local programmatic,
+S02,DSPs & buy-side platforms,9,Quantcast,https://www.quantcast.com,private,<$1B,AI-first DSP positioning,
+S02,DSPs & buy-side platforms,10,Adform,https://site.adform.com,public,<$1B,European independent stack,SSP
+S03,SSPs & sell-side,1,Magnite,https://www.magnite.com,public,<$1B,largest independent SSP,CTV
+S03,SSPs & sell-side,2,PubMatic,https://pubmatic.com,public,<$1B,public SSP,
+S03,SSPs & sell-side,3,Index Exchange,https://www.indexexchange.com,private,<$1B,major private exchange,
+S03,SSPs & sell-side,4,OpenX,https://www.openx.com,private,<$1B,sustainability/identity positioning,
+S03,SSPs & sell-side,5,TripleLift,https://triplelift.com,private,<$1B,native/creative SSP,creative
+S03,SSPs & sell-side,6,Equativ,https://equativ.com,private,<$1B,European SSP,
+S03,SSPs & sell-side,7,Sovrn,https://www.sovrn.com,private,<$1B,publisher tools,
+S03,SSPs & sell-side,8,Kargo,https://www.kargo.com,private,<$1B,creative-led sell side,creative
+S03,SSPs & sell-side,9,Sharethrough,https://www.sharethrough.com,private,<$1B,attention/sustainability SSP,
+S03,SSPs & sell-side,10,Media.net,https://www.media.net,private,<$1B,contextual + search SSP,
+S04,Retail & commerce media,1,Walmart Connect,https://www.walmartconnect.com,public,$1-10B,#2 retail media network,CTV (Vizio)
+S04,Retail & commerce media,2,Criteo,https://www.criteo.com,public,$1-10B,commerce media platform,DSP
+S04,Retail & commerce media,3,Instacart Ads,https://www.instacart.com/company/ads,public,<$1B,grocery RMN,
+S04,Retail & commerce media,4,Kroger Precision Marketing,https://www.krogerprecisionmarketing.com,public,<$1B,grocery data RMN,data
+S04,Retail & commerce media,5,Albertsons Media Collective,https://www.albertsonsmediacollective.com,public,<$1B,grocery RMN,
+S04,Retail & commerce media,6,Target Roundel,https://www.roundel.com,public,<$1B,big-box RMN,
+S04,Retail & commerce media,7,Uber Advertising,https://www.uber.com/us/en/advertising/,public,$1-10B,mobility commerce media,
+S04,Retail & commerce media,8,Pacvue,https://pacvue.com,private,<$1B,commerce media software,workflow
+S04,Retail & commerce media,9,Skai,https://skai.io,private,<$1B,omnichannel commerce software,workflow
+S04,Retail & commerce media,10,Koddi,https://koddi.com,private,<$1B,RMN enablement tech,
+S05,CTV & streaming,1,Roku Advertising,https://advertising.roku.com,public,$1-10B,largest US CTV OS,
+S05,CTV & streaming,2,Netflix Ads,https://www.netflixadsales.com,public,$1-10B,premium SVOD ads,
+S05,CTV & streaming,3,Disney Advertising,https://www.disneyadvertising.com,public,>$10B (parent),streaming + linear,
+S05,CTV & streaming,4,NBCUniversal Advertising,https://www.nbcuniversal.com/advertising,public,>$10B (parent),Peacock + linear,
+S05,CTV & streaming,5,Paramount Advertising,https://www.paramount.com/advertising,public,$1-10B,streaming + linear,
+S05,CTV & streaming,6,Samsung Ads,https://www.samsung.com/us/business/samsungads/,public,<$1B,OEM ACR data,data
+S05,CTV & streaming,7,Vizio / Walmart,https://www.vizio.com/en/ads,public,<$1B,OEM CTV + retail,retail media
+S05,CTV & streaming,8,Fox Advertising (Tubi),https://www.foxadsolutions.com,public,$1-10B,FAST + sports,
+S05,CTV & streaming,9,Warner Bros. Discovery Advertising,https://www.wbdadsales.com,public,$1-10B,streaming + linear,
+S05,CTV & streaming,10,Innovid (Mediaocean),https://www.innovid.com,private,<$1B,CTV ad serving + measurement,creative;measurement
+S06,Measurement & attribution,1,Nielsen,https://www.nielsen.com,private,$1-10B,currency incumbent,data
+S06,Measurement & attribution,2,Circana,https://www.circana.com,private,$1-10B,sales-based measurement,data
+S06,Measurement & attribution,3,Kantar Media,https://www.kantarmedia.com,private,<$1B,audience measurement,
+S06,Measurement & attribution,4,Comscore,https://www.comscore.com,public,<$1B,alt currency,
+S06,Measurement & attribution,5,iSpot.tv,https://www.ispot.tv,private,<$1B,TV outcomes measurement,
+S06,Measurement & attribution,6,VideoAmp,https://www.videoamp.com,private,<$1B,alt currency,
+S06,Measurement & attribution,7,Analytic Partners,https://analyticpartners.com,private,<$1B,commercial MMM,
+S06,Measurement & attribution,8,Upwave,https://www.upwave.com,private,<$1B,brand outcomes,
+S06,Measurement & attribution,9,Measured,https://www.measured.com,private,<$1B,incrementality,
+S06,Measurement & attribution,10,Mutinex,https://mutinex.co,private,<$1B,AI MMM challenger,
+S07,Verification & brand safety,1,DoubleVerify,https://doubleverify.com,public,<$1B,verification leader,measurement
+S07,Verification & brand safety,2,Integral Ad Science,https://integralads.com,private,<$1B,verification leader,measurement
+S07,Verification & brand safety,3,Zefr,https://zefr.com,private,<$1B,walled-garden suitability,
+S07,Verification & brand safety,4,HUMAN Security,https://www.humansecurity.com,private,<$1B,fraud,
+S07,Verification & brand safety,5,Pixalate,https://www.pixalate.com,private,<$1B,fraud/privacy,
+S07,Verification & brand safety,6,Peer39,https://www.peer39.com,private,<$1B,contextual data,data
+S07,Verification & brand safety,7,Channel Factory,https://www.channelfactory.com,private,<$1B,YouTube suitability,
+S07,Verification & brand safety,8,Scope3,https://scope3.com,private,<$1B,sustainability/agentic,
+S07,Verification & brand safety,9,Adelaide,https://www.adelaidemetrics.com,private,<$1B,attention metric,measurement
+S07,Verification & brand safety,10,Lumen Research,https://lumen-research.com,private,<$1B,attention metric,measurement
+S08,Data identity & clean rooms,1,Experian Marketing Services,https://www.experian.com/marketing,public,$1-10B (parent),identity + data,
+S08,Data identity & clean rooms,2,Epsilon (Publicis),https://www.epsilon.com,public,$1-10B,identity + data,agency;retail media
+S08,Data identity & clean rooms,3,LiveRamp,https://liveramp.com,public,<$1B,identity + clean room,
+S08,Data identity & clean rooms,4,TransUnion (TruAudience),https://www.transunion.com/solution/truaudience,public,$1-10B (parent),identity + data,
+S08,Data identity & clean rooms,5,Acxiom (IPG/Omnicom),https://www.acxiom.com,public,<$1B,data + identity,agency
+S08,Data identity & clean rooms,6,Snowflake,https://www.snowflake.com/en/solutions/industries/advertising-media-entertainment/,public,$1-10B,data cloud / clean room,martech
+S08,Data identity & clean rooms,7,Databricks,https://www.databricks.com/solutions/industries/marketing,private,$1-10B,data lakehouse,martech
+S08,Data identity & clean rooms,8,Dun & Bradstreet,https://www.dnb.com/marketing,private,$1-10B,B2B data,
+S08,Data identity & clean rooms,9,Lotame,https://www.lotame.com,private,<$1B,independent data platform,
+S08,Data identity & clean rooms,10,ID5,https://id5.io,private,<$1B,identity infrastructure,
+S09,Marketing clouds CDP & engagement,1,Salesforce Marketing Cloud,https://www.salesforce.com/marketing/,public,>$10B (parent),enterprise marketing cloud,AI agents
+S09,Marketing clouds CDP & engagement,2,Adobe Experience Cloud,https://business.adobe.com,public,>$10B (parent),enterprise marketing cloud,creative;AI
+S09,Marketing clouds CDP & engagement,3,HubSpot,https://www.hubspot.com,public,$1-10B,SMB/mid-market CRM,
+S09,Marketing clouds CDP & engagement,4,Oracle Advertising & CX,https://www.oracle.com/cx/,public,>$10B (parent),enterprise CX,
+S09,Marketing clouds CDP & engagement,5,Braze,https://www.braze.com,public,<$1B,customer engagement,
+S09,Marketing clouds CDP & engagement,6,Klaviyo,https://www.klaviyo.com,public,$1-10B,commerce CRM,
+S09,Marketing clouds CDP & engagement,7,Twilio Segment,https://segment.com,public,$1-10B (parent),CDP,data
+S09,Marketing clouds CDP & engagement,8,Iterable,https://iterable.com,private,<$1B,engagement,
+S09,Marketing clouds CDP & engagement,9,Amperity,https://amperity.com,private,<$1B,CDP,data
+S09,Marketing clouds CDP & engagement,10,Bloomreach,https://www.bloomreach.com,private,<$1B,commerce personalization,
+S10,Creative tech & AI content,1,Canva for Business,https://www.canva.com/business/,private,$1-10B,creative platform,
+S10,Creative tech & AI content,2,Smartly,https://www.smartly.io,private,<$1B,creative + buying automation,workflow
+S10,Creative tech & AI content,3,Celtra,https://celtra.com,private,<$1B,creative automation,
+S10,Creative tech & AI content,4,Typeface,https://www.typeface.ai,private,<$1B,generative content,
+S10,Creative tech & AI content,5,Jasper,https://www.jasper.ai,private,<$1B,AI marketing copy,
+S10,Creative tech & AI content,6,The Brandtech Group (Pencil),https://thebrandtechgroup.com,private,<$1B,gen-AI agency/tech,agency
+S10,Creative tech & AI content,7,Movable Ink,https://movableink.com,private,<$1B,AI personalization,
+S10,Creative tech & AI content,8,VidMob,https://vidmob.com,private,<$1B,creative analytics,measurement
+S10,Creative tech & AI content,9,Writer,https://writer.com,private,<$1B,enterprise gen-AI,
+S10,Creative tech & AI content,10,Marpipe,https://www.marpipe.com,private,<$1B,creative testing,
+S11,Workflow & media operations,1,Mediaocean,https://www.mediaocean.com,private,<$1B,agency operating system,CTV
+S11,Workflow & media operations,2,Madison Logic,https://www.madisonlogic.com,private,<$1B,B2B ABM media,
+S11,Workflow & media operations,3,6sense,https://6sense.com,private,<$1B,B2B intent,data
+S11,Workflow & media operations,4,Demandbase,https://www.demandbase.com,private,<$1B,B2B ABM,data
+S11,Workflow & media operations,5,ZoomInfo,https://www.zoominfo.com,public,$1-10B,B2B GTM data,data
+S11,Workflow & media operations,6,Sprinklr,https://www.sprinklr.com,public,<$1B,unified CXM,
+S11,Workflow & media operations,7,Sprout Social,https://sproutsocial.com,public,<$1B,social management,
+S11,Workflow & media operations,8,Semrush,https://www.semrush.com,public,<$1B,search/visibility suite,AEO
+S11,Workflow & media operations,9,Profound,https://www.tryprofound.com,private,<$1B,AI search visibility,AEO
+S11,Workflow & media operations,10,Integrate,https://www.integrate.com,private,<$1B,B2B demand orchestration,
+S12,Agencies & holding companies,1,WPP,https://www.wpp.com,public,>$10B,holding co,
+S12,Agencies & holding companies,2,Publicis Groupe,https://www.publicisgroupe.com,public,>$10B,holding co,data (Epsilon)
+S12,Agencies & holding companies,3,Omnicom (incl. IPG),https://www.omnicomgroup.com,public,>$10B,holding co,data (Acxiom)
+S12,Agencies & holding companies,4,Dentsu,https://www.group.dentsu.com,public,$1-10B,holding co,
+S12,Agencies & holding companies,5,Havas,https://www.havas.com,public,$1-10B,holding co,
+S12,Agencies & holding companies,6,Accenture Song,https://www.accenture.com/us-en/about/accenture-song-index,public,>$10B,consultancy agency,
+S12,Agencies & holding companies,7,Stagwell,https://www.stagwellglobal.com,public,$1-10B,challenger network,martech
+S12,Agencies & holding companies,8,Deloitte Digital,https://www.deloittedigital.com,private,>$10B (parent),consultancy agency,
+S12,Agencies & holding companies,9,Monks (S4 Capital),https://www.monks.com,public,<$1B,AI-native network,creative tech
+S12,Agencies & holding companies,10,Horizon Media,https://www.horizonmedia.com,private,$1-10B billings,largest independent media agency,

@@ -171,18 +171,19 @@
       "source": "/index.html",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/next(.html)?",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/next/(.*)",
+      "destination": "/",
+      "permanent": true
     }
   ],
   "headers": [
-    {
-      "source": "/landscape.html",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
-    },
     {
       "source": "/dev",
       "headers": [
@@ -194,24 +195,6 @@
     },
     {
       "source": "/dev/(.*)",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
-    },
-    {
-      "source": "/next",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
-    },
-    {
-      "source": "/next/(.*)",
       "headers": [
         {
           "key": "X-Robots-Tag",

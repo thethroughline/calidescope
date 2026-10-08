@@ -184,7 +184,7 @@ S=[dict(cover=True),
  dict(conn="What is new",what="Agents, sold as the way results get delivered",
    h1="Agents are the new pitch for delivering results.",
    h2="The contracts still say no guarantee.",
-   body=agents(),sec="The context"),
+   body=agents(),credit=True,sec="The context"),
  dict(conn="The study",what="What we did, September 2026",
    h1="We read 138 companies&rsquo; websites, word for word.",
    h2="One rule: what can a buyer check on the page?",
@@ -214,7 +214,7 @@ S=[dict(cover=True),
    h1="What we cannot claim",h2="from this evidence.",body=bounds(),sec="The opportunity"),
  dict(conn="The record",what="Everything behind these thirteen slides",
    h1="Check any number in here.",h2="All of it is open.",
-   body=deeper(),method=True,sec="The opportunity")]
+   body=deeper(),method=True,credit=True,sec="The opportunity")]
 
 SECS=["The context","The study","The opportunity"]
 
@@ -236,6 +236,9 @@ def stage(s,i):
         if s.get("fine"): h+='<p class="fine">%s</p>'%s["fine"]
         if s.get("method"): h+='<p class="meth">%s</p>'%METHOD
         h+='</div>'
+    if s.get("credit"):
+        h+=('<p class="credit">*<a href="https://www.linkedin.com/in/michaelrisucci/" '
+            'target="_blank" rel="noopener">MAVEN Claim and Evidence Analysis by Michael Risucci</a></p>')
     lab=s.get("sec","The context")
     dots=''.join('<i class="%s"></i>'%('on' if (lab==x or (s.get("cover") and x==SECS[0]))
                  else '') for x in SECS)
@@ -284,6 +287,10 @@ h1 .k{color:var(--ink)}
 .stat b{color:var(--ink);font-weight:600}
 .meth{font-family:var(--mono);font-size:11px;line-height:1.62;color:var(--dim);margin:14px 0 0}
 .meth b{color:var(--ink)}
+/* the credit under slides 5 and 14: the analysis the agent and record claims rest on */
+.credit{font-family:var(--mono);font-size:11px;line-height:1.6;color:var(--dim);margin:12px 0 0}
+.credit a{color:var(--ink);text-decoration:underline;text-decoration-color:rgba(31,32,36,.28);text-underline-offset:3px;text-decoration-thickness:1px}
+.credit a:hover{text-decoration-color:currentColor}
 .dark .meth{color:#B4AFA4}
 .dark .meth b{color:var(--paper)}
 .ic{width:22px;height:22px;display:block}
