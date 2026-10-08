@@ -25,7 +25,7 @@ import re, pathlib
 
 HERE = pathlib.Path(__file__).resolve().parent
 UX   = (HERE / "ux.css").read_text()
-UXDEV = (HERE / "ux-dev.css").read_text()   # /dev only: responsive repairs staged ahead of the live site
+UXDEV = (HERE / "ux-dev.css").read_text()   # the responsive repairs from the October audit
 APP  = (HERE / "app.js").read_text()
 
 def render(src_path, n_sections, extra=""):
@@ -72,8 +72,7 @@ DESC  = ("Growth advisory services and software. Seven situations, "
 
 # The two outputs differ ONLY in the head. Same CSS, same markup, same script:
 #   /       the homepage — canonical, Open Graph, indexable
-#   /dev    the staging mirror — noindex, so a draft can be seen without being found
-SRC = HERE / "source" / "calidescope-situations_4.html"   # 42 cards, the outcomes row — / and /dev
+SRC = HERE / "source" / "calidescope-situations_4.html"   # 42 cards, the outcomes row
 TARGETS = [
     (SRC, 42, HERE.parent / "index.html", f'''<title>{TITLE}</title>
 <meta name="description" content="{DESC}">
@@ -82,9 +81,6 @@ TARGETS = [
 <meta property="og:url" content="{SITE}/">
 <meta property="og:title" content="{TITLE}">
 <meta property="og:description" content="{DESC}">'''),
-    (SRC, 42, HERE.parent / "dev" / "index.html", f'''<title>Calidescope &mdash; dev</title>
-<meta name="description" content="{DESC}">
-<meta name="robots" content="noindex, nofollow">'''),
 ]
 
 for src_path, n, target, head in TARGETS:
@@ -109,17 +105,10 @@ for src_path, n, target, head in TARGETS:
 """)
     print("wrote", target.relative_to(HERE.parent), target.stat().st_size, "bytes")
 
-# ---- The Outcomes Opportunity deck and the record behind it, at the root and mirrored at /dev.
-#      Both are generated from next/deck and next/record so a copy change is a source change.
-#      The record's CSV and JSON are the hub's own; they are copied, never rewritten.
-import subprocess, sys as _sys, shutil
+# ---- The Outcomes Opportunity deck and the record behind it. Both are generated from
+#      next/deck and next/record so a copy change is a source change. The record's CSV and
+#      JSON under record/{data,adjudication} are the hub's own; the build never touches them.
+import subprocess, sys as _sys
 ROOT = HERE.parent
-for deck in (ROOT / "landscape.html", ROOT / "dev" / "landscape.html"):
-    subprocess.run([_sys.executable, str(HERE / "deck" / "build.py"), str(deck)], check=True)
-for rec in (ROOT / "record", ROOT / "dev" / "record"):
-    subprocess.run([_sys.executable, str(HERE / "record" / "build.py"), str(rec)], check=True)
-for sub in ("data", "adjudication"):
-    src = ROOT / "dev" / "record" / sub
-    dst = ROOT / "record" / sub
-    if src.exists() and not dst.exists():
-        shutil.copytree(src, dst)
+subprocess.run([_sys.executable, str(HERE / "deck" / "build.py"), str(ROOT / "landscape.html")], check=True)
+subprocess.run([_sys.executable, str(HERE / "record" / "build.py"), str(ROOT / "record")], check=True)

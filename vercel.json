@@ -181,27 +181,19 @@
       "source": "/next/(.*)",
       "destination": "/",
       "permanent": true
-    }
-  ],
-  "headers": [
+    },
     {
-      "source": "/dev",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
+      "source": "/dev(.html)?",
+      "destination": "/",
+      "permanent": true
     },
     {
       "source": "/dev/(.*)",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
-    },
+      "destination": "/",
+      "permanent": true
+    }
+  ],
+  "headers": [
     {
       "source": "/assets/fonts/(.*)",
       "headers": [

@@ -188,7 +188,7 @@ S=[dict(cover=True),
  dict(conn="The study",what="What we did, September 2026",
    h1="We read 138 companies&rsquo; websites, word for word.",
    h2="One rule: what can a buyer check on the page?",
-   body=study(),fine=STUDYNOTE,sec="The study"),
+   body=study(),fine=STUDYNOTE,credit=True,sec="The study"),
  dict(conn="What they say",what="Six results claims, exactly as published",
    h1="Here is what they actually say.",h2="Same promise. Very different backing.",
    body=says(),sec="The study"),
@@ -211,7 +211,7 @@ S=[dict(cover=True),
    h1="The best claim we read writes the first.",h2="Nobody writes the second.",
    body=filled(),fine=FILLNOTE,sec="The opportunity"),
  dict(conn="The limits",dark=True,what="What an outside reviewer would not let us say",
-   h1="What we cannot claim",h2="from this evidence.",body=bounds(),sec="The opportunity"),
+   h1="What we cannot claim",h2="from this evidence.",body=bounds(),credit=True,sec="The opportunity"),
  dict(conn="The record",what="Everything behind these thirteen slides",
    h1="Check any number in here.",h2="All of it is open.",
    body=deeper(),method=True,credit=True,sec="The opportunity")]
@@ -291,6 +291,8 @@ h1 .k{color:var(--ink)}
 .credit{font-family:var(--mono);font-size:11px;line-height:1.6;color:var(--dim);margin:12px 0 0}
 .credit a{color:var(--ink);text-decoration:underline;text-decoration-color:rgba(31,32,36,.28);text-underline-offset:3px;text-decoration-thickness:1px}
 .credit a:hover{text-decoration-color:currentColor}
+.dark .credit{color:#B4AFA4}
+.dark .credit a{color:var(--paper);text-decoration-color:rgba(250,247,239,.3)}
 .dark .meth{color:#B4AFA4}
 .dark .meth b{color:var(--paper)}
 .ic{width:22px;height:22px;display:block}
