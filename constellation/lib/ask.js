@@ -2,6 +2,7 @@
 
      CLQ.read(lib, text, ctx)   { q, chips, alts, unused }       the question, read into a query
      CLQ.answer(lib, q, o)      { total, lives, span, line, items, shared, refine, nearest, checked }
+                                { total, lives } with o.count: the numbers alone, for a page that shows a count
      CLQ.shelf(lib, memberId)   [{ group, items: [{ text, q, n }] }]   the questions coaches bring, each counted
      CLQ.compare(lib, a, b, m)  { shared, rows }                 two stories side by side, facts only
      CLQ.gaps(lib)              the shelf's thin answers, worst first: where to write and check next
@@ -43,7 +44,8 @@
     B6: ['expert', 'never invite', 'not in the room', 'steer around', 'after the strategy', 'room that decides', 'left out', 'heard', 'talked over', 'talks over', 'talk over', 'interrupt'],
     C1: ['selling', 'sell', 'pitch', 'new clients', 'win work', 'find my own work', 'business development', 'bring in'],
     C2: ["firm's name", 'own name', 'stood on', 'stand on', 'knows the firm', 'by name', 'name on the door', 'for the agency', 'the firm, not'],
-    // a committee or board asked to back, support or approve is the coalition, whatever room it sits in
+    // a committee or board asked to back, support or approve is the coalition, whatever room it sits in. The pattern
+    // adds weight and never leads on its own: "the board to approve his pitch" is still the pitch first
     C3: ['steering committee', 'none of them report', 'not report to', "don't report", "doesn't report", 'no authority', 'other departments', 'stakeholders', 'before the meeting', 'do not control', "don't control", 'coalition',
       /\b(?:need|get|win|bring|want|persuad|convinc)[a-z]*(?: the| her| his| their| our| my)? (?:committee|board|steering group)\b|\b(?:committee|board|steering group)(?:'s)? (?:to )?(?:back|support|approv|sign)[a-z]*/],
     D1: ['hundred', 'offices', 'only see', 'two levels down', 'skip-level', "can't see", 'more people than'],
@@ -56,6 +58,7 @@
     E4: ['bored', 'coasting', 'nothing left to learn', 'plateau', 'becalmed', 'autopilot', 'gone stale', 'stale']
   };
   var CUE_WEIGHT = 0.15;   // tuned on the panel's held-out questions: it keeps every fresh score and lifts the rest
+  var MINE = 0.04, SECOND = 0.18;   // a member's own situation wins a tie; a second situation is read from this score
   // Words that name one domain read as that domain ("a creator" is the creators, a small part of advertising and
   // media). They are read before the fields, so "journalists" is the press and "media" is the whole field. The fourth
   // place keeps a domain narrow however few it holds: for a member who follows creators a newspaper editor is no answer
@@ -89,6 +92,8 @@
     ['ideas', /\b(scien\w*|faith|philosoph\w*|thinkers?|inventors?)\b/]
   ];
   var FIELD_LABEL = { public: 'Politics & public life', law: 'Law', business: 'Business & finance', media: 'Advertising & media', sport: 'Sport', music: 'Music', arts: 'Film, art & letters', ideas: 'Science, ideas & faith' };
+  // a field inside a sentence, in words: "from business and finance", as a chip and the compare row both say it
+  function fieldWords(f) { return FIELD_LABEL[f].toLowerCase().replace(/ & /g, ' and '); }
   var CELEB = ['sport', 'music', 'film', 'influencer'];   // by domain: the worlds of modern fame
   var STANCE_TRAIT = [
     [/too nice|people.pleas|wants? to be liked|avoids? conflict|soft touch/, ['weight'], 'too nice', 'leads by carrying the weight'],
@@ -105,15 +110,18 @@
     // Turning something down is a choice; being turned down, or having a plan turned down, is the setback. A scene
     // is the person's own loss (own), never the day they won, and one that says lost, failed or went badly comes first
     setback: { heading: 'after it went badly', label: 'a setback', own: true,
-      ask: /\b(?:(?:after )?(?:the|that|this|her|his|their|my|our) (?:meeting|review|presentation|call|session|pitch) (?:went badly|went wrong|did not go well|didn't go well|fell flat)|went badly|went wrong|gone wrong|did not go well|didn't go well|fell flat|a setback|setback|(?:was|were|got|been|being|is|are|get) turned down|turned (?:her|him|me|us|them|it) down|turned down (?:the |her |his |their |my |our |a |an )?(?:[a-z']+ )?(?:plan|proposal|pitch|bid|idea|request|application|budget|case|appeal|motion|roadmap)|voted down|lost (?:the |a |an |our |her |his |their )?(?:[a-z']+ )?(?:vote|pitch|room|argument|deal|account|client|case|bid|fight|election|match|contract))\b/,
+      ask: /\b(?:(?:after )?(?:the|that|this|her|his|their|my|our) (?:meeting|review|presentation|call|session|pitch) (?:went badly|went wrong|did not go well|didn't go well|fell flat)|went badly|went wrong|gone wrong|did not go well|didn't go well|fell flat|a setback|setback|(?:was|were|got|been|being|is|are|get) turned down|turned (?:her|him|me|us|them|it) down|turned down (?:the |her |his |their |my |our |a |an )?(?:[a-z']+ )?(?:plan|proposal|pitch|bid|idea|request|application|budget|case|appeal|motion|roadmap)|turned (?:the|her|his|their|my|our|a|an) (?:[a-z']+ )?(?:plan|proposal|pitch|bid|idea|request|application|budget|case|appeal|motion|roadmap) down|voted down|lost (?:the |a |an |our |her |his |their )?(?:[a-z']+ )?(?:vote|pitch|room|argument|deal|account|client|case|bid|fight|election|match|contract))\b/,
       scene: /\b(lost|losing|defeat\w*|failed|humiliat\w*|rejected|booed|walked out|voted down|went badly|setback|beaten)\b/i,
       strong: /\b(lost|defeat\w*|failed|went badly|voted down|setback)\b/i },
     writing: { heading: 'where it was put in writing', ask: /in writing|a letter|a memo|an email/, scene: /\bletter\b|\bmemo\b|wrote to/i, label: 'putting it in writing' }
   };
+  // What a story's moment and lines are read as, kept in these maps beside the story, so the API sends a story as
+  // the corpus has it
+  var SCENES = new WeakMap(), SAID = new WeakMap();
   // The sentence of a story's moment that sets it in a scene, and how strongly: 2 when it says the scene's strong
   // words, 1 when only its looser ones, else none. Read once per story and scene.
   function sceneOf(lib, s, k) {
-    var c = s._scene || (s._scene = {}); if (c[k] !== undefined) return c[k];
+    var c = SCENES.get(s); if (!c) SCENES.set(s, c = {}); if (c[k] !== undefined) return c[k];
     var S = SCENE[k], best = null;
     if (S && S.scene.test(s.moment)) CLC.sentences(s.moment).forEach(function (x) {
       if (!S.scene.test(x) || (S.own && wonIn(lib, s, x))) return;
@@ -122,12 +130,22 @@
     return (c[k] = best);
   }
   // a loss in the sentence that is somebody else's, to this person: "he had beaten Hillary Clinton", "Then Margaret
-  // Court accepted, and lost" (to Billie Jean King). A loss said of the person, or of their side, stays theirs
+  // Court accepted, and lost" (to Billie Jean King). The loser is the name that opens the sentence as the verb's
+  // subject, an adverb or a short aside between them ("Richard Nixon narrowly lost", "Richard Nixon, the sitting
+  // vice president, lost"); "Her" and "The" open no name, and a name earlier in the sentence lost nothing ("After
+  // Bruce Lee died, … Chan's films failed"). A loss said of the person, of their side or of their work stays
+  // theirs, as does their being beaten. A name's word may carry a capital inside it ("John McCain", "O'Neill")
+  var NAMEW = "[A-Z](?:[a-z'’-]|[A-Z](?=[a-z]))+";
+  var BEAT = new RegExp('\\b(?:beaten|beat|defeated|outvoted|outplayed)\\s+(?:the\\s+)?(' + NAMEW + '(?:\\s+' + NAMEW + ')*)');
+  var LOSER = new RegExp('^(?:(?:Then|And|But|When|After|So),?\\s+)?(?!(?:Her|His|Their|Its|The|A|An)\\s)(' + NAMEW + '(?:\\s+' + NAMEW + ')+)'
+    + "(?:,\\s+[^,.;]{2,40},)?(?:\\s+(?:had|has|was|then|also|finally|[a-z]+ly))*(?:\\s+[a-z]+,?\\s+and)?\\s+(?:lost|failed|was defeated)\\b");
   function wonIn(lib, s, x) {
-    if (/\b(?:beaten|beat|defeated|outvoted|outplayed)\s+(?:the\s+)?[A-Z]/.test(x) && !/\b(?:was|were|been|being|is|are)\s+(?:beaten|beat|defeated|outvoted)/.test(x)) return true;
-    var who = /^(?:(?:Then|And|But|When|After|So),?\s+)?([A-Z][a-z'’-]+(?:\s+[A-Z][a-z'’-]+)+)\b[^.;]*?\b(?:lost|failed|was defeated)\b/.exec(x); if (!who) return false;
     var mine = fold((lib.icon[s.icon] || {}).name || '').split(/[^a-z]+/);
-    return !fold(who[1]).split(/[^a-z]+/).some(function (w) { return w.length > 2 && mine.indexOf(w) >= 0; });
+    var me = function (n) { return fold(n).split(/[^a-z]+/).some(function (w) { return w.length > 2 && mine.indexOf(w) >= 0; }); };
+    var beat = BEAT.exec(x);
+    if (beat && !me(beat[1]) && !/\b(?:was|were|been|being|is|are)\s+(?:beaten|beat|defeated|outvoted)/.test(x)) return true;
+    var who = LOSER.exec(x);
+    return !!who && !me(who[1]);
   }
   // Who a story's line is said to ("To the colleague who wanted the job: …"), in seven kinds of person, and the
   // words in a question that name one. On a story's line the first kind in this order wins; in a question the
@@ -139,22 +157,32 @@
     ['guide', 'a mentor or a sponsor', /mentor|coach|sponsor|advis/, /\b(?:mentor|sponsor)\b/],
     ['home', 'someone at home', /at home|spouse|family|a friend/, /\b(?:at home|my partner at home|my family)\b/],
     ['up', 'someone above them', /managing partner|practice head|manager|boss|board|chair|chief|director|head of|department head|group head|editor|owner|president|founder|\bceo\b|\bvp\b|partner who hired/,
-      /\b(?:my|her|his|their|the) boss\b|\bthe (?:vp|directors?|partners)\b|\bthe board\b|\bthe ceo\b|\bmanaging partner\b|\bthe chair\b/],
+      /\b(?:my|her|his|their|the) boss\b|\b(?:my|her|his) (?:line )?manager\b|\bthe (?:vp|directors?|partners)\b|\bthe board\b|\bthe ceo\b|\bmanaging partner\b|\bthe chair\b/],
     ['down', 'their team', /team|deputy|report|staff|associate|junior|new hire|successor|crew|players/, /\b(?:my|her|his|their|the) (?:new )?team\b|\bdirect reports?\b|\b(?:my|her|his|their) head of\b/],
     ['peer', 'a peer', /peer|colleague|partner/, /\b(?:a|my|her|his|their) peers?\b/]
   ];
   var TO_LABEL = {}; TO.forEach(function (t) { TO_LABEL[t[0]] = t[1]; });
   function saidTo(s) {
-    if (s._saidTo) return s._saidTo;
-    return (s._saidTo = (s.line_examples || []).map(function (l) {
+    var c = SAID.get(s); if (c) return c;
+    SAID.set(s, c = (s.line_examples || []).map(function (l) {
       var m = /^To ([^:]{2,80}):/.exec(l); if (!m) return null;
       var who = m[1].toLowerCase(), b = TO.filter(function (t) { return t[2].test(who); })[0];
       return { to: b ? b[0] : null, who: m[1], text: l };
     }).filter(Boolean));
+    return c;
   }
   var WHO_STOP = /^(your|their|that|this|with|from|have|been|will|when|what|team|person|someone|people|colleague|the|who|and)$/;
-  // a capital after "say to" that is no person: a word that opens a phrase, a day, a month
-  var NOT_A_NAME = /^(?:The|My|Her|His|Their|Your|Our|A|An|This|That|Them|Him|Everyone|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|January|February|March|April|May|June|July|August|September|October|November|December)$/;
+  // a capital after "say to" that is no person: a word that opens a phrase, a day, a month, a department, a group.
+  // A group's word also ends a name of two capitals ("Head Office", "Group Finance", "Platform Engineering")
+  var GROUP = "Legal|Finance|Marketing|Sales|Engineering|Product|Operations|Ops|Design|Research|Procurement|Compliance|Risk|Strategy|Communications|Comms|Support|Security|Data|Brand|Accounts|Audit|Tax|Treasury|Facilities|Recruiting|Talent|People|Management|Leadership|Board|Customers|Clients|Staff|Investors|Shareholders"
+    + "|Group|Global|Regional|Central|Corporate|Executive|Executives|Exec|Human|Resources|Partners|Directors|Managers|Leaders|Team|Teams|Office|Headquarters|Committee|Council|Department|Division";
+  var NOT_A_NAME = new RegExp('^(?:The|My|Her|His|Their|Your|Our|A|An|This|That|Them|Him|Everyone|Everybody|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|January|February|March|April|May|June|July|August|September|October|November|December|' + GROUP + ')$');
+  var A_GROUP = new RegExp('^(?:' + GROUP + ')$');
+  // "can" or "could tell" is seeing it when what is seen follows in the same sentence: "Sarah can tell her team is
+  // anxious", "can tell that…", "can tell when…", "could tell from the room…". Past a clause or a second subject, or
+  // in a sentence that opens with what or how, it is telling someone ("Tom could tell Ana, who was passed over",
+  // "could tell the team it is over", "What can Sarah tell Dan when he is upset?")
+  var SEEING = /\b(?:can|could)(?:\s+(?!not\b|never\b)[a-z']+)?\s+tell(?=\s+(?:if|whether|when|how|what|who|why|from)\s+[a-z]|(?:\s+that)?\s+(?!(?:who|that|which|when|once|if|so|because|before|after)\b)[a-z']+(?:\s+(?!(?:who|that|which|when|once|if|so|because|before|after|i|you|he|she|it|we|they)\b)[a-z']+){0,2}\s+(?:is|are|was|were|isn't|aren't|wasn't|weren't|has|have|had|hasn't|haven't|will|won't|would|can't|cannot|doesn't|don't|didn't|feels|felt|seems|seemed|looks|looked)\b)/g;
   function sharesWord(who, text) {
     var t = ' ' + fold(text) + ' ';
     return fold(who).split(/[^a-z']+/).some(function (w) { return w.length >= 4 && !WHO_STOP.test(w) && t.indexOf(' ' + w.replace(/s$/, '')) >= 0; });
@@ -172,6 +200,12 @@
     ['pub', 'in public', /\b(press|speech|keynote|conference|panel|interview)\b/i, /\b(speech|keynote|the press|conference|panel)\b/]
   ];
   var ROOM_LABEL = {}; ROOM.forEach(function (r) { ROOM_LABEL[r[0]] = r[1]; });
+  // the words before a room that put the line or the announcement in it: a preposition or a verb that puts it there,
+  // past up to three words that open no clause ("in a short email", "at this week's board meeting", "is sending an
+  // email to announce", "in private"), or a room that announces ("a memo announcing the reorg"). A room's own "'s" is
+  // only mentioned ("the committee's decision")
+  var PLACED = "(?:\\b(?:in|at|by|via|over|during|on|through|to|with|into|in front of|send|sends|sending|sent|write|writes|writing|wrote|draft|drafts|drafting|drafted|give|gives|giving|gave|use|uses|using|deliver|delivers|delivering|delivered|hold|holds|holding|held)(?:\\s+(?:a|an|the|this|that|next|her|his|their|its|our|my|your|[a-z]+'s)(?:\\s+(?!(?:after|before|when|and|but|then|because|once|while|since|until|if|so|that|which|who|whose|is|was|are|were|to)\\b)[a-z]+(?:-[a-z]+)*(?:'s)?){0,2})?\\s+|(?=in\\s))";
+  var PLACED_AFTER = "(?!'s)", ANNOUNCING = "(?=\\s+(?:to announce|announcing|that announces|which announces))";
   function moveIn(s, room) {
     var R = ROOM.filter(function (r) { return r[0] === room; })[0]; if (!R) return null;
     return (s.move_examples || []).filter(function (m) { return R[2].test(m); })[0] || null;
@@ -227,15 +261,46 @@
     var sc = {}, low = ' ' + fold(text).replace(/[^a-z0-9' ]+/g, ' ') + ' ';
     lib.situations.forEach(function (s) { sc[s.id] = 0; });
     CLC.interpret(lib, text, lib.situations.length).forEach(function (x) { sc[x.sit.id] = x.score; });
-    var strong = {};
+    // the words a pattern reads are its own: in "the board to sign off" the board signs, so A5's "sign off" is not said
+    var strong = {}, said = {}, pat = {}, spans = [];
+    Object.keys(CUES).forEach(function (id) { CUES[id].forEach(function (c) {
+      if (typeof c === 'string') return; var re = cueRe(c, 'g'), m;
+      while ((m = re.exec(low))) { spans.push({ id: id, at: m.index, end: m.index + m[0].length }); pat[id] = 1; re.lastIndex = m.index + 1; }   // overlapping matches too
+    }); });
     Object.keys(CUES).forEach(function (id) {
-      CUES[id].forEach(function (c) { if (cueRe(c).test(low)) { sc[id] += CUE_WEIGHT; if (typeof c !== 'string' || / /.test(c)) strong[id] = 1; } });
+      CUES[id].forEach(function (c) {
+        if (typeof c !== 'string') return;
+        var re = cueRe(c, 'g'), m, hit = false;
+        while (!hit && (m = re.exec(low))) hit = !spans.some(function (p) { return p.id !== id && m.index < p.end && m.index + m[0].length > p.at; });
+        if (hit) { sc[id] += CUE_WEIGHT; said[id] = 1; if (/ /.test(c)) strong[id] = 1; }
+      });
     });
-    if (M && M.sits) M.sits.forEach(function (id) { if (sc[id] > 0) sc[id] += 0.04; });   // a tie goes to the member's own
+    // a pattern ("needs the board to approve") adds its weight. Beside a situation another cue names, it is read
+    // second, a hair under the best of the rest once the member's tie below is counted: "Michael needs the board to
+    // approve his pitch" reads the pitch first and the board beside it, "needs the board to support the reorg" keeps
+    // the board. When the rest is too thin to be read beside it, it is read first, as when nothing else is said.
+    // What it is read beside is the situation the other cue names, never one read from loose words alone: "needs
+    // the board to support the reorg" is the reorg (D4) and the board
+    var own = function (id) { return M && M.sits && M.sits.indexOf(id) >= 0 && sc[id] > 0 ? MINE : 0; }, beside = {};
+    Object.keys(pat).forEach(function (id) {
+      var up = sc[id] + CUE_WEIGHT, others = Object.keys(sc).filter(function (x) { return x !== id; });
+      var top = function (xs) { return xs.reduce(function (a, x) { return !a || sc[x] + own(x) > sc[a] + own(a) ? x : a; }, null); };
+      if (!said[id] && Object.keys(said).some(function (x) { return x !== id; })) {
+        var best = sc[top(others)] + own(top(others)), cue = top(others.filter(function (x) { return said[x]; }));
+        if (best - 0.001 >= SECOND && sc[cue] + own(cue) < best) { sc[cue] = best + 0.002 - own(cue); best += 0.002; }
+        if (best - 0.001 >= SECOND) { up = best - 0.001; beside[id] = 1; } else up = Math.max(up, best + 0.001);
+      }
+      sc[id] = Math.max(sc[id], up);
+    });
+    if (M && M.sits) M.sits.forEach(function (id) { if (sc[id] > 0) sc[id] += MINE; });   // a tie goes to the member's own
     // a phrase people use for a situation ("argued against", "talked over") outranks a reading of loose words;
     // two such phrases keep the order the words gave them
     var top = Math.max.apply(null, Object.keys(sc).map(function (id) { return sc[id]; })), orig = Object.assign({}, sc);
     Object.keys(strong).forEach(function (id) { sc[id] = Math.max(sc[id], top + 0.01); });
+    // a pattern read beside one phrase stays beside it: a loose word lifted by nothing ("noticed", "the announcement")
+    // never puts it third. Two phrases said keep their two places
+    var lifted = Object.keys(strong).filter(function (x) { return !pat[x]; });
+    if (lifted.length === 1) Object.keys(beside).forEach(function (id) { if (!strong[id]) sc[id] = Math.max(sc[id], sc[lifted[0]] - 0.001); });
     return Object.keys(sc).map(function (id) { return { id: id, score: sc[id], orig: orig[id] }; }).filter(function (x) { return x.score > 0.06; })
       .sort(function (a, b) { return b.score - a.score || b.orig - a.orig; });
   }
@@ -268,13 +333,26 @@
     function g(re) { return new RegExp(re.source, 'g'); }
     function mark(m) { m.split(/[^a-z0-9']+/).forEach(function (w) { if (w) used[w] = 1; }); }
     function words(m) { return new RegExp('\\b' + m.split(/[^a-z0-9']+/).filter(Boolean).map(esc).join("[^a-z0-9']+") + '\\b', 'g'); }   // a phrase, as it sits in rest
-    var mid = ctx.m || null, ageOf = null, ft = fold(text);
+    var mid = ctx.m || null, ageOf = null, ft = fold(text), cast = [];
+    // the member is the one the question is about: a member named as its subject comes before one named only as
+    // an age ("Michael's age") or as the one spoken to ("What can Maya say to Tom" is Maya's), and the first named
+    // leads. A member named only as the one spoken to, or met with, is still the member ("What should I tell Sarah")
     lib.order.forEach(function (id) {
-      var m = lib.members[id], f = fold(m.first);
+      var m = lib.members[id], f = fold(m.first), re = new RegExp("\\b" + f + "(?:'s)?\\b", 'g'), x, best = null;
+      while ((x = re.exec(rest))) {
+        var pre = rest.slice(0, x.index);
+        var r = /\b(?:(?:say|said|says|saying|talk|talks|talking|talked|speak|speaks|speaking|spoke|spoken)(?: it)? to|tell|tells|telling|told|ask|asks|asking|asked|with)\s+$/.test(pre) ? 2 : m.age && /^'s\s+age\b/.test(rest.slice(x.index + f.length)) ? 1
+          : /\b(?:when|whenever|if|after|before|because|since|once|while|until|now that|although|though)\s+$/.test(pre) ? 0.5 : 0;   // "When Sarah announces the reorg, what should Tom…" is Tom's
+        if (!best || r < best.r) best = { id: id, r: r, at: x.index };
+      }
+      if (best) cast.push(best);
       // "Michael's age" is the member's age: read before the name takes its "'s" and leaves "age" alone
-      if (m.age && take(new RegExp("\\b" + f + "'s\\s+age\\b", 'g'))) { mid = id; ageOf = id; }
-      if (take(new RegExp("\\b" + f + "(?:'s)?\\b", 'g'))) mid = id;
+      if (m.age && take(new RegExp("\\b" + f + "'s\\s+age\\b", 'g'))) ageOf = id;
+      take(re);
     });
+    // on a member's own page or thread the member is "I": another member only spoken to, or only an age, leaves them
+    var lead = cast.sort(function (a, b) { return a.r - b.r || a.at - b.at; })[0];
+    if (lead && !(ctx.m && lib.members[ctx.m] && lead.r > 0)) mid = lead.id;
     if (mid) q.m = mid;
     var M = memberOf(lib, mid);
     STANCE_TRAIT.forEach(function (t) { if (!q.stance && take(g(t[0]))) { q.stance = t[1].join('+'); q.trait = t[2]; } });
@@ -282,20 +360,30 @@
     else if (take(/\b(a man|men|male|himself)\b/g)) q.sex = 'm';
     // the room's words are read, so they leave the words the situation is read from, unless a situation's own
     // cue says them too ("pitch" is C1, "steering committee" C3, "announcing" E1, "needs the committee to back"
-    // C3): "Sarah's group meeting" is a room, and no longer reads as C3's meeting
-    var roomAt = null;
-    ROOM.forEach(function (r) {
-      var m = !q.room && ft.match(r[3]); if (!m) return; q.room = r[0]; roomAt = { at: m.index, end: m.index + m[0].length }; mark(m[0]);
-      if (!isCue(m[0]) && !inCue(ft, roomAt.at, roomAt.end)) take(words(m[0]));
-    });
-    // the morning after the announcement, or a line said to a named person, is a one-to-one when the only room read
-    // is the team an announcement implies. A room named outright stays ("say to Dan at the team meeting"), and a day
-    // or a month is nobody ("say to Thursday's group")
-    var after = ft.match(/\b(?:morning|day) after\b/), named = /\b(?:[Ss]ay|said|says|saying)(?: it)? to ([A-Z][a-z]+)|\b[Tt]ell ([A-Z][a-z]+)/.exec(text);
-    named = named && !NOT_A_NAME.test(named[1] || named[2]);
-    var outright = ROOM.some(function (r) { return (ft.match(g(r[3])) || []).some(function (w) { return !/^announc/.test(w); }); });
+    // C3): "Sarah's group meeting" is a room, and no longer reads as C3's meeting. When the team room comes only from
+    // an announcement, a room the announcement is placed in comes first ("announces the reorg in an email" is in
+    // writing, "at the board meeting" the board); a room only mentioned leaves it the team's ("announces the
+    // committee's decision to her team", "after Dan's pitch went badly")
+    var roomAt = null, rooms = ROOM.filter(function (r) { return r[3].test(ft); });
+    var outright = rooms.filter(function (r) { return ft.match(g(r[3])).some(function (w) { return !/^announc/.test(w); }); });
+    var R = rooms[0];
+    if (R && R[0] === 'team' && outright.indexOf(R) < 0) R = rooms.filter(function (r) { return r !== R && (new RegExp(PLACED + r[3].source + PLACED_AFTER).test(ft) || new RegExp(r[3].source + ANNOUNCING).test(ft)); })[0] || R;
+    var rm = R && ft.match(R[3]);
+    if (rm) {
+      q.room = R[0]; roomAt = { at: rm.index, end: rm.index + rm[0].length }; mark(rm[0]);
+      if (!isCue(rm[0]) && !inCue(ft, roomAt.at, roomAt.end)) take(words(rm[0]));
+    }
+    // the morning after the announcement, or a line said to a named person ("say to Dan"), is a one-to-one when the
+    // only room read is the team an announcement implies. A room named outright stays ("say to Dan at the team
+    // meeting"); a day, a month, a department, a group or the question's own member is no such person ("say to
+    // Thursday's group", "said to Marketing", "tell Customers", "tell Head Office", "What should I tell Sarah"), nor is
+    // a name whose group is told ("tell Dan's team"; "tell Dan's boss" is one person), and another member is ("What
+    // can Maya say to Tom")
+    var after = ft.match(/\b(?:morning|day) after\b/), named = false, nm;
+    var nre = /\b(?:(?:[Ss]ay|said|says|saying)(?: it)? to|[Tt]ell) ([A-Z][a-z]+)\b(?!['’]s\s+(?:(?:whole|entire|old|new|own|wider|direct)\s+)*(?:team|teams|department|group|staff|people|reports|org|organi[sz]ation|unit|division|office|side|crew|squad|function)\b)(?:\s+([A-Z][a-z]+)\b)?/g;
+    while (!named && (nm = nre.exec(text))) named = !NOT_A_NAME.test(nm[1]) && !(nm[2] && A_GROUP.test(nm[2])) && !(M && fold(nm[1]) === fold(M.first));
     // the morning after is the day after the room, so it moves any team room but the offsite's, as it always has
-    if ((after && (!q.room || (q.room === 'team' && !/offsite|town hall|all.hands/.test(ft)))) || (named && !outright)) { q.room = 'one'; roomAt = null; if (after) mark(after[0]); }
+    if ((after && (!q.room || (q.room === 'team' && !/offsite|town hall|all.hands/.test(ft)))) || (named && !outright.length)) { q.room = 'one'; roomAt = null; if (after) mark(after[0]); }
     // the person the line is said to: the words after "say to" or "tell" first, else the person named first ("her team
     // sends to the client" is said to the team); never a word of the room's own phrase ("at the team meeting")
     var saidAt = [], sre = /\b(?:(?:say|said|says|saying)(?: it)? to|tell|tells|telling)\s+/g, sm;
@@ -340,11 +428,50 @@
     else if (take(/\b(big story|grand|epic)\b/g)) q.reach = 'far';
     if (take(/\b(send today|ready to send|checked|verified|can send)\b/g)) q.ok = 1;
     // a line is asked for in words for it, or a saying verb with a person after it ("say to Dan", "what should she
-    // say"); "tends to say yes" is a habit, and asks for no line
-    if (take(/\b(a line|something to say|words to say|quotable|what to say|how to say|(?:can|could|should|might)(?:\s+(?!not\b|never\b)[a-z']+)?\s+(?:say|tell)(?:\s+to)?|say(?: it)? to(?=\s+[a-z]))\b/g)) q.line = 1;
-    // a scene's words are read like a room's: "after the meeting went badly" is the scene, and its meeting is no C3
+    // say"); "tends to say yes" is a habit, "can tell her team is anxious" is seeing it, and "Can you tell me a story
+    // where…" asks the Library for a story: none asks for a line. Only the "can tell" that is seen leaves the line's
+    // words, so the same words asking for a line later stay; telling whether, if or from what is judging it, even in
+    // a question ("How can Sarah tell whether the team trusts her?"), and a name after the people told is what they
+    // are told ("Sarah can tell the team Dan is leaving")
+    var cased = String(text).normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[’‘]/g, "'");
+    for (var see = new RegExp(SEEING.source, 'g'), sx; (sx = see.exec(ft));) {
+      var end = sx.index + sx[0].length;
+      if (!/^\s+(?:if|whether|from)\b/.test(ft.slice(end)) && /(?:^|[.?!;])\s*(?:what|how)\b[^.?!;]*$/.test(ft.slice(0, sx.index))) continue;
+      if (cased.length === ft.length && /^\s+(?:the|her|his|their|my|our|your)\s+[a-z']+\s+[A-Z][a-z]+\b/.test(cased.slice(end))) continue;
+      var at = 1 + ft.slice(0, sx.index).replace(/[^a-z0-9' ]+/g, ' ').length; rest = rest.slice(0, at) + ' '.repeat(sx[0].length) + rest.slice(at + sx[0].length); mark(sx[0]);
+    }
+    // "Can you tell me how to tell Dan…" or "…what Sarah should say" still asks for the words
+    var tellMe = /\b(?:can|could|would|will) you tell (?:me|us)\s+(?:how|what)\s+(?:to\b(?!\s+tell\s+(?:if|whether|when)\b)|(?:[a-z']+\s+){0,2}(?:should|could|can|might|would)\b)/.test(rest);
+    take(/\b(?:can|could|would|will) you (?:tell|give|show|find) (?:me|us)\b/g);
+    if (take(/\b(a line|something to say|words to say|words(?:\s+[a-z']+)?\s+(?:to|can|could|should)\s+use|quotable|what to say|how to say|(?:can|could|should|might)(?:\s+(?!not\b|never\b)[a-z']+)?\s+(?:say|tell)(?:\s+to)?|say(?: it)? to(?=\s+[a-z]))\b/g) || tellMe) q.line = 1;
+    // a scene's words are read like a room's: "after the meeting went badly" is the scene, and its meeting is no C3.
+    // Turning it down is a choice when the member, I or we did it ("Priya turned them down"), when she or he turned
+    // down a thing ("she turned it down", "she turned down his proposal"), and when the one offered it turned it down
+    // ("She was offered the role and turned it down"); the setback is a person turned down by somebody else ("the VP
+    // turned her down", "he turned her down")
+    var adv = "(?:\\s+(?:had|has|have|then|already|also|finally|eventually|since|later|soon|once|[a-z]+ly))*\\s+turned";
+    // the member is the one who can choose: another member named ("Tom turned her down") is somebody else, and so is a
+    // she or he the member cannot be. When the member pitched, asked, or took or put something to a person, the she,
+    // he or they who turns it down next is that person ("Maya pitched the roadmap to the VP and she turned it down")
+    var pro = M && M.sex === 'f' ? 'she' : M && M.sex === 'm' ? 'he' : 'she|he';
+    var chooser = ['i', 'we', 'you'].concat(M ? [esc(fold(M.first))] : []).join('|'), thing = '(?:the|a|an|his|her|their|its|my|our|your)';
+    // a span of time taken or asked for, or a verb after "to", puts nothing to anyone ("took a week to think and she
+    // turned it down" is her own choice)
+    var SPAN = "(?:(?:a|an|the|some|another|more|her|his|their|my|our)\\s+)?(?:few\\s+|couple\\s+of\\s+|whole\\s+|full\\s+|little\\s+)?(?:weekend|week|day|night|month|year|while|time|moment|minute|hour|beat|breath)s?\\b";
+    var INF = "(?:think|decide|consider|reflect|weigh|mull|sleep|see|look|talk|get|be|do|make|figure|check|review|digest|recover|rest|prepare|discuss|go|work|read)\\b";
+    var put = new RegExp('\\b(?:' + chooser + "|she|he|they)(?:\\s+(?:had|has|have|then|already|also|first|finally|[a-z]+ly))*\\s+(?:(?:pitch|propos)[a-z]*|ask[a-z]*(?!\\s+(?:around|if|whether|about|to|why|how|when|where)\\b|\\s+for\\s+" + SPAN + ")|(?:went|goes|go|going) to"
+      + "|(?:took|takes|take|taking)(?!\\s+" + SPAN + ")\\b[^.?!]{0,160}?\\bto(?!\\s+" + INF + ")|(?:put|puts|putting|brought|brings|bring|bringing|present[a-z]*|sent|sends|send|sending|submit[a-z]*)\\b[^.?!]{0,160}?\\bto(?!\\s+" + INF + "))\\b[^.?!]{0,160}?(?:[,;]|\\b(?:and|but|so|yet))\\s+(?:then\\s+)?(she|he|they)(?=" + adv + ')', 'g');
+    var refused = {}, px;
+    while ((px = put.exec(ft))) refused[px.index + px[0].length - px[1].length] = 1;
+    var chose = new RegExp('\\b(?:' + chooser + ')' + adv + "(?:\\s+(?:her|him|me|us|them|it)|\\s+" + thing + "(?:\\s+[a-z']+){1,2})?\\s+down\\b|\\b(?:" + pro + ')' + adv
+      + "(?:\\s+(?:them|it)\\s+down\\b|\\s+down(?=\\s+" + thing + "\\b)|\\s+" + thing + "(?:\\s+[a-z']+){1,2}\\s+down\\b)", 'g');
+    // the subject that opens the clause before carries on to a "turned it down" that has none
+    var carried = new RegExp('((?:^|[.?!;:,]\\s*|\\b(?:and|but|so|when|after|because|while|once|if)\\s+)(?:' + chooser + '|' + pro + ")(?:\\s+(?!(?:and|but|yet|so|then|who|which|that)\\b)[a-z']+){1,12}?,?\\s+(?:and|but|yet|so|then)(?:\\s+(?:then|already|also|finally|eventually|later|soon|[a-z]+ly))*\\s+)"
+      + "turned(?:\\s+(?:them|it)\\s+down\\b|\\s+down(?=\\s+" + thing + "\\b)|\\s+" + thing + "(?:\\s+[a-z']+){1,2}\\s+down\\b)", 'g');
+    var fts = ft.replace(chose, function (w) { return refused[arguments[arguments.length - 2]] ? w : ' '.repeat(w.length); })
+      .replace(carried, function (w, lead) { return lead + ' '.repeat(w.length - lead.length); });
     Object.keys(SCENE).forEach(function (k) {
-      var all = !q.cue && ft.match(g(SCENE[k].ask)); if (!all) return; q.cue = k;
+      var all = !q.cue && fts.match(g(SCENE[k].ask)); if (!all) return; q.cue = k;
       all.forEach(function (m) { mark(m); if (!isCue(m)) take(words(m)); });
     });
 
@@ -355,7 +482,7 @@
       var sc = situationScores(lib, rest, M);
       if (sc.length && sc[0].score >= 0.12) {
         sits = [sc[0].id];
-        if (sc[1] && sc[1].score >= 0.18 && sc[1].score >= sc[0].score * 0.5) sits.push(sc[1].id);
+        if (sc[1] && sc[1].score >= SECOND && sc[1].score >= sc[0].score * 0.5) sits.push(sc[1].id);
       }
       alts = sc.filter(function (o) { return sits.indexOf(o.id) < 0; }).map(function (o) { return o.id; });
       // the words that carried the reading count as read
@@ -424,7 +551,7 @@
     if (q.sit) q.sit.split('+').forEach(function (id) { if (lib.sit[id]) c.push({ k: 'sit', v: id, label: sitLabel(lib, id), kind: 'sit' }); });
     if (q.mine && M) c.push({ k: 'mine', label: 'In ' + M.first + '’s situations: ' + M.sits.join(', '), kind: 'sit' });
     if (q.sex) c.push({ k: 'sex', label: q.sex === 'f' ? 'A woman' : 'A man' });
-    if (q.field && FIELD_LABEL[q.field]) c.push({ k: 'field', label: 'From ' + FIELD_LABEL[q.field].toLowerCase().replace(/ & /g, ' and ') });
+    if (q.field && FIELD_LABEL[q.field]) c.push({ k: 'field', label: 'From ' + fieldWords(q.field) });
     if (q.domain && DOMAIN_LABEL[q.domain]) c.push({ k: 'domain', label: DOMAIN_LABEL[q.domain] });
     if (q.nocel) c.push({ k: 'nocel', label: 'No sport, music, film or creators' });
     if (q.before && q.after) c.push({ k: 'era', label: 'Set between ' + q.after + ' and ' + (q.before - 1) });
@@ -534,29 +661,56 @@
   function routeFor(lib, M, s, keys) {
     var N = net(); if (!N || !M || threeOf(M).indexOf(s.icon) >= 0) return '';
     var key = s.keys.filter(function (k) { return keys.indexOf(k) >= 0; })[0] || s.keys[0];
-    var lt = N.linksTo(lib, M.id, s.icon, key, { keys: keys }); if (!lt.links || lt.links >= 9) return '';
+    var lt = N.linksTo(lib, M.id, s.icon, key, { keys: keys }); if (!lt.links) return '';
+    // a life no chain of three links reaches says so, as plainly as one that does
+    if (lt.links >= 9) return 'For ' + M.first + ': not near ' + M.first + '\u2019s three.';
     return 'For ' + M.first + ': ' + lt.line.charAt(0).toLowerCase() + lt.line.slice(1);
   }
   // The source's first clause, past the corpus's own "Corpus draft." and "Verify against" (core's "Check against"),
-  // which the check button says. A clause ends at a semicolon or a full stop after a word or a year, never after an
-  // initial ("W. A. Mozart") or an abbreviation ("ed. Emily Anderson", "Col. L. Thomas", "Google Inc."), and never
-  // inside a bracket ("(London, 1690. Issued December 1689)"). A long one is cut at a comma outside a bracket.
-  var SOURCE_CLAUSE = /;\s*|(?<=[a-z0-9)]{2}\.)(?<!\b(?:ed|eds|edn|trans|vol|vols|no|pp|repr|rev|ca|cf|al|dir|approx|Col|Gen|Brig|Lt|Capt|Inc|Co|Ltd)\.)\s+/g;
+  // which the check button says, and past a working note left in it ("page to be confirmed"). A clause ends at a
+  // semicolon, or a full stop after a word, a year or a closing quote, never after an initial ("W. A. Mozart") or an
+  // abbreviation in any case ("ed. Emily Anderson", "Col. L. Thomas", "the Rev. James Drake", "Google Inc."), and
+  // never inside a bracket ("(London, 1690. Issued December 1689)"). A long one is cut at a comma outside a bracket.
+  // A clause whose working note is taken out keeps beside it the source the record names for the moment, so a
+  // citation still being checked never reads as the whole source: "Michelle Obama, Becoming (Crown, 2018); the
+  // moment is from her speech…"
+  var ABBR = ['ed', 'eds', 'edn', 'trans', 'tr', 'vol', 'vols', 'no', 'pp', 'repr', 'rev', 'ca', 'cf', 'al', 'dir', 'approx', 'col', 'gen', 'brig', 'lt', 'capt', 'inc', 'co', 'ltd', 'mrs', 'esq', 'hrg', 'stat', 'supp', 'tex'];
+  var SOURCE_CLAUSE = new RegExp(';\\s*|(?:(?<=[a-z0-9)]{2}\\.)|(?<=[\u201d\u2019"]\\.))(?<!\\b(?:' + ABBR.map(function (w) {
+    return w.replace(/[a-z]/g, function (c) { return '[' + c + c.toUpperCase() + ']'; });
+  }).join('|') + ')\\.)\\s+', 'g');
+  var WORKING_NOTE = /\s*\((?:page|pages|date|title|year)(?: and \w+)? (?:to be confirmed|to confirm)\)|,\s*(?:page|pages|date|title|year)(?: and \w+)? (?:to be confirmed|to confirm)(?=[.;)]|$)/gi;
   function depth(t) { return (t.match(/[([]/g) || []).length - (t.match(/[)\]]/g) || []).length; }
-  function sourceLine(s) {
-    var t = String(CLC.sourceFor(s, 'coach') || '').replace(/^Corpus draft\.\s*/i, '').replace(/^(?:Verify|Check) against\s+/i, ''), m;
-    SOURCE_CLAUSE.lastIndex = 0;
-    while ((m = SOURCE_CLAUSE.exec(t))) if (depth(t.slice(0, m.index)) <= 0) { t = t.slice(0, m.index); break; }
+  function firstClause(t) {
+    var m; SOURCE_CLAUSE.lastIndex = 0;
+    while ((m = SOURCE_CLAUSE.exec(t))) if (depth(t.slice(0, m.index)) <= 0) return t.slice(0, m.index);
+    return t;
+  }
+  function cut(t) {
     if (t.length <= 110) return t;
     for (var c = t.slice(0, 110).lastIndexOf(','); c > 40; c = t.slice(0, c).lastIndexOf(',')) if (depth(t.slice(0, c)) <= 0) return t.slice(0, c) + '\u2026';
     var br = t.slice(0, 110).search(/\s*[([][^)\]]*$/);   // no comma outside a bracket: stop before the bracket that is open
     return t.slice(0, br > 40 ? br : 110) + '\u2026';
   }
+  function sourceLine(s) {
+    var raw = String(CLC.sourceFor(s, 'coach') || '').replace(/^Corpus draft\.\s*/i, '').replace(/^(?:Verify|Check) against\s+/i, '');
+    var t = raw.replace(WORKING_NOTE, ''), first = firstClause(t), line = cut(first), mo = /(?:^|[.;]\s+)for the moment,\s+/i.exec(t);
+    if (mo && mo.index >= first.length - 1 && firstClause(raw) !== first) line = line.replace(/\.$/, '') + '; the moment is from ' + cut(firstClause(t.slice(mo.index + mo[0].length)));
+    return line;
+  }
   // o.limit: cards in the list (24); o.as: who reads it ('coach' sees this week's chosen story marked); o.routes:
   // false leaves the lead's route out. Otherwise the route is worked out when it is first read, so a caller that
-  // wants counts (the shelf, the gaps, a count on a page, the Review's rows, which say their own) never pays for it
+  // wants cards (the Review's rows, which say their own) never pays for it. o.count: the numbers alone, before
+  // anything is ranked or carded, for the shelf, the gaps and a count on a page; o.nearest adds the ways to widen
+  // a thin answer
   function answer(lib, q, o) {
     o = o || {}; var F = facets(lib, q);
+    if (o.count) {
+      var all = F.length ? filter(lib, F) : [], seen = {}, nl = 0;
+      all.forEach(function (s) { if (!seen[s.icon]) { seen[s.icon] = 1; nl++; } });
+      var c = { total: all.length, lives: nl };
+      if (o.nearest) c.nearest = F.length ? nearest(lib, q, F, all.length, chips(lib, q)) : [];
+      return c;
+    }
     if (!F.length) return { q: q, chips: chips(lib, q), empty: true, total: 0, lives: 0, items: [], shared: [], refine: [], nearest: [], checked: 0 };
     var hit = filter(lib, F), mk = q.m ? marks(lib, q.m, o.as) : {}, fit = {};
     hit.forEach(function (s) { fit[s.id] = fitScore(lib, s, q); });   // once a story, not twice a comparison
@@ -579,9 +733,10 @@
       else Object.defineProperty(L, 'route', { enumerable: true, get: function () { return rt != null ? rt : (rt = routeFor(lib, M, s, askedKeys)); } });
       return L;
     };
-    // the list keeps its limit, and keeps the two last places for what the member had, so the marks are seen
-    var rest = hit.filter(function (s) { return s !== rd && s !== oc; }), lim = o.limit || 24, old = rest.filter(gone);
-    var shown = rest.filter(function (s) { return !gone(s); }).slice(0, lim - (lim > 2 ? Math.min(2, old.length) : 0));
+    // the list keeps its limit, and keeps the two last places for what the member had, so the marks are seen; a
+    // short list (a member page's first three) keeps one. What the member had fills any place left over
+    var rest = hit.filter(function (s) { return s !== rd && s !== oc; }), lim = o.limit || 24, old = rest.filter(gone), keep = lim < 6 ? 1 : 2;
+    var shown = rest.filter(function (s) { return !gone(s); }).slice(0, lim - (lim > 2 ? Math.min(keep, old.length) : 0));
     var items = shown.concat(old.slice(0, lim - shown.length)).map(function (s) {
       var r = reasons(lib, s, q), m = mk[s.id]; if (m) r.push({ type: 'had', text: m.text });
       return { story: s, card: CLC.storyCard(lib, s), reasons: r, had: m && m.past ? m.text : '', chosen: m && !m.past ? m.text : '' };
@@ -597,12 +752,16 @@
       about: q.sit ? about(lib, q.sit.split('+')[0]) : '',
       cueN: q.cue && SCENE[q.cue] ? hit.filter(function (s) { return sceneOf(lib, s, q.cue); }).length : null };
     res.refine = refine(lib, q, hit);
-    res.nearest = hit.length < 4 && F.length > 1 ? F.map(function (f) {
-      var others = F.filter(function (g) { return g !== f; }), n = filter(lib, others).length;
-      return { k: f.k, without: res.chips.filter(function (c) { return c.k === f.k; }).map(function (c) { return c.label; })[0] || f.k, n: n, q: drop(q, f.k) };
-    // dropping a facet keeps the question; dropping the situation changes it, so that comes last
-    }).filter(function (x) { return x.n > hit.length; }).sort(function (a, b) { return (a.k === 'sit') - (b.k === 'sit') || b.n - a.n; }) : [];
+    res.nearest = nearest(lib, q, F, hit.length, res.chips);
     return res;
+  }
+  // A thin answer (under four) and the facet to drop for more, each with the count it would give
+  function nearest(lib, q, F, n0, cs) {
+    return n0 < 4 && F.length > 1 ? F.map(function (f) {
+      var others = F.filter(function (g) { return g !== f; }), n = filter(lib, others).length;
+      return { k: f.k, without: cs.filter(function (c) { return c.k === f.k; }).map(function (c) { return c.label; })[0] || f.k, n: n, q: drop(q, f.k) };
+    // dropping a facet keeps the question; dropping the situation changes it, so that comes last
+    }).filter(function (x) { return x.n > n0; }).sort(function (a, b) { return (a.k === 'sit') - (b.k === 'sit') || b.n - a.n; }) : [];
   }
   function drop(q, k, v) {
     var q2 = Object.assign({}, q);
@@ -670,7 +829,7 @@
   ];
   function shelf(lib, mid) {
     var M = memberOf(lib, mid), Q = [];
-    function g(group, items) { Q.push({ group: group, items: items.filter(Boolean).map(function (it) { return { text: it[0], q: it[1], n: answer(lib, it[1], { limit: 1, routes: false }).total }; }) }); }
+    function g(group, items) { Q.push({ group: group, items: items.filter(Boolean).map(function (it) { return { text: it[0], q: it[1], n: answer(lib, it[1], { count: true }).total }; }) }); }
     if (M) {
       var first = M.first, up = M.up19 && lib.sit[M.up19.sit] ? lib.sit[M.up19.sit] : null;
       g('For ' + first + ' this week', [
@@ -695,7 +854,7 @@
     var IA = lib.icon[A.icon], IB = lib.icon[B.icon], shared = [], rows = [];
     A.keys.forEach(function (k) { if (B.keys.indexOf(k) >= 0 && lib.sitByKey[k]) shared.push(sitLabel(lib, lib.sitByKey[k].id)); });
     if (IA.sex === IB.sex) shared.push(IA.sex === 'f' ? 'Both women' : 'Both men');
-    if (IA.field === IB.field && FIELD_LABEL[IA.field]) shared.push('Both from ' + FIELD_LABEL[IA.field].toLowerCase());
+    if (IA.field === IB.field && FIELD_LABEL[IA.field]) shared.push('Both from ' + fieldWords(IA.field));
     function row(label, x, y) { if (x !== y && (x || y)) rows.push([label, x || '—', y || '—']); }
     row('When', yl(A.year), yl(B.year));
     var aa = ageAt(lib, A), ab = ageAt(lib, B); row('Age then', aa != null ? 'About ' + aa : '', ab != null ? 'About ' + ab : '');
@@ -708,14 +867,24 @@
   }
 
   // ---------- gaps: thin answers, where to write and check next ----------
+  // Kept on the index while what it counts holds: the checked stories, and each member's heroes, week and age.
   function gaps(lib) {
+    var sig = lib.stories.filter(function (s) { return s.verified; }).map(function (s) { return s.id; }).join(' ') + '|' + lib.order.map(function (mid) {
+      var M = lib.members[mid] || {}; return heroesOf(M).join(',') + ':' + (M.up19 ? M.up19.sit + M.up19.label : '') + ':' + (M.age || '');
+    }).join('|');
+    if (lib._gaps && lib._gaps.sig === sig) return lib._gaps.out.slice();
+    var out = gapsOf(lib);
+    Object.defineProperty(lib, '_gaps', { value: { sig: sig, out: out }, configurable: true, writable: true });
+    return out.slice();
+  }
+  function gapsOf(lib) {
     var out = [];
     [null].concat(lib.order).forEach(function (mid) {
       shelf(lib, mid).forEach(function (grp) {
         if (mid && grp.group.indexOf('For ') !== 0) return;   // the shared questions are counted once, without a member
         grp.items.forEach(function (it) {
           if (it.n >= 4) return;
-          var r = answer(lib, it.q, { limit: 1, routes: false });
+          var r = answer(lib, it.q, { count: true, nearest: true });
           out.push({ member: mid, group: grp.group, text: it.text, q: it.q, n: it.n, nearest: r.nearest[0] || null });
         });
       });

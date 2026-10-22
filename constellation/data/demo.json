@@ -89,15 +89,15 @@
    "fit": {
     "obama": [
      "up",
-     "His record is full of rivals kept close. That's the room you're walking into."
+     "His record is full of rivals kept close. That’s the room you’re walking into."
     ],
     "serena": [
      "partly",
-     "Her stories are mostly about owning the stage. Useful for some of your weeks."
+     "Her record is mostly about owning the stage. Useful for some of your weeks."
     ],
     "rihanna": [
      "partly",
-     "Mostly about building something of your own. Useful for the weeks you're making the group yours."
+     "Mostly about building something of your own. Useful for the weeks you’re making the group yours."
     ]
    },
    "mv": {
@@ -105,14 +105,14 @@
     "trigger": "Your first full group meeting, week one.",
     "behaviour": "Give the person who wanted your job the best work, in front of the room.",
     "grain": "Out of the way (giving credit)",
-    "failure": "You'll do it privately, to spare his feelings. Privately it reads as a consolation prize. It only works where it's witnessed.",
+    "failure": "You’ll do it privately, to spare Dan’s feelings. Privately it reads as a consolation prize. It only works where it’s witnessed.",
     "obs": "The handover happened where others saw it.",
-    "retire": "He raises things with you unprompted."
+    "retire": "Dan raises things with you unprompted."
    },
    "micro": [
     {
      "w": 1,
-     "b": "Give him the account, in the room.",
+     "b": "Give Dan the account, in front of the team.",
      "o": "The room saw the handover.",
      "ins": {
       "story": "st-obama-2008-clinton",
@@ -121,8 +121,8 @@
     },
     {
      "w": 2,
-     "b": "Ask him for the number, out loud.",
-     "o": "He answered in front of the group.",
+     "b": "Ask Dan for the number, out loud.",
+     "o": "Dan answered in front of the group.",
      "ins": {
       "story": "st-obama-1990-law-review",
       "src": "core"
@@ -130,7 +130,7 @@
     },
     {
      "w": 4,
-     "b": "Let his call stand when you'd have changed it.",
+     "b": "Let Dan’s call stand when you’d have changed it.",
      "o": "You did not reverse it.",
      "ins": {
       "story": "st-schultz-1987-seattle",
@@ -139,8 +139,8 @@
     },
     {
      "w": 6,
-     "b": "Say his name to the client, first.",
-     "o": "The client heard his name from you.",
+     "b": "Say Dan’s name to the client, first.",
+     "o": "The client heard Dan’s name from you.",
      "ins": null
     }
    ],
@@ -149,8 +149,8 @@
     "found": "Session 1, said about the Halverson account",
     "reh": "practising"
    },
-   "note12": "Read this before Thursday. Notice that he didn't explain himself.",
-   "ask1": "I'm announcing the reorg to the whole group on Thursday and Dan wanted my job.",
+   "note12": "Read this before Thursday. Notice that he didn’t explain himself.",
+   "ask1": "I’m announcing the reorg to the whole group on Thursday and Dan wanted my job.",
    "askLabel": "Ask: the reorg",
    "rooms": [
     [
@@ -178,7 +178,7 @@
     ],
     [
      "Off the table",
-     "Performing a toughness you don't feel."
+     "Performing a toughness you don’t feel."
     ]
    ],
    "heroes_icons": {
@@ -245,11 +245,11 @@
    "fit": {
     "saujani": [
      "up",
-     "Built a room for people who weren't being called. That's the room you want."
+     "Built a room for people who weren’t being called. That’s the room you want."
     ],
     "biles": [
      "partly",
-     "Her record is about calling what you see, even when it's unwelcome. Useful for some of your weeks."
+     "Her record is about calling what you see, even when it’s unwelcome. Useful for some of your weeks."
     ],
     "mrbeast": [
      "partly",
@@ -261,7 +261,7 @@
     "trigger": "The product review, the week before the roadmap decision.",
     "behaviour": "Send one paragraph with a position in it to one person, the day before the meeting.",
     "grain": "On paper first (you think in writing)",
-    "failure": "You'll send analysis with no position in it.",
+    "failure": "You’ll send analysis with no position in it.",
     "obs": "Someone replies to the position you took.",
     "retire": "You are asked for your view before the meeting."
    },
@@ -297,12 +297,12 @@
     }
    ],
    "line": {
-    "text": "Here's where I land, and the one number that would change my mind.",
+    "text": "Here’s where I land, and the one number that would change my mind.",
     "found": "Session 1, said about the roadmap review",
     "reh": "practising"
    },
    "note12": "Read this before Thursday. She asked whether any rule barred her. Ask the same question.",
-   "ask1": "The roadmap review is Thursday and the VP will decide with the two directors after I've presented.",
+   "ask1": "The roadmap review is Thursday and the VP will decide with the two directors after I’ve presented.",
    "askLabel": "Ask: the roadmap review",
    "rooms": [
     [
@@ -402,7 +402,7 @@
     ],
     "jordan": [
      "partly",
-     "Jordan's stories are mostly about asking more of the people around you. Useful for the weeks you lead the team, less for the client's room."
+     "Jordan’s record is mostly about asking more of the people around you. Useful for the weeks you lead the team, less for the client’s room."
     ],
     "ali": [
      "pulls",
@@ -412,13 +412,13 @@
    "mv": {
     "sit": "C2",
     "trigger": "Every pitch, starting with Ardent Health this month.",
-    "behaviour": "In every pitch, say one thing only you would say, before the firm's credentials.",
+    "behaviour": "In every pitch, say one thing only you would say, before the firm’s credentials.",
     "grain": "Out front (you like the opening)",
-    "failure": "Your first version will still be the firm's line, shortened.",
+    "failure": "Your first version will still be the firm’s line, shortened.",
     "obs": "A client repeats your own point back to you.",
     "retire": "A client asks for you by name."
    },
-   "move": "In every pitch, say one thing only you would say, before the firm's credentials.",
+   "move": "In every pitch, say one thing only you would say, before the firm’s credentials.",
    "micro": [
     {
      "w": 1,
@@ -431,7 +431,7 @@
     },
     {
      "w": 2,
-     "b": "Take the client's first question yourself.",
+     "b": "Take the client’s first question yourself.",
      "o": "You answered it yourself, before the senior associate spoke.",
      "ins": null
     },
@@ -446,19 +446,19 @@
     },
     {
      "w": 6,
-     "b": "Ask the client what they'd call you for.",
+     "b": "Ask the client what they’d call you for.",
      "o": "They named something.",
      "ins": null
     }
    ],
    "line": {
-    "text": "I'll tell you what I'd do, and why I'm the one to do it.",
+    "text": "I’ll tell you what I’d do, and why I’m the one to do it.",
     "found": "Session 1, said about the Ardent pitch",
     "reh": "practising"
    },
    "note12": "Read this before Thursday. He changed his name the morning after. Notice how little he explained.",
-   "ask1": "The Ardent pitch is Thursday and their general counsel knows the firm, not me.",
-   "askLabel": "Ask: the Ardent pitch",
+   "ask1": "The Calder Foods pitch is Thursday, and their general counsel knows the firm but has never met me.",
+   "askLabel": "Ask: the Calder Foods pitch",
    "rooms": [
     [
      "Pitch to Ardent Health",
@@ -486,11 +486,11 @@
     ],
     [
      "Watch for",
-     "Reaching for the firm's credentials when you are nervous."
+     "Reaching for the firm’s credentials when you are nervous."
     ],
     [
      "Off the table",
-     "Talking down the people who built the firm's name."
+     "Talking down the people who built the firm’s name."
     ]
    ],
    "events": [],
@@ -525,7 +525,7 @@
    "last": "2 days ago",
    "next": "Thu 22 Oct, 16:30",
    "move": "End every client conversation with a specific next step and a date, out loud.",
-   "line": "Here's what I'd do next, and when.",
+   "line": "Here’s what I’d do next, and when.",
    "up19": {
     "label": "Tue 20 Oct · Pitch to Ardent Health",
     "sit": "C1"
@@ -576,7 +576,7 @@
    "last": "1 day ago",
    "next": "Mon 19 Oct, 09:00",
    "move": "Send one paragraph with a position in it to one person before the meeting.",
-   "line": "I'll say where I land, then I want to hear where you do.",
+   "line": "I’ll say where I land, then I want to hear where you do.",
    "up19": {
     "label": "Mon 19 Oct · Steering committee",
     "sit": "C3"
@@ -622,7 +622,7 @@
    "next": "Not booked",
    "move": "Run the smallest version of the conversation that would still count, once.",
    "line": "",
-   "lineNote": "None yet. Jennifer's first session is booked.",
+   "lineNote": "None yet. Jennifer’s first session is booked.",
    "up19": {
     "label": "Wed 21 Oct · Leadership offsite",
     "sit": "E2"
@@ -632,7 +632,7 @@
      "day": 14,
      "icon": "ph-chat-circle",
      "title": "You wrote",
-     "detail": "I haven't heard from you in a while. Fifteen minutes this week?"
+     "detail": "I haven’t heard from you in a while. Fifteen minutes this week?"
     }
    ],
    "coach": "jim",
@@ -665,7 +665,7 @@
     "id": "s1",
     "from": "coach",
     "kind": "text",
-    "body": "Thanks for your three, Sarah. I've read your goal. Obama's record is full of rivals kept close; we'll start there.",
+    "body": "Thanks for your three, Sarah. I’ve read your goal. Obama’s record is full of rivals kept close; we’ll start there.",
     "day": 7,
     "at": "Wed 7 Oct, 11:20"
    },
@@ -710,7 +710,7 @@
     "id": "t1",
     "from": "coach",
     "kind": "text",
-    "body": "I haven't heard from you in a while. Fifteen minutes this week?",
+    "body": "I haven’t heard from you in a while. Fifteen minutes this week?",
     "day": 14,
     "at": "Wed 14 Oct, 09:10"
    }
@@ -720,7 +720,7 @@
     "id": "ma1",
     "from": "coach",
     "kind": "text",
-    "body": "Thanks for your three, Maya. None of them has a story in the record yet, so your first weeks will come from people close to them. We'll fix that together.",
+    "body": "Thanks for your three, Maya. Only Simone Biles has a story in the library so far, and it waits for my check. For the others I’ll choose your stories by hand.",
     "day": 7,
     "at": "Wed 7 Oct, 11:20"
    },
@@ -737,7 +737,7 @@
     "id": "mi1",
     "from": "coach",
     "kind": "text",
-    "body": "Thanks for your three, Michael. We'll talk about how to use Ali when we meet. He's for the weeks you stand on your own name. The pitch itself needs a different story.",
+    "body": "Thanks for your three, Michael. We’ll talk about how to use Ali when we meet. He’s for the weeks you stand on your own name, and Thursday’s pitch is one of them.",
     "day": 7,
     "at": "Wed 7 Oct, 11:20"
    },
@@ -1190,7 +1190,7 @@
    "stance": "",
    "desc": "Founder, Girls Who Code",
    "q": [
-    "Built a room for people who weren't being called",
+    "Built a room for people who weren’t being called",
     "Asked in public",
     "Kept going after losing"
    ],
@@ -3837,7 +3837,7 @@
   {
    "id": "A5",
    "key": "judging-unfamiliar-work",
-   "chip": "Accountable for work you can't judge",
+   "chip": "Accountable for work you can’t judge",
    "line": "You answer for work you could not do yourself.",
    "label_from": "added"
   },
@@ -3845,7 +3845,7 @@
    "id": "B1",
    "key": "credit-and-attribution",
    "chip": "Getting credit for your work",
-   "line": "Your work reaches the client in somebody else's voice.",
+   "line": "Your work reaches the client in somebody else’s voice.",
    "label_from": "prototype+line"
   },
   {
@@ -3928,7 +3928,7 @@
   {
    "id": "D4",
    "key": "carrying-somebody-elses-decision",
-   "chip": "Carrying a decision you didn't make",
+   "chip": "Carrying a decision you didn’t make",
    "line": "You have to stand behind a call that was not yours.",
    "label_from": "prototype"
   },

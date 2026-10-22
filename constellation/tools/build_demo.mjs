@@ -10,9 +10,13 @@
 //                                             person is on the roster, else a slug of the name)
 //   twins                                     sample story -> the corpus record of the same moment (reviewed)
 //   situations                                the member-facing label for all 22 situations
+// and constellation/data/derived.json: the likeness tables a page would otherwise build on its first story
+// (CLC.derive: each story's counted words, how often each life answers a week), stamped with the SHA-256 of
+// corpus.json and the basis they rest on, so a page uses them only while both still hold (CLC.useDerived).
 // Deterministic: same inputs, same bytes.
 import fs from 'node:fs';
 import vm from 'node:vm';
+import crypto from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -79,8 +83,8 @@ for (const s of CPD.sits) LABELS[mapKey(s.key)] = { chip: s.chip, line: s.line |
 const ADDED = {
   'naming-an-unseen-problem': [null, 'You inherited a problem and everyone here thinks things are fine.'],
   'following-a-legend': ['Following someone they loved', 'The person before you was loved here, and you are measured against them.'],
-  'judging-unfamiliar-work': ["Accountable for work you can't judge", 'You answer for work you could not do yourself.'],
-  'credit-and-attribution': [null, "Your work reaches the client in somebody else's voice."],
+  'judging-unfamiliar-work': ['Accountable for work you can\u2019t judge', 'You answer for work you could not do yourself.'],
+  'credit-and-attribution': [null, 'Your work reaches the client in somebody else\u2019s voice.'],
   'style-against-expectation': [null, 'You are quiet in meetings, and you are not going to start shouting.'],
   'unclassifiable-profile': [null, 'People do not know what to do with you.'],
   'saying-it-in-your-own-words': [null, 'You have to announce yourself, and every draft sounds like everyone else.'],
@@ -152,6 +156,11 @@ const out = {
   heroes, works, samples, idmap, twins: TWINS, keymap: KEYMAP, situations,
 };
 fs.writeFileSync(path.join(ROOT, 'data/demo.json'), JSON.stringify(out, null, 1) + '\n');
+// the tables from the demo as a page reads it back, so their basis is the page's
+const hash = crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'data/corpus.json'))).digest('hex');
+const derived = CLC.derive(CLC.merge(corpus, JSON.parse(JSON.stringify(out))), hash);
+fs.writeFileSync(path.join(ROOT, 'data/derived.json'), JSON.stringify(derived, null, 1) + '\n');
 const matched = Object.values(idmap).filter((v) => ids.has(v)).length;
 console.log(`written data/demo.json · ${CPD.order.length} members · ${Object.keys(CPD.coaches).length} coaches · ` +
   `${heroes.length} heroes (${matched} on the roster) · ${samples.length} samples (${Object.keys(TWINS).length} twins) · ${works.length} works`);
+console.log(`written data/derived.json · corpus ${hash.slice(0, 12)} · ${Object.keys(derived.textIndex).length} stories' words · ${Object.keys(derived.likeUse).length} lives counted`);

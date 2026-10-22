@@ -9,17 +9,19 @@
      CLN.bridge(lib, mid, icon, key) -> the chain from a member's three to a story's life
      CLN.near(lib, mid)            -> a member's situations, the lives in them, their three, stand-ins
      CLN.web(lib)                  -> situation pairs held by the same life, with the lives
-     CLN.checkPlan(lib, o)         -> { members: [{ id, have, left }], picks: [{ story, serves, near, given }], alts }  the checks to make first
+     CLN.checkPlan(lib, o)         -> { members: [{ id, have, left, later }], picks: [{ story, serves, near, given }], alts }  the checks to make first
      CLN.fitFor(lib, mid, o)       -> [{ story, score, terms, links, hero, key, why }]  what next for one member, ranked
      CLN.nextFor(lib, mid, o)      -> { ready, pick, next, total }               one answer per member and week
      CLN.sourceOk(s)               -> true when the source names a work a coach can check it against
+     CLN.fitLine(lib, mid, hero, o) -> 'Michelle Obama has a checked story for one of your weeks: …'  a hero's fit, from their stories
+     CLN.firstWeekGap(lib, mid, o) -> [{ sit, key, first, picks }]          the first weeks no checked story fills, and the checks
      CLN.moveVectors(lib)          -> { vec, form, clauses }                 tf-idf over each story's move and line, cached per lib
      CLN.sitVectors(lib, key)      -> { ids, vec, df, n }                    the same, weighed within one situation
      CLN.moveTie(lib, a, b)        -> { w, words } or null                   how far two stories make the same move
      CLN.coLocated(lib, a, b, o)   -> { a, b, words } or null                the clause pair in which two stories make it
      CLN.moveFamilies(lib, key)    -> { fams: [{ members, ties, hub, words, move, rows }], alone }  one situation's stories, by move
      CLN.sameMoveElsewhere(lib, id) -> { story, w, words, pair } or null     the same move in another week, from another life
-     CLN.moveWords(lib, a, b)      -> 'The same move: ...' or ''             the shared move as a reason
+     CLN.moveWords(lib, a, b)      -> 'The same move. A: ... B: ...' or ''   the shared move as a reason, in both clauses
 
    A tie needs one shared situation (the predicament) and one more reason: the same way of leading,
    within 15 years, or the same domain. Two shared situations make a tie on their own. Measured on the
@@ -76,7 +78,8 @@
     if (A.stance && A.stance === B.stance) r.push('stance');
     if (dy != null && dy <= NEAR_YEARS) r.push('time');
     if (A.domain && A.domain === B.domain) r.push('domain'); else if (A.field === B.field) r.push('field');
-    if (shared.length < 2 && !r.length) return null;
+    // a way of leading not yet ruled on is a reading: it never makes the one more reason a tie needs on its own
+    if (shared.length < 2 && !r.some(function (x) { return x !== 'stance' || (ruled(A) && ruled(B)); })) return null;
     var w = shared.length * 3 + (r.indexOf('stance') >= 0 ? (ruled(A) && ruled(B) ? 2 : 1) : 0) + (r.indexOf('time') >= 0 ? 1 : 0) + (r.indexOf('domain') >= 0 ? 1.5 : r.indexOf('field') >= 0 ? 0.75 : 0);
     return { shared: shared, reasons: r, dy: dy, w: w };
   }
@@ -94,7 +97,10 @@
     if (st) out.push(st);
     return out;
   }
-  function apart(dy) { return dy === 0 ? 'The same year.' : dy + (dy === 1 ? ' year' : ' years') + ' apart.'; }
+  // one to nine in words, as every surface says them ("Two years apart.", "21 years apart."). APART, further down, is
+  // another list: the pairs of stories read by hand as two moves
+  var YEARS_APART = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+  function apart(dy) { return dy === 0 ? 'The same year.' : (YEARS_APART[dy] || dy) + (dy === 1 ? ' year' : ' years') + ' apart.'; }
   // "Both in sport", "Both creators": the world they share, in a member's words
   function world(X) {
     var d = { influencer: 'Both creators.', film: 'Both in film and television.', literature: 'Both writers.', art: 'Both artists.', science: 'Both scientists.', law: 'Both in law.',
@@ -110,9 +116,11 @@
   }
 
   // ---------- the graph ----------
-  var cache = typeof WeakMap === 'function' ? new WeakMap() : null;
+  // Tables built from an index are kept on the index (not enumerable, so it still prints as data): a Library frame inside
+  // the app reads the app's own index, and finds them built
+  function keep(lib, k, v) { try { Object.defineProperty(lib, k, { value: v, configurable: true, writable: true, enumerable: false }); } catch (e) { lib[k] = v; } return v; }
   function graph(lib) {
-    if (cache && cache.has(lib)) return cache.get(lib);
+    if (lib._graph) return lib._graph;
     var lives = lib.icons.filter(function (i) { return i.stories.length; }), adj = {};
     lives.forEach(function (i) { adj[i.id] = []; });
     for (var a = 0; a < lives.length; a++) for (var b = a + 1; b < lives.length; b++) {
@@ -121,8 +129,7 @@
     }
     var g = { lives: lives, adj: adj, deg: {} };
     Object.keys(adj).forEach(function (k) { g.deg[k] = adj[k].length; });
-    if (cache) cache.set(lib, g);
-    return g;
+    return keep(lib, '_graph', g);
   }
 
   function byName(lib) { return function (a, b) { var x = lib.icon[a.id].name, y = lib.icon[b.id].name; return x < y ? -1 : x > y ? 1 : 0; }; }
@@ -189,14 +196,19 @@
   function three(lib, mid) { var m = lib.members[mid]; return m ? ((m.heroes_icons || {}).core || []).filter(function (x) { return lib.icon[x]; }) : []; }
 
   // From the member's three to the life a story comes from. The last link should share the week's situation.
+  // Each answer is kept on the index, by member, life, week and three: the Review, Find and send and a story's
+  // next asks the same chain on every render. CLC.applyVerification and a check made in the app clear it.
   function bridge(lib, mid, iconId, key, o) {
     var hs = o && o.three && o.three.length ? o.three : three(lib, mid);
     if (hs.indexOf(iconId) >= 0) return { hero: iconId, steps: [], own: true };
+    var memo = lib._bridge || (lib._bridge = new Map()), mk = mid + '|' + iconId + '|' + key + '|' + hs.join('/');
+    if (memo.has(mk)) return memo.get(mk);
     var best = null;
     hs.forEach(function (h) {
       var r = route(lib, h, iconId, { max: 3, lastKey: key }); if (!r) return;
       if (!best || r.cost < best.steps.cost) best = { hero: h, steps: r };
     });
+    memo.set(mk, best);
     return best;
   }
 
@@ -206,12 +218,15 @@
   function affinity(lib, X, H) {
     var t = tie(lib, X, H); if (t) return { w: t.w, t: t };
     var w = 0, r = [];
-    if (X.stance && X.stance === H.stance) { w += 2; r.push('stance'); }
+    if (X.stance && X.stance === H.stance) { w += ruled(X) && ruled(H) ? 2 : 1; r.push('stance'); }
     if (X.domain === H.domain) { w += 1.5; r.push('domain'); } else if (X.field === H.field) { w += 0.75; r.push('field'); }
     var dy = X.year == null || H.year == null ? null : Math.abs(X.year - H.year);
     if (dy != null && dy <= NEAR_YEARS) { w += 1; r.push('time'); }
     return { w: w, t: { shared: [], reasons: r, dy: dy, w: w } };
   }
+  // what makes a life close to a hero is something the record holds: a situation, the same world or field, or years within
+  // fifteen; a way of leading counts only once a coach has ruled on it for both
+  function heldIn(lib, a, X, H) { return a.t.shared.length || a.t.reasons.some(function (x) { return x !== 'stance' || (ruled(X) && ruled(H)); }); }
   function sendable(lib, iconId, key) {
     return (lib.byIcon[iconId] || []).some(function (sid) { var s = lib.story[sid]; return s.keys.indexOf(key) >= 0 && (s.reach === 'near' || s.reach === 'mid'); });
   }
@@ -227,7 +242,7 @@
       var hero = hs.indexOf(i.id) >= 0;
       if (!held.length && !hero) return;
       var best = { w: 0, h: null, t: null };
-      H.forEach(function (h) { if (h.id === i.id) return; var a = affinity(lib, i, h); if (a.w > best.w) best = { w: a.w, h: h.id, t: a.t }; });
+      H.forEach(function (h) { if (h.id === i.id) return; var a = affinity(lib, i, h); if (a.w > best.w && heldIn(lib, a, i, h)) best = { w: a.w, h: h.id, t: a.t }; });
       lives.push({ id: i.id, held: held, hero: hero, near: best, sendable: held.filter(function (k) { return sendable(lib, i.id, k); }) });
     });
     lives.sort(function (a, b) { return (b.hero - a.hero) || b.held.length - a.held.length || b.near.w - a.near.w || (lib.icon[a.id].name < lib.icon[b.id].name ? -1 : 1); });
@@ -239,8 +254,8 @@
         var c = (lib.iconsByKey[k] || []).filter(function (x) { return x !== h.id && hs.indexOf(x) < 0 && sendable(lib, x, k); })
           .map(function (x) { return { id: x, a: affinity(lib, lib.icon[x], h) }; })
           .sort(function (p, q) { return q.a.w - p.a.w || (p.a.t.dy || 0) - (q.a.t.dy || 0) || (p.id < q.id ? -1 : 1); })[0];
-        // a stand-in has to share something real with the hero: a situation, or the way they lead
-        if (c && c.a.w >= 3 && (c.a.t.shared.length || c.a.t.reasons.indexOf('stance') >= 0)) standIns.push({ hero: h.id, key: k, id: c.id, a: c.a });
+        // a stand-in has to share something the record holds with the hero (heldIn), and weigh three at least
+        if (c && c.a.w >= 3 && heldIn(lib, c.a, lib.icon[c.id], h)) standIns.push({ hero: h.id, key: k, id: c.id, a: c.a });
         else standIns.push({ hero: h.id, key: k, id: null });
       });
     });
@@ -285,7 +300,8 @@
   // year; a web address; or an interview, an oral history, an archive, a transcript, a letter or a memoir (and their
   // kin: testimony, a memorandum, a catalogue, a recording). The corpus's "Corpus draft." goes first, and so does
   // every clause that tells a coach what to check, though "Verify against White, Catch a Fire (1983)" keeps its book.
-  // Measured on the corpus: 8 of 531 sources name no work, among them the WTA's founding at the Gloucester Hotel
+  // A dated address, speech, remarks, statement, lecture or sermon is a work too: it was given once, and its text can be
+  // found. Measured on the corpus: 4 of 531 sources name no work, among them the WTA's founding at the Gloucester Hotel
   // ("Verify the numbers") and Ali's press conference in Miami Beach.
   var SRC_NOTE = /\b(?:verify|verified|check|checked)\b/i, SRC_PLACE = /\b(?:University|College|School|Institute|Hotel|Stadium|Centre|Center|Hall|House|Palace|Theatre|Beach)\b/;
   var SRC_NAME = "(?:[A-Z][\\w’'.-]*|de|van|von|der|bin|al|da|le|la)";
@@ -296,6 +312,7 @@
     new RegExp('^[A-Z][\\w’\'.-]+(?:\\s+' + SRC_NAME + '){1,4},\\s+[“‘\'"A-Z0-9]'),   // an author, then a title
     /\b(?:by|directed by|edited by|ed\.)\s+[A-Z][\w’'.-]+\s+[A-Z]|[“‘][^”’]{4,}[”’]|\bin [A-Z][\w’'.-]+ [A-Z][\w’'.-]+, [A-Z]/,
     /\b(?:published|printed|quoted|reproduced|reprinted)\b|\btext (?:at|in)\b/i,
+    /\b(?:address|speech|remarks|statement|lecture|sermon)\b[^;]*\b(?:1\d{3}|20\d{2})\b/i,      // a dated address, speech, remarks or statement
     /\b[A-Z][\w&’'.-]* (?:Press|Books|Publishing|Publishers)\b|\b(?:Penguin|Knopf|Viking|HarperCollins|Times|Post|Journal|Review|Magazine|News|Herald|Guardian|Gazette|Tribune|Quarterly|Monthly|Bulletin|Register|Observer|Telegraph|Economist|New Yorker|Variety|Vogue|Rolling Stone|TIME|TED\w*|BBC|CNN|NPR|ABC|CBS|NBC|ESPN|C-SPAN|Reuters|Associated Press|Hansard|Public Papers|Nature|Science|Netflix|YouTube|Instagram|Twitter|Facebook|IndieWire|Refinery29)\b/
   ];
   // a title, then its author and the year ("Thrive, Arianna Huffington, 2014"), where the name is no building
@@ -349,10 +366,10 @@
   };
   function when(key) { return WHEN[key] ? 'for a week when ' + WHEN[key] : ''; }
   // the year holds when the dateline names it and nothing else ("Houston, September 1973"); "late 1950s", "c. 1976"
-  // and "1975-76" do not pin a year
+  // and "1975-76" do not pin a year, and nor does a dateline whose own year words disagreed (CLC.oneYear's yearClash)
   function yearAgrees(s) {
     var p = String((s && s.place) || ''), ys = p.match(/\b\d{3,4}s?\b/g) || [];
-    if (s.year == null || !ys.length || /\bc\.\s*\d|\d{3,4}\s*(?:[-–]|to|and)\s*\d/.test(p)) return false;
+    if (s.year == null || s.yearClash || !ys.length || /\bc\.\s*\d|\d{3,4}\s*(?:[-–]|to|and)\s*\d/.test(p)) return false;
     return ys.every(function (y) { return +y === s.year; });
   }
   var FIT_ORDER = ['three', 'reserve', 'added', 'link', 'interest', 'age', 'link2'];
@@ -361,16 +378,17 @@
     var up = M.up19 && lib.sit[M.up19.sit] ? [M.up19.sit] : [];
     return up.concat(M.sits || []).map(function (c) { return lib.sit[c] && lib.sit[c].key; }).filter(function (k, i, a) { return k && a.indexOf(k) === i; });
   }
-  function fitWhy(lib, M, x) {
+  function fitWhy(lib, M, x, now) {
     var nm = function (id) { var J = lib.icon[id]; return J ? J.short || J.name : id; }, s = x.story;
     var t = x.terms.filter(function (y) { return y.k !== 'checked'; }).sort(function (a, b) { return b.w - a.w || FIT_ORDER.indexOf(a.k) - FIT_ORDER.indexOf(b.k); })[0];
     var gap = t && t.k === 'age' ? t.a - M.age : 0;
-    var lead = !t ? '' : t.k === 'three' ? 'From ' + nm(s.icon) + ', one of your three' : t.k === 'reserve' ? 'From your fourth hero'
+    var lead = !t ? '' : t.k === 'three' ? 'From ' + nm(s.icon) + ', one of your three' : t.k === 'reserve' ? 'From ' + nm(s.icon) + ', your reserve'
       : t.k === 'added' ? 'From ' + nm(s.icon) + ', a hero you added' : t.k === 'link' ? 'One step from ' + nm(x.hero)
       : t.k === 'interest' ? 'From ' + INT_WORDS[t.n] + ', one of your interests'
-      : t.k === 'age' ? nm(s.icon) + ' was ' + t.a + ' then, ' + (gap === 0 ? 'your age' : YEARS[Math.abs(gap)] + (gap < 0 ? ' younger' : ' older') + ' than you are')
+      : t.k === 'age' ? nm(s.icon) + ' was ' + (t.a - 1) + ' or ' + t.a + ' then, ' + (gap === 0 ? 'about your age' : 'about ' + YEARS[Math.abs(gap)] + (gap < 0 ? ' younger' : ' older') + ' than you are')
       : 'Two steps from your three';
-    var w = when(x.key);
+    // the week it fits: this week, another of theirs (o.now, the week it is now, when known), or a week when ...
+    var w = now && x.key && WHEN[x.key] ? (x.key === now ? 'for this week: ' : 'for another of your weeks: ') + WHEN[x.key] : when(x.key);
     return lead ? lead + (w ? ', ' + w : '') + '.' : w ? w.charAt(0).toUpperCase() + w.slice(1) + '.' : '';
   }
   // o.three, o.reserve, o.extended: the heroes as the app holds them now; o.keys: the situations, in order (the week's
@@ -398,7 +416,7 @@
     }); });
     out.sort(function (x, y) { return y.score - x.score || (x.story.id < y.story.id ? -1 : 1); });
     if (o.n) out = out.slice(0, o.n);
-    out.forEach(function (x) { x.why = fitWhy(lib, M, x); });
+    out.forEach(function (x) { x.why = fitWhy(lib, M, x, o.now); });
     return out;
   }
 
@@ -421,6 +439,51 @@
       return x;
     };
     return { ready: chain(ok[0]), pick: chain(dr[0]), next: dr.slice(1, 3).map(chain), total: dr.length, checked: ok.length };
+  }
+
+  // ---------- a hero's fit, from the stories they have ----------
+  // The fit check's line for a hero, said from what the library holds for them in the member's situations: a checked
+  // story for one of their weeks ("Michelle Obama has a checked story for one of your weeks: everything you do gets read
+  // as a signal."), a recall draft for one, stories about other kinds of week, or none yet; and with none, the truth about
+  // who stands in for them (nobody tied to them in the library means the coach chooses by hand). o.coach: the coach's
+  // first name. heroId may be the prototype's id ("michelle") or the library's.
+  function fitLine(lib, mid, heroId, o) {
+    o = o || {}; var M = lib.members[mid] || {}, id = lib.icon[heroId] ? heroId : (lib.idmap || {})[heroId] || heroId, I = lib.icon[id]; if (!I) return '';
+    var co = o.coach || 'your coach', nm = I.name, mine = (M.sits || []).map(function (c) { return lib.sit[c]; }).filter(Boolean);
+    var all = (lib.byIcon[id] || []).map(function (x) { return lib.story[x]; }).filter(Boolean);
+    var weeks = function (pick) { return mine.filter(function (st) { return all.some(function (s) { return pick(s) && s.keys.indexOf(st.key) >= 0; }); }); };
+    var say = function (ws) { var w = ws.map(function (st) { return WHEN[st.key] || st.chip.toLowerCase(); }); return w.length <= 1 ? w.join('') : w.slice(0, -1).join(', ') + ' and ' + w[w.length - 1]; };
+    var NW = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'], ok = weeks(function (s) { return s.verified; }), dr = weeks(function (s) { return !s.verified; });
+    if (ok.length) return nm + (ok.length === 1 ? ' has a checked story for one of your weeks: ' : ' has checked stories for ' + NW[ok.length] + ' of your weeks: ') + say(ok) + '.';
+    if (dr.length) return nm + (dr.length === 1 ? ' has a story for one of your weeks: ' : ' has stories for ' + NW[dr.length] + ' of your weeks: ') + say(dr) + '. ' + (dr.length === 1 ? 'It is a recall draft' : 'They are recall drafts') + ', waiting for ' + co + '’s check.';
+    if (all.length) return nm + (all.length === 1 ? '’s one story is about another kind of week.' : '’s ' + (NW[all.length] || all.length) + ' stories are about other kinds of week.');
+    return 'No story from ' + nm + ' yet. ' + (kindred(lib, id, 1).length ? 'When none fits your week, ' + co + ' sends one from someone close to ' + nm + '.' : 'Nobody in the library is tied to ' + nm + ', so ' + co + ' chooses your stories by hand.');
+  }
+
+  // ---------- the first week, before Move 1 is published ----------
+  // The member's first fortnight, guaranteed at the moment the coach publishes: each situation of the move (o.sit) and of
+  // the next meeting (up19), counted once, that no checked story could fill (fillSlot's ready), with the three drafts
+  // whose check fills it: fitFor inside the week, close enough to send, with a source a coach can check. o.prefer, the
+  // draft the week already holds, comes first. Each pick says why, for the coach: "Close to Reshma Saujani, by Bret’s
+  // choice" (o.closeTo, o.coach), "One of Maya’s interests: Creators", "One step from Simone Biles".
+  function firstWeekGap(lib, mid, o) {
+    o = o || {}; var M = lib.members[mid]; if (!M) return [];
+    var first = M.first, poss = first + '’s', nm = function (x) { var J = lib.icon[x]; return J ? J.name : x; }, seen = {};
+    return [o.sit || (M.mv && M.mv.sit), M.up19 && M.up19.sit].filter(function (c) { var k = lib.sit[c] && lib.sit[c].key; if (!k || seen[k]) return false; seen[k] = 1; return true; }).map(function (c, i) {
+      var key = lib.sit[c].key, f = fillSlot(lib, mid, key, { three: o.three, exclude: o.exclude, avoidIcons: o.avoidIcons });
+      if (f.ready) return null;
+      var picks = fitFor(lib, mid, { keys: [key], three: o.three, reserve: o.reserve, extended: o.extended, ints: o.ints, age: o.age, exclude: o.exclude, avoidIcons: o.avoidIcons, near: true, drafts: true, sourced: true });
+      if (o.prefer) picks.sort(function (a, b) { return (b.story.id === o.prefer) - (a.story.id === o.prefer); });
+      return { sit: c, key: key, first: i === 0, picks: picks.slice(0, 3).map(function (x) {
+        var t = x.terms.slice().sort(function (a, b) { return b.w - a.w || FIT_ORDER.indexOf(a.k) - FIT_ORDER.indexOf(b.k); })[0];
+        x.reason = x.story.id === o.prefer ? (o.closeTo ? 'Close to ' + nm(o.closeTo) + ', by ' + (o.coach || 'the coach') + '’s choice' : 'Chosen by ' + (o.coach || 'the coach') + ' for the week')
+          : !t ? 'It carries the week'
+          : t.k === 'three' ? 'One of ' + poss + ' three' : t.k === 'reserve' ? poss + ' fourth hero' : t.k === 'added' ? 'A hero ' + first + ' added'
+          : t.k === 'link' ? 'One step from ' + nm(x.hero) : t.k === 'interest' ? 'One of ' + poss + ' interests: ' + t.n
+          : t.k === 'age' ? nm(x.story.icon) + ' was ' + (t.a - 1) + ' or ' + t.a + ' then, near ' + poss + ' age' : 'Two steps from ' + poss + ' three';
+        return x;
+      }) };
+    }).filter(Boolean);
   }
 
   // ---------- the week, quieter or closer ----------
@@ -458,19 +521,23 @@
   // Obama. Both had every act read as a signal."). The reason is the situation asked about (key, then o.keys) from
   // the step whose tie shares it, the last link first; a chain that shares none says its last link's own reason.
   // After a chain of two, "Both" names its pair. The hero goes by the short name the member knows ("Obama"), every
-  // other life by its whole name. The Review's rows and the Library's lead route both say this line.
+  // other life by its whole name, and so does the hero when a life the line is about holds the short name too:
+  // Michelle Obama's card says "one step from Barack Obama". The Review's rows and the Library's lead route both
+  // say this line.
   function linksTo(lib, mid, iconId, key, o) {
     o = o || {}; var hs = o.three && o.three.length ? o.three : three(lib, mid), b = bridge(lib, mid, iconId, key, { three: hs });
-    var nm = function (id) { var I = lib.icon[id]; return I ? I.short || I.name : id; }, full = function (id) { var I = lib.icon[id]; return I ? I.name : id; };
+    var full = function (id) { var I = lib.icon[id]; return I ? I.name : id; };
     if (!b) return { links: 9, hero: null, steps: [], line: 'Not near the three.' };
     if (b.own) return { links: 0, hero: iconId, steps: [], line: 'One of the three.' };
     var st = b.steps, last = st[st.length - 1], ks = [key].concat(o.keys || []).filter(function (k, i, a) { return k && a.indexOf(k) === i; }), at = null, w;
+    var sh = (lib.icon[b.hero] || {}).short || full(b.hero), lives = [iconId].concat(st.map(function (x) { return x.a; }), st.map(function (x) { return x.b; }));
+    var nm = function (id) { return id === b.hero && !lives.some(function (x) { return x !== b.hero && (' ' + full(x) + ' ').indexOf(' ' + sh + ' ') >= 0; }) ? sh : full(id); };
     for (var i = st.length - 1; i >= 0 && !at; i--) for (var j = 0; j < ks.length && !at; j++) if (st[i].tie.shared.indexOf(ks[j]) >= 0 && both(ks[j])) at = { x: st[i], k: ks[j] };
     w = at ? 'Both ' + both(at.k) + '.' : why(lib, last.a, last.b, last.tie)[0] || '';
     if (st.length > 1) w = w.replace(/^Both /, full((at || { x: last }).x.a) + ' and ' + full((at || { x: last }).x.b) + ' both ');
-    var NUMW = ['', 'One', 'Two', 'Three', 'Four', 'Five'];
-    var line = st.length === 1 ? 'One step from ' + nm(b.hero) + '. ' + w
-      : (NUMW[st.length] || st.length) + ' steps from ' + nm(b.hero) + ', through ' + st.slice(0, -1).map(function (x) { return full(x.b); }).join(' and ') + '. ' + w;
+    var NUMW = ['', 'One', 'Two', 'Three', 'Four', 'Five'], stop = function (t) { return /\.$/.test(t) ? t : t + '.'; };   // "through Martin Luther King Jr."
+    var line = st.length === 1 ? stop('One step from ' + nm(b.hero)) + ' ' + w
+      : stop((NUMW[st.length] || st.length) + ' steps from ' + nm(b.hero) + ', through ' + st.slice(0, -1).map(function (x) { return full(x.b); }).join(' and ')) + ' ' + w;
     return { links: st.length, hero: b.hero, steps: st, line: line.trim() };
   }
 
@@ -484,7 +551,8 @@
     var hs = o.three && o.three.length ? o.three : three(lib, mid), seen = {}, out = [];
     keys.forEach(function (k) { (lib.byKey[k] || []).forEach(function (sid) {
       if (seen[sid]) return; seen[sid] = 1;
-      var s = lib.story[sid], ic = lib.icon[s.icon]; if (!ic || ic.born == null || s.year == null) return;
+      // no age for a story whose dateline gave another year, until a coach settles it
+      var s = lib.story[sid], ic = lib.icon[s.icon]; if (!ic || ic.born == null || s.year == null || s.yearClash) return;
       var age = s.year - ic.born; if (age < 12 || age > 95) return;
       out.push({ story: s, age: age, hero: hs.indexOf(s.icon) >= 0, gap: Math.abs(age - m.age), sit: lib.sitByKey[s.keys.filter(function (x) { return keys.indexOf(x) >= 0; })[0]].id });
     }); });
@@ -497,7 +565,8 @@
   // (o.sent[mid]) and whose life they did not have last week (o.avoid[mid]). The plan picks recall drafts, near
   // or mid reach, greedily: the draft that closes the most gaps first, a gap counting 1.2 when the draft's life
   // is within one link of that member's three. Check one and run it again: the plan shortens. A draft whose source names
-  // no work (sourceOk) is never a pick. o.thisWeek ({ mid: situation }): the members still waiting for this week's story;
+  // no work (sourceOk) is never a pick. Each week a member has ahead needs a checked story of its own as well, and a week
+  // of theirs with none weighs 1.5. o.thisWeek ({ mid: situation }): the members still waiting for this week's story;
   // a draft that carries one of their weeks belongs on that member's line, so it leaves the plan, and the best of them
   // for each waiting member comes back as alts[mid], the line's other check.
   function checkPlan(lib, o) {
@@ -506,23 +575,31 @@
     var wkKeys = Object.keys(wk).map(function (mid) { return wk[mid]; }), thisWeek = function (s) { return s.keys.some(function (k) { return wkKeys.indexOf(k) >= 0; }); };
     var M = ids.filter(function (mid) { return lib.members[mid]; }).map(function (mid) {
       var keys = (lib.members[mid].sits || []).map(function (c) { return lib.sit[c] && lib.sit[c].key; }).filter(Boolean), ex = sent[mid] || [], av = avoid[mid] || [];
-      var seen = {}, have = 0, pool = [], all = [];
+      var seen = {}, have = 0, pool = [], all = [], hk = {};
+      keys.forEach(function (k) { hk[k] = 0; });
       keys.forEach(function (k) { (lib.byKey[k] || []).forEach(function (sid) {
         var s = lib.story[sid]; if (seen[sid] || !s) return; seen[sid] = 1;
         if (ex.indexOf(sid) >= 0 || av.indexOf(s.icon) >= 0) return;
         if (s.reach !== 'near' && s.reach !== 'mid') return;   // the weekly rule never sends a far story
-        if (s.verified) have++; else if (sourceOk(s)) { all.push(sid); if (!thisWeek(s)) pool.push(sid); }
+        if (s.verified) { have++; keys.forEach(function (x) { if (s.keys.indexOf(x) >= 0) hk[x]++; }); }
+        else if (sourceOk(s)) { all.push(sid); if (!thisWeek(s)) pool.push(sid); }
       }); });
-      return { id: mid, have: have, gap: Math.max(0, need - have), pool: pool, all: all, near: hops(lib, mid, { max: 1, three: th[mid] }) };
+      return { id: mid, have: have, gap: Math.max(0, need - have), pool: pool, all: all, keys: keys, hk: hk, near: hops(lib, mid, { max: 1, three: th[mid] }) };
     });
+    // a week of theirs ahead with no checked story. The situation a member waits on this week comes round again in their
+    // season, and the story this week's check sends is spent by then, so that week ahead needs a second checked story
+    var empty = function (m, s) { return m.keys.filter(function (k) { return m.hk[k] < (k === wk[m.id] ? 2 : 1) && (!s || s.keys.indexOf(k) >= 0); }); };
+    var wants = function (m) { return m.gap > 0 || empty(m).length > 0; };
+    var takes = function (m, s) { return empty(m, s).length ? 1.5 : m.gap > 0 ? 1 : 0; };
+    var fill = function (m, s) { m.gap--; m.keys.forEach(function (k) { if (s.keys.indexOf(k) >= 0) m.hk[k]++; }); };
     var byId = {}; M.forEach(function (m) { byId[m.id] = m; });
     var picks = [], used = {}, alts = {};
     var nearOf = function (s, serves) { return serves.filter(function (mid) { return byId[mid].near[s.icon]; }).map(function (mid) { return { id: mid, links: byId[mid].near[s.icon].links, hero: byId[mid].near[s.icon].hero }; }); };
     // o.first: checks already asked for (this week's), counted before the plan picks its own
     (o.first || []).forEach(function (sid) {
       var s = lib.story[sid]; if (!s || used[sid]) return; used[sid] = 1;
-      var serves = M.filter(function (m) { return m.gap > 0 && m.all.indexOf(sid) >= 0; }).map(function (m) { return m.id; });
-      serves.forEach(function (mid) { byId[mid].gap--; });
+      var serves = M.filter(function (m) { return wants(m) && takes(m, s) && m.all.indexOf(sid) >= 0; }).map(function (m) { return m.id; });
+      serves.forEach(function (mid) { fill(byId[mid], s); });
       picks.push({ story: s, serves: serves, given: true, near: nearOf(s, serves) });
     });
     // the other check for each waiting member's line: the draft in their week that closes the most gaps
@@ -538,17 +615,23 @@
     });
     for (;;) {
       var score = {}, best = null;
-      M.forEach(function (m) { if (m.gap <= 0) return; m.pool.forEach(function (sid) {
-        if (used[sid]) return; var x = score[sid] = score[sid] || { w: 0, serves: [] };
-        x.w += m.near[lib.story[sid].icon] ? 1.2 : 1; x.serves.push(m.id);
+      M.forEach(function (m) { if (!wants(m)) return; m.pool.forEach(function (sid) {
+        var t = used[sid] ? 0 : takes(m, lib.story[sid]); if (!t) return; var x = score[sid] = score[sid] || { w: 0, serves: [] };
+        x.w += t * (m.near[lib.story[sid].icon] ? 1.2 : 1); x.serves.push(m.id);
       }); });
       Object.keys(score).sort().forEach(function (sid) { if (!best || score[sid].w > best.w + 1e-9) best = { sid: sid, w: score[sid].w, serves: score[sid].serves }; });
       if (!best) break;
       used[best.sid] = 1;
-      best.serves.forEach(function (mid) { byId[mid].gap--; });
+      best.serves.forEach(function (mid) { fill(byId[mid], lib.story[best.sid]); });
       picks.push({ story: lib.story[best.sid], serves: best.serves, near: nearOf(lib.story[best.sid], best.serves) });
     }
-    return { need: need, members: M.map(function (m) { return { id: m.id, have: m.have, left: Math.max(0, m.gap) }; }), picks: picks, alts: alts };
+    // a week still empty at the end has no draft to check (left), or only drafts that carry this week's story for
+    // someone, which come into the plan once this week has gone (later: its situation ids)
+    var later = function (m) { return empty(m).filter(function (k) { return m.all.some(function (sid) { return lib.story[sid].keys.indexOf(k) >= 0; }); }); };
+    // gap: checked stories still short of need once the plan is checked; weeks: weeks ahead still without one; left: what
+    // still needs writing (a gap the waiting drafts will close after Sunday is not), and later: the weeks that wait for Sunday
+    var waiting = function (m) { return m.all.filter(function (sid) { return !used[sid] && thisWeek(lib.story[sid]); }).length; };
+    return { need: need, members: M.map(function (m) { var w = later(m); return { id: m.id, have: m.have, gap: Math.max(0, m.gap), weeks: empty(m).length, left: Math.max(0, m.gap - waiting(m)) + empty(m).length - w.length, later: w.map(function (k) { return lib.sitByKey[k].id; }) }; }), picks: picks, alts: alts };
   }
 
   // ---------- the situation web ----------
@@ -576,10 +659,13 @@
   // word in more than half of them weighs as one in half, so the week's own words ("read", "sentence" in E1) count for
   // little and still count. A reason says only the words both stories wrote in the same form: "direct" and "directly"
   // weigh together and are never said as one word.
-  // Measured on the corpus at the rules below: 99 families hold 380 of 563 story slots (67%), with 494 ties between their
-  // stories; none of the 40 families of four or more is a chain; E1 has seven families holding 27 of its 41 stories, the
-  // largest the eight that write down the sentence they want repeated. The same move in another week: 31 stories (the
-  // nearest move alone gave 112, many on chance words, as King to Eisenhower on "conversation" and "turned").
+  // Measured on the corpus at the rules below: 67 families hold 175 of 563 story slots (31%), with 154 ties between their
+  // stories; none of the 9 families of four or more is a chain; E1 has five families holding 12 of its 41 stories, the
+  // largest the four that write down the sentence they want repeated. The same move in another week: 12 stories (the
+  // nearest move alone gave 112, many on chance words, as King to Eisenhower on "conversation" and "turned"). Round six
+  // read 40 ties by hand and found 13 joined on the frame alone ("ask your manager", "chair"); the frame rule below keeps
+  // those apart, at the cost of some families a reader would have kept. A second reading, of every tie, parted the pairs
+  // that share a word in two senses (APART, below).
   var STOPW = {}; ('actually really just rather instead the a an and or of to in on at by for with from as is was were be been being had has have he she his her him ' +
     'they them their it its that this which who whom what when where while after before into over under than then there these those not no but if so up out ' +
     'about one two three four five would could should may might did do does said says told also only more most other some such own same very can will like ' +
@@ -595,6 +681,23 @@
   'one two three first last before after only same own never once again not every each nothing out'.split(' ').forEach(function (w) { PIVOT[w] = 1; });
   'a an the it its they them their you your he she his her him we our us me my this that these those is are was were be to of'.split(' ').forEach(function (w) { GLUE[w] = 1; });
   var SETTING = /^(?:in|at|on|when|whenever|before|after|once|within|during|this|the|tonight|today|tomorrow|with|every|each|next|by|if|as|from|over|until|while|for)\b/i;
+  // The frame of a move: the verbs that open almost every move and the people and things they are done to. Two clauses
+  // that share only these share no move ("ask your manager" and "ask each long-serving manager"; "Chair it yourself" and
+  // "Ask the chair"): a tie needs a word of the move itself, outside the frame, uncommon in the week, in the clause's own
+  // head (before any "before", "until" or "when" that times it), and neither clause may do its work on a bare "it" or "them".
+  var FRAME = {}; ('ask say tell name write send hand give read list put call phone ring open keep make take bring show answer reply book get use used ' +
+    'person people team manager boss client lead room chair colleague partner peer group meeting member line sentence word note page question piece ' +
+    'work job role firm office organisation organization company time how why serve serving need run state front best see think want look stay help know find part side way end start hold hear meet doing done').split(' ').forEach(function (w) { FRAME[stem(w)] = 1; FRAME[w] = 1; });
+  // two forms of one word, or one inflected from the other ("repeat", "repeated"); not two words a stem joined ("site", "sits")
+  function inflected(a, b) { if (a === b) return true; var x = a.length < b.length ? a : b, y = a.length < b.length ? b : a, r = y.slice(x.length); return y.indexOf(x) === 0 && /^(?:s|es|d|ed|ing|ly)$/.test(r) || y.indexOf(x.replace(/e$/, '')) === 0 && /^(?:ing|ed)$/.test(y.slice(x.length - 1)); }
+  // a counting word with a frame word is still the frame ("one sentence", "three people"); "own name" or "first word" is not
+  var COUNTING = { one: 1, two: 1, three: 1, four: 1, five: 1, six: 1, seven: 1, eight: 1, nine: 1, ten: 1, each: 1, every: 1 };
+  function framed(k) {
+    var p = k.split(' '); if (p.length === 1) return !!FRAME[k];
+    var piv = PIVOT[p[0]] ? p[0] : p[1], w = PIVOT[p[0]] ? p[1] : p[0];
+    return !!FRAME[w] && !!COUNTING[piv];
+  }
+  var TIMED = /\s+(?:before|after|until|once|when|whenever|while|so that|then)\s+/i, BARE = /^[A-Za-z]+\s+(?:them|it)\b/i;
   var TAKES = /^(?:under |about |up to )?(?:a|an|one|two|three|four|five|six|seven|eight|nine|ten|fifteen|twenty|thirty|forty|sixty|ninety|\d+) (?:minutes?|seconds?|hours?)\b/i;
   var MIN_TIE = 0.10, MIN_WORDS = 2, ELSEWHERE = 0.35, SAME_MOVE = 0.2, COMMON = 0.5, RARE = 0.1, BESIDE = 4, ON_ITS_OWN = 0.25;
   function fold(s) { return String(s == null ? '' : s).normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
@@ -655,36 +758,81 @@
     n = Math.sqrt(n) || 1; Object.keys(v).forEach(function (w) { v[w] /= n; }); return v;
   }
 
-  var mcache = typeof WeakMap === 'function' ? new WeakMap() : null;
-  function moveVectors(lib) {
-    var c = mcache ? mcache.get(lib) : lib._mv; if (c) return c;
-    var N = lib.stories.length, ids = lib.stories.map(function (s) { return s.id; }), docs = {}, mdocs = {}, terms = {}, forms = {}, boil = {}, wrote = {}, cl = {};
-    lib.situations.forEach(function (st) { var b = {}; plain([st.chip, st.line, st.member_line, st.key.replace(/-/g, ' ')].join(' ')).forEach(function (w) { b[w] = 1; }); boil[st.key] = b; });
-    lib.stories.forEach(function (s) {
-      var me = {}; plain((lib.icon[s.icon] || {}).name).forEach(function (w) { me[w] = 1; });
-      var drop = Object.assign({}, me); s.keys.forEach(function (k) { Object.keys(boil[k] || {}).forEach(function (w) { drop[w] = 1; }); });
-      var mt = [], wr = wrote[s.id] = {}, cs = cl[s.id] = [];
+  // The move vectors, built a story at a time (moveBuild), so a page can build them in idle slices that yield to a tap
+  // (moveVectorsIdle); a call that needs them at once finishes whatever is left. Kept on the index (keep).
+  function moveBuild(lib) {
+    if (lib._mvb) return lib._mvb;
+    var b = { i: 0, docs: {}, mdocs: {}, terms: {}, forms: {}, wrote: {}, cl: {}, boil: {} };
+    lib.situations.forEach(function (st) { var x = {}; plain([st.chip, st.line, st.member_line, st.key.replace(/-/g, ' ')].join(' ')).forEach(function (w) { x[w] = 1; }); b.boil[st.key] = x; });
+    return keep(lib, '_mvb', b);
+  }
+  function moveStep(lib, b, n) {
+    for (var end = Math.min(lib.stories.length, b.i + n); b.i < end; b.i++) {
+      var s = lib.stories[b.i], me = {}; plain((lib.icon[s.icon] || {}).name).forEach(function (w) { me[w] = 1; });
+      var drop = Object.assign({}, me); s.keys.forEach(function (k) { Object.keys(b.boil[k] || {}).forEach(function (w) { drop[w] = 1; }); });
+      var mt = [], wr = b.wrote[s.id] = {}, cs = b.cl[s.id] = [];
       (s.move_examples || []).forEach(function (m) {
         mt = mt.concat(toks(action(m), me));
         // each clause of the move, with the terms it holds: where, and in which form
-        clauses(action(m)).forEach(function (x) { var at = {}; toks(x, me).forEach(function (p) { (at[p[0]] = at[p[0]] || { f: {}, at: [] }).f[p[1]] = 1; at[p[0]].at.push(p[2]); }); cs.push({ text: x, at: at }); });
+        clauses(action(m)).forEach(function (x) {
+          var at = {}, head = {}; toks(x, me).forEach(function (p) { (at[p[0]] = at[p[0]] || { f: {}, at: [] }).f[p[1]] = 1; at[p[0]].at.push(p[2]); });
+          toks(x.split(TIMED)[0], me).forEach(function (p) { head[p[0]] = 1; });
+          cs.push({ text: x, at: at, head: head, bare: BARE.test(x.trim()) });
+        });
       });
       // the forms the moves wrote each term in; across the corpus, the situation's own words go as well as the name
       mt.forEach(function (p) { (wr[p[0]] = wr[p[0]] || {})[p[1]] = 1; });
       var dm = mt.filter(function (p) { return !p[0].split(' ').some(function (w) { return !PIVOT[w] && drop[w]; }); }), d = dm.slice();
       (s.line_examples || []).forEach(function (l) { d = d.concat(toks(said(l), drop)); });
-      docs[s.id] = d.map(function (t) { var f = forms[t[0]] = forms[t[0]] || {}; f[t[1]] = (f[t[1]] || 0) + 1; return t[0]; });
-      mdocs[s.id] = dm.map(function (t) { return t[0]; }); terms[s.id] = mt.map(function (t) { return t[0]; });
-    });
-    // the move and its line join two stories of a week; the same move in another week is judged on the moves alone, where
-    // a chance word in a line ("table", "joke") cannot carry two stories together
-    var df = dfOf(docs, ids), mdf = dfOf(mdocs, ids), vec = {}, mvec = {}, form = {};
-    lib.stories.forEach(function (s) { vec[s.id] = tfidf(docs[s.id], df, N, { drop: 0.15 }); mvec[s.id] = tfidf(mdocs[s.id], mdf, N, { drop: 0.15 }); });
+      var forms = b.forms; b.docs[s.id] = d.map(function (t) { var f = forms[t[0]] = forms[t[0]] || {}; f[t[1]] = (f[t[1]] || 0) + 1; return t[0]; });
+      b.mdocs[s.id] = dm.map(function (t) { return t[0]; }); b.terms[s.id] = mt.map(function (t) { return t[0]; });
+    }
+    return b.i >= lib.stories.length;
+  }
+  // the weight of each term in each story, a few stories at a time once every story is read (moveStep). The move and its
+  // line join two stories of a week; the same move in another week is judged on the moves alone, where a chance word in a
+  // line ("table", "joke") cannot carry two stories together
+  function moveWeigh(lib, b, n) {
+    var N = lib.stories.length, ids = function () { return lib.stories.map(function (s) { return s.id; }); };
+    if (!b.df) { b.df = dfOf(b.docs, ids()); b.vec = {}; b.mvec = {}; b.w = 0; if (n < N) return false; }
+    if (!b.mdf) { b.mdf = dfOf(b.mdocs, ids()); if (n < N) return false; }
+    for (var end = Math.min(N, b.w + n); b.w < end; b.w++) { var s = lib.stories[b.w]; b.vec[s.id] = tfidf(b.docs[s.id], b.df, N, { drop: 0.15 }); b.mvec[s.id] = tfidf(b.mdocs[s.id], b.mdf, N, { drop: 0.15 }); }
+    return b.w >= N;
+  }
+  function moveVectors(lib) {
+    if (lib._mv) return lib._mv;
+    var b = moveBuild(lib); moveStep(lib, b, lib.stories.length); moveWeigh(lib, b, lib.stories.length);
+    var N = lib.stories.length, forms = b.forms, form = {};
     // a term reads as the form the corpus uses most
     Object.keys(forms).forEach(function (k) { form[k] = Object.keys(forms[k]).sort(function (x, y) { return forms[k][y] - forms[k][x] || x.length - y.length || (x < y ? -1 : 1); })[0]; });
-    c = { vec: vec, mvec: mvec, form: form, df: df, mdf: mdf, n: N, terms: terms, wrote: wrote, clauses: cl, fam: {}, away: {}, sit: {} };
-    if (mcache) mcache.set(lib, c); else lib._mv = c;
-    return c;
+    return keep(lib, '_mv', { vec: b.vec, mvec: b.mvec, form: form, df: b.df, mdf: b.mdf, n: N, terms: b.terms, wrote: b.wrote, clauses: b.cl, fam: {}, away: {}, sit: {} });
+  }
+  // Work done while the page is idle, in slices of up to 30 ms that give the main thread back between them, so a tap
+  // waits for one slice at most: each(i) is called until it returns true, then done(). In node, at once.
+  var NOW = function () { return typeof performance !== 'undefined' && performance.now ? performance.now() : Date.now(); };
+  function idleRun(each, done) {
+    var idle = typeof requestIdleCallback === 'function' ? requestIdleCallback : typeof window === 'undefined' ? null : function (f) { return setTimeout(function () { f({ timeRemaining: function () { return 30; } }); }, 16); };
+    if (!idle) { while (!each()) {} if (done) done(); return; }
+    (function slice(dl) {
+      var t0 = NOW();
+      while (!each()) if (!dl || dl.timeRemaining() < 3 || NOW() - t0 > 30) return idle(slice);
+      if (done) done();
+    })(null);
+  }
+  // Build the move vectors while the page is idle, a few stories a slice; done(V) once they are built. A page that needs
+  // them before then builds the rest at once.
+  function moveVectorsIdle(lib, done) {
+    if (lib._mv) { if (done) done(lib._mv); return; }
+    var b = moveBuild(lib);
+    idleRun(function () { return !!lib._mv || (moveStep(lib, b, 4) && moveWeigh(lib, b, 8)); }, function () { var V = moveVectors(lib); if (done) done(V); });
+  }
+  // Each situation's families (moveFamilies), one situation a slice once the vectors are built, the keys given first and
+  // then the rest: a story's reasons and a situation page then find them made. done() once all are.
+  function familiesIdle(lib, keys, done) {
+    var all = (keys || []).filter(function (k) { return lib.sitByKey[k]; }).concat(lib.situations.map(function (s) { return s.key; })), i = 0;
+    moveVectorsIdle(lib, function (V) {
+      idleRun(function () { while (i < all.length && V.fam[all[i]]) i++; if (i >= all.length) return true; moveFamilies(lib, all[i++]); return false; }, done);
+    });
   }
   // One situation's moves, weighed against that situation's own stories.
   function sitVectors(lib, key) {
@@ -704,8 +852,14 @@
   // Two clauses make the same move: the words they share (in both vectors x and y), or null. o: { df, n } of the stories
   // the words weigh against, which say what is common (more than half) and what is rare (a tenth, three at least).
   function meets(ca, cb, x, y, o) {
+    if (ca.bare || cb.bare) return null;
     var ks = Object.keys(ca.at).filter(function (k) { return cb.at[k] && x[k] && y[k]; }), ws = ks.filter(function (k) { return k.indexOf(' ') < 0; });
     var com = function (k) { return o.df[k] > o.n * COMMON; }, rare = function (k) { return o.df[k] <= Math.max(3, o.n * RARE); };
+    // a word of the move itself, in the head of both clauses: two of them, or one that is rare in the week and written
+    // as the same word in both
+    var own = ks.filter(function (k) { return !framed(k) && !com(k) && (!ca.head || ca.head[k]) && (!cb.head || cb.head[k]); });
+    if (!own.length) return null;
+    if (own.length === 1 && (!rare(own[0]) || !Object.keys(ca.at[own[0]].f).some(function (f) { return Object.keys(cb.at[own[0]].f).some(function (g) { return inflected(f, g); }); }))) return null;
     var beside = function (c, p, q) { return c.at[p].at.some(function (i) { return c.at[q].at.some(function (j) { return j > i && j - i <= BESIDE; }); }); };
     for (var i = 0; i < ws.length; i++) for (var j = 0; j < ws.length; j++) {
       var p = ws[i], q = ws[j]; if (i === j) continue;
@@ -714,11 +868,43 @@
     }
     return null;
   }
+  // The words cannot tell a word's two senses apart ("the senior seat" and "each senior colleague", "the one thing you
+  // learned" and "the one thing you will work on"), nor a frame from a move when a placeholder carries it. Round six read
+  // every tie that holds a family, and every same move another week or an Others card says, by hand (222 of them): these
+  // 53 pairs share words and make two different moves, and are kept apart. A new corpus wants its ties read the same way.
+  var APART = {}; [
+    's-A1-caroline-robinson-jones s-A1-laura-bush', 's-A1-caroline-robinson-jones s-A1-mia-hamm',
+    's-A1-florence-nightingale s-A1-mahatma-gandhi', 's-A2-elena-kagan st-obama-2008-clinton',
+    's-A3-arthur-levitt s-A3-harry-markopolos', 's-A3-arthur-levitt s-A3-howard-schultz',
+    's-A3-brooksley-born s-A3-harry-markopolos', 's-A3-martin-baron s-A4-angela-ahrendts',
+    's-A3-vannevar-bush s-D2-archimedes', 's-A4-aristotle s-A4-satya-nadella', 's-A5-mary-barra s-A5-nelson-mandela',
+    's-B1-albert-einstein st-stevie-wonder-1971-motown', 's-B1-nora-ephron s-B1-tom-burrell',
+    's-B3-anne-frank s-B3-coco-gauff', 's-B3-ivanka-trump s-B3-martina-navratilova',
+    's-B4-caroline-robinson-jones s-B4-sara-blakely', 's-B5-abraham-lincoln s-B5-bill-bernbach',
+    's-B5-margaret-thatcher s-B5-meryl-streep', 's-B6-george-c-marshall s-B6-ulysses-s-grant',
+    's-B6-harry-markopolos s-B6-nikola-tesla', 's-B6-ulysses-s-grant s-E3-john-adams',
+    's-B6-ulysses-s-grant st-kjohnson-1958-langley', 's-C2-ada-lovelace s-C2-madam-c-j-walker',
+    's-C2-eleanor-roosevelt s-C2-jo-malone', 's-C2-jo-malone s-C2-mary-wells-lawrence',
+    's-C3-dolores-huerta s-C3-j-robert-oppenheimer', 's-C3-fannie-lou-hamer s-C3-venus-williams',
+    's-C3-j-robert-oppenheimer s-C3-sabrina-ionescu', 's-D1-anne-boden s-D1-bill-walsh',
+    's-D1-anne-boden s-D1-wangari-maathai', 's-D1-bill-walsh s-D1-theodore-roosevelt',
+    's-D1-cesar-chavez s-D1-ricardo-semler', 's-D1-frances-arnold s-D1-paul-cravath',
+    's-D1-ricardo-semler s-D1-theodore-roosevelt', 's-D2-charlie-munger s-D2-rene-descartes',
+    's-D2-giorgio-armani s-D2-rene-descartes', 's-D2-madeleine-albright s-D2-ruth-bader-ginsburg',
+    's-D2-pat-summitt s-D2-paul-mccartney', 's-D2-rene-descartes s-D2-walt-disney', 's-D3-john-legend s-D3-mo-ibrahim',
+    's-E1-archibald-cox s-E1-tim-tebow', 's-E1-fannie-lou-hamer s-E1-lloyd-blankfein',
+    's-E1-halle-berry s-E1-paige-bueckers', 's-E1-lebron-james st-jackie-robinson-1945-rickey',
+    's-E2-erin-callan s-E4-yo-yo-ma', 's-E3-antonio-banderas s-E3-magic-johnson', 's-E3-indra-nooyi s-E3-magic-johnson',
+    's-E3-indra-nooyi s-E3-martha-graham', 's-E3-ludwig-van-beethoven s-E3-wilma-rudolph',
+    's-E3-magic-johnson s-E3-martha-graham', 's-E4-ashleigh-barty s-E4-stevie-wonder',
+    's-E4-joan-didion s-E4-mary-wells-lawrence', 's-E4-michael-jordan s-E4-peter-drucker'
+  ].forEach(function (p) { var x = p.split(' '); APART[x[0] + '|' + x[1]] = APART[x[1] + '|' + x[0]] = 1; });
   // coLocated: the clause pair in which two stories make the same move, { a, b, stems, words, sc } or null: the pair that
   // shares the most, then the heaviest. o.x, o.y and o.df/o.n: the vectors and counts to judge with (the corpus's moves
   // when not given).
   function coLocated(lib, a, b, o) {
     a = sid(a); b = sid(b); o = o || {};
+    if (APART[a + '|' + b]) return null;
     var V = moveVectors(lib), x = o.x || V.mvec[a], y = o.y || V.mvec[b], n = o.df ? o : { df: V.mdf, n: V.n }, best = null; if (!x || !y || a === b) return null;
     (V.clauses[a] || []).forEach(function (ca) { (V.clauses[b] || []).forEach(function (cb) {
       var ks = meets(ca, cb, x, y, n); if (!ks) return;
@@ -734,19 +920,25 @@
     var st = common(x, y); if (!st.length) return null;
     return { w: dot(x, y), words: sameWords(V, a, b, st), stems: st };
   }
-  // the clauses of a move, in the corpus's words. A fragment ("in one sentence") or a short tail ("and stop") reads with
-  // the clause before it; a fragment that opens a sentence is a setting, and goes.
-  var FRAGMENT = /^(?:with|in|at|on|by|for|from|to|which|each|whose|where|when|until|before|after|without|than|as)\b/i;
+  // the clauses of a move, in the corpus's words. A fragment ("in one sentence"), a short tail ("and stop"), a piece with
+  // no verb of its own ("the direction you want", "naming the review you skipped", "so the numbers are read beside it",
+  // "even if the response was none") and whatever follows a clause too short to stand ("speak once, second to last")
+  // read with the clause before it; a fragment that opens a sentence is a setting, and goes.
+  var FRAGMENT = /^(?:with|within|in|inside|at|on|by|beside|alongside|for|from|to|which|each|whose|where|when|until|before|after|during|without|than|as|that|what|under|who|whom)\b/i;
+  var TAIL = /^(?:so|even|if|unless|because|though|although|whether|the|a|an|your|their|its|this|these|those|(?!(?:bring|thing|string|swing|spring|sting)\b)[a-z]{2,}ing|(?!(?:need|feed|proceed|succeed|shed|embed|speed)\b)[a-z]{3,}ed|([a-z]+) (?:by|for) \1$|[a-z]+ [a-z]+ each$)\b/i;
   function clauses(t) {
-    var out = [];
+    var out = [], KEEP = '\u0000';
     String(t).replace(/[.?!]+$/, '').split(/[.?!]\s+/).forEach(function (sen) {
-      var cs = sen.split(/(,\s+|;\s+|\s+[—–]\s+)/), cur = null;
+      // a comma inside brackets, or in a list after a colon, does not end a clause
+      sen = sen.replace(/\([^()]*\)/g, function (m0) { return m0.replace(/,\s+/g, ',' + KEEP); }).replace(/:\s[^;—–]*$/, function (m0) { return m0.replace(/,\s+/g, ',' + KEEP); });
+      var cs = sen.split(/(,\s+|;\s+|\s+[—–]\s+)/).map(function (x) { return x.split(',' + KEEP).join(', '); }), cur = null, cond = false;
       for (var i = 0; i < cs.length; i += 2) {
-        var raw = cs[i].trim(), c = raw.replace(/^(?:and|then|but|so|or)\s+/i, ''); if (!c) continue;
-        if (cur && (FRAGMENT.test(c) || c.split(/\s+/).length < 3)) { cur += cs[i - 1] + raw; continue; }
+        var raw = cs[i].trim(), c = raw.replace(/^(?:(?:and|then|but|so|or)\s+)+/i, ''); if (!c) continue;
+        // a condition ("if it could sit on a rival's slide") takes the clause it governs with it
+        if (cur && (cond || FRAGMENT.test(c) || TAIL.test(raw) || TAIL.test(c) || c.split(/\s+/).length < 3 || cur.split(/\s+/).length < 3)) { cond = /^(?:if|unless)\b/i.test(c); cur += cs[i - 1] + raw; continue; }
         if (FRAGMENT.test(c)) continue;
         if (cur) out.push(cur);
-        cur = c;
+        cur = c; cond = /^(?:if|unless)\b/i.test(c);
       }
       if (cur) out.push(cur);
     });
@@ -785,7 +977,11 @@
       var t = { a: a, b: b, w: w, stems: st, words: sameWords(V, a, b, st), pair: pr };
       ties.push(t); adj[a][b] = adj[b][a] = t;
     }
-    var makes = function (c, h, s) { return (V.clauses[s] || []).filter(function (d) { return meets(c, d, S.vec[h], S.vec[s], S); })[0]; };
+    // the clause of s that makes the move of h's clause c: the one its tie to h is on, when that one does, else the first
+    var makes = function (c, h, s) {
+      var ok = (V.clauses[s] || []).filter(function (d) { return meets(c, d, S.vec[h], S.vec[s], S); }), t = adj[h] && adj[h][s], on = t && t.pair ? (t.a === s ? t.pair.a : t.pair.b) : null;
+      return ok.filter(function (d) { return d.text === on; })[0] || ok[0];
+    };
     for (;;) {
       var best = null;
       ids.forEach(function (h) { if (left[h]) (V.clauses[h] || []).forEach(function (c, ci) {
@@ -796,10 +992,11 @@
       if (!best) break;
       var row = {}, mem = [best.h].concat(best.by);
       row[best.h] = best.c; best.by.forEach(function (s) { row[s] = makes(best.c, best.h, s); });
+      // a story tied to two members joins only when its clause makes the headline's move as well
       ids.forEach(function (o) {
         if (!left[o] || row[o]) return;
-        var two = best.by.concat(best.h).map(function (m) { return adj[o][m] && adj[o][m].pair ? makes(row[m], m, o) : null; }).filter(Boolean);
-        if (two.length >= 2) { mem.push(o); row[o] = two[0]; }
+        var two = best.by.concat(best.h).map(function (m) { return adj[o][m] && adj[o][m].pair ? makes(row[m], m, o) : null; }).filter(Boolean), head = makes(best.c, best.h, o);
+        if (two.length >= 2 && head) { mem.push(o); row[o] = head; }
       });
       mem.forEach(function (m) { delete left[m]; });
       fams.push(family(lib, V, S, mem.sort(yr), best.h, row, ties));
@@ -816,10 +1013,9 @@
     mem.forEach(function (id) {
       var c = row[id], marks = [];
       Object.keys(c.at).forEach(function (k) {
-        if (k.indexOf(' ') >= 0 || !S.vec[id][k] || S.df[k] > S.n * COMMON) return;
-        Object.keys(c.at[k].f).forEach(function (f) {
-          if (marks.indexOf(f) < 0 && mem.some(function (m) { return m !== id && row[m].at[k] && row[m].at[k].f[f]; })) { marks.push(f); used[f] = (used[f] || 0) + (w[k] || 0); }
-        });
+        if (k.indexOf(' ') >= 0 || !S.vec[id][k] || S.df[k] > S.n * COMMON || framed(k)) return;
+        if (!mem.some(function (m) { return m !== id && row[m].at[k]; })) return;
+        Object.keys(c.at[k].f).forEach(function (f) { if (marks.indexOf(f) < 0) { marks.push(f); used[f] = (used[f] || 0) + (w[k] || 0); } });
       });
       rows[id] = { text: cap1(c.text), marks: marks };
     });
@@ -839,27 +1035,31 @@
     var pr = best && coLocated(lib, id, best.id);
     return (V.away[id] = pr ? { story: lib.story[best.id], w: best.w, words: pr.words, pair: { a: cap1(pr.a), b: cap1(pr.b) } } : null);
   }
-  // A reason in a sentence: "The same move: write the one sentence you want repeated in the corridor", said only when one
-  // clause of each makes it. Two stories tied in a family say it in the clause pair their tie holds, the hub's side when
-  // the hub is one of them, else b's (b is the story the reason stands beside); any other two are judged on the corpus.
+  // A reason in a sentence, said only when one clause of each makes the move, with both clauses so a reader can see it is
+  // one move: "The same move. Pat Benatar: say once, at your normal volume, the direction you want and the reason, then
+  // stop. James Madison: answer …" a is the story the page opens, b the one the reason stands
+  // beside; two clauses in the same words are said once ("The same move: decide in the room."). Two stories tied in a
+  // family say it in the clause pair their tie holds; any other two are judged on the corpus.
   function moveWords(lib, a, b) {
     a = sid(a); b = sid(b);
-    var A = lib.story[a], B = lib.story[b], c = null; if (!A || !B || a === b) return '';
-    A.keys.forEach(function (k) { if (c || B.keys.indexOf(k) < 0) return; moveFamilies(lib, k).fams.forEach(function (f) {
+    var A = lib.story[a], B = lib.story[b], ca = null, cb = null; if (!A || !B || a === b) return '';
+    A.keys.forEach(function (k) { if (ca || B.keys.indexOf(k) < 0) return; moveFamilies(lib, k).fams.forEach(function (f) {
       var t = f.ties.filter(function (x) { return x.pair && ((x.a === a && x.b === b) || (x.a === b && x.b === a)); })[0];
-      if (!c && t) c = (f.hub === a || f.hub === b ? f.hub : b) === t.a ? t.pair.a : t.pair.b;
+      if (!ca && t) { ca = t.a === a ? t.pair.a : t.pair.b; cb = t.a === a ? t.pair.b : t.pair.a; }
     }); });
-    if (!c) {
+    if (!ca) {
       var t = moveTie(lib, a, b); if (!t || t.w < SAME_MOVE || t.stems.length < MIN_WORDS) return '';
       var V = moveVectors(lib), pr = coLocated(lib, a, b, { x: V.vec[a], y: V.vec[b], df: V.df, n: V.n }); if (!pr) return '';
-      c = pr.b;
+      ca = pr.a; cb = pr.b;
     }
-    return 'The same move: ' + c.charAt(0).toLowerCase() + c.slice(1);
+    var low = function (c) { return c.charAt(0).toLowerCase() + c.slice(1); }, nm = function (S) { var I = lib.icon[S.icon] || {}; return I.short || I.name || ''; };
+    if (low(ca) === low(cb)) return 'The same move: ' + low(ca) + '.';
+    return 'The same move. ' + nm(A) + ': ' + low(ca) + '. ' + nm(B) + ': ' + low(cb) + '.';
   }
 
   return { BOTH: BOTH, STANCE: STANCE, FIELD: FIELD, NEAR_YEARS: NEAR_YEARS, both: both, apart: apart, world: world,
-    tie: tie, why: why, short: short, graph: graph, kindred: kindred, route: route, routes: routes, bridge: bridge,
+    tie: tie, why: why, short: short, graph: graph, kindred: kindred, route: route, routes: routes, bridge: bridge, idleRun: idleRun, familiesIdle: familiesIdle,
     near: near, nearWhy: nearWhy, affinity: affinity, sendable: sendable, web: web, three: three, atAge: atAge, fillSlot: fillSlot, hops: hops, linksTo: linksTo, grid: grid, checkPlan: checkPlan,
-    sourceOk: sourceOk, fitFor: fitFor, nextFor: nextFor, yearAgrees: yearAgrees, when: when, INT_FIELDS: INT_FIELDS, WHEN: WHEN,
-    moveVectors: moveVectors, sitVectors: sitVectors, moveTie: moveTie, coLocated: coLocated, moveFamilies: moveFamilies, sameMoveElsewhere: sameMoveElsewhere, moveWords: moveWords, moveClause: moveClause, stem: stem };
+    sourceOk: sourceOk, fitFor: fitFor, nextFor: nextFor, fitLine: fitLine, firstWeekGap: firstWeekGap, yearAgrees: yearAgrees, when: when, INT_FIELDS: INT_FIELDS, WHEN: WHEN,
+    moveVectors: moveVectors, moveVectorsIdle: moveVectorsIdle, sitVectors: sitVectors, moveTie: moveTie, coLocated: coLocated, moveFamilies: moveFamilies, sameMoveElsewhere: sameMoveElsewhere, moveWords: moveWords, moveClause: moveClause, stem: stem, APART: APART };
 }));

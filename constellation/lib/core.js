@@ -59,11 +59,53 @@
   }
   // the one mark a member or reader sees on a draft
   function draftLine(coachFirst) { return 'Recall draft \u00b7 ' + (coachFirst || 'a coach') + ' checks it before it is sent'; }
+  // What a recall draft is, said once for a member: written from memory, read against a named work before it is sent
+  // ("\u2026 against the source, Long Walk to Freedom by Nelson Mandela, before \u2026"), or against its source where the
+  // citation names no work by title (workOf)
+  function draftWhy(s, coachFirst) {
+    var w = workOf(s);
+    return 'Written from memory. ' + (coachFirst || 'Your coach') + ' reads it against ' + (w ? 'the source, ' + w + ',' : 'its source') + ' before it is sent, so every detail you repeat holds.';
+  }
+  // The work a draft's citation names, by its title alone: a book with its author ("Crusade in Europe by Dwight D.
+  // Eisenhower"), a collection ("the NASA oral-history interviews") or a periodical ("a piece in Rolling Stone"); never
+  // a working note, a page or a date. The citation's first clause past "Corpus draft." and any clause that says what to
+  // check; '' where that clause names no work this can read (two drafts in three, measured on the corpus).
+  var WORK_NOTE = /\b(?:verify|verified|check|checked|confirm|confirmed)\b/i;
+  var WORK_LEAD = /^(?:Letters?|Address|Eulogy|Profile|Interview|Speech|Statement|Remarks|Testimony|Memo|Press|Opening|Lecture|Article|Report|Notes?|Diary|Arms|Preface|Foreword|Introduction|Not yet)\b/;
+  var WORK_AUTHOR = new RegExp("^[A-Z][\\w\u2019'.-]*(?:\\s+(?:[A-Z][\\w\u2019'.-]*|de|van|von|der|bin|al|da|le|la|and|with|Jr\\.?)){0,5}$");
+  var WORK_PRINT = /\b(The New York Times|The Washington Post|The Wall Street Journal|The Guardian|The Observer|The New Yorker|The Atlantic|Harvard Business Review|Harvard Magazine|Vogue|Vanity Fair|Rolling Stone|Newsweek|Fortune|Forbes|Esquire|Variety|The Hollywood Reporter|Sports Illustrated|Billboard|McKinsey Quarterly|Fast Company|Financial Times|The Economist|The Telegraph|Los Angeles Times|Chicago Tribune|USA Today|The Independent|Texas Monthly|Ebony|Essence|Wired|The Paris Review|Commentary)\b/;
+  var WORK_AIR = /\b(CNN|ESPN|BBC|NPR|CBS News|NBC News|ABC News)\b/;
+  function workOf(s) {
+    var src = String((s && s.source) || '').replace(/^corpus draft\.\s*/i, '').replace(/,\s+(Jr\.|Sr\.)(?=,)/g, ' $1');
+    var cls = [].concat.apply([], sentences(src).map(function (x) { return x.split(/;\s*/); })).map(function (x) { return x.trim().replace(/^(?:verify|check)\s+against\s+/i, ''); })
+      .filter(function (x) { return x && !WORK_NOTE.test(x); });
+    if (!cls.length || /^not yet sourced/i.test(cls[0])) return '';
+    // each clause in turn, the first that names a work: a speech "quoted in CNN" names CNN's piece
+    for (var i = 0; i < cls.length; i++) { var w = workIn(cls[i]); if (w) return w; }
+    return '';
+  }
+  function workIn(cl) {
+    // "Author, Title: Subtitle (Publisher, 1998)", or "Author, as told to X, Title (\u2026)"
+    var m = /^([^,()]+?),\s+(?:(?:as told to|with)\s+[^,()]+,\s+)?([A-Z\u201c\u2018'][^()]*?)\s*\(([^()]*\b\d{4}\b[^()]*)\)/.exec(cl);
+    if (m && WORK_AUTHOR.test(m[1].trim()) && !WORK_LEAD.test(m[1])) {
+      var t = m[2].replace(/^['\u2018\u201c]|['\u2019\u201d]$/g, '').split(/:\s/)[0].replace(/,.*$/, '').trim(), a = m[1].trim();
+      if (t.length >= 3 && !/^(?:interview|speech|letter|address|statement|remarks)\b/i.test(t)) return t === a || a.split(/\s+/).length < 2 ? t : t + ' by ' + a;
+    }
+    var o = /^((?:[A-Z][\w.&-]*\s+){1,4}(?:[a-z][\w-]*\s+)?(?:oral[- ]histor(?:y|ies)|interviews|letters|diaries|papers|archives?))\b/i.exec(cl);
+    if (o) return (/^the\b/i.test(o[1]) ? '' : 'the ') + o[1];
+    var p = WORK_PRINT.exec(cl); if (p) return 'a piece in ' + p[1];
+    var b = WORK_AIR.exec(cl); if (b) return 'a piece on ' + b[1];
+    return /\bAssociated Press\b/.test(cl) ? 'an Associated Press report' : '';
+  }
   // The source as a reader may see it. A coach sees everything. A member sees a citation once the story is
   // checked. Nobody but a coach sees a working note ("Corpus draft", "Verify the numbers", "Check wording").
-  var NOTE = /^corpus draft\b|\b(?:verify|verified|check|checked|confirm)\b/i;
+  var NOTE = /^corpus draft\b|\b(?:verify|verified|check|checked|confirm)\b/i, SRC = {};
+  // said once for each source, reader and status: the engine asks it for every card on every render
   function sourceFor(s, as) {
-    var src = String((s && s.source) || '');
+    var src = String((s && s.source) || ''), k = (as || '') + (s && s.verified ? '+' : '-') + src;
+    return Object.prototype.hasOwnProperty.call(SRC, k) ? SRC[k] : (SRC[k] = sourceSaid(src, s, as));
+  }
+  function sourceSaid(src, s, as) {
     // a coach sees the note too, said once as what to do: "Remnick, The Bridge (2010). Check the appointments detail."
     if (as === 'coach') return src.replace(/^corpus draft\.\s*/i, '').split(/;\s*/).map(function (x) {
       x = x.trim().replace(/^(?:verify|confirm)\b/i, 'Check').replace(/\b[Vv]erify\b/g, function (w) { return w.charAt(0) === 'V' ? 'Check' : 'check'; });
@@ -88,12 +130,14 @@
   // the situation's own words ("It fits your week: everything you do gets read as a signal.", or for a week the
   // member is not in, "It fits this kind of week: saying it in your own words."). mine: the situation key of the
   // member's that the story carries, or true; lib, when given, supplies the words.
-  function whyFor(s, as, mine, lib) {
+  // now: the situation of the member's week as it is now, when known; a story of another of their situations "fits one of
+  // your weeks"
+  function whyFor(s, as, mine, lib, now) {
     var w = String((s && s.why) || ''), m = /^Chosen because (.+)$/.exec(w);
     if (as === 'coach' || !m) return w;
     var key = typeof mine === 'string' ? mine : s && s.keys && s.keys[0], st = lib && key && lib.sitByKey[key];
-    if (!st) return (mine ? 'It fits your week: ' : 'It fits this kind of week: ') + m[1];
-    return (mine ? 'It fits your week: ' : 'It fits this kind of week: ') + lowerFirst(st.chip) + '.';
+    var lead = !mine ? 'It fits this kind of week: ' : now && typeof mine === 'string' && mine !== now ? 'It fits one of your weeks: ' : 'It fits your week: ';
+    return lead + (st ? lowerFirst(st.chip) + '.' : m[1]);
   }
   function lowerFirst(t) { t = String(t || ''); return /^[A-Z][a-z]/.test(t) ? t.charAt(0).toLowerCase() + t.slice(1) : t; }
   function fold(s) { return String(s == null ? '' : s).normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
@@ -112,30 +156,50 @@
   }
   function yearLabel(y) { return y == null ? '' : y < 0 ? -y + ' BC' : String(y); }
   // Sentences, without breaking on initials or the usual abbreviations ("J. Walter Thompson", "c. 1976").
-  function sentences(t) {
-    var out = [], cur = '', w = String(t || '').split(/(\s+)/);
+  // Each text is split once: a render asks for the same few hundred moments again and again (SPLIT, by the text).
+  var SPLIT = typeof Map === 'function' ? new Map() : null, LEADS = {}, TEASE = {};
+  function split(t) {
+    t = String(t || ''); var hit = SPLIT && SPLIT.get(t); if (hit) return hit;
+    var out = [], cur = '', w = t.split(/(\s+)/);
     for (var i = 0; i < w.length; i++) {
       cur += w[i];
       if (/[.!?]["”’)]?$/.test(w[i]) && !/^(?:(?:[A-Z]\.)+|(?:c|ca|St|Mr|Mrs|Ms|Dr|Jr|Sr|vol|no|pp?)\.)$/.test(w[i]) && (i + 2 >= w.length || /^["“‘(]?[A-Z0-9]/.test(w[i + 2] || ''))) { out.push(cur.trim()); cur = ''; }
     }
     if (cur.trim()) out.push(cur.trim());
+    if (SPLIT) { if (SPLIT.size > 5000) SPLIT.clear(); SPLIT.set(t, out); }
     return out;
   }
-  function firstSentence(t) { return sentences(t)[0] || ''; }
+  function sentences(t) { return split(t).slice(); }
+  function firstSentence(t) { return split(t)[0] || ''; }
+  // A value kept by story id, good while the text it came from is the same: the engine's copy of a story and the
+  // index's share an id, so each id keeps both
+  function kept(memo, id, m, p, f) {
+    if (id == null) return f();
+    var a = memo[id] || (memo[id] = []), i;
+    for (i = 0; i < a.length; i++) if (a[i].m === m && a[i].p === p) return a[i].v;
+    var v = f(); a.unshift({ m: m, p: p, v: v }); if (a.length > 2) a.pop();
+    return v;
+  }
   // The opening line of a story for a card: past a leading "Place, date." sentence, which the card shows already.
-  function lead(moment, place) {
-    var ss = sentences(moment), i = 0;
-    while (i < ss.length - 1 && (dateline(ss[i], place))) i++;
-    return ss[i] || '';
+  // o: the story, when the caller has it, so the line is kept by its id
+  function lead(moment, place, o) {
+    return kept(LEADS, o && o.id, moment, place, function () {
+      var ss = split(moment), i = 0;
+      while (i < ss.length - 1 && (dateline(ss[i], place))) i++;
+      return ss[i] || '';
+    });
   }
   // The teaser on a card: past a dateline and past an opening of four words or fewer ("September 2017."), cut at
   // 160 characters on a word.
   function teaser(s, max) {
-    max = max || 160; var ss = sentences(s && s.moment), i = 0;
-    while (i < ss.length - 1 && (dateline(ss[i], s.place) || ss[i].split(/\s+/).length <= 4)) i++;
-    var t = ss[i] || '';
-    if (t.length > max) { var cut = t.lastIndexOf(' ', max - 1); t = t.slice(0, cut > max / 2 ? cut : max - 1).replace(/[,;:\u2014-]+$/, '') + '\u2026'; }
-    return t;
+    max = max || 160;
+    return kept(TEASE, s && s.id != null ? s.id + '|' + max : null, s && s.moment, s && s.place, function () {
+      var ss = split(bodyAfterPlace(s && s.moment, s && (s.placeAsWritten || s.place))), i = 0;
+      while (i < ss.length - 1 && (dateline(ss[i], s.place) || ss[i].split(/\s+/).length <= 4)) i++;
+      var t = ss[i] || '';
+      if (t.length > max) { var cut = t.lastIndexOf(' ', max - 1); t = t.slice(0, cut > max / 2 ? cut : max - 1).replace(/[,;:\u2014-]+$/, '') + '\u2026'; }
+      return t;
+    });
   }
   function dateline(s, place) {
     var b = s.replace(/[.:]$/, '');
@@ -145,11 +209,50 @@
     if (b.length <= 40 && /^(?:[A-Z\u00C0-\u024F][\w\u00C0-\u024F'’.-]*\s?)+$/.test(b)) return true;        // "New York", "Königsberg"
     return b.length <= 40 && /^[A-Z\u00C0-\u024F][\w\u00C0-\u024F'’ .-]*,\s/.test(b);                          // "Syracuse, third century BC"
   }
-  // A moment without its leading "Place, date." sentence, for views that print the place above it.
+  // A moment without its leading "Place, date." sentence, for views that print the place above it; and without a
+  // dateline that opens its first sentence ("Langley, Virginia, late 1950s: Johnson, a mathematician …").
   function bodyAfterPlace(moment, place) {
     if (!place) return moment;
-    var ss = sentences(moment);
-    return ss.length > 1 && ss[0].replace(/[.:]$/, '') === place ? ss.slice(1).join(' ') : moment;
+    var ss = split(moment), m = String(moment || ''), rest = m.slice(place.length);
+    if (ss.length > 1 && ss[0].replace(/[.:]$/, '') === place) return ss.slice(1).join(' ');
+    if (ss.length > 1 && dateline(ss[0], place) && ss[0].toLowerCase().indexOf(String(place).toLowerCase()) >= 0) return ss.slice(1).join(' ');
+    if (m.slice(0, place.length).toLowerCase() === place.toLowerCase() && (/^:\s+\S/.test(rest) || (/\d/.test(place) && /^[,.]\s+\S/.test(rest)))) {
+      rest = rest.replace(/^[:,.]\s+/, ''); return rest.charAt(0).toUpperCase() + rest.slice(1);
+    }
+    return moment;
+  }
+  // ---------- one year per story ----------
+  // The record's year is the story's one year. A dateline whose year words disagree with it ("Langley, Virginia, late
+  // 1950s" on a story of 1953) keeps its place and loses its year words ("Langley, Virginia"), and no page gives the story a
+  // year until a coach settles which holds; the coach is told: "Years disagree: 1953, late 1950s". Year words agree when
+  // the year falls inside them: "1975", "January 2017", "late 1950s" (1955 to 1959), "1954 to 1958", "1953-60", "c. 1976".
+  // Measured on the corpus: 12 of 531 datelines disagree.
+  function yearRanges(seg) {
+    var out = [], bc = /\bBCE?\b/.test(seg), sg = function (n) { return bc ? -n : n; };
+    String(seg).replace(/(\d{3,4})s?\s*(?:-|–|to|and)\s*(?:the\s+)?(?:[A-Za-z]+\s+)?(\d{2,4})(s)?\b/g, function (m0, a, b, d) {
+      var A = +a, Bn = +b; if (b.length <= 2) Bn = Math.floor(A / 100) * 100 + Bn; if (Bn < A) Bn += 100; out.push([sg(A), sg(d ? Bn + 9 : Bn)]); return ' ';
+    }).replace(/(?:\b(early|mid|late)[-\s]+)?(?:the\s+)?(\d{3,4})s\b/gi, function (m0, q, dd) {
+      var d = +dd, lo = d, hi = d + 9; q = (q || '').toLowerCase(); if (q === 'early') hi = d + 4; else if (q === 'mid') { lo = d + 3; hi = d + 7; } else if (q === 'late') lo = d + 5;
+      out.push([sg(lo), sg(hi)]); return ' ';
+    }).replace(/(\b(?:c\.|around|circa)\s*)?\b(\d{3,4})\b/g, function (m0, c, y) { out.push(c ? [sg(+y) - 3, sg(+y) + 3] : [sg(+y), sg(+y)]); return ' '; });
+    return out.map(function (r) { return r[0] <= r[1] ? r : [r[1], r[0]]; });
+  }
+  function oneYear(place, year) {
+    var segs = String(place || '').split(/,\s*/), dated = segs.filter(function (x) { return /\d{3,4}/.test(x); });
+    if (year == null || !dated.length) return { place: place, clash: '' };
+    var rs = [].concat.apply([], dated.map(yearRanges));
+    if (!rs.length || rs.some(function (r) { return year >= r[0] && year <= r[1]; })) return { place: place, clash: '' };
+    return { place: segs.filter(function (x) { return !/\d{3,4}/.test(x); }).join(', '), clash: 'Years disagree: ' + yearLabel(year) + ', ' + dated.join(', ') };
+  }
+  // A person's age in the year of a story, said beside the member's own when it is near theirs ("Michelle Obama was 51 or
+  // 52 then, about your age."): only on a checked story whose dateline agrees with its year, within three years of the member's age
+  var AGE_GAP = ['', 'a year', 'two years', 'three years'];
+  function ageLine(lib, s, age) {
+    var I = s && lib.icon[s.icon], a = I && I.born != null && s.year != null ? s.year - I.born : null;
+    if (!s || !s.verified || s.yearClash || a == null || age == null || Math.abs(a - age) > 3) return '';
+    var gap = a - age;
+    // the record holds a year of birth, so the age is one of two: "29 or 30" (King in September 1973, born November 1943)
+    return I.name + ' was ' + (a - 1) + ' or ' + a + ' then, ' + (gap === 0 ? 'about your age.' : 'about ' + AGE_GAP[Math.abs(gap)] + (gap < 0 ? ' younger than you are.' : ' older than you are.'));
   }
   function uniq(a) { return a.filter(function (x, i) { return a.indexOf(x) === i; }); }
   function byYear(a, b) { return (a.year == null ? 1e9 : a.year) - (b.year == null ? 1e9 : b.year) || (a.id < b.id ? -1 : 1); }
@@ -198,7 +301,8 @@
     }
     function fromSample(s) {
       var t = s.twin ? corpusById[s.twin] : null, ic = lib.icon[s.icon];
-      var y = yearOf(s.place); if (y == null && t) y = t.year; if (y == null && ic) y = ic.year;
+      // the twin's year where there is one: the place's "late 1950s" is a decade, and would read as 1950
+      var y = t && t.year != null ? t.year : yearOf(s.place); if (y == null && ic) y = ic.year;
       return { id: s.id, icon: s.icon, era: t ? t.era : (y == null ? '' : String(y)), year: y, place: s.place, context: t ? t.context : '',
         keys: uniq(s.keys.concat(t ? t.keys : [])), reach: s.reach, moment: s.moment, pattern: s.pattern || '', pattern_lang: 'en', pattern_en: null, pattern_translation: null,
         by: s.by || '', source: s.source || '', caution: s.caution || '', why: s.why || '', gist: s.gist || '', walk: s.walk || '',
@@ -210,6 +314,12 @@
     (demo.samples || []).forEach(function (s) { lib.stories.push(fromSample(s)); });
     corpus.stories.forEach(function (s) { if (!twinned[s.id]) lib.stories.push(fromCorpus(s)); });
     lib.stories.forEach(function (s) {
+      var y = oneYear(s.place, s.year);   // one year per story
+      if (y.clash) {
+        var op = split(s.moment)[0] || '', ob = op.replace(/[.:]$/, '');
+        if (!y.place && dateline(op, s.place) && ob.toLowerCase().indexOf(String(s.place).toLowerCase()) >= 0) y.place = ob.split(/,\s*/).filter(function (x) { return !/\d{3,4}/.test(x); }).join(', ');
+        s.placeAsWritten = s.place; s.place = y.place; s.yearClash = y.clash;
+      }
       lib.story[s.id] = s;
       var ic = lib.icon[s.icon]; if (ic) { ic.stories.push(s.id); s.keys.forEach(function (k) { if (ic.keys.indexOf(k) < 0) ic.keys.push(k); }); }
       (lib.byIcon[s.icon] = lib.byIcon[s.icon] || []).push(s.id);
@@ -224,7 +334,7 @@
     corpus.situations.forEach(function (s) {
       var L = labelByKey[s.match_key] || {};
       var x = { id: s.id, fam: s.id[0], family: s.family || FAMILY[s.id[0]], key: s.match_key, chip: L.chip || s.member_line, line: L.line || '',
-        member_line: voice(s.member_line), owner: s.owner, literature: s.literature || [], calibration: calib[s.match_key] || null, outcome: outc[s.match_key] || null,
+        member_line: voice(s.member_line, null, true), owner: s.owner, literature: s.literature || [], calibration: calib[s.match_key] || null, outcome: outc[s.match_key] || null,
         moves: (corpus.moves || []).filter(function (m) { return m.match_key === s.match_key; }).sort(function (a, b) { return (a.variant || 0) - (b.variant || 0); }),
         lines: (corpus.lines || []).filter(function (l) { return l.match_key === s.match_key; }).sort(function (a, b) { return a.id < b.id ? -1 : 1; }),
         stories: lib.byKey[s.match_key] || [], icons: lib.iconsByKey[s.match_key] || [] };
@@ -239,6 +349,7 @@
   // A coach's source check, recorded in the ledger, makes a draft sendable. The ledger is
   // { storyId: { by, at, note } }; anything not in the corpus or the samples is ignored.
   function applyVerification(lib, ledger) {
+    if (lib._bridge) lib._bridge.clear();   // net.js keeps its chains on the index; a check starts them afresh
     Object.keys(ledger || {}).forEach(function (id) {
       var s = lib.story[resolve(lib, id)]; if (!s || s.verified) return;
       s.verified = true; s.status = 'verified'; s.checked = ledger[id];
@@ -253,7 +364,7 @@
     var st = STATUS[s.status] || STATUS.recall;
     return { id: s.id, icon: s.icon, name: ic.name, place: s.place, year: s.year, era: s.era, reach: s.reach, keys: s.keys,
       first: teaser(s), pattern: s.pattern_lang && s.pattern_lang !== 'en' && s.pattern_en ? s.pattern_en : s.pattern,
-      status: s.status, statusLabel: st.label, verified: s.verified };
+      status: s.status, statusLabel: st.label, verified: s.verified, clash: !!s.yearClash };
   }
   function iconCard(lib, i) {
     return { id: i.id, name: i.name, ini: i.ini, desc: i.desc || [i.domainLabel, i.place].filter(Boolean).join(' · '), year: i.year,
@@ -357,31 +468,72 @@
    'thirteen fourteen fifteen sixteen seventeen eighteen nineteen half too then keeps getting member members leader leaders ' +
    'thursday monday tuesday wednesday friday whole').split(' ').forEach(function (w) { STOP[w] = 1; });
   function words(text) { return (fold(text).match(/[a-z][a-z'-]{2,}/g) || []).filter(function (w) { return !STOP[w] && w.indexOf("'") < 0; }); }
+  // Each story's words, counted in the order they first appear, keeping only the words that can carry likeness:
+  // in two stories or more, and in no more than one in seven. The vectors below are built from these counts alone,
+  // so counts shipped in data/derived.json give the same vectors to the last bit.
+  function textTerms(lib) {
+    var N = lib.stories.length, df = {}, tfs = {};
+    lib.stories.forEach(function (s) {
+      var name = {}, tf = {}; words((lib.icon[s.icon] || {}).name).forEach(function (w) { name[w] = 1; });
+      words([s.moment, s.pattern_en || s.pattern, s.context].join(' ')).forEach(function (w) { if (!name[w]) tf[w] = (tf[w] || 0) + 1; });
+      tfs[s.id] = tf; Object.keys(tf).forEach(function (w) { df[w] = (df[w] || 0) + 1; });
+    });
+    Object.keys(tfs).forEach(function (id) { var tf = tfs[id], k = {}; Object.keys(tf).forEach(function (w) { if (df[w] >= 2 && df[w] <= N * 0.15) k[w] = tf[w]; }); tfs[id] = k; });
+    return tfs;
+  }
   function textIndex(lib) {
     if (lib._tx) return lib._tx;
-    var N = lib.stories.length, df = {}, docs = {};
-    lib.stories.forEach(function (s) {
-      var name = {}; words((lib.icon[s.icon] || {}).name).forEach(function (w) { name[w] = 1; });
-      var d = words([s.moment, s.pattern_en || s.pattern, s.context].join(' ')).filter(function (w) { return !name[w]; });
-      docs[s.id] = d; var seen = {}; d.forEach(function (w) { if (!seen[w]) { seen[w] = 1; df[w] = (df[w] || 0) + 1; } });
-    });
-    function vecOf(d) {
-      var tf = {}, v = {}, n = 0; d.forEach(function (w) { tf[w] = (tf[w] || 0) + 1; });
-      Object.keys(tf).forEach(function (w) { if (df[w] < 2 || df[w] > N * 0.15) return; v[w] = (1 + Math.log(tf[w])) * Math.log(N / df[w]); n += v[w] * v[w]; });
-      n = Math.sqrt(n) || 1; Object.keys(v).forEach(function (w) { v[w] /= n; }); return v;
+    var b = textBuild(lib); textStep(lib, b, Infinity);
+    return lib._tx;
+  }
+  // The vectors a few stories, then a few lives, at a time (textStep returns true once lib._tx is made), so a page can
+  // build them in idle slices (textIndexIdle). Kept on the index, unlisted, beside the counts they are built from.
+  function textBuild(lib) {
+    if (!lib._txb) Object.defineProperty(lib, '_txb', { value: { i: 0, j: 0, k: 0, df: null, tfs: lib._derived ? null : textTerms(lib), vec: {}, ivec: {} }, configurable: true, writable: true });
+    return lib._txb;
+  }
+  function textStep(lib, b, n) {
+    var N = lib.stories.length, P = lib._derived && lib._derived.textIndex, ids = lib.stories, end;
+    if (!b.tfs) b.tfs = {};
+    // the shipped counts, a story at a time ("word word:2", a count of one left out)
+    for (end = Math.min(N, b.i + n); P && b.i < end && !b.df; b.i++) b.tfs[ids[b.i].id] = unpackOne(P[ids[b.i].id]);
+    if (P && b.i < N && !b.df) return false;
+    if (!b.df) { var df = b.df = {}; Object.keys(b.tfs).forEach(function (id) { Object.keys(b.tfs[id]).forEach(function (w) { df[w] = (df[w] || 0) + 1; }); }); return n === Infinity ? textStep(lib, b, n) : false; }
+    for (end = Math.min(N, b.j + n); b.j < end; b.j++) b.vec[ids[b.j].id] = vecOf(b.tfs[ids[b.j].id] || {}, b.df, N);
+    if (b.j < N) return false;
+    for (end = Math.min(lib.icons.length, b.k + n); b.k < end; b.k++) {
+      var i = lib.icons[b.k]; if (!i.stories.length) continue; var v = {}, nn = 0;
+      i.stories.forEach(function (sid) { var x = b.vec[sid]; Object.keys(x).forEach(function (w) { v[w] = (v[w] || 0) + x[w]; }); });
+      Object.keys(v).forEach(function (w) { nn += v[w] * v[w]; }); nn = Math.sqrt(nn) || 1; Object.keys(v).forEach(function (w) { v[w] /= nn; });
+      b.ivec[i.id] = v;
     }
-    var vec = {}; lib.stories.forEach(function (s) { vec[s.id] = vecOf(docs[s.id]); });
-    var ivec = {};
-    lib.icons.forEach(function (i) {
-      if (!i.stories.length) return; var v = {}, n = 0;
-      i.stories.forEach(function (sid) { var x = vec[sid]; Object.keys(x).forEach(function (w) { v[w] = (v[w] || 0) + x[w]; }); });
-      Object.keys(v).forEach(function (w) { n += v[w] * v[w]; }); n = Math.sqrt(n) || 1; Object.keys(v).forEach(function (w) { v[w] /= n; });
-      ivec[i.id] = v;
-    });
+    if (b.k < lib.icons.length) return false;
     var withStory = lib.icons.filter(function (i) { return i.stories.length; }).length, kidf = {};
     lib.situations.forEach(function (s) { kidf[s.key] = Math.log(withStory / Math.max(1, s.icons.length)); });
-    lib._tx = { vec: vec, ivec: ivec, kidf: kidf };
-    return lib._tx;
+    lib._tx = { vec: b.vec, ivec: b.ivec, kidf: kidf };
+    return true;
+  }
+  function vecOf(tf, df, N) {
+    var v = {}, n = 0;
+    Object.keys(tf).forEach(function (w) { if (df[w] < 2 || df[w] > N * 0.15) return; v[w] = (1 + Math.log(tf[w])) * Math.log(N / df[w]); n += v[w] * v[w]; });
+    n = Math.sqrt(n) || 1; Object.keys(v).forEach(function (w) { v[w] /= n; }); return v;
+  }
+  // the text vectors while the page is idle; done(tx) once they are built (CLN.idleRun gives the slices)
+  function textIndexIdle(lib, done) {
+    var N = (typeof self !== 'undefined' && self.CLN) || (typeof global !== 'undefined' && global.CLN);
+    if (lib._tx || !N || !N.idleRun) { var tx = textIndex(lib); if (done) done(tx); return; }
+    var b = textBuild(lib);
+    N.idleRun(function () { return !!lib._tx || textStep(lib, b, 12); }, function () { if (done) done(textIndex(lib)); });
+  }
+  // Everything a first story or a first situation page reads, built while the page is idle, a slice at a time: the move
+  // vectors, the text vectors, then the families of each situation, the ones in keys first. Once per index: a second
+  // caller (the Library's frame, reading the app's index) builds nothing again, and hears done once the families are made.
+  function warm(lib, keys, done) {
+    var N = (typeof self !== 'undefined' && self.CLN) || (typeof global !== 'undefined' && global.CLN);
+    if (!lib || !N || !N.moveVectorsIdle) return;
+    if (lib._warm) { if (done) N.familiesIdle(lib, keys || [], done); return; }
+    Object.defineProperty(lib, '_warm', { value: true, configurable: true });
+    N.moveVectorsIdle(lib, function () { textIndexIdle(lib, function () { N.familiesIdle(lib, keys || [], done); }); });
   }
   function cosine(a, b) { var s = 0, k; if (Object.keys(a).length > Object.keys(b).length) { k = a; a = b; b = k; } for (k in a) if (b[k]) s += a[k] * b[k]; return s; }
   function sharedWords(a, b, n) { return Object.keys(a).filter(function (w) { return b[w]; }).sort(function (x, y) { return b[y] * a[y] - b[x] * a[x]; }).slice(0, n || 3); }
@@ -402,6 +554,7 @@
   function jit(a, b) { var h = 2166136261, t = a + '|' + b; for (var i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0) / 4294967296; }
   function likeUse(lib) {
     if (lib._likeUse) return lib._likeUse;
+    if (lib._derived) return (lib._likeUse = Object.assign({}, lib._derived.likeUse));
     var use = lib._likeUse = {};   // set first: the counting pass reads an empty table, so it counts without damping
     lib.stories.forEach(function (s) { likeThis(lib, s.id, 4, null, true).forEach(function (x) { use[x.icon] = (use[x.icon] || 0) + 1; }); });
     return use;
@@ -412,7 +565,7 @@
     var use = raw ? {} : likeUse(lib);
     var tx = textIndex(lib), me = lib.icon[s.icon] || {}, best = {};
     lib.stories.forEach(function (o) {
-      if (o.icon === s.icon || !o.keys.some(function (x) { return s.keys.indexOf(x) >= 0; })) return;
+      if (o.icon === s.icon || !o.keys.some(function (x) { return s.keys.indexOf(x) >= 0; }) || (ctx.key && o.keys.indexOf(ctx.key) < 0)) return;
       var shared = o.keys.filter(function (x) { return s.keys.indexOf(x) >= 0; });
       var sk = shared.reduce(function (a, x) { return a + (tx.kidf[x] || 1); }, 0) / Math.max(1, Math.sqrt(s.keys.length * o.keys.length));
       var score = 0.9 * sk + 6 * cosine(tx.vec[s.id], tx.vec[o.id]);
@@ -455,17 +608,46 @@
   function reasonFor(lib, here, o, ctx, used, oldest) {
     var oi = lib.icon[o.icon] || {}, me = lib.icon[here.icon] || {}, c = [];
     var mw = moveWordsOf(lib, here.id, o.id); if (mw) c.push({ type: 'move', text: mw });
-    (ctx.three || []).forEach(function (h) { var H = lib.icon[h]; if (ctx.role === 'member' && H && h !== o.icon && oi.stance && oi.stance === H.stance && STANCE_BY[oi.stance]) c.push({ type: 'fit', text: 'Leads ' + STANCE_BY[oi.stance] + ', as ' + (H.short || H.name) + ' does' }); });
-    var dom = String(oi.domainLabel || oi.field || '').toLowerCase(), mv = MOVE_WORD[o.directness];
-    var when = o.year == null ? '' : o.year === oldest ? yearLabel(o.year) + ', the oldest of this week'
-      : here.year != null && o.year !== here.year && Math.abs(o.year - here.year) <= 10 ? lowerFirst(gapWords(o.year - here.year)) + ', ' + yearLabel(o.year) : yearLabel(o.year);
-    if (oi.field !== me.field) c.push({ type: 'field', text: 'From ' + dom + ', ' + when });
+    // a way of leading counts here only once a coach has ruled on it for both lives; until then it is a reading, and no
+    // row's reason rests on it
+    var ruled = function (X) { return !!X.stanceStatus && X.stanceStatus !== 'proposed'; };
+    (ctx.three || []).forEach(function (h) { var H = lib.icon[h]; if (ctx.role === 'member' && H && h !== o.icon && oi.stance && oi.stance === H.stance && STANCE_BY[oi.stance] && ruled(oi) && ruled(H)) c.push({ type: 'fit', text: 'Leads ' + STANCE_BY[oi.stance] + ', as ' + (H.short || H.name) + ' does' }); });
+    var dom = lowerFirst(String(oi.domainLabel || oi.field || '')).replace(/ & /g, ' and '), mv = MOVE_WORD[o.directness];
+    // a year still to settle (yearClash) is said nowhere, and no other year is reckoned from it
+    var when = o.year == null || o.yearClash ? '' : o.year === oldest ? yearLabel(o.year) + ', the oldest of this week'
+      : here.year != null && !here.yearClash && o.year !== here.year && Math.abs(o.year - here.year) <= 10 ? lowerFirst(gapWords(o.year - here.year)) + ', ' + yearLabel(o.year) : yearLabel(o.year);
+    if (oi.field !== me.field) c.push({ type: 'field', text: 'From ' + dom + (when ? ', ' + when : '') });
     if (mv && o.directness !== here.directness) c.push({ type: 'way', text: cap1(mv) + ', where ' + (me.short || me.name || 'this one') + '\u2019s was ' + (DIR_WORD[here.directness] || 'marked otherwise') });
-    c.push({ type: 'field', text: (oi.field === me.field ? 'Also in ' : 'From ') + dom + ', ' + when });
+    c.push({ type: 'field', text: (oi.field === me.field ? 'Also in ' : 'From ') + dom + (when ? ', ' + when : '') });
     if (o.year != null && o.year < 1900) c.push({ type: 'years', text: 'The same kind of week, in ' + yearLabel(o.year) });
     return c.filter(function (r) { return !used[r.text]; })[0] || { type: 'field', text: (oi.name || '') + ', ' + yearLabel(o.year) };
   }
   function cap1(t) { return t.charAt(0).toUpperCase() + t.slice(1); }
+
+  // ---------- the derived tables, shipped ----------
+  // tools/build_demo.mjs writes data/derived.json: { hash, basis, likeUse, textIndex }, the two tables a page would
+  // otherwise build on its first story (each story's counted words, and how often each life answers a week). hash is
+  // the SHA-256 of corpus.json's bytes; basis is what else the tables rest on (the code that builds them, the field
+  // of every life, the demo's own stories). A page uses them only when both match what it loaded, and builds them as
+  // before when either does not, so a new corpus or a changed rule never meets stale tables.
+  function fnv(t) { var h = 2166136261; for (var i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 16777619); } return ('0000000' + (h >>> 0).toString(16)).slice(-8); }
+  function derivedBasis(lib) {
+    var code = [words, textTerms, textIndex, textStep, vecOf, unpackOne, likeUse, likeThis, cosine].map(String).join('\n') + Object.keys(STOP).join(' ');
+    var lives = lib.icons.map(function (i) { return i.id + ':' + i.field + (i.inCorpus ? '' : ':' + i.name); }).join('|');
+    var own = lib.stories.map(function (s) { return s.origin === 'corpus' ? s.id : JSON.stringify([s.id, s.icon, s.keys, s.year, s.moment, s.pattern_en || s.pattern, s.context]); }).join('|');
+    return fnv(code) + fnv(lives) + fnv(own);
+  }
+  // "word word:2": a story's counted words in their order, a count of one left out
+  function packTerms(tfs) { var o = {}; Object.keys(tfs).forEach(function (id) { o[id] = Object.keys(tfs[id]).map(function (w) { return tfs[id][w] > 1 ? w + ':' + tfs[id][w] : w; }).join(' '); }); return o; }
+  function unpackOne(t) { var tf = {}; if (t) t.split(' ').forEach(function (x) { var i = x.indexOf(':'); if (i < 0) tf[x] = 1; else tf[x.slice(0, i)] = +x.slice(i + 1); }); return tf; }
+  function derive(lib, hash) {
+    if (lib._derived) throw new Error('derive needs an index built from the corpus, not one reading shipped tables');
+    return { hash: hash, basis: derivedBasis(lib), likeUse: Object.assign({}, likeUse(lib)), textIndex: packTerms(textTerms(lib)) };
+  }
+  function useDerived(lib, D, hash) {
+    if (!D || !hash || D.hash !== hash || !D.textIndex || !D.likeUse || D.basis !== derivedBasis(lib)) return false;
+    lib._derived = D; return true;
+  }
 
   // ---------- one name for each thing ----------
   // Every surface says a thing the same way: a situation as its code and chip, reach and directness in words, a
@@ -482,14 +664,15 @@
   // the dateline's own words when they give a span or a decade the year cannot ("Katherine Johnson, Langley, late
   // 1950s"). Two stories of one life that would read the same keep their whole datelines, or else add their week.
   var DATEISH = /\d|^(?:early|late|mid|c\.|circa|spring|summer|autumn|fall|winter|january|february|march|april|may|june|july|august|september|october|november|december)\b/i;
+  // a place that is a whole country says nothing a title needs ("United States, 1970 and 1971" reads "1970")
+  var COUNTRY = /^(?:the )?(?:United States|USA|US|America|United Kingdom|UK|Britain|Great Britain|England|Scotland|Wales|Ireland|France|Germany|Italy|Spain|India|China|Japan|Russia|Soviet Union|Canada|Australia|New Zealand|South Africa|Kenya|Nigeria|Ghana|Brazil|Mexico|Argentina|Israel|Egypt|Pakistan|Jamaica|Cuba|Sweden|Norway|Denmark|Poland|Greece|Austria|Switzerland|Netherlands|Belgium|Portugal)$/i;
   function titleOf(lib, s, whole) {
     var name = (lib.icon[s.icon] || {}).name || s.icon, parts = String(s.place || '').split(/,\s*/).map(function (x) { return x.trim(); }).filter(Boolean);
-    var where = parts.length && !DATEISH.test(parts[0]) ? parts[0] : '', y = yearLabel(s.year), date = parts.filter(function (x) { return /\d/.test(x); }).pop() || '';
+    var where = parts.length && !DATEISH.test(parts[0]) && !COUNTRY.test(parts[0]) ? parts[0].replace(/^The\s+(?=\S)/, 'the ') : '';
+    // the record's year, and none where its dateline gave another (CLC.oneYear)
+    var when = s.yearClash ? '' : yearLabel(s.year);
     if (whole && s.place) return name + ', ' + s.place;
-    // a dateline that is a day, a month or a year, ending on the record's own year, says no more than the year
-    var plain = !date || (y && new RegExp('^(?:\\d{1,2} )?(?:[A-Z][a-z]+ )?' + y.replace(/ BC$/, '') + '(?: BC)?$').test(date));
-    var when = plain ? y : date;
-    return name + (where || when ? ', ' : '') + where + (where && when ? (plain ? ' ' : ', ') : '') + when;
+    return name + (where || when ? ', ' : '') + where + (where && when ? ' ' : '') + when;
   }
   function storyTitle(lib, s) {
     if (typeof s === 'string') s = lib.story[resolve(lib, s)]; if (!s) return '';
@@ -588,14 +771,19 @@
       var r = [];
       x.shared.forEach(function (key) { r.push({ type: 'situation', key: key, text: 'Also filed under ' + sitName(lib, key) }); });
       if (x.c >= 0.06) r.push({ type: 'words', text: 'Shared words: ' + sharedWords(tx.vec[s.id], tx.vec[x.o.id], 3).join(', ') });
-      if (x.dy <= 10) r.push({ type: 'years', text: x.dy === 0 ? 'The same year, ' + yearLabel(x.o.year) : gapWords(x.o.year - (s.year == null ? x.o.year : s.year)) + ', ' + yearLabel(x.o.year) });
-      if (x.oi.stance && x.oi.stance === me.stance) r.push({ type: 'stance', text: 'Both lead by ' + (x.oi.stanceName || x.oi.stance) });
+      if (x.dy <= 10 && !s.yearClash && !x.o.yearClash) r.push({ type: 'years', text: x.dy === 0 ? 'The same year, ' + yearLabel(x.o.year) : gapWords(x.o.year - (s.year == null ? x.o.year : s.year)) + ', ' + yearLabel(x.o.year) });
+      if (x.oi.stance && x.oi.stance === me.stance) r.push({ type: 'stance', text: stanceReading(x.oi, me) });
       if (x.oi.field === me.field && !r.length) r.push({ type: 'field', text: 'Both in ' + (x.oi.domainLabel || x.oi.field) });
       res.push({ story: storyCard(lib, x.o), score: +x.score.toFixed(3), reasons: r });
     }
     return res;
   }
 
+  // a way of leading two lives share: as fact once a coach has ruled on both, as a reading until then
+  function stanceReading(A, B) {
+    var ok = function (X) { return !!X.stanceStatus && X.stanceStatus !== 'proposed'; }, by = STANCE_BY[A.stance] || ('by ' + String(A.stanceName || A.stance).toLowerCase());
+    return ok(A) && ok(B) ? 'Both lead ' + by : 'Both may lead ' + by + '. A coach has yet to rule on this.';
+  }
   // Lives most like this one: shared situations, weighted by how rare each is, then the words of their stories,
   // the same way of leading, the same field and nearby years.
   function kindred(lib, iconId, k, opt) {
@@ -615,7 +803,7 @@
       var r = [];
       if (x.shared.length) r.push({ type: 'situation', keys: x.shared, text: (x.shared.length > 1 ? 'Lived ' + x.shared.length + ' of the same situations: ' : 'Lived the same situation: ') + x.shared.map(function (key) { return (lib.sitByKey[key] || {}).id || key; }).join(', ') });
       if (x.c >= 0.08) r.push({ type: 'words', text: 'Shared words: ' + sharedWords(mv, tx.ivec[x.o.id] || {}, 3).join(', ') });
-      if (x.o.stance && x.o.stance === me.stance) r.push({ type: 'stance', text: 'Both lead by ' + x.o.stanceName });
+      if (x.o.stance && x.o.stance === me.stance) r.push({ type: 'stance', text: stanceReading(x.o, me) });
       if (x.dy <= 10) r.push({ type: 'years', text: 'The same years' });
       if (!r.length && x.o.field === me.field) r.push({ type: 'field', text: 'Both in ' + x.o.domainLabel });
       return { icon: iconCard(lib, x.o), score: +x.score.toFixed(3), reasons: r };
@@ -780,11 +968,31 @@
     ['The restraint was a condition, not a temperament. Robinson spoke out forcefully once it lifted.', 'The restraint was a condition of the deal. Robinson spoke out forcefully once it lifted.'],
     ['ask whether any rule actually bars you from the room. Then sit in.', 'ask whether any rule bars you from the room. Then sit in.'],
     ['Useful for some of your weeks, not all.', 'Useful for some of your weeks.'],
+    // a fit note speaks of the hero's record; what the library holds for them is said after it, from their stories
+    ['Her stories are mostly about owning the stage.', 'Her record is mostly about owning the stage.'],
+    ["Jordan's stories are mostly about asking more of the people around you.", 'Jordan’s record is mostly about asking more of the people around you.'],
     ["You'll send analysis, not a position.", "You'll send analysis with no position in it."],
     ['Someone replies to the position, not the data.', 'Someone replies to the position you took.'],
     ["A client repeats your point back to you, not the firm's.", 'A client repeats your own point back to you.'],
     ['You answered it, not the senior associate.', 'You answered it yourself, before the senior associate spoke.'],
-    ["He's for the weeks you stand on your own name, not for the pitch itself.", "He's for the weeks you stand on your own name. The pitch itself needs a different story."],
+    ["He's for the weeks you stand on your own name, not for the pitch itself.", "He's for the weeks you stand on your own name, and Thursday\u2019s pitch is one of them."],
+    // a coach's first word to a member says what the library holds for their three, as Heroes does
+    ["None of them has a story in the record yet, so your first weeks will come from people close to them. We'll fix that together.", 'Only Simone Biles has a story in the library so far, and it waits for my check. For the others I\u2019ll choose your stories by hand.'],
+    // Sarah's move names Dan, the person who wanted her job: the record holds no pronoun for him
+    ['Give him the account, in the room.', 'Give Dan the account, in front of the team.'],
+    ['Ask him for the number, out loud.', 'Ask Dan for the number, out loud.'],
+    ["Let his call stand when you'd have changed it.", 'Let Dan\u2019s call stand when you\u2019d have changed it.'],
+    ['Say his name to the client, first.', 'Say Dan\u2019s name to the client, first.'],
+    ['He answered in front of the group.', 'Dan answered in front of the group.'],
+    ['The client heard his name from you.', 'The client heard Dan\u2019s name from you.'],
+    ["You'll do it privately, to spare his feelings.", 'You\u2019ll do it privately, to spare Dan\u2019s feelings.'],
+    ['He raises things with you unprompted.', 'Dan raises things with you unprompted.'],
+    // Michael's steps, with the apostrophes every screen sets
+    ["Take the client's first question yourself.", 'Take the client\u2019s first question yourself.'],
+    ["Ask the client what they'd call you for.", 'Ask the client what they\u2019d call you for.'],
+    // Michael's own question at step 9 is about the week's room, the Calder Foods pitch, said as one thing
+    ['The Ardent pitch is Thursday and their general counsel knows the firm, not me.', 'The Calder Foods pitch is Thursday, and their general counsel knows the firm but has never met me.'],
+    ['Ask: the Ardent pitch', 'Ask: the Calder Foods pitch'],
     ['He had just beaten Hillary Clinton in a primary that ran seventeen months.', 'Weeks earlier he had beaten Hillary Clinton in a primary that ran seventeen months.'],
     // members' goals, as the demo script gives them: the same aims, said once
     ['Be the person they call before the decision, not after it.', 'Be the person they call before the decision.'],
@@ -792,13 +1000,20 @@
     ['Leading the change, not being changed by it.', 'Leading the change from the front.'],
     // two member lines from the corpus (the fix belongs in the corpus repo; until then it is made here, at merge)
     ['I got the job. Nobody told me what it actually asks.', 'I got the job. Nobody told me what it asks.'],
-    ['I have more people than I can actually see.', 'I have more people than I can see.']
+    ['I have more people than I can actually see.', 'I have more people than I can see.'],
+    // a situation's label with a curly apostrophe, as every label on screen has it
+    ["Carrying a decision you didn't make", 'Carrying a decision you didn\u2019t make']
   ];
+  // A straight apostrophe inside a word is set curly, as every screen sets it ("you’re", "Here’s"). The stories and the
+  // works keep the record's own typography (what is counted and searched stays as written), and so does any text
+  // voiced with raw set (a situation's member line, which the question engine reads).
+  var KEEP_TYPE = { stories: 1, story: 1, samples: 1, works: 1, work: 1 };
+  function curly(t) { return t.replace(/([A-Za-z])'([a-z])/g, '$1\u2019$2'); }
   // returns a copy of v with every rewrite applied to every string in it; o.used collects the rewrites that fired
-  function voice(v, o) {
-    if (typeof v === 'string') { var t = v; COPY.forEach(function (c, i) { if (t.indexOf(c[0]) >= 0) { t = t.split(c[0]).join(c[1]); if (o && o.used) o.used[i] = 1; } }); return t; }
-    if (Array.isArray(v)) return v.map(function (x) { return voice(x, o); });
-    if (v && typeof v === 'object') { var out = {}; Object.keys(v).forEach(function (k) { out[k] = typeof v[k] === 'function' ? v[k] : voice(v[k], o); }); return out; }
+  function voice(v, o, raw) {
+    if (typeof v === 'string') { var t = v; COPY.forEach(function (c, i) { if (t.indexOf(c[0]) >= 0) { t = t.split(c[0]).join(c[1]); if (o && o.used) o.used[i] = 1; } }); return raw ? t : curly(t); }
+    if (Array.isArray(v)) return v.map(function (x) { return voice(x, o, raw); });
+    if (v && typeof v === 'object') { var out = {}; Object.keys(v).forEach(function (k) { out[k] = typeof v[k] === 'function' ? v[k] : voice(v[k], o, raw || !!KEEP_TYPE[k]); }); return out; }
     return v;
   }
 
@@ -969,11 +1184,11 @@
 
   return { DOMAINS: DOMAINS, FIELDS: FIELDS, FAMILY: FAMILY, STATUS: STATUS, GEO: GEO,
     fold: fold, slug: slug, yearOf: yearOf, eraOf: eraOf, yearLabel: yearLabel, firstSentence: firstSentence, lead: lead, bodyAfterPlace: bodyAfterPlace, sentences: sentences, geoName: geoName,
-    merge: merge, applyVerification: applyVerification, resolve: resolve, storyCard: storyCard, iconCard: iconCard,
+    merge: merge, applyVerification: applyVerification, derive: derive, useDerived: useDerived, resolve: resolve, storyCard: storyCard, iconCard: iconCard,
     search: search, iconTrails: iconTrails, storyTrails: storyTrails, eraView: eraView, eras: eras,
     member: member, readingFor: readingFor, matcherMember: matcherMember,
     matcher: matcher, pick: pick, replay: replay, season: season, stanceProfile: stanceProfile,
-    similarStories: similarStories, kindred: kindred, ego: ego, situationWeb: situationWeb, path: path, words: words,
-    interpret: interpret, ask: ask, sitIndex: sitIndex, queryVec: queryVec, COPY: COPY, voice: voice, STANCE_BY: STANCE_BY, draftLine: draftLine, sourceFor: sourceFor, cautionFor: cautionFor, whyFor: whyFor, statusLine: statusLine, teaser: teaser, lowerFirst: lowerFirst, cap1: cap1,
+    similarStories: similarStories, kindred: kindred, ego: ego, situationWeb: situationWeb, path: path, words: words, textIndex: textIndex, textIndexIdle: textIndexIdle, warm: warm,
+    interpret: interpret, ask: ask, sitIndex: sitIndex, queryVec: queryVec, COPY: COPY, voice: voice, KEEP_TYPE: KEEP_TYPE, curly: curly, STANCE_BY: STANCE_BY, draftLine: draftLine, draftWhy: draftWhy, workOf: workOf, oneYear: oneYear, ageLine: ageLine, sourceFor: sourceFor, cautionFor: cautionFor, whyFor: whyFor, statusLine: statusLine, teaser: teaser, lowerFirst: lowerFirst, cap1: cap1,
     num: num, REACH_WORD: REACH_WORD, REACH_SHORT: REACH_SHORT, DIRECT_WORD: DIRECT_WORD, sitLabel: sitLabel, statusWord: statusWord, storyTitle: storyTitle, gapWords: gapWords, stanceGerund: stanceGerund, lifeName: lifeName, likeThis: likeThis, sameField: sameField, reasonFor: reasonFor, readingPath: readingPath, otherWay: otherWay, DIR_WORD: DIR_WORD };
 }));

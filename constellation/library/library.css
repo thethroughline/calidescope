@@ -107,6 +107,8 @@ section > header { display: flex; align-items: center; justify-content: space-be
 /* cards */
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
 .grid.people { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+/* four hundred lives on one page: a card out of sight is laid out and painted only as it nears the screen */
+.grid.people > .card { content-visibility: auto; contain-intrinsic-size: auto 112px; }
 .card { display: block; border: 1px solid var(--hair); border-radius: 16px; padding: 16px 18px 18px; background: var(--paper); color: var(--ink); text-decoration: none; transition: border-color .15s, transform .25s var(--ease); }
 .card:hover { border-color: var(--ink); color: var(--ink); transform: translateY(-1px); }
 .card .top-line { display: flex; gap: 10px; align-items: center; justify-content: space-between; min-height: 20px; }
@@ -687,7 +689,7 @@ details.readas[open] > summary .change { display: none; }
 .mf-a .nm { font-weight: 500; }
 .mf-a .yr { font: 400 var(--t-meta)/1 var(--sans); color: var(--mute); font-variant-numeric: tabular-nums; }
 .mf-a .mv { color: var(--ink); }
-.mf-a mark { background: none; color: var(--pru); font-weight: 500; }
+.mf-a mark { background: var(--pru12); color: var(--pru); font-weight: 500; border-radius: 3px; padding: 0 2px; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
 .mf-a:hover .nm { color: var(--pru); }
 .mfam.alone .mf-row { padding-left: 0; }
 .mf-more { margin-top: 12px; }
@@ -710,3 +712,7 @@ details.readas[open] > summary .change { display: none; }
 /* a member reads situations in words: the coach's codes are not shown */
 .as-member .code, .as-member .ladder .rows .c, .as-member .n-h .code { display: none; }
 .as-member .ladder .rows button { grid-template-columns: minmax(0, 1fr); }
+
+/* a situation named in a section's note is one link, a full touch target */
+a.sitlink{display:inline-flex;align-items:center;min-height:44px}
+.mf-row .chk { margin-left: 6px; font: 500 var(--t-meta) var(--sans); color: var(--pru); white-space: nowrap; }

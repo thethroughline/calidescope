@@ -39,6 +39,9 @@ for (const f of ['../js/constellation-proto-data.js']) {
 }
 const ownList = [...own].sort((a, b) => b.length - a.length);
 const KEYS = corpus.situations.map((s) => s.match_key).filter(Boolean);
+// the lives with no story that nobody in the library is tied to: nobody stands "close to" them
+const LIB = createRequire(import.meta.url)('../lib/core.js').merge(corpus, demo), CLN = createRequire(import.meta.url)('../lib/net.js');
+const LONELY = LIB.icons.filter((i) => !i.stories.length && !CLN.kindred(LIB, i.id, 1).length).map((i) => i.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
 function residue(text) {
   let t = ' ' + text + ' ';
   for (const s of ownList) if (t.includes(s)) t = t.split(s).join(' ');
@@ -57,9 +60,21 @@ const RULES = [
   ['a second name for a checked story or a draft', /\bVerified\b|Draft — must verify|\bmust verify\b/],
   ['engine words', /\bpaired\b|\bslot\b|\bReachability\b|\bKeys inferred\b|\bthe rule proposes\b|\bauto-send\b/i],
   ['a broken join', /a week where there|Leads by [A-Z]|\bLeads by \(proposed\)/],
+  // round six, the first week: words retired because they said what was not so (a third element limits a rule to the
+  // screens it is about)
+  ['another coach’s name on the line', /Developed with Jennifer/, (label) => /^(Sarah|Maya) /.test(label)],
+  ['a pronoun read from a name', /\bhis story\b/i],
+  ['a fit said as "not all"', /\bnot all\./],
+  ['a bracket of 128', /\bto 128\b/],
+  ['"close to" a life nobody is tied to', new RegExp('close to (' + LONELY.join('|') + ')\\b')],
+  // round six, the coach's Monday and fresh eyes: the engine's own words, another member's name, and a reading said as fact
+  ['the engine’s own status', /\bproposed by the rule\b|\boverrides the rule\b|\bthe rule propos/i],
+  ['another member’s name on a hero', /\badded by Sarah\b/, (label) => /^(Maya|Michael) /.test(label)],
+  ['"verified" where the house says checked', /\bverified\b/, (label) => / coach /.test(label)],
+  ['a way of leading said as fact', /\bLeads [a-z][a-z ]*, as [A-Z][\w.’' -]* does\b/],
 ];
 // what only a member must not read: a situation's code where its words belong
-const MEMBER_RULES = [['a situation code where a member reads words', /\bOpen [A-E][1-6]\b/]];
+const MEMBER_RULES = [['a situation code where a member reads words', /\bOpen [A-E][1-6]\b/], ['a group letter where a member reads words', /\bThe rest of [A-E]\b/]];
 
 const port = await new Promise((r) => { const s = net.createServer(); s.listen(0, () => { const p = s.address().port; s.close(() => r(p)); }); });
 const server = spawn(process.execPath, [path.join(HERE, '../tools/dev-server.mjs'), String(port)], { stdio: 'ignore' });
@@ -83,13 +98,15 @@ try {
     const page = await browser.newPage({ viewport: { width: 1920, height: 1100 } });
     await page.goto(`${BASE}/constellation`); await page.waitForFunction(() => window.CLB && CLB.ready && CLB.lib);
     await page.locator('button', { hasText: persona + ',' }).first().click(); await page.waitForTimeout(300);
-    for (const i of [1, 3, 4, 6, 7, 8, 9, 10, 11]) { await page.click(`button[title^="${i} ·"]`); await page.waitForTimeout(350); await shot(page, `${persona} clock ${i}`); }
+    for (const i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]) { await page.click(`button[title^="${i} ·"]`); await page.waitForTimeout(350); await shot(page, `${persona} clock ${i}`); }
+    await page.click('button[title^="1 ·"]'); await page.evaluate(() => CLB.c.setState({ m: 'M2' })); await page.waitForTimeout(300); await shot(page, `${persona} interests`);
     await page.click('button[title^="9 ·"]'); await page.waitForTimeout(300);
     await page.evaluate(() => CLB.c.setState({ role: 'member', m: 'app', published: true, overlay: null }));
     for (const tab of ['week', 'ask', 'heroes', 'you']) { await page.evaluate((tab) => CLB.c.setState({ tab, overlay: null }), tab); await page.waitForTimeout(300); await shot(page, `${persona} ${tab}`); }
     const ids = await page.evaluate(() => { const st = CLB.c.state, S = CPD.story, core = st.core.length ? st.core : CPD.members[st.p].core, ss = Object.keys(S);
       return { ver: ss.find((k) => core.includes(S[k].hero) && S[k].verified), dr: ss.find((k) => core.includes(S[k].hero) && !S[k].verified), far: ss.find((k) => !core.includes(S[k].hero) && !S[k].verified), hero: core[0] }; });
     for (const sid of [ids.ver, ids.dr, ids.far].filter(Boolean)) { await page.evaluate((sid) => CLB.c.setState({ overlay: 'story', sid, sctx: {}, sstack: [] }), sid); await page.waitForTimeout(350); await shot(page, `${persona} story ${sid}`); }
+    if (ids.far) { await page.locator('[data-bridge="story-draft"] [data-bridge="draft-info"]').click().catch(() => {}); await page.locator('[data-bridge="story-check"]').click().catch(() => {}); await page.waitForTimeout(300); await shot(page, `${persona} story asked`); }
     await page.evaluate((hid) => CLB.c.setState({ overlay: 'hero', hid, hctx: {}, sstack: [] }), ids.hero); await page.waitForTimeout(350); await shot(page, `${persona} hero`);
     await page.evaluate(() => CLB.c.setState({ overlay: 'library', libRoute: '#/', libBack: null, libDepth: 1 })); await page.waitForTimeout(1200); await shot(page, `${persona} library`);
     await page.evaluate(() => CLB.c.setState({ overlay: null, tab: 'ask', ask: Object.assign({}, CLB.c.state.ask, { stage: 'confirm', text: 'I still answer every client email myself at midnight.', key: null, story: null, sent: false }) })); await page.waitForTimeout(300);
@@ -125,7 +142,8 @@ let bad = 0;
 const seen = new Set();
 for (const s of screens) {
   const r = residue(s.text);
-  for (const [name, re] of RULES.concat(s.label.startsWith('library member') ? MEMBER_RULES : [])) {
+  for (const [name, re, only] of RULES.concat(s.label.startsWith('library member') ? MEMBER_RULES : [])) {
+    if (only && !only(s.label)) continue;
     const g = new RegExp(re.source, re.flags.includes('g') ? re.flags : re.flags + 'g');
     for (const m of r.matchAll(g)) {
       const at = r.slice(Math.max(0, m.index - 50), m.index + m[0].length + 50).replace(/\s+/g, ' ').trim(), key = name + '|' + at;

@@ -81,11 +81,11 @@
     var ticks = d.pew.filter(function (e) { return e[0] >= w0 && e[0] <= w1; }).map(function (e, i) { return { x: px(e[0]), year: String(e[0]), label: e[1], up: i % 2 === 0, down: i % 2 === 1 }; });
     var b0 = px(w0), b1 = px(w1);
     var winShow = !ticks.some(function (t) { return t.down && t.x > b0 - 3 && t.x < b0 + 26; });
-    return { show: true, b0: b0, b1: b1, bw: b1 - b0, ticks: ticks, winDisp: winShow ? 'block' : 'none', win: w0 + '–' + w1, short: w0 + '–' + String(w1).slice(2), caption: 'The years that shaped you: ' + w0 + '–' + w1 + '.' };
+    return { show: true, b0: b0, b1: b1, bw: b1 - b0, ticks: ticks, winDisp: winShow ? 'block' : 'none', win: w0 + '–' + w1, short: w0 + '–' + w1,   /*bridge:born-window*/ caption: 'The years that shaped you: ' + w0 + '–' + w1 + '.' };
   }
   function wheelRef(c) { if (!c._wref) c._wref = function (el) { c._wheel = el; c._wkey = null; syncWheel(c); }; return c._wref; }
   function syncWheel(c) { var el = c._wheel || document.getElementById('cp-wheel'), st = c.state; if (!el || !st || st.bornSkip || st.m !== 'M1b') return; var key = st.p + ':' + st.m; if (c._wkey === key) return; c._wkey = key; el.scrollTop = (st.born - 1950) * 36; }
-  function libLine(hid) { var d = D(), L = d.libOf(hid); return L.n >= 3 ? 'Stories in the library: ' + L.n : "Few stories yet. When none fits your week, you'll get one from someone close to " + d.hero[hid].name + '.'; }
+  function libLine(hid) { var d = D(), L = d.libOf(hid); return L.n >= 3 ? 'Stories in the library: ' + L.n : "Few stories yet. When none fits your week, you\u2019ll get one from someone close to " + d.hero[hid].name + '.'; }
 
   function init(pid) {
     var d = D(); if (pid && d.members[pid]) P = pid; var m = d.members[P];
@@ -113,7 +113,7 @@
       hold: {},
       c: 'C1', cm: P,
       lib: { key: 'all', hero: 'all', reach: 'all', ver: 'all', sel: 'st-obama-2008-more-perfect-union', to: P, note: '', msg: '' },
-      msgs: clone(d.msgs), compose: '', attach: null, attachOpen: false, cCompose: '', thread: P, drawer: false, playing: null, bookOpen: false, slot: 'Tue 20 Oct, 10:00',
+      msgs: clone(d.msgs), compose: '', attach: null, attachOpen: false, cCompose: '', thread: P, drawer: false, playing: null, bookOpen: false, slot: 'Tue 20 Oct, 10:00', slotFor: null, /*bridge:slot-for-init*/
       talk: (m.talk || d.talk).slice(), ciNotes: '', summarySent: false,
       notif: null, cnotif: null, toast: null, ctoast: null
     };
@@ -135,7 +135,7 @@
     var d = D(), m = d.members[P], r = st.review[P] || {};
     var paired = pairedFor(st, week === 12 ? 1 : 2);
     var pd = function (day, note) { return { story: paired.story, source: paired.src === 'coach' ? 'coach' : 'paired', origin: paired.src, closeTo: paired.closeTo, note: note, day: day }; };
-    /*bridge:send-guard-week*/ var checked = function (x) { return x && x.story && d.story[x.story] && !d.story[x.story].verified ? { held: true, why: 'check', waiting: x.story, day: x.day } : x; };
+    /*bridge:send-guard-week*/ var checked = function (x) { var s = x && x.story && d.story[x.story]; if (!s) return x; if (x.day === 19 && window.CLB && window.CLB.hadLife && window.CLB.hadLife(P, s.id)) return { held: true, why: 'recent', waiting: x.story, day: x.day }; return !s.verified ? { held: true, why: 'check', waiting: x.story, day: x.day } : x; };
     if (week === 12) {
       if (paired) return checked(pd(12, m.note12 || ''));   /*bridge:send-guard-w12*/
       var sel0 = select(st, P, d.sit[st.mv.sit].key, 'week', 12);
@@ -185,7 +185,7 @@
     var pool = ok;
     if (mode === 'ask') { var nm = ok.filter(function (o) { return o.s.reach !== 'far'; }); pool = nm.length ? nm : ok; }
     pool.sort(function (a, b) { return a.tier - b.tier || (a.s.id < b.s.id ? -1 : 1); });
-    var p = pool[0], trace = [];
+    var p = (mode === 'week' ? pool.filter(function (o) { return !o.s.checked; }) : pool)[0], trace = [];   /*bridge:rule-own*/
     if (!cand.length) trace = ['✗ no verified story carries ' + key];
     else if (!p) trace = ['✓ situation ' + key, '✗ nothing eligible: ' + out.map(function (e) { return e.why; }).join('; ')];
     else {
@@ -203,10 +203,9 @@
 
   function fit(st, hid) {
     var d = D(), h = d.hero[hid], m = d.members[P], canned = (m.fit || {})[hid], L = d.libOf(hid), has = L.cov.indexOf(m.sits[0]) >= 0, state, line;
-    if (canned) { state = canned[0]; line = canned[1]; }
+    if (canned) { state = canned[0]; line = canned[1]; if (/\buseful for\b/i.test(line) && window.CLN && window.CLN.fitLine && window.CLB && window.CLB.lib) line = line.replace(/\s*Useful for[^.]*\./, '') + ' ' + window.CLN.fitLine(window.CLB.lib, P, hid, { coach: (d.coaches[m.coach] || {}).first }); }   /*bridge:fit-canned*/
     else if (has) { state = 'up'; line = h.short + ' has a story for exactly the kind of week you have coming.'; }
-    else if (L.n > 0) { state = 'partly'; line = h.short + "'s stories are mostly about other kinds of weeks. Useful for some of yours, not all."; }
-    else { state = 'partly'; line = "We don't have stories from " + h.short + ' yet. Your coach will find some, or someone close.'; }
+    else { state = 'partly'; line = window.CLN && window.CLN.fitLine && window.CLB && window.CLB.lib ? window.CLN.fitLine(window.CLB.lib, P, hid, { coach: (d.coaches[m.coach] || {}).first }) : h.short + (L.n ? "'s stories are mostly about other kinds of weeks." : ' has no stories yet.'); }   /*bridge:fit-line*/
     var covered = m.sits.map(function (id) { return { k: d.sit[id].key, ok: L.cov.indexOf(id) >= 0 }; });
     return { state: state, line: line, n: L.n, keys: covered.filter(function (x) { return x.ok; }).map(function (x) { return x.k; }), covered: covered, thin: L.n < 3 };
   }
@@ -225,7 +224,7 @@
   function fs(s) {
     if (!s) return {};
     var d = D(), h = d.hero[s.hero];
-    return { id: s.id, hero: h.name, short: h.short, ini: h.ini, place: s.place, eyebrow: h.name + ' · ' + s.place, moment: s.moment, hasPattern: !!s.pattern, patternQ: s.pattern ? '“' + s.pattern + '”' : '', hasBy: !!s.by, by: '— ' + s.by,
+    return { id: s.id, hero: h.name, short: h.short, ini: h.ini, place: s.place, eyebrow: h.name + (s.place ? ' · ' + s.place : ''), /*bridge:fs-place*/ moment: s.moment, hasPattern: !!s.pattern, patternQ: s.pattern ? '“' + s.pattern + '”' : '', hasBy: !!s.by, by: '— ' + s.by,
       source: 'Source: ' + (window.CLC && window.CLC.sourceFor ? window.CLC.sourceFor(s, 'coach') : s.source), /*bridge:fs-source*/ hasCaution: !!s.caution, caution: s.caution, why: s.why, verified: s.verified, verLabel: s.verified ? 'Checked' : 'Recall draft', /*bridge:fs-words*/ verC: s.verified ? 'var(--ink)' : 'var(--mad)',
       first: window.CLC && window.CLC.teaser ? window.CLC.teaser(s) : s.moment.split(/\.\s/)[0] + '.', /*bridge:fs-first*/ reach: s.reach, keys: s.keys.join(' · '), gist: s.pattern ? '“' + s.pattern + '”' : s.gist };
   }
@@ -249,7 +248,7 @@
       v.slot = st.slot + ', 15 min';
       v.toggleBook = function () { S({ bookOpen: !st.bookOpen }); };
       v.bookOpen = st.bookOpen;
-      v.slots = d.slots.map(function (sl) { return { t: sl, on: sl === st.slot, bd: sl === st.slot ? 'var(--ink)' : 'var(--hair)', pick: function () { S({ slot: sl, bookOpen: false }); toast(c, viewer === 'member' ? 'Check-in moved to ' + sl + '.' : 'Check-in moved to ' + sl + '.', viewer); } }; });
+      v.slots = d.slots.map(function (sl) { return { t: sl, on: sl === st.slot, bd: sl === st.slot ? 'var(--ink)' : 'var(--hair)', pick: function () { S({ slot: sl, slotFor: mid, bookOpen: false }); /*bridge:slot-for*/ toast(c, viewer === 'member' ? 'Check-in moved to ' + sl + '.' : 'Check-in moved to ' + sl + '.', viewer); } }; });
     }
     return v;
   }
@@ -321,7 +320,7 @@
     if (k.n === 5) { p.c = 'C6'; p.cm = P; }
     if (k.n >= 6) { p.published = true; p.m = 'app'; }
     if (k.n === 6) { p.tab = 'week'; var w12n = weekDelivery(Object.assign({}, st, p), P, 12); p.notif = { text: 'Your week: one move, one line' + (w12n && w12n.story ? ', one story from ' + d.hero[d.story[w12n.story].hero].name : '') + '.', go: 'week' }; }
-    if (k.n === 7) { p.tab = 'week'; p.ready = false; p.notif = { text: 'In an hour. Your move, your line, his story.', go: 'prep' }; }
+    if (k.n === 7) { p.tab = 'week'; p.ready = false; var w12h = weekDelivery(Object.assign({}, st, p), P, 12); p.notif = { text: 'In an hour: your move' + (w12h && w12h.story ? ', your line and ' + d.hero[d.story[w12h.story].hero].name + '\u2019s story.' : ' and your line.'), go: 'prep' }; /*bridge:notif-hour*/ }
     if (k.n === 8) { p.tab = 'week'; p.db = { acted: false, said: false, note: '' }; p.notif = { text: 'How did this week go? Two taps.', go: 'debrief' }; }
     if (k.n === 9) { p.tab = 'ask'; p.ask = { stage: 'compose', text: d.members[P].ask1 || d.ask1, key: null, note: '', sent: false, story: null }; }
     if (k.n === 10) {
@@ -370,7 +369,7 @@
     var showMsg = function (m) { return m.live || m.day <= day; };
     var libLineFor = libLine;
     var helpsFor = function (hid) {
-      if (!st.published) return { text: "You'll see what they help with after your first session with " + CO.first + '.', c: 'var(--faint)' };
+      if (!st.published) return { text: "You\u2019ll see what they help with after your first session with " + CO.first + '.', c: 'var(--faint)' };
       var mm = st.micro.filter(function (x) { return x.ins && d.story[x.ins.story] && d.story[x.ins.story].hero === hid; })[0];
       return mm ? { text: 'Helps with: ' + mm.b, c: 'var(--pru)' } : { text: 'Nothing paired yet. ' + CO.first + ' is looking.', c: 'var(--faint)' };
     };
@@ -520,7 +519,7 @@
       weekN: 'Your move · Week ' + ms.w + ' of 6', micro: ms.b, parent: st.mv.behaviour, whyOpen: st.whyOpen, whyIcon: st.whyOpen ? 'ph ph-caret-up' : 'ph ph-caret-down',
       toggleWhy: function () { S({ whyOpen: !st.whyOpen }); }, failure: st.mv.failure,
       line: '“' + st.line.text + '”',
-      hasStory: !!sObj, held: !sObj, /*bridge:held-text*/ heldText: del && del.why === 'check' ? 'Your story comes once ' + CO.first + ' has checked it.' : 'No story this week. ' + CO.first + ' chose to wait.', story: fs(sObj), pinned: !!(del && del.source === 'pinned'), hasNote: !!(del && del.note), note: del ? del.note : '',
+      hasStory: !!sObj, held: !sObj, /*bridge:held-text*/ nothing: false, heldText: !del || !del.held ? 'Your story comes once ' + CO.first + ' has checked one.' : del.why === 'check' ? 'Your story comes once ' + CO.first + ' has checked it.' : del.why === 'recent' ? 'Your story comes once ' + CO.first + ' has chosen one.' : 'No story this week. ' + CO.first + ' chose to wait.', story: fs(sObj), pinned: !!(del && del.source === 'pinned'), hasNote: !!(del && del.note), note: del ? del.note : '',
       open: function () { if (sObj) open(c, sObj.id, { note: del.note, pinned: del.source === 'pinned' }); },
       saveIcon: sObj && isSaved(sObj.id) ? 'ph-fill ph-bookmark-simple' : 'ph ph-bookmark-simple', saveLabel: sObj && isSaved(sObj.id) ? 'Saved' : 'Save story',
       toggleSave: sObj ? toggleSave(sObj.id) : function () {},
@@ -573,7 +572,7 @@
       when: day === sitDay ? 'Today, 2pm' : (wkNo === 19 ? 'Thursday 22 October, 2pm' : 'Thursday 15 October, 2pm'),
       sit: sarah.rooms[wkNo === 19 ? 1 : 0][1],
       move: ms.b, line: '“' + st.line.text + '”', heroLine: sObj ? d.hero[sObj.hero].name + ' · ' + sObj.place : '', pattern: sObj ? fs(sObj).gist : '', hasPattern: !!sObj,
-      ready: st.ready, box: st.ready ? 'var(--ink)' : 'transparent', boxIcon: st.ready ? 'ph-bold ph-check' : '', readyText: st.ready ? 'Ready. Go well.' : "I'm ready",
+      ready: st.ready, box: st.ready ? 'var(--ink)' : 'transparent', boxIcon: st.ready ? 'ph-bold ph-check' : '', readyText: st.ready ? 'Ready. Go well.' : "I\u2019m ready",
       toggle: function () { S({ ready: !st.ready }); }, close: function () { S({ overlay: null }); }
     };
 
@@ -635,8 +634,8 @@
         if (ov && !scopedOut) return { has: true, none: false, lead: 'In the spirit of ' + h.short + ':', text: ' ' + ov.text, open: function () { open(c, ov.story, { back: null }); } };
         var s = !scopedOut && d.stories.filter(function (s1) { return s1.hero === hid && s1.verified && s1.keys.indexOf(key) >= 0 && s1.walk; })[0];
         if (s) return { has: true, none: false, lead: 'In the spirit of ' + h.short + ':', text: ' ' + s.walk, open: function () { open(c, s.id, {}); } };
-        if (sc) return { has: false, none: true, text: h.short + " isn't in this one. " + CO.first + "'s using " + pr + ' for ' + scopePhrase(st, hid) + '.' };
-        return { has: false, none: true, text: h.short + " isn't in this one. There's no story from " + pr + ' for this yet.' };
+        if (sc) return { has: false, none: true, text: h.short + " isn\u2019t in this one. " + CO.first + "'s using " + pr + ' for ' + scopePhrase(st, hid) + '.' };
+        return { has: false, none: true, text: h.short + " isn\u2019t in this one. There\u2019s no story from " + pr + ' for this yet.' };
       });
     };
     var askStory = A.story ? d.story[A.story] : null;
@@ -681,7 +680,7 @@
       var tier = st.core.indexOf(st.hid) >= 0 ? 'One of your three' : st.reserve === st.hid ? 'Reserve' : st.extended.some(function (e) { return e.hero === st.hid; }) ? 'Added by you' : st.pending.some(function (e) { return e.hero === st.hid; }) ? 'Waiting for ' + CO.first : 'From the library';
       hv = {
         name: hh.name, ini: hh.ini, desc: hh.desc, q: hh.q, tier: tier, scoped: !!st.scopes[st.hid], scopeLine: CO.first + "'s using " + hh.short + ' for ' + scopePhrase(st, st.hid) + '.',
-        storiesLabel: recd.length ? "Stories you've received" : 'Stories',
+        storiesLabel: recd.length ? "Stories you\u2019ve received" : 'Stories',
         stories: recd.map(function (id) { var f = fs(d.story[id]); return { place: f.place, first: f.first, open: function () { open(c, id, { back: 'hero' }); } }; }),
         noStories: !recd.length, noStoriesText: verN ? 'Nothing yet. ' + (hh.sex === 'f' ? 'Her' : 'His') + ' stories come to you when they fit the week.' : 'No stories from ' + hh.short + ' in the record yet.',
         moreInLib: recd.length > 0 && verN > recd.length, moreText: 'More of ' + her + ' record is with ' + CO.first + '. Stories come when they fit your week.',
@@ -806,7 +805,7 @@
       }
       if (t >= 19.3125) { var w = weekDelivery(st, P, 19); if (w && w.story) events.push({ day: 19, icon: 'ph ph-book-open-text', title: 'Story · ' + fs(d.story[w.story]).eyebrow, detail: ({ pinned: 'Pinned by you', coach: 'Chosen by you', system: 'Sent by the rule' })[w.source] + (st.opened.indexOf(w.story) >= 0 ? ' · opened' : ''), hasAct: false }); }
       st.marks.forEach(function (mk) { events.push({ day: mk.day, live: true, icon: mk.kind === 'acted' ? 'ph-fill ph-circle' : 'ph-fill ph-circle', ic: mk.kind === 'acted' ? 'var(--pru)' : 'var(--mad)', title: mk.kind === 'acted' ? 'Mark · ran the move' : 'Mark · said the line', detail: mk.note || '', hasAct: false }); });
-      st.signals.forEach(function (sg) { if (sg.kind === 'decline') events.push({ day: sg.day, live: true, icon: 'ph ph-x-circle', title: 'Not for me · ' + fs(d.story[sg.sid]).eyebrow, detail: 'Never shown again to ' + sarah.first, hasAct: false }); if (sg.kind === 'nohappen') events.push({ day: sg.day, live: true, icon: 'ph ph-minus-circle', title: "Debrief: it didn't happen this week", detail: '', hasAct: false }); });
+      st.signals.forEach(function (sg) { if (sg.kind === 'decline') events.push({ day: sg.day, live: true, icon: 'ph ph-x-circle', title: 'Not for me · ' + fs(d.story[sg.sid]).eyebrow, detail: 'Never shown again to ' + sarah.first, hasAct: false }); if (sg.kind === 'nohappen') events.push({ day: sg.day, live: true, icon: 'ph ph-minus-circle', title: "Debrief: it didn\u2019t happen this week", detail: '', hasAct: false }); });
       st.msgs[P].filter(function (m) { return m.from === 'member' && m.live; }).forEach(function (m) {
         events.push({ day: m.day, live: true, icon: m.kind === 'ask' ? 'ph ph-question' : 'ph ph-chat-circle', title: m.kind === 'ask' ? 'Ask · ' + m.chip : m.kind === 'story' ? 'Shared a story' : 'Message', detail: m.kind === 'story' ? fs(d.story[m.story]).eyebrow : '“' + m.body + '”' + (m.story ? ' → ' + fs(d.story[m.story]).eyebrow : ''), hasAct: true, act: 'Reply', go: function () { S({ c: 'C8', thread: P }); } });
       });
@@ -858,7 +857,7 @@
           noteOpen: st.noteFor === q.mid, noteDraft: st.noteDraft, noteCount: st.noteDraft.length + ' / 240',
           setNote: function (e) { S({ noteDraft: e.target.value.slice(0, 240) }); },
           saveNote: function () { setR({ note: st.noteDraft.trim() }); S({ noteFor: null }); },
-          isDavid: !s, corpusOn: st.corpus, corpusLabel: st.corpus ? 'On the corpus request list' : 'Add to corpus request list', corpusIcon: st.corpus ? 'ph-fill ph-check-square' : 'ph ph-square',
+          isDavid: !s, corpusOn: st.corpus, corpusLabel: st.corpus ? 'More stories asked for' : 'Ask for more stories of this situation',   /*bridge:corpus-label*/ corpusIcon: st.corpus ? 'ph-fill ph-check-square' : 'ph ph-square',
           toggleCorpus: function () { S({ corpus: !st.corpus }); }
         };
       })
@@ -949,21 +948,21 @@
       hasReserve: !!st.reserve, reserve: st.reserve ? d.hero[st.reserve].name : '', reserveFit: st.reserve ? FITL[fit(st, st.reserve).state] + ' · covers ' + fit(st, st.reserve).covered.filter(function (x) { return x.ok; }).map(function (x) { return x.k; }).join(', ') : '',
       pending: st.pending.map(function (p) {
         var n = p.hero ? d.stories.filter(function (s) { return s.hero === p.hero && s.verified; }).length : 0;
-        return { name: p.name, why: p.why ? '“' + p.why + '”' : 'No reason given', thin: n < 3, thinText: 'Thin record — ' + n + ' verified ' + (n === 1 ? 'story' : 'stories') + ". They'll rarely be matched.",
+        return { name: p.name, why: p.why ? '“' + p.why + '”' : 'No reason given', thin: n < 3, thinText: 'Thin record — ' + n + ' verified ' + (n === 1 ? 'story' : 'stories') + ". They\u2019ll rarely be matched.",
           approve: function () { S({ pending: st.pending.filter(function (x) { return x !== p; }), extended: st.extended.concat([p]) }); toast(c, p.name + ' added to ' + sarah.first + '\'s heroes (extended).', 'coach'); },
           decline: function () {
-            var mm = Object.assign({}, st.msgs); mm[P] = st.msgs[P].concat([{ id: 'c' + Date.now(), from: 'coach', kind: 'text', body: "I've held off on " + p.name + ' for now. There are no verified stories from her yet. Let\'s talk about it on Tuesday.', day: day, at: stp, live: true }]);
+            var mm = Object.assign({}, st.msgs); mm[P] = st.msgs[P].concat([{ id: 'c' + Date.now(), from: 'coach', kind: 'text', body: "I\u2019ve held off on " + p.name + ' for now. There are no verified stories from her yet. Let\u2019s talk about it on Tuesday.', day: day, at: stp, live: true }]);
             S({ pending: st.pending.filter(function (x) { return x !== p; }), msgs: mm }); toast(c, 'Declined, with a note to ' + sarah.first + '.', 'coach');
           } };
       }),
       hasPending: st.pending.length > 0, noPending: st.pending.length === 0,
       suggestOpen: st.suggestOpen, toggleSuggest: function () { S({ suggestOpen: !st.suggestOpen }); },
-      suggestList: d.heroes.filter(function (h) { return st.core.indexOf(h.id) < 0 && h.id !== st.reserve && d.stories.some(function (s) { return s.hero === h.id && s.verified; }); }).map(function (h) {
-        var n = d.stories.filter(function (s) { return s.hero === h.id && s.verified; }).length;
-        return { name: h.name, meta: n + ' verified ' + (n === 1 ? 'story' : 'stories'), go: function () {
-          var mm = Object.assign({}, st.msgs); mm[P] = st.msgs[P].concat([{ id: 'c' + Date.now(), from: 'coach', kind: 'text', body: "I'd like to suggest " + h.name + ' for your heroes. Have a look and tell me yes or no.', day: day, at: stp, live: true }]);
+      suggestList: (function (vc) { d.stories.forEach(function (s) { if (s.verified) vc[s.hero] = (vc[s.hero] || 0) + 1; }); return d.heroes.filter(function (h) { return st.core.indexOf(h.id) < 0 && h.id !== st.reserve && vc[h.id]; }).map(function (h) {   /*bridge:suggest-count*/
+        var n = vc[h.id];
+        return { name: h.name, meta: n + ' checked ' + (n === 1 ? 'story' : 'stories'), go: function () {
+          var mm = Object.assign({}, st.msgs); mm[P] = st.msgs[P].concat([{ id: 'c' + Date.now(), from: 'coach', kind: 'text', body: "I\u2019d like to suggest " + h.name + ' for your heroes. Have a look and tell me yes or no.', day: day, at: stp, live: true }]);
           S({ msgs: mm, suggestOpen: false }); toast(c, 'Suggested ' + h.name + ' to ' + sarah.first + '.', 'coach'); } };
-      })
+      }); })({})   /*bridge:suggest-count-end*/
     };
 
     // C6 moves
