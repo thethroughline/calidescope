@@ -104,7 +104,7 @@ The matcher in `lib/core.js` is a line-for-line port of the corpus repo's `scrip
 node --test constellation/tests/*.test.mjs     21 tests: matcher parity, the merge, every API route, the Redis protocol,
                                                likeness, coach questions read as situations, the question engine, the networks,
                                                the house voice
-node constellation/tests/e2e.mjs               83 checks in a browser: prototype, Library, both roles, phone and desktop,
+node constellation/tests/e2e.mjs               85 checks in a browser: prototype, Library, both roles, phone and desktop,
                                                light and dark, every persona at every step of the clock, in-app reading
                                                both ways, Ask, the shelf, the networks, no console errors and no
                                                request the server refuses

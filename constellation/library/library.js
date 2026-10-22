@@ -364,7 +364,7 @@
         t += '<path class="thread' + (strong ? ' strong' : '') + '" d="M' + me0.x.toFixed(1) + ' ' + me0.y.toFixed(1) + ' Q' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ' ' + q.x.toFixed(1) + ' ' + q.y.toFixed(1) + '"/>';
       });
       kin.concat([{ id: id, me: true }]).forEach(function (k) {
-        var q = pos[k.id], nm = k.me ? lib.icon[id].name : CLG.shortName(lib.icon[k.id].name), ww = w(nm), hh = fs * 1.2, spots = [[q.x + 6, q.y + fs * 0.35, 'start'], [q.x - 6, q.y + fs * 0.35, 'end'], [q.x, q.y - 7, 'middle'], [q.x, q.y + fs + 5, 'middle']];
+        var q = pos[k.id], F = +fs, nm = k.me ? lib.icon[id].name : CLG.shortName(lib.icon[k.id].name), ww = w(nm), hh = F * 1.2, spots = [[q.x + 6, q.y + F * 0.35, 'start'], [q.x - 6, q.y + F * 0.35, 'end'], [q.x, q.y - 7, 'middle'], [q.x, q.y + F + 5, 'middle']];
         var ok = spots.filter(function (sp) { var x0 = sp[2] === 'start' ? sp[0] : sp[2] === 'end' ? sp[0] - ww : sp[0] - ww / 2, b = { x0: x0, x1: x0 + ww, y0: sp[1] - hh, y1: sp[1] + 2 }; return b.x0 > 0 && b.x1 < MW && !boxes.some(function (o) { return b.x0 < o.x1 && b.x1 > o.x0 && b.y0 < o.y1 && b.y1 > o.y0; }); })[0];
         if (!ok) return;
         var x0 = ok[2] === 'start' ? ok[0] : ok[2] === 'end' ? ok[0] - ww : ok[0] - ww / 2; boxes.push({ x0: x0, x1: x0 + ww, y0: ok[1] - hh, y1: ok[1] + 2 });
@@ -375,7 +375,7 @@
     };
     var show = function (e) {
       var c = e.target.closest('.hit'); if (!c) { tip.hidden = true; threads(null); return; }
-      if (lib.icon[c.dataset.id].stories.length) threads(c.dataset.id);
+      threads(lib.icon[c.dataset.id].stories.length ? c.dataset.id : null);
       var i = lib.icon[c.dataset.id], b = host.getBoundingClientRect(), cb = c.getBoundingClientRect();
       tip.innerHTML = '<b>' + esc(i.name) + '</b>' + esc([yl(i.year), i.domainLabel, i.stories.length ? n(i.stories.length, 'story', 'stories') : 'no story yet'].filter(Boolean).join(' · '));
       tip.style.left = (cb.left + cb.width / 2 - b.left) + 'px'; tip.style.top = (cb.top - b.top) + 'px'; tip.hidden = false;

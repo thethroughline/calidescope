@@ -239,6 +239,8 @@ try {
       await q.evaluate(() => { location.hash = '#/'; }); await q.waitForSelector('#map svg .hit');
       await q.locator('#map svg .hit[data-id="billie-jean-king"]').dispatchEvent('mousemove');
       check(await q.locator('#map .thread').count() >= 8 && /threads from/.test(await q.locator('#mapcap').innerText()), 'a star on the map draws threads to its kin');
+      const sweep = await q.evaluate(() => { let ok = 0, none = 0, n = 0; document.querySelectorAll('#map svg .hit').forEach((c) => { n++; c.dispatchEvent(new MouseEvent('mousemove', { bubbles: true })); const k = document.querySelectorAll('#map .thread').length; const has = window.CLL && true; if (k) ok++; else none++; }); return { n, ok, none }; });
+      check(sweep.n > 400 && sweep.ok > 300 && sweep.none > 0, `every star can be hovered: ${sweep.ok} draw threads, ${sweep.none} have no story and draw none`);
       if (as === 'coach') {
         await q.evaluate(() => { location.hash = '#/age?m=sarah'; }); await q.waitForSelector('#agestrip svg');
         check(await q.locator('#agestrip .agedot').count() > 40 && /within three years of 41/.test(await q.locator('main .lede').innerText()), 'At Sarah’s age places her situations’ stories by age, the nearest named');
