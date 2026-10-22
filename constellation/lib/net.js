@@ -297,17 +297,23 @@
     }
     return out;
   }
-  // linksTo: how one life reaches the member, in words: the chain bridge() finds, and one line for it
-  // ("One step from Obama. Both had every act read as a signal.").
+  // linksTo: how one life reaches the member, in words: the chain bridge() finds, and one line for it ("One step from
+  // Obama. Both had every act read as a signal."). The reason is the situation asked about (key, then o.keys) from
+  // the step whose tie shares it, the last link first; a chain that shares none says its last link's own reason.
+  // After a chain of two, "Both" names its pair. The hero goes by the short name the member knows ("Obama"), every
+  // other life by its whole name. The Review's rows and the Library's lead route both say this line.
   function linksTo(lib, mid, iconId, key, o) {
-    var hs = o && o.three && o.three.length ? o.three : three(lib, mid), b = bridge(lib, mid, iconId, key, { three: hs });
-    var nm = function (id) { var I = lib.icon[id]; return I ? I.short || I.name : id; };
+    o = o || {}; var hs = o.three && o.three.length ? o.three : three(lib, mid), b = bridge(lib, mid, iconId, key, { three: hs });
+    var nm = function (id) { var I = lib.icon[id]; return I ? I.short || I.name : id; }, full = function (id) { var I = lib.icon[id]; return I ? I.name : id; };
     if (!b) return { links: 9, hero: null, steps: [], line: 'Not near the three.' };
     if (b.own) return { links: 0, hero: iconId, steps: [], line: 'One of the three.' };
-    var st = b.steps, w = why(lib, st[st.length - 1].a, st[st.length - 1].b, st[st.length - 1].tie)[0] || '';
+    var st = b.steps, last = st[st.length - 1], ks = [key].concat(o.keys || []).filter(function (k, i, a) { return k && a.indexOf(k) === i; }), at = null, w;
+    for (var i = st.length - 1; i >= 0 && !at; i--) for (var j = 0; j < ks.length && !at; j++) if (st[i].tie.shared.indexOf(ks[j]) >= 0 && both(ks[j])) at = { x: st[i], k: ks[j] };
+    w = at ? 'Both ' + both(at.k) + '.' : why(lib, last.a, last.b, last.tie)[0] || '';
+    if (st.length > 1) w = w.replace(/^Both /, full((at || { x: last }).x.a) + ' and ' + full((at || { x: last }).x.b) + ' both ');
     var NUMW = ['', 'One', 'Two', 'Three', 'Four', 'Five'];
     var line = st.length === 1 ? 'One step from ' + nm(b.hero) + '. ' + w
-      : (NUMW[st.length] || st.length) + ' steps from ' + nm(b.hero) + ', through ' + st.slice(0, -1).map(function (x) { return nm(x.b); }).join(' and ') + '. ' + w;
+      : (NUMW[st.length] || st.length) + ' steps from ' + nm(b.hero) + ', through ' + st.slice(0, -1).map(function (x) { return full(x.b); }).join(' and ') + '. ' + w;
     return { links: st.length, hero: b.hero, steps: st, line: line.trim() };
   }
 
@@ -403,17 +409,16 @@
     'left got put set get take come know knew want wanted next whether though although around never always already enough something nothing anyone someone ' +
     'everyone everything another himself herself themselves itself nearly almost both either neither once twice six seven eight nine ten twenty thirty forty ' +
     'fifty sixty ninety hundred half too getting member members whole you your yours yourself we our ours us me my mine myself don doesn didn isn won aren ' +
-    'let here per minute minutes second seconds hour hours tonight today tomorrow morning afternoon evening monday tuesday wednesday thursday friday').split(' ')
+    'let here per minute minutes second seconds hour hours tonight today tomorrow morning afternoon evening monday tuesday wednesday thursday friday are move moves').split(' ')
     .forEach(function (w) { STOPW[w] = 1; });
   var SETTING = /^(?:in|at|on|when|whenever|before|after|once|within|during|this|the|tonight|today|tomorrow|with|every|each|next|by|if|as|from|over|until|while|for)\b/i;
   var TAKES = /^(?:under |about |up to )?(?:a|an|one|two|three|four|five|six|seven|eight|nine|ten|fifteen|twenty|thirty|forty|sixty|ninety|\d+) (?:minutes?|seconds?|hours?)\b/i;
-  var MIN_TIE = 0.10, MIN_WORDS = 2, ELSEWHERE = 0.29, SAME_MOVE = 0.2;
+  var MIN_TIE = 0.10, MIN_WORDS = 2, ELSEWHERE = 0.35, SAME_MOVE = 0.2;
   function fold(s) { return String(s == null ? '' : s).normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
   // light stemming: plurals, -ed, -ing, -ly, a doubled last letter and a final e, so the forms of a word meet
   function stem(w) {
     if (w.length <= 3) return w;
     if (/i(?:es|ed)$/.test(w) && w.length > 4) w = w.slice(0, -3) + 'y';
-    else if (/eed$/.test(w)) w = w.slice(0, -1);
     else if (/s$/.test(w) && !/(?:ss|us|is)$/.test(w)) w = w.slice(0, -1);
     if (/ing$/.test(w) && w.length > 5) w = w.slice(0, -3);
     else if (/ed$/.test(w) && w.length > 4) w = w.slice(0, -2);
@@ -450,26 +455,31 @@
   var mcache = typeof WeakMap === 'function' ? new WeakMap() : null;
   function moveVectors(lib) {
     var c = mcache ? mcache.get(lib) : lib._mv; if (c) return c;
-    var N = lib.stories.length, df = {}, docs = {}, forms = {}, boil = {};
+    var N = lib.stories.length, df = {}, docs = {}, forms = {}, boil = {}, mdocs = {}, mdf = {}, own = {};
     lib.situations.forEach(function (st) { var b = {}; plain([st.chip, st.line, st.member_line, st.key.replace(/-/g, ' ')].join(' ')).forEach(function (w) { b[w] = 1; }); boil[st.key] = b; });
     lib.stories.forEach(function (s) {
       var drop = {}; plain((lib.icon[s.icon] || {}).name).forEach(function (w) { drop[w] = 1; });
       s.keys.forEach(function (k) { Object.keys(boil[k] || {}).forEach(function (w) { drop[w] = 1; }); });
-      var d = [];
-      (s.move_examples || []).forEach(function (m) { d = d.concat(toks(action(m), drop)); });
+      var d = [], dm = [], o = own[s.id] = {};
+      (s.move_examples || []).forEach(function (m) { var t = toks(action(m), drop); d = d.concat(t); dm = dm.concat(t); });
       (s.line_examples || []).forEach(function (l) { d = d.concat(toks(said(l), drop)); });
-      docs[s.id] = d.map(function (t) { var f = forms[t[0]] = forms[t[0]] || {}; f[t[1]] = (f[t[1]] || 0) + 1; return t[0]; });
+      docs[s.id] = d.map(function (t) { var f = forms[t[0]] = forms[t[0]] || {}; f[t[1]] = (f[t[1]] || 0) + 1; if (!o[t[0]]) o[t[0]] = t[1]; return t[0]; });
+      mdocs[s.id] = dm.map(function (t) { return t[0]; });
       var seen = {}; docs[s.id].forEach(function (w) { if (!seen[w]) { seen[w] = 1; df[w] = (df[w] || 0) + 1; } });
+      var mseen = {}; mdocs[s.id].forEach(function (w) { if (!mseen[w]) { mseen[w] = 1; mdf[w] = (mdf[w] || 0) + 1; } });
     });
-    var vec = {}, form = {};
-    lib.stories.forEach(function (s) {
-      var tf = {}, v = {}, n = 0; docs[s.id].forEach(function (w) { tf[w] = (tf[w] || 0) + 1; });
-      Object.keys(tf).forEach(function (w) { if (df[w] < 2 || df[w] > N * 0.15) return; v[w] = (1 + Math.log(tf[w])) * Math.log(N / df[w]); n += v[w] * v[w]; });
-      n = Math.sqrt(n) || 1; Object.keys(v).forEach(function (w) { v[w] /= n; }); vec[s.id] = v;
-    });
+    var tfidf = function (doc, dfx) {
+      var tf = {}, v = {}, n = 0; doc.forEach(function (w) { tf[w] = (tf[w] || 0) + 1; });
+      Object.keys(tf).forEach(function (w) { if (dfx[w] < 2 || dfx[w] > N * 0.15) return; v[w] = (1 + Math.log(tf[w])) * Math.log(N / dfx[w]); n += v[w] * v[w]; });
+      n = Math.sqrt(n) || 1; Object.keys(v).forEach(function (w) { v[w] /= n; }); return v;
+    };
+    // the move and its line join a family; the same move in another week is judged on the moves alone, where a
+    // chance word in a line ("table", "joke") cannot carry two stories together
+    var vec = {}, mvec = {}, form = {};
+    lib.stories.forEach(function (s) { vec[s.id] = tfidf(docs[s.id], df); mvec[s.id] = tfidf(mdocs[s.id], mdf); });
     // a stem reads as the form the corpus uses most
     Object.keys(forms).forEach(function (k) { form[k] = Object.keys(forms[k]).sort(function (x, y) { return forms[k][y] - forms[k][x] || x.length - y.length || (x < y ? -1 : 1); })[0]; });
-    c = { vec: vec, form: form, df: df, fam: {}, away: {} };
+    c = { vec: vec, mvec: mvec, form: form, own: own, df: df, fam: {}, away: {} };
     if (mcache) mcache.set(lib, c); else lib._mv = c;
     return c;
   }
@@ -478,18 +488,21 @@
     a = sid(a); b = sid(b);
     var V = moveVectors(lib), x = V.vec[a], y = V.vec[b]; if (!x || !y || a === b) return null;
     var st = common(x, y); if (!st.length) return null;
-    return { w: dot(x, y), words: st.map(function (k) { return V.form[k]; }), stems: st };
+    var oa = V.own[a] || {}, ob = V.own[b] || {};
+    return { w: dot(x, y), words: st.map(function (k) { return oa[k] && oa[k] === ob[k] ? oa[k] : oa[k] || ob[k] || V.form[k]; }), stems: st };
   }
   // the move in the corpus's words, one clause: the clause that carries most of the weight in want ({ stem: w })
+  var FRAGMENT = /^(?:with|in|at|on|by|for|from|to|which|each|whose|where|when|until|before|after|without|than|as)\b/i;
   function clauses(t) {
     var cs = String(t).replace(/[.?!]+$/, '').split(/,\s+|;\s+|[.?!]\s+|\s+[—–]\s+/)
-      .map(function (c) { return c.replace(/^(?:and|then|but|so|or)\s+/i, '').trim(); }).filter(function (c) { return c.split(/\s+/).length >= 3; });
+      .map(function (c) { return c.replace(/^(?:and|then|but|so|or)\s+/i, '').trim(); }).filter(function (c) { return c.split(/\s+/).length >= 3 && !FRAGMENT.test(c); });
     return cs.length ? cs : [String(t).replace(/[.?!]+$/, '')];
   }
   function moveClause(lib, id, want) {
     var s = lib.story[sid(id)], best = null; if (!s) return null; want = want || {};
-    (s.move_examples || []).forEach(function (m) { clauses(action(m)).forEach(function (c) {
+    (s.move_examples || []).forEach(function (m) { clauses(action(m)).forEach(function (c, ci) {
       var seen = {}, sc = 0; toks(c, {}).forEach(function (t) { if (want[t[0]] && !seen[t[0]]) { seen[t[0]] = 1; sc += want[t[0]]; } });
+      if (ci === 0) sc *= 1.15;   // the clause that opens the move says it best, all else near equal
       if (!best || sc > best.sc + 1e-12) best = { sc: sc, text: c.charAt(0).toUpperCase() + c.slice(1) };
     }); });
     return best;
@@ -504,6 +517,7 @@
   // Within one situation: each story's two nearest moves from other lives. A tie needs the two to choose each other,
   // a cosine of 0.10 and two shared words at least; a family is what the ties join. The hub has the most ties.
   function moveFamilies(lib, key) {
+    if (lib.sit[key]) key = lib.sit[key].key;   // "E1" reads as its situation
     var V = moveVectors(lib); if (V.fam[key]) return V.fam[key];
     var ids = (lib.byKey[key] || []).filter(function (id) { return lib.story[id]; }), top = {}, yr = byYearId(lib);
     ids.forEach(function (a) {
@@ -537,14 +551,14 @@
   // The same move in another week: the nearest move in the corpus from a story that shares no situation and no life.
   function sameMoveElsewhere(lib, id) {
     id = sid(id); var V = moveVectors(lib); if (Object.prototype.hasOwnProperty.call(V.away, id)) return V.away[id];
-    var s = lib.story[id], x = V.vec[id], best = null; if (!s || !x) return null;
+    var s = lib.story[id], xm = V.mvec[id], best = null; if (!s || !xm) return null;
     lib.stories.forEach(function (o) {
       if (o.icon === s.icon || o.keys.some(function (k) { return s.keys.indexOf(k) >= 0; })) return;
-      var y = V.vec[o.id], w = dot(x, y); if (w < ELSEWHERE || (best && (w < best.w - 1e-12 || (Math.abs(w - best.w) < 1e-12 && o.id > best.id)))) return;
-      if (common(x, y).length >= MIN_WORDS) best = { id: o.id, w: w };
+      var y = V.mvec[o.id], w = dot(xm, y); if (w < ELSEWHERE || (best && (w < best.w - 1e-12 || (Math.abs(w - best.w) < 1e-12 && o.id > best.id)))) return;
+      if (common(xm, y).length >= MIN_WORDS) best = { id: o.id, w: w };
     });
-    var t = best && moveTie(lib, id, best.id);
-    return (V.away[id] = t ? { story: lib.story[best.id], w: t.w, words: t.words } : null);
+    var oa = V.own[id] || {}, ob = best ? V.own[best.id] || {} : {};
+    return (V.away[id] = best ? { story: lib.story[best.id], w: best.w, words: common(xm, V.mvec[best.id]).map(function (k) { return oa[k] && oa[k] === ob[k] ? oa[k] : oa[k] || ob[k] || V.form[k]; }) } : null);
   }
   // A reason in a sentence: "The same move: write the one sentence you want repeated in the corridor afterwards".
   // The move is the hub's when the two share a family, else whichever of the two says the shared words most.

@@ -5,7 +5,7 @@
       "n": 1, "m": "sarah", "shape": "a scene: the rival in the room, at the up19 event (reorg, Thu 22 Oct)",
       "t": "Sarah announces the reorg to the whole group on Thursday, and Dan, who wanted her job, will be in the front row.",
       "q": { "m": "sarah", "sit": "E1+A2", "to": "rival", "room": "team", "cue": "rival" },
-      "lead": { "ready": "st-michelle-obama-2016-go-high", "readyReason": "Sarah’s reserve hero", "readyRoute": "For Sarah: one step from Barack Obama." },
+      "lead": { "ready": "st-michelle-obama-2016-go-high", "readyReason": "Sarah’s reserve hero", "readyRoute": "For Sarah: one step from Obama." },
       "unread": ["Dan"]
     },
     {

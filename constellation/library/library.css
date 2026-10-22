@@ -646,6 +646,8 @@ details.readas[open] > summary .change { display: none; }
 .leadcard h3 a { color: inherit; text-decoration: none; display: inline-block; padding: 6px 0; }
 .leadcard h3 a:hover { color: var(--pru); }
 .leadcard .meta { margin: 0; }
+/* the route a lead takes to the member is a plain meta line: .route is the path page's bordered box */
+.leadcard .leadroute { margin: 0; color: var(--mute); }
 @media (max-width: 640px) { .lead2 { grid-template-columns: 1fr; } }
 .saidline { margin: 10px 0 0; font: italic 400 16px/1.5 var(--serif); color: var(--ink); }
 .leadcard .saidline { margin: 0; }

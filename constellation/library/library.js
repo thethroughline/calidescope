@@ -80,6 +80,8 @@
         reserve: m.heroes_icons.reserve, sits: m.sits || [] };
     }
     layout(); chrome(); route();
+    // the move vectors take a tenth of a second to build: built while the reader looks at the first page
+    (window.requestIdleCallback || function (f) { setTimeout(f, 300); })(function () { if (window.CLN && CLN.moveVectors) CLN.moveVectors(lib); });
     window.addEventListener('hashchange', route);
     if (EMBED) window.addEventListener('message', function (e) {
       if (e.source !== window.parent || e.origin !== location.origin || !e.data || e.data.type !== 'cl:back') return;
@@ -133,7 +135,10 @@
     main.addEventListener('keydown', function (e) {
       var li = (e.key === 'ArrowDown' || e.key === 'ArrowUp') && e.target.closest && e.target.closest('.mf-row'); if (!li) return;
       var nx = e.key === 'ArrowDown' ? li.nextElementSibling : li.previousElementSibling, el = nx && nx.querySelector(e.target.classList.contains('mf-j') ? '.mf-j' : '.mf-a');
-      if (el) { e.preventDefault(); el.focus(); }
+      if (!el) return;
+      // one tab stop per card: the row the reader is on takes Tab, the others wait for the arrow keys
+      e.preventDefault(); li.querySelectorAll('.mf-a, .mf-j').forEach(function (x) { x.setAttribute('tabindex', '-1'); });
+      nx.querySelectorAll('.mf-a, .mf-j').forEach(function (x) { x.removeAttribute('tabindex'); }); el.focus();
     });
     main.addEventListener('keydown', function (e) { if (e.target.id === 'askq' && e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('askform').requestSubmit(); } });
     main.addEventListener('submit', function (e) {
@@ -719,7 +724,7 @@
         (c.pattern ? '<p class="pat" style="font:italic 400 var(--t-body)/1.5 var(--serif);color:var(--mute);margin:6px 0 0">“' + esc(c.pattern) + '”</p>' : '') + (mv ? '<p class="mv"><b>The move it suggests.</b> ' + esc(mv) + '</p>' : '') + '</div>'; };
     var A = lib.icon[s.icon], B = lib.icon[o.icon];
     // and every quieter way through the same week, for a story met head on
-    var st0 = lib.sitByKey[s.keys[0]], qq = st0 && s.directness !== 'indirect' ? { than: s.icon, sit: st0.id } : null, nq = qq ? CLQ.answer(lib, qq).total : 0;
+    var st0 = lib.sitByKey[s.keys[0]], qq = st0 && s.directness !== 'indirect' ? { than: s.icon, sit: st0.id } : null, nq = qq ? CLQ.answer(lib, qq, { limit: 1, routes: false }).total : 0;
     return sec('The other way', '<p class="note" style="margin:-6px 0 14px">' + esc(A.name) + ' made ' + (s.directness === 'indirect' ? 'an ' : 'a ') + esc(CLC.DIR_WORD[s.directness]) + ' move; ' + esc(B.name) + ' ' + (o.directness === 'indirect' ? 'an ' : 'a ') + esc(CLC.DIR_WORD[o.directness]) + ' one.</p><div class="pair">' + side(s) + side(o) + '</div>' +
       (nq ? '<p style="margin-top:14px">' + tlink(askUrl(qq), 'Same week, a quieter way: ' + n(nq, 'story', 'stories')) + '</p>' : ''));
   }
@@ -832,7 +837,7 @@
     // the grid of how directly and how near is the coach's tool, folded
     if (AS === 'coach') h += '<section><details class="more"><summary>Every story of this week, quieter or closer</summary><div id="sitplot">' + gridHTML(s.key, null) + '</div></details></section>';
     // every story as a card, folded: the families above already list each one
-    h += '<section id="cards"><details class="more"' + (f !== 'all' ? ' open' : '') + '><summary>' + esc('All ' + n(s.stories.length, 'story', 'stories') + ' as cards') + '</summary>' +
+    h += '<section id="cards"><details class="more"' + (f !== 'all' || qs.get('at') === 'cards' ? ' open' : '') + '><summary>' + esc('All ' + n(s.stories.length, 'story', 'stories') + ' as cards') + '</summary>' +
       '<div class="row" style="margin-bottom:16px">' + seg('all', 'All') + seg('near', 'Near and mid') + seg('checked', 'Checked') + '</div>' +
       (stories.length ? '<div class="grid">' + stories.map(function (x) { return storyCard(CLC.storyCard(lib, x)); }).join('') + '</div>' : '<p class="empty">Nothing matches that filter yet.</p>') + '</details></section>';
     if (AS === 'coach') {
@@ -879,11 +884,12 @@
   function famRow(id, f, i, r) {
     var s = lib.story[id], I = lib.icon[s.icon], jid = 'mj' + i + '-' + r;
     var joins = f.ties.filter(function (t) { return t.a === id || t.b === id; }).map(function (t) {
-      return 'Joined to ' + lib.icon[lib.story[t.a === id ? t.b : t.a].icon].name + ': both moves use ' + andList(t.words.slice(0, 3)) + '.';
+      return 'Joined to ' + lib.icon[lib.story[t.a === id ? t.b : t.a].icon].name + ': both use ' + andList(t.words.slice(0, 3)) + '.';
     });
-    return '<li class="mf-row' + (id === f.hub ? ' hub' : '') + '" data-id="' + esc(id) + '"><div class="mf-line"><a class="mf-a" href="' + H.story(id) + '"><span class="nm">' + esc(I.name) + '</span>' +
+    var ti = r === 0 ? '' : ' tabindex="-1"';
+    return '<li class="mf-row' + (id === f.hub ? ' hub' : '') + '" data-id="' + esc(id) + '"><div class="mf-line"><a class="mf-a" href="' + H.story(id) + '"' + ti + '><span class="nm">' + esc(I.name) + '</span>' +
       '<span class="pl">' + esc(placeLine(s)) + (s.verified ? '' : ' · <span class="dr">Recall draft</span>') + '</span></a>' +
-      '<button class="mf-j" type="button" data-act="mjoin" aria-expanded="false" aria-controls="' + jid + '">Joined<span class="sr"> · how ' + esc(I.name) + '’s move meets the others</span></button></div>' +
+      '<button class="mf-j" type="button" data-act="mjoin" aria-expanded="false" aria-controls="' + jid + '"' + ti + '>Joined<span class="sr"> · how ' + esc(I.name) + '’s move meets the others</span></button></div>' +
       '<p class="mf-why" id="' + jid + '" hidden>' + esc(joins.join(' ')) + '</p></li>';
   }
   function famCard(f, i, key) {
@@ -974,7 +980,7 @@
       return '<div class="leadcard ' + kind + '"><p class="label">' + (ready ? 'Ready to send' : 'One check from sending') + '</p>' +
         '<h3><a href="' + H.story(c.id) + '">' + esc(c.name + ' \u00b7 ' + (c.place || yl(c.year))) + '</a></h3>' +
         '<p class="meta">' + esc(ready ? it.reasons.filter(function (r) { return r.type !== 'line' && r.type !== 'move'; }).map(rtext).slice(0, 2).join(' \u00b7 ') : 'Source: ' + (it.source || 'not given')) + '</p>' +
-        (it.route ? '<p class="meta route">' + esc(it.route) + '</p>' : '') +
+        (it.route ? '<p class="meta leadroute">' + esc(it.route) + '</p>' : '') +
         (it.reasons.some(function (r) { return r.type === 'line'; }) ? '<p class="saidline">' + esc(it.reasons.filter(function (r) { return r.type === 'line'; })[0].text) + '</p>' : '') + act + '</div>';
     };
     return '<div class="lead2' + (a.ready && a.oneCheck ? '' : ' one') + '">' + (a.ready ? card(a.ready, 'ready') : '') + (a.oneCheck ? card(a.oneCheck, 'check') : '') + '</div>';
@@ -1042,7 +1048,7 @@
       return { title: 'Ask', html: h };
     }
     var rd2 = q.t ? CLQ.read(lib, q.t, { m: q.m }) : { alts: [], unused: [] };
-    var a = CLQ.answer(lib, q, { limit: 30 });
+    var a = CLQ.answer(lib, q, { limit: 30, as: AS });
     var chipsH = a.chips.filter(function (c) { return !(AS === 'member' && c.k === 'm'); }).map(function (c) {
       var to = askUrl(CLQ.drop(q, c.k, c.v));
       return '<a class="qchip' + (c.kind ? ' ' + c.kind : '') + '" href="' + esc(to) + '" title="Take this away">' + esc(you(c.label)) + '<i class="ph ph-x" aria-hidden="true"></i><span class="sr">, take this away</span></a>';
@@ -1325,7 +1331,7 @@
       // and the first three stories
       var M0 = lib.members[id], upL = M0.up19 ? String(M0.up19.label).split(' \u00b7 ').slice(1).join(' \u00b7 ') : '';
       var rq = upL ? CLQ.read(lib, upL, { m: id }).q : {}; if (!CLQ.isQuery(rq) && M0.up19) rq = { sit: M0.up19.sit, m: id };
-      rq.m = id; var pa = CLQ.answer(lib, rq, { limit: 3 });
+      rq.m = id; var pa = CLQ.answer(lib, rq, { limit: 3, as: AS });
       h += sec('What is ' + esc(m.first) + ' facing this week?', askForm({ t: upL }, 'What is ' + m.first + ' facing?').replace('<form id="askform"', '<form id="askform" data-m="' + esc(id) + '"') +
         (pa.total ? leadHTML(pa, M0) + (pa.items.length ? '<div class="grid answers" style="margin-top:14px">' + pa.items.map(answerCard).join('') + '</div>' : '') +
           '<p style="margin-top:12px"><a class="btn sm" href="' + esc(askUrl(rq)) + '">All ' + pa.total + ' stories for this</a></p>' : ''));

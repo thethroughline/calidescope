@@ -43,7 +43,9 @@
     B6: ['expert', 'never invite', 'not in the room', 'steer around', 'after the strategy', 'room that decides', 'left out', 'heard', 'talked over', 'talks over', 'talk over', 'interrupt'],
     C1: ['selling', 'sell', 'pitch', 'new clients', 'win work', 'find my own work', 'business development', 'bring in'],
     C2: ["firm's name", 'own name', 'stood on', 'stand on', 'knows the firm', 'by name', 'name on the door', 'for the agency', 'the firm, not'],
-    C3: ['steering committee', 'none of them report', 'not report to', "don't report", "doesn't report", 'no authority', 'other departments', 'stakeholders', 'before the meeting', 'do not control', "don't control", 'coalition'],
+    // a committee or board asked to back, support or approve is the coalition, whatever room it sits in
+    C3: ['steering committee', 'none of them report', 'not report to', "don't report", "doesn't report", 'no authority', 'other departments', 'stakeholders', 'before the meeting', 'do not control', "don't control", 'coalition',
+      /\b(?:need|get|win|bring|want|persuad|convinc)[a-z]*(?: the| her| his| their| our| my)? (?:committee|board|steering group)\b|\b(?:committee|board|steering group)(?:'s)? (?:to )?(?:back|support|approv|sign)[a-z]*/],
     D1: ['hundred', 'offices', 'only see', 'two levels down', 'skip-level', "can't see", 'more people than'],
     D2: ['delegate to', 'no one to', 'bench', 'people left', 'moved to another', 'grow people', 'without a bench'],
     D3: ['old job', 'let go of', 'old clients', 'on top of', 'still doing', 'still review', 'still answer', 'still write', 'still rewrit', 'rewrites every', 'rewrit', 'still do the', 'shut down', 'stop the', 'stopped work'],
@@ -55,9 +57,10 @@
   };
   var CUE_WEIGHT = 0.15;   // tuned on the panel's held-out questions: it keeps every fresh score and lifts the rest
   // Words that name one domain read as that domain ("a creator" is the creators, a small part of advertising and
-  // media). They are read before the fields, so "journalists" is the press and "media" is the whole field.
+  // media). They are read before the fields, so "journalists" is the press and "media" is the whole field. The fourth
+  // place keeps a domain narrow however few it holds: for a member who follows creators a newspaper editor is no answer
   var DOMAIN_WORDS = [
-    ['influencer', /\b(creators?|content creators?|influencers?|youtubers?)\b/, 'From creators'],
+    ['influencer', /\b(creators?|content creators?|influencers?|youtubers?)\b/, 'From creators', true],
     ['agency', /\b(advertising|ad agenc\w*|admen)\b/, 'From advertising'],
     ['media', /\b(journalis\w*|reporters?|newspapers?|editors?)\b/, 'From journalism and the press'],
     ['marketing', /\b(marketing|marketers?)\b/, 'From marketing'],
@@ -67,9 +70,14 @@
     ['architecture', /\b(architects?)\b/, 'From architecture'],
     ['design', /\b(designers?|fashion)\b/, 'From fashion and design'],
     ['banking', /\b(bankers?|banking)\b/, 'From banking'],
-    ['military', /\b(military|soldiers?|army|generals|(?:a|the) general(?! (?:counsel|manager|partner|election|meeting|secretary)))\b/, 'From the military']
+    // a general is a person ("a general who…", "generals"): "a general sense" and "in general" are no army
+    ['military', /\b(military|soldiers?|army|generals|(?:a|the) general(?=\s+(?:who|in|from|at|during)\b))\b/, 'From the military']
   ];
-  var DOMAIN_LABEL = {}; DOMAIN_WORDS.forEach(function (d) { DOMAIN_LABEL[d[0]] = d[2]; });
+  // a domain with fewer stories than this, under the rest of the question, widens to its field ("a marketer")
+  var DOMAIN_MIN = 3;
+  var DOMAIN_LABEL = {}, DOMAIN_NARROW = {}; DOMAIN_WORDS.forEach(function (d) { DOMAIN_LABEL[d[0]] = d[2]; if (d[3]) DOMAIN_NARROW[d[0]] = 1; });
+  // the field a domain sits in, as the corpus files its lives (marketing is in advertising and media)
+  function fieldOf(lib, domain) { var i = lib.icons.filter(function (x) { return x.domain === domain && x.field; })[0]; return i ? i.field : null; }
   var FIELD_WORDS = [
     ['law', /\b(law|lawyers?|legal|a judge|judges|attorneys?|barristers?|solicitors?|courts?)\b/],
     ['business', /\b(business|bankers?|banking|finance|financiers?|investors?|ceos?|companies|company|chief executives?)\b/],
@@ -93,12 +101,34 @@
     predecessor: { heading: 'with a predecessor', ask: /predecessor|before me|still in the building|founder/, scene: /predecessor|took over from|founder|succeeded/i, label: 'a predecessor' },
     forced: { ask: /fired|sacked|forced out|pushed out|let go of me/, scene: /\bfired\b|dismissed|sacked|ousted|forced out/i, label: 'being forced out', heading: 'where someone was forced out' },
     first: { heading: 'where someone was the first', ask: /first woman|only woman|first black|only black/, scene: /first wom[ae]n|only wom[ae]n|first black|first african/i, label: 'being the first' },
-    // after it went badly: the meeting, the vote, the pitch. Being talked over is B6's own words, so it stays there
-    setback: { heading: 'after it went badly', label: 'a setback',
-      ask: /\b(?:(?:after )?(?:the|that|this|her|his|their|my|our) (?:meeting|review|presentation|call|session|pitch) (?:went badly|went wrong|did not go well|didn't go well|fell flat)|went badly|went wrong|gone wrong|did not go well|didn't go well|fell flat|a setback|setback|turned down|voted down|lost (?:the |a |an |our |her |his |their )?(?:[a-z']+ )?(?:vote|pitch|room|argument|deal|account|client|case|bid|fight|election|match|contract))\b/,
-      scene: /\b(lost|losing|defeat\w*|failed|humiliat\w*|rejected|booed|walked out|voted down|went badly|setback|beaten)\b/i },
+    // after it went badly: the meeting, the vote, the pitch. Being talked over is B6's own words, so it stays there.
+    // Turning something down is a choice; being turned down, or having a plan turned down, is the setback. A scene
+    // is the person's own loss (own), never the day they won, and one that says lost, failed or went badly comes first
+    setback: { heading: 'after it went badly', label: 'a setback', own: true,
+      ask: /\b(?:(?:after )?(?:the|that|this|her|his|their|my|our) (?:meeting|review|presentation|call|session|pitch) (?:went badly|went wrong|did not go well|didn't go well|fell flat)|went badly|went wrong|gone wrong|did not go well|didn't go well|fell flat|a setback|setback|(?:was|were|got|been|being|is|are|get) turned down|turned (?:her|him|me|us|them|it) down|turned down (?:the |her |his |their |my |our |a |an )?(?:[a-z']+ )?(?:plan|proposal|pitch|bid|idea|request|application|budget|case|appeal|motion|roadmap)|voted down|lost (?:the |a |an |our |her |his |their )?(?:[a-z']+ )?(?:vote|pitch|room|argument|deal|account|client|case|bid|fight|election|match|contract))\b/,
+      scene: /\b(lost|losing|defeat\w*|failed|humiliat\w*|rejected|booed|walked out|voted down|went badly|setback|beaten)\b/i,
+      strong: /\b(lost|defeat\w*|failed|went badly|voted down|setback)\b/i },
     writing: { heading: 'where it was put in writing', ask: /in writing|a letter|a memo|an email/, scene: /\bletter\b|\bmemo\b|wrote to/i, label: 'putting it in writing' }
   };
+  // The sentence of a story's moment that sets it in a scene, and how strongly: 2 when it says the scene's strong
+  // words, 1 when only its looser ones, else none. Read once per story and scene.
+  function sceneOf(lib, s, k) {
+    var c = s._scene || (s._scene = {}); if (c[k] !== undefined) return c[k];
+    var S = SCENE[k], best = null;
+    if (S && S.scene.test(s.moment)) CLC.sentences(s.moment).forEach(function (x) {
+      if (!S.scene.test(x) || (S.own && wonIn(lib, s, x))) return;
+      var w = S.strong && !S.strong.test(x) ? 1 : 2; if (!best || w > best.w) best = { w: w, line: x };
+    });
+    return (c[k] = best);
+  }
+  // a loss in the sentence that is somebody else's, to this person: "he had beaten Hillary Clinton", "Then Margaret
+  // Court accepted, and lost" (to Billie Jean King). A loss said of the person, or of their side, stays theirs
+  function wonIn(lib, s, x) {
+    if (/\b(?:beaten|beat|defeated|outvoted|outplayed)\s+(?:the\s+)?[A-Z]/.test(x) && !/\b(?:was|were|been|being|is|are)\s+(?:beaten|beat|defeated|outvoted)/.test(x)) return true;
+    var who = /^(?:(?:Then|And|But|When|After|So),?\s+)?([A-Z][a-z'’-]+(?:\s+[A-Z][a-z'’-]+)+)\b[^.;]*?\b(?:lost|failed|was defeated)\b/.exec(x); if (!who) return false;
+    var mine = fold((lib.icon[s.icon] || {}).name || '').split(/[^a-z]+/);
+    return !fold(who[1]).split(/[^a-z]+/).some(function (w) { return w.length > 2 && mine.indexOf(w) >= 0; });
+  }
   // Who a story's line is said to ("To the colleague who wanted the job: …"), in seven kinds of person, and the
   // words in a question that name one. On a story's line the first kind in this order wins; in a question the
   // person named first does ("her team sends to the client" is said to the team).
@@ -123,6 +153,8 @@
     }).filter(Boolean));
   }
   var WHO_STOP = /^(your|their|that|this|with|from|have|been|will|when|what|team|person|someone|people|colleague|the|who|and)$/;
+  // a capital after "say to" that is no person: a word that opens a phrase, a day, a month
+  var NOT_A_NAME = /^(?:The|My|Her|His|Their|Your|Our|A|An|This|That|Them|Him|Everyone|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|January|February|March|April|May|June|July|August|September|October|November|December)$/;
   function sharesWord(who, text) {
     var t = ' ' + fold(text) + ' ';
     return fold(who).split(/[^a-z']+/).some(function (w) { return w.length >= 4 && !WHO_STOP.test(w) && t.indexOf(' ' + w.replace(/s$/, '')) >= 0; });
@@ -188,6 +220,8 @@
   function esc(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
 
   // ---------- the situation, proposed ----------
+  // a cue as a pattern: a phrase, read from a word's start, or a pattern written out where a phrase cannot say it
+  function cueRe(c, flags) { return c instanceof RegExp ? new RegExp(c.source, flags || '') : new RegExp('\\b' + esc(c).replace(/'/g, "'?"), flags || ''); }
   // core's reading (the question's words against each situation's stories and sayings) plus the cue phrases.
   function situationScores(lib, text, M) {
     var sc = {}, low = ' ' + fold(text).replace(/[^a-z0-9' ]+/g, ' ') + ' ';
@@ -195,7 +229,7 @@
     CLC.interpret(lib, text, lib.situations.length).forEach(function (x) { sc[x.sit.id] = x.score; });
     var strong = {};
     Object.keys(CUES).forEach(function (id) {
-      CUES[id].forEach(function (c) { if (new RegExp('\\b' + esc(c).replace(/'/g, "'?")).test(low)) { sc[id] += CUE_WEIGHT; if (/ /.test(c)) strong[id] = 1; } });
+      CUES[id].forEach(function (c) { if (cueRe(c).test(low)) { sc[id] += CUE_WEIGHT; if (typeof c !== 'string' || / /.test(c)) strong[id] = 1; } });
     });
     if (M && M.sits) M.sits.forEach(function (id) { if (sc[id] > 0) sc[id] += 0.04; });   // a tie goes to the member's own
     // a phrase people use for a situation ("argued against", "talked over") outranks a reading of loose words;
@@ -209,7 +243,16 @@
   // does a phrase say one of the situations' cues? ("announcing the reorg" says E1's "announc")
   function isCue(phrase) {
     var low = ' ' + phrase + ' ';
-    return Object.keys(CUES).some(function (id) { return CUES[id].some(function (c) { return new RegExp('\\b' + esc(c).replace(/'/g, "'?")).test(low); }); });
+    return Object.keys(CUES).some(function (id) { return CUES[id].some(function (c) { return cueRe(c).test(low); }); });
+  }
+  // does a cue in the question run through these characters? "needs the committee to back" is C3, so its committee
+  // stays in the words the situation is read from
+  function inCue(text, at, end) {
+    return Object.keys(CUES).some(function (id) { return CUES[id].some(function (c) {
+      var re = cueRe(c, 'g'), m;
+      while ((m = re.exec(text))) { if (m.index < end && m.index + m[0].length > at) return true; if (!m[0].length) re.lastIndex++; }
+      return false;
+    }); });
   }
 
   // ---------- reading a question ----------
@@ -238,15 +281,34 @@
     if (take(/\b(a woman|women|female|herself)\b/g)) q.sex = 'f';
     else if (take(/\b(a man|men|male|himself)\b/g)) q.sex = 'm';
     // the room's words are read, so they leave the words the situation is read from, unless a situation's own
-    // cue says them too ("pitch" is C1, "steering committee" C3, "announcing" E1): "Sarah's group meeting" is a
-    // room, and no longer reads as C3's meeting
-    ROOM.forEach(function (r) { var m = !q.room && ft.match(r[3]); if (!m) return; q.room = r[0]; mark(m[0]); if (!isCue(m[0])) take(words(m[0])); });
-    // the morning after the announcement, or a line said to a named person, is a one-to-one, whatever room came before it
-    var after = ft.match(/\b(?:morning|day) after\b/);
-    if ((after || /\bsay to (?!The\b|My\b|Her\b|His\b|Their\b)[A-Z][a-z]+/.test(text)) && (!q.room || (q.room === 'team' && !/offsite|town hall|all.hands/.test(ft)))) { q.room = 'one'; if (after) mark(after[0]); }
-    // the person named first is the one the line is said to ("her team sends to the client" is said to the team)
-    var toAt = TO.map(function (t, i) { var m = ft.match(t[3]); return m ? { k: t[0], at: m.index, w: m[0], i: i } : null; }).filter(Boolean)
-      .sort(function (a, b) { return a.at - b.at || a.i - b.i; })[0];
+    // cue says them too ("pitch" is C1, "steering committee" C3, "announcing" E1, "needs the committee to back"
+    // C3): "Sarah's group meeting" is a room, and no longer reads as C3's meeting
+    var roomAt = null;
+    ROOM.forEach(function (r) {
+      var m = !q.room && ft.match(r[3]); if (!m) return; q.room = r[0]; roomAt = { at: m.index, end: m.index + m[0].length }; mark(m[0]);
+      if (!isCue(m[0]) && !inCue(ft, roomAt.at, roomAt.end)) take(words(m[0]));
+    });
+    // the morning after the announcement, or a line said to a named person, is a one-to-one when the only room read
+    // is the team an announcement implies. A room named outright stays ("say to Dan at the team meeting"), and a day
+    // or a month is nobody ("say to Thursday's group")
+    var after = ft.match(/\b(?:morning|day) after\b/), named = /\b(?:[Ss]ay|said|says|saying)(?: it)? to ([A-Z][a-z]+)|\b[Tt]ell ([A-Z][a-z]+)/.exec(text);
+    named = named && !NOT_A_NAME.test(named[1] || named[2]);
+    var outright = ROOM.some(function (r) { return (ft.match(g(r[3])) || []).some(function (w) { return !/^announc/.test(w); }); });
+    // the morning after is the day after the room, so it moves any team room but the offsite's, as it always has
+    if ((after && (!q.room || (q.room === 'team' && !/offsite|town hall|all.hands/.test(ft)))) || (named && !outright)) { q.room = 'one'; roomAt = null; if (after) mark(after[0]); }
+    // the person the line is said to: the words after "say to" or "tell" first, else the person named first ("her team
+    // sends to the client" is said to the team); never a word of the room's own phrase ("at the team meeting")
+    var saidAt = [], sre = /\b(?:(?:say|said|says|saying)(?: it)? to|tell|tells|telling)\s+/g, sm;
+    while ((sm = sre.exec(ft))) saidAt.push(sm.index + sm[0].length);
+    var toAt = [];
+    TO.forEach(function (t, i) {
+      var re = g(t[3]), m;
+      while ((m = re.exec(ft))) {
+        if (roomAt && m.index < roomAt.end && m.index + m[0].length > roomAt.at) continue;
+        toAt.push({ k: t[0], at: m.index, w: m[0], i: i, said: saidAt.some(function (p) { return m.index >= p && m.index - p <= 24; }) });
+      }
+    });
+    toAt = toAt.sort(function (a, b) { return b.said - a.said || a.at - b.at || a.i - b.i; })[0];
     if (toAt) { q.to = toAt.k; mark(toAt.w); }
     take(/\bgeneral counsel\b/g);   // a person in the room, never a field: the line is said to them
     if (take(/\b(celebrit\w*|famous people|stars)\b/g)) q.nocel = 1;
@@ -277,7 +339,9 @@
     if (take(/\b(ordinary|everyday|close to home|near)\b/g)) q.reach = 'near';
     else if (take(/\b(big story|grand|epic)\b/g)) q.reach = 'far';
     if (take(/\b(send today|ready to send|checked|verified|can send)\b/g)) q.ok = 1;
-    if (take(/\b(a line|something to say|words to say|quotable|what to say|(?:can|could|should|to) say(?: to)?)\b/g)) q.line = 1;
+    // a line is asked for in words for it, or a saying verb with a person after it ("say to Dan", "what should she
+    // say"); "tends to say yes" is a habit, and asks for no line
+    if (take(/\b(a line|something to say|words to say|quotable|what to say|how to say|(?:can|could|should|might)(?:\s+(?!not\b|never\b)[a-z']+)?\s+(?:say|tell)(?:\s+to)?|say(?: it)? to(?=\s+[a-z]))\b/g)) q.line = 1;
     // a scene's words are read like a room's: "after the meeting went badly" is the scene, and its meeting is no C3
     Object.keys(SCENE).forEach(function (k) {
       var all = !q.cue && ft.match(g(SCENE[k].ask)); if (!all) return; q.cue = k;
@@ -299,7 +363,7 @@
       sits.forEach(function (id) {
         var key = lib.sit[id].key, low = fold(rest);
         rest.split(/[^a-z0-9']+/).forEach(function (w) { if (w && (sx[key][w] || 0) > 0.02) used[w] = 1; });
-        CUES[id].forEach(function (c) { var m = low.match(new RegExp('\\b' + esc(c) + "[a-z']*", 'g')); (m || []).forEach(function (h) { h.split(/\s+/).forEach(function (w) { used[w] = 1; }); }); });
+        CUES[id].forEach(function (c) { var m = low.match(c instanceof RegExp ? cueRe(c, 'g') : new RegExp('\\b' + esc(c) + "[a-z']*", 'g')); (m || []).forEach(function (h) { h.split(/\s+/).forEach(function (w) { if (w) used[w] = 1; }); }); });
       });
     }
     if (q.trait === 'too nice' && sits.indexOf('B3') < 0) alts.unshift('B3');
@@ -307,6 +371,12 @@
     if (q.trait === 'hides behind the firm' && !sits.length) sits = ['C2'];
     // with a member named and no situation read, the answer stays inside the member's own situations
     if (sits.length) q.sit = sits.join('+'); else if (M) q.mine = 1;
+    // a domain that leaves fewer than three stories here widens to the field it sits in, and the chip names the
+    // field: "a marketer" finds marketing's two stories, or none, where advertising and media holds a shelf
+    if (q.domain && !DOMAIN_NARROW[q.domain]) {
+      var n0 = filter(lib, facets(lib, q)).length, wide = fieldOf(lib, q.domain), q2 = Object.assign({}, q, { field: wide }); delete q2.domain;
+      if (n0 < DOMAIN_MIN && wide && filter(lib, facets(lib, q2)).length > n0) { q.field = wide; delete q.domain; }
+    }
     var closest = [];
     if (!sits.length && !M) closest = situationScores(lib, rest, null).slice(0, 3).map(function (o) { return o.id; });
     if (M && M.sits) M.sits.forEach(function (id) { if (sits.indexOf(id) < 0 && alts.indexOf(id) < 0) alts.push(id); });
@@ -328,16 +398,19 @@
       var s = lib.story[CLC.resolve(lib, x.ins.story)]; return s ? { icon: s.icon, story: s.id, day: 'Mon ' + weekDay(x.w) } : null;
     }).filter(Boolean);
   }
-  // what a member already has, said on its card: "Sarah had this on 12 Oct", or, for this week's and later weeks'
-  // pairings, "Paired with Sarah's week of 19 Oct"
-  function hadBy(lib, mid) {
+  // what a member already has, said on its card. A story sent before this week: "Sarah had this on 12 Oct", and it
+  // goes last (past). This week's chosen story, to a coach only (as): "Already chosen for Sarah's week of 19 Oct",
+  // where it stands. A later week's is the coach's plan, and no card tells it to anyone as had
+  function marks(lib, mid, as) {
     var M = memberOf(lib, mid), out = {}; if (!M) return out;
     (M.micro || []).forEach(function (x) {
       if (!x || !x.ins || !x.ins.story) return; var id = CLC.resolve(lib, x.ins.story); if (out[id]) return;
-      out[id] = x.w < CURRENT_W ? M.first + ' had this on ' + weekDay(x.w) : 'Paired with ' + M.first + '\u2019s week of ' + weekDay(x.w);
+      if (x.w < CURRENT_W) out[id] = { text: M.first + ' had this on ' + weekDay(x.w), past: true };
+      else if (x.w === CURRENT_W && as === 'coach') out[id] = { text: 'Already chosen for ' + M.first + '\u2019s week of ' + weekDay(x.w), past: false };
     });
     return out;
   }
+  function hadBy(lib, mid, as) { var m = marks(lib, mid, as), out = {}; Object.keys(m).forEach(function (id) { out[id] = m[id].text; }); return out; }
   // the stories a member has already been given (each week's pairing in the demo), which an answer leaves out of its lead
   function sentTo(lib, mid) {
     var M = memberOf(lib, mid); if (!M) return [];
@@ -351,7 +424,7 @@
     if (q.sit) q.sit.split('+').forEach(function (id) { if (lib.sit[id]) c.push({ k: 'sit', v: id, label: sitLabel(lib, id), kind: 'sit' }); });
     if (q.mine && M) c.push({ k: 'mine', label: 'In ' + M.first + '’s situations: ' + M.sits.join(', '), kind: 'sit' });
     if (q.sex) c.push({ k: 'sex', label: q.sex === 'f' ? 'A woman' : 'A man' });
-    if (q.field && FIELD_LABEL[q.field]) c.push({ k: 'field', label: 'From ' + FIELD_LABEL[q.field].toLowerCase() });
+    if (q.field && FIELD_LABEL[q.field]) c.push({ k: 'field', label: 'From ' + FIELD_LABEL[q.field].toLowerCase().replace(/ & /g, ' and ') });
     if (q.domain && DOMAIN_LABEL[q.domain]) c.push({ k: 'domain', label: DOMAIN_LABEL[q.domain] });
     if (q.nocel) c.push({ k: 'nocel', label: 'No sport, music, film or creators' });
     if (q.before && q.after) c.push({ k: 'era', label: 'Set between ' + q.after + ' and ' + (q.before - 1) });
@@ -401,7 +474,7 @@
     if (q.nothero && M) F.push({ k: 'nothero', t: function (s) { return heroesOf(M).indexOf(s.icon) < 0; } });
     if (q.line) F.push({ k: 'line', t: function (s) { return !!s.pattern || !!(s.line_examples && s.line_examples.length); } });
     // a scene asked for on its own ("who got fired") is the question: it filters; beside a situation it only ranks
-    if (q.cue && SCENE[q.cue] && !q.sit && !q.mine) F.push({ k: 'cue', t: function (s) { return SCENE[q.cue].scene.test(s.moment); } });
+    if (q.cue && SCENE[q.cue] && !q.sit && !q.mine) F.push({ k: 'cue', t: function (s) { return !!sceneOf(lib, s, q.cue); } });
     return F;
   }
   function filter(lib, F) { return lib.stories.filter(function (s) { return F.every(function (f) { return f.t(s); }); }); }
@@ -414,10 +487,8 @@
     s.keys.forEach(function (k) { var st = lib.sitByKey[k]; if (st && asked.indexOf(st.id) >= 0) r.push({ type: 'sit', text: st.chip || cap(DID[st.id]), code: st.id }); });
     var two = (q.sit || '').split('+').filter(function (id) { return lib.sit[id]; });
     if (two.length > 1 && two.every(function (id) { return s.keys.indexOf(lib.sit[id].key) >= 0; })) r.unshift({ type: 'sit', text: 'Carries both' });
-    if (q.cue && SCENE[q.cue] && SCENE[q.cue].scene.test(s.moment)) {
-      var line = CLC.sentences(s.moment).filter(function (x) { return SCENE[q.cue].scene.test(x); })[0];
-      if (line) r.unshift({ type: 'scene', text: '“' + line + '”' });
-    }
+    var sn = q.cue && SCENE[q.cue] && sceneOf(lib, s, q.cue);
+    if (sn) r.unshift({ type: 'scene', text: '“' + sn.line + '”' });
     if (q.sex) r.push({ type: 'sex', text: ic.sex === 'f' ? 'A woman' : 'A man' });
     if (q.field || q.domain || q.nocel) r.push({ type: 'field', text: ic.domainLabel });
     if (q.before || q.after) r.push({ type: 'year', text: yl(s.year) });
@@ -448,7 +519,7 @@
       if (M.age && a != null && Math.abs(a - M.age) <= 4) n += 1;
       if (follows(M, ic).length) n += 1;
     }
-    if (q.cue && SCENE[q.cue] && SCENE[q.cue].scene.test(s.moment)) n += 4;
+    var sn = q.cue && SCENE[q.cue] && sceneOf(lib, s, q.cue); if (sn) n += sn.w === 2 ? 4 : 2.5;   // a plain loss before a looser word
     var said = q.to && lineTo(s, q.to);
     if (said) { n += 3; if (q.t && sharesWord(said.who, q.t)) n += 1.5; }   // the addressee in the question's own words
     if (q.room && moveIn(s, q.room)) n += 2;
@@ -457,28 +528,42 @@
     return n + (s.verified ? 1.5 : 0) + (s.reach === 'near' ? 0.6 : s.reach === 'mid' ? 0.3 : 0);
   }
   // How the lead's life reaches the member, as a sentence: "For Maya: one step from Simone Biles. Both had every
-  // act read as a signal." The chain is CLN.bridge's, and its last link shares the situation asked about. One of
-  // the three needs no route: its card says so.
-  var STEPS = ['', 'one step', 'two steps', 'three steps', 'four steps'];
-  var SOURCE_CLAUSE = /;\s*|(?<=[a-z0-9)]{2}\.)(?<!\b(?:ed|eds|edn|trans|vol|vols|no|pp|repr|rev|ca|cf|al)\.)\s+/;
+  // act read as a signal." The sentence is CLN.linksTo's, the one the Review's rows say, so a route reads one way
+  // wherever it is shown; its reason is the situation asked about when a step of the chain shares it. One of the
+  // three needs no route: its card says so.
   function routeFor(lib, M, s, keys) {
     var N = net(); if (!N || !M || threeOf(M).indexOf(s.icon) >= 0) return '';
     var key = s.keys.filter(function (k) { return keys.indexOf(k) >= 0; })[0] || s.keys[0];
-    var b = N.bridge(lib, M.id, s.icon, key); if (!b || !b.steps || !b.steps.length || !STEPS[b.steps.length]) return '';
-    var nm = function (id) { return (lib.icon[id] || { name: id }).name; }, st = b.steps, last = st[st.length - 1];
-    // the last link in the words of the situation asked about, when the two share it
-    var w = last.tie.shared.indexOf(key) >= 0 && N.both(key) ? 'Both ' + N.both(key) + '.' : N.why(lib, last.a, last.b, last.tie)[0] || '';
-    // after a chain of two, "Both" needs its pair named
-    if (st.length > 1) w = w.replace(/^Both /, nm(last.a) + ' and ' + nm(last.b) + ' both ');
-    return ('For ' + M.first + ': ' + STEPS[st.length] + ' from ' + nm(b.hero) + (st.length > 1 ? ', through ' + st.slice(0, -1).map(function (x) { return nm(x.b); }).join(' and ') : '') + '. ' + w).trim();
+    var lt = N.linksTo(lib, M.id, s.icon, key, { keys: keys }); if (!lt.links || lt.links >= 9) return '';
+    return 'For ' + M.first + ': ' + lt.line.charAt(0).toLowerCase() + lt.line.slice(1);
   }
+  // The source's first clause, past the corpus's own "Corpus draft." and "Verify against" (core's "Check against"),
+  // which the check button says. A clause ends at a semicolon or a full stop after a word or a year, never after an
+  // initial ("W. A. Mozart") or an abbreviation ("ed. Emily Anderson", "Col. L. Thomas", "Google Inc."), and never
+  // inside a bracket ("(London, 1690. Issued December 1689)"). A long one is cut at a comma outside a bracket.
+  var SOURCE_CLAUSE = /;\s*|(?<=[a-z0-9)]{2}\.)(?<!\b(?:ed|eds|edn|trans|vol|vols|no|pp|repr|rev|ca|cf|al|dir|approx|Col|Gen|Brig|Lt|Capt|Inc|Co|Ltd)\.)\s+/g;
+  function depth(t) { return (t.match(/[([]/g) || []).length - (t.match(/[)\]]/g) || []).length; }
+  function sourceLine(s) {
+    var t = String(CLC.sourceFor(s, 'coach') || '').replace(/^Corpus draft\.\s*/i, '').replace(/^(?:Verify|Check) against\s+/i, ''), m;
+    SOURCE_CLAUSE.lastIndex = 0;
+    while ((m = SOURCE_CLAUSE.exec(t))) if (depth(t.slice(0, m.index)) <= 0) { t = t.slice(0, m.index); break; }
+    if (t.length <= 110) return t;
+    for (var c = t.slice(0, 110).lastIndexOf(','); c > 40; c = t.slice(0, c).lastIndexOf(',')) if (depth(t.slice(0, c)) <= 0) return t.slice(0, c) + '\u2026';
+    var br = t.slice(0, 110).search(/\s*[([][^)\]]*$/);   // no comma outside a bracket: stop before the bracket that is open
+    return t.slice(0, br > 40 ? br : 110) + '\u2026';
+  }
+  // o.limit: cards in the list (24); o.as: who reads it ('coach' sees this week's chosen story marked); o.routes:
+  // false leaves the lead's route out. Otherwise the route is worked out when it is first read, so a caller that
+  // wants counts (the shelf, the gaps, a count on a page, the Review's rows, which say their own) never pays for it
   function answer(lib, q, o) {
     o = o || {}; var F = facets(lib, q);
     if (!F.length) return { q: q, chips: chips(lib, q), empty: true, total: 0, lives: 0, items: [], shared: [], refine: [], nearest: [], checked: 0 };
-    var hit = filter(lib, F), had = q.m ? hadBy(lib, q.m) : {};
-    hit.sort(function (a, b) { return fitScore(lib, b, q) - fitScore(lib, a, q) || ((a.year || 0) - (b.year || 0)) || (a.id < b.id ? -1 : 1); });
-    // what the member already has goes last, and says when they had it
-    hit = hit.filter(function (s) { return !had[s.id]; }).concat(hit.filter(function (s) { return had[s.id]; }));
+    var hit = filter(lib, F), mk = q.m ? marks(lib, q.m, o.as) : {}, fit = {};
+    hit.forEach(function (s) { fit[s.id] = fitScore(lib, s, q); });   // once a story, not twice a comparison
+    hit.sort(function (a, b) { return fit[b.id] - fit[a.id] || ((a.year || 0) - (b.year || 0)) || (a.id < b.id ? -1 : 1); });
+    // what the member was sent before this week goes last, and says when they had it
+    var gone = function (s) { return mk[s.id] && mk[s.id].past; };
+    hit = hit.filter(function (s) { return !gone(s); }).concat(hit.filter(gone));
     var ys = hit.map(function (s) { return s.year; }).filter(function (y) { return y != null; }).sort(function (a, b) { return a - b; });
     // the answer leads with what a coach can do now: the best checked story, and the best draft one check from it,
     // leaving out what the member already has
@@ -487,15 +572,19 @@
     var fresh = hit.filter(function (s) { return ex.indexOf(s.id) < 0 && av.indexOf(s.icon) < 0; });
     var rd = fresh.filter(function (s) { return s.verified; })[0] || null, oc = fresh.filter(function (s) { return !s.verified && (s.reach === 'near' || s.reach === 'mid'); })[0] || null;
     var M = memberOf(lib, q.m), askedKeys = (q.sit ? q.sit.split('+') : q.mine && M ? M.sits : []).filter(function (id) { return lib.sit[id]; }).map(function (id) { return lib.sit[id].key; });
-    // the source's first clause, past the corpus's own "Corpus draft." and "Verify against" (core's "Check against"),
-    // which the check button says. A clause ends at a semicolon or a full stop after a word or a year, never after an
-    // initial ("W. A. Mozart") or an abbreviation ("ed. Emily Anderson")
-    var lead = function (s) { return s ? { story: s, card: CLC.storyCard(lib, s), reasons: reasons(lib, s, q), route: routeFor(lib, M, s, askedKeys),
-      source: clause(String(CLC.sourceFor(s, 'coach') || '').replace(/^Corpus draft\.\s*/i, '').replace(/^(?:Verify|Check) against\s+/i, '').split(SOURCE_CLAUSE)[0]) } : null; };
-    function clause(t) { if (t.length <= 110) return t; var c = t.slice(0, 110).lastIndexOf(','); return t.slice(0, c > 40 ? c : 110) + '\u2026'; }
-    var items = hit.filter(function (s) { return s !== rd && s !== oc; }).slice(0, o.limit || 24).map(function (s) {
-      var r = reasons(lib, s, q); if (had[s.id]) r.push({ type: 'had', text: had[s.id] });
-      return { story: s, card: CLC.storyCard(lib, s), reasons: r, had: had[s.id] || '' };
+    var lead = function (s) {
+      if (!s) return null;
+      var L = { story: s, card: CLC.storyCard(lib, s), reasons: reasons(lib, s, q), source: sourceLine(s) }, rt = null;
+      if (o.routes === false) L.route = '';
+      else Object.defineProperty(L, 'route', { enumerable: true, get: function () { return rt != null ? rt : (rt = routeFor(lib, M, s, askedKeys)); } });
+      return L;
+    };
+    // the list keeps its limit, and keeps the two last places for what the member had, so the marks are seen
+    var rest = hit.filter(function (s) { return s !== rd && s !== oc; }), lim = o.limit || 24, old = rest.filter(gone);
+    var shown = rest.filter(function (s) { return !gone(s); }).slice(0, lim - (lim > 2 ? Math.min(2, old.length) : 0));
+    var items = shown.concat(old.slice(0, lim - shown.length)).map(function (s) {
+      var r = reasons(lib, s, q), m = mk[s.id]; if (m) r.push({ type: 'had', text: m.text });
+      return { story: s, card: CLC.storyCard(lib, s), reasons: r, had: m && m.past ? m.text : '', chosen: m && !m.past ? m.text : '' };
     });
     // a reason every card shares is said once, above them; each card keeps what sets it apart
     var shared = items.length > 1 ? items[0].reasons.filter(function (r) { return r.type !== 'fit' && r.type !== 'scene' && r.type !== 'had' && items.every(function (it) { return it.reasons.some(function (x) { return x.text === r.text; }); }); }).map(function (r) { return r.text; }) : [];
@@ -506,7 +595,7 @@
       line: (did.length ? 'Someone who ' + did.join(', or who ') : q.cue && SCENE[q.cue] && !q.mine ? 'Scenes ' + SCENE[q.cue].heading : 'Stories') + (span ? (span[0] === span[1] ? ', in ' + yl(span[0]) : ', between ' + yl(span[0]) + ' and ' + yl(span[1])) : '') + '.',
       checked: hit.filter(function (s) { return s.verified; }).length, items: items, shared: shared, ready: lead(rd), oneCheck: lead(oc), excluded: ex,
       about: q.sit ? about(lib, q.sit.split('+')[0]) : '',
-      cueN: q.cue && SCENE[q.cue] ? hit.filter(function (s) { return SCENE[q.cue].scene.test(s.moment); }).length : null };
+      cueN: q.cue && SCENE[q.cue] ? hit.filter(function (s) { return sceneOf(lib, s, q.cue); }).length : null };
     res.refine = refine(lib, q, hit);
     res.nearest = hit.length < 4 && F.length > 1 ? F.map(function (f) {
       var others = F.filter(function (g) { return g !== f; }), n = filter(lib, others).length;
@@ -581,7 +670,7 @@
   ];
   function shelf(lib, mid) {
     var M = memberOf(lib, mid), Q = [];
-    function g(group, items) { Q.push({ group: group, items: items.filter(Boolean).map(function (it) { return { text: it[0], q: it[1], n: answer(lib, it[1], { limit: 1 }).total }; }) }); }
+    function g(group, items) { Q.push({ group: group, items: items.filter(Boolean).map(function (it) { return { text: it[0], q: it[1], n: answer(lib, it[1], { limit: 1, routes: false }).total }; }) }); }
     if (M) {
       var first = M.first, up = M.up19 && lib.sit[M.up19.sit] ? lib.sit[M.up19.sit] : null;
       g('For ' + first + ' this week', [
@@ -626,7 +715,7 @@
         if (mid && grp.group.indexOf('For ') !== 0) return;   // the shared questions are counted once, without a member
         grp.items.forEach(function (it) {
           if (it.n >= 4) return;
-          var r = answer(lib, it.q, { limit: 1 });
+          var r = answer(lib, it.q, { limit: 1, routes: false });
           out.push({ member: mid, group: grp.group, text: it.text, q: it.q, n: it.n, nearest: r.nearest[0] || null });
         });
       });
@@ -646,5 +735,5 @@
   return { sentTo: sentTo, recentTo: recentTo, hadBy: hadBy, weekDay: weekDay, saidTo: saidTo, lineTo: lineTo, TO_LABEL: TO_LABEL, moveIn: moveIn, ROOM_LABEL: ROOM_LABEL, DID: DID, CUES: CUES, SCENE: SCENE, DIRECT: DIRECT, REACH: REACH, FIELD_LABEL: FIELD_LABEL, SHELF: SHELF,
     read: read, chips: chips, answer: answer, reasons: reasons, drop: drop, shelf: shelf, compare: compare, gaps: gaps,
     toQS: toQS, fromQS: fromQS, isQuery: isQuery, ageAt: ageAt, heroesOf: heroesOf, threeOf: threeOf, reserveOf: reserveOf, situationScores: situationScores,
-    sitLabel: sitLabel, youLine: youLine, about: about, routeFor: routeFor, DOMAIN_LABEL: DOMAIN_LABEL, AREA_DOMAINS: AREA_DOMAINS };
+    sitLabel: sitLabel, youLine: youLine, about: about, routeFor: routeFor, sourceLine: sourceLine, DOMAIN_LABEL: DOMAIN_LABEL, AREA_DOMAINS: AREA_DOMAINS };
 }));

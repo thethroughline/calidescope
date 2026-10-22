@@ -36,8 +36,8 @@ const KEYS = corpus.situations.map((s) => s.match_key).filter(Boolean);
 function residue(text) {
   let t = ' ' + text + ' ';
   for (const s of ownList) if (t.includes(s)) t = t.split(s).join(' ');
-  // quotations are someone's words
-  return t.replace(/“[^”]*”/g, ' ').replace(/"[^"\n]*"/g, ' ').replace(/‘[^’\n]*’/g, ' ');
+  // quotations are someone's words, and a source line cites a title as it was printed
+  return t.replace(/Source: [^\n]*/g, ' ').replace(/“[^”]*”/g, ' ').replace(/"[^"\n]*"/g, ' ').replace(/‘[^’\n]*’/g, ' ');
 }
 
 // ---------- the rules ----------
@@ -95,7 +95,8 @@ try {
   }
   // ---------- the Library, in its three modes ----------
   const routes = ['#/', '#/situations', '#/situation/E1', '#/story/st-bjk-1973-riggs', '#/story/s-A2-elena-kagan', '#/icon/barack-obama', '#/icon/steve-jobs', '#/people', '#/eras', '#/stance/close',
-    '#/ask?t=' + encodeURIComponent('She is announcing the reorg on Thursday and the person who wanted her job will be in the room') + '&read=1', '#/path?from=barack-obama&to=serena-williams', '#/cmp?a=st-bjk-1973-riggs&b=s-A2-barack-obama'];
+    '#/ask?t=' + encodeURIComponent('She is announcing the reorg on Thursday and the person who wanted her job will be in the room') + '&read=1', '#/path?from=barack-obama&to=serena-williams', '#/cmp?a=st-bjk-1973-riggs&b=s-A2-barack-obama',
+    '#/ask?sit=A2&m=sarah', '#/ask?sit=C2&m=michael', '#/ask?sit=B6&m=maya', '#/situation/D3', '#/situation/C1', '#/story/s-D3-david-ogilvy', '#/story/s-E1-john-foster-dulles'];
   for (const as of ['reader', 'member', 'coach']) {
     const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
     await page.goto(`${BASE}/constellation/library?as=${as}&m=sarah#/`); await page.waitForSelector('main h1');

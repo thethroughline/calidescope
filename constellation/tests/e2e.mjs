@@ -382,7 +382,7 @@ try {
       check(sweep.n > 400 && sweep.ok > 300 && sweep.none > 0, `every star can be hovered: ${sweep.ok} draw threads, ${sweep.none} have no story and draw none`);
       await q.evaluate(() => { location.hash = '#/situation/E1'; }); await q.waitForSelector('.mfam[data-fam]');
       const fam = await q.evaluate(() => ({ cards: document.querySelectorAll('.mfam[data-fam]').length, lede: (document.querySelector('.mfams') || { previousElementSibling: null }).previousElementSibling ? document.querySelector('.mfams').previousElementSibling.innerText : '', rows: document.querySelectorAll('.mfam[data-fam] .mf-row').length }));
-      check(fam.cards === 9 && fam.rows === 26, `a situation's stories draw as families of moves: nine families holding 26 of E1's stories (${fam.cards}, ${fam.rows})`);
+      check(fam.cards === 9 && fam.rows === 25, `a situation's stories draw as families of moves: nine families holding 25 of E1's stories (${fam.cards}, ${fam.rows})`);
       await q.evaluate(() => { location.hash = '#/'; }); await q.waitForSelector('#map svg .hit');
       const top = await q.evaluate(() => { const st = document.querySelector('#map svg').getBoundingClientRect().top; let worst = 1e9; document.querySelectorAll('#map svg .hit').forEach((c) => { c.dispatchEvent(new MouseEvent('mousemove', { bubbles: true })); document.querySelectorAll('#map .thread').forEach((t) => { worst = Math.min(worst, t.getBoundingClientRect().top - st); }); }); return worst; });
       check(top > 0, `no thread leaves the top of the map (highest ${top.toFixed(1)}px below it)`);
