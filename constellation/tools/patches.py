@@ -100,6 +100,7 @@ PATCHES = [
     ("scripts", '<script src="/constellation/js/support.js"></script>', "after",
      '\n<script data-bridge="scripts" src="/constellation/lib/core.js"></script>'
      '\n<script data-bridge="scripts-net" src="/constellation/lib/net.js"></script>'
+     '\n<script data-bridge="scripts-ask" src="/constellation/lib/ask.js"></script>'
      '\n<script data-bridge="scripts-bridge" src="/constellation/js/constellation-bridge.js"></script>'),
     ("heroes-library", '<sc-if value="{{ hz.addClosed }}" hint-placeholder-val="{{ true }}">', "before",
      '<button data-bridge="heroes-library" sc-camel-on-click="{{ hz.explore }}" style="display:flex;gap:14px;width:100%;text-align:left;padding:16px;margin:0 0 16px;border:1px solid var(--hair);border-radius:16px;background:var(--well);color:var(--ink);cursor:pointer;align-items:center" style-hover="border-color:var(--ink)">'

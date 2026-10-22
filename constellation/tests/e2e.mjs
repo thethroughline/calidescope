@@ -103,6 +103,14 @@ try {
   check(await p.evaluate(() => CLB.state().overlay === 'hero' && (CLB.state().sstack || []).length === 1), 'a name in the chain opens that life in place');
   await p.evaluate(() => CLB.c.setState({ overlay: null, sstack: [], tab: 'heroes', m: 'app' })); await p.waitForTimeout(250);
   check(/Who stands near your three/.test(await p.locator('[data-bridge="heroes-near"]').innerText().catch(() => '')), 'Heroes offers who stands near the three');
+  const askAs = async (t) => { await p.evaluate((t) => CLB.c.setState({ overlay: null, m: 'app', tab: 'ask', askMore: false, ask: Object.assign({}, CLB.c.state.ask, { stage: 'confirm', text: t, key: null, story: null, sent: false }) }), t); await p.waitForTimeout(250); return p.locator('[data-screen-label="M8 Ask"] button').allInnerTexts(); };
+  const ch = await askAs('I still answer every client email myself at midnight.');
+  check(/my old job/.test(ch[0]) && ch.includes('None of these') && /as it is$/.test(ch[ch.length - 1]), 'a member’s Ask offers their own situations in their own words, the closest first');
+  await p.locator('[data-screen-label="M8 Ask"] button', { hasText: 'None of these' }).click(); await p.waitForTimeout(250);
+  const more = await p.locator('[data-screen-label="M8 Ask"] button').allInnerTexts();
+  check(more.length >= 5 && !more.some((x) => /my old job/.test(x)), 'None of these opens the other situations');
+  await p.locator('[data-screen-label="M8 Ask"] button').first().click(); await p.waitForTimeout(1700);
+  check(['answer', 'else'].includes(await p.evaluate(() => CLB.c.state.ask.stage)), 'any situation chosen gets an answer or goes to the coach');
   await p.evaluate(() => CLB.c.setState({ overlay: 'library', libRoute: '#/icon/billie-jean-king', libBack: null, sstack: [] }));
   const lf = p.frameLocator('iframe[title="The Constellation library"]');
   await lf.locator('[data-act="add-hero"]').click(); await p.waitForTimeout(300);

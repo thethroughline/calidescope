@@ -194,5 +194,7 @@ test('voice: the house rules hold in our own copy, and every rewrite of the expo
   const ctx = { window: {} }; vm.createContext(ctx);
   vm.runInContext(fs.readFileSync(new URL('../js/constellation-proto-data.js', import.meta.url), 'utf8'), ctx);
   const used = {}; CLC.voice(JSON.parse(JSON.stringify(ctx.window.CPD, (k, v) => (typeof v === 'function' ? undefined : v))), { used });
+  CLC.voice(corpus.situations.map((s) => s.member_line), { used });
+  assert.ok(lib.situations.every((s) => !/\b(actually|really|just)\b/.test(s.member_line)), 'member lines reach the reader in the house voice');
   CLC.COPY.forEach((c, i) => assert.ok(used[i], 'a rewrite no longer matches the export: ' + c[0]));
 });

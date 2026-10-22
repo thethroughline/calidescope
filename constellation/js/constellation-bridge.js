@@ -285,6 +285,7 @@
       relatedStory(c, out, st, lib);
     }
     if (st.overlay === 'hero' && st.hid && out.hv) relatedHero(c, out, st, lib);
+    if (st.role === 'member' && out.ak && out.ak.confirm) askChoices(c, out, st, lib);
     stackBack(c, out, st);
 
     // coach: Library opens on Explore; the send screen is one tab along
@@ -410,6 +411,51 @@
       }),
       steps: best.r.map(function (x, i) { var w = CLN.why(lib, x.a, x.b, x.tie); return { n: i + 1, text: nm(x.a) + ' and ' + nm(x.b) + ' ' + w[0].replace(/^Both /, 'both ') }; })
     };
+  }
+  // The member's Ask: "Is this about…". Members describe their week, so the words can only order the list;
+  // the member's tap decides. Their own situations come first, in their own words, ordered by what they
+  // wrote; "None of these" opens the closest others; "Send it to Jim as it is" is always there. Measured
+  // on 30 fresh member asks: the old three keyword rules found a situation for 1 of them.
+  function askChoices(c, out, st, lib) {
+    var d = _cpd, CLQ = window.CLQ, M = lib.members[st.p]; if (!M || !d) return;
+    var text = (st.ask && st.ask.text) || '', sc = {};
+    (CLQ ? CLQ.situationScores(lib, text, M) : []).forEach(function (x) { sc[x.id] = x.score; });
+    var engine = {}; (out.ak.chips || []).forEach(function (ch) { var hit = d.sits.filter(function (x) { return x.chip === ch.label; })[0]; if (hit) engine[hit.id] = ch.pick; else engine.else = ch.pick; });
+    var reset = function (f) { return function () { c.setState({ askMore: false }); f(); }; };
+    var pick = function (sid) { return engine[sid] ? reset(engine[sid]) : function () { chooseHere(c, sid); }; };
+    var line = function (sid) { var x = lib.sit[sid]; return x ? '“' + x.member_line + '”' : d.sit[sid].chip; };
+    var byScore = function (a, b) { return (sc[b] || 0) - (sc[a] || 0) || (a < b ? -1 : 1); };
+    var mine = (M.sits || []).filter(function (x) { return d.sit[x]; }).sort(byScore);
+    var co = (lib.coaches[M.coach] || {}).first || 'your coach';
+    var send = { label: 'Send it to ' + co + ' as it is', pick: reset(engine.else || function () {}) };
+    if (st.askMore) {
+      var others = lib.situations.map(function (x) { return x.id; }).filter(function (x) { return mine.indexOf(x) < 0 && d.sit[x]; }).sort(byScore).slice(0, 6);
+      out.ak.chips = others.map(function (x) { return { label: line(x), pick: pick(x) }; }).concat([send]);
+    } else {
+      var lead = Object.keys(sc).filter(function (x) { return mine.indexOf(x) < 0 && d.sit[x] && sc[x] >= 0.3 && sc[x] > (sc[mine[0]] || 0); }).sort(byScore).slice(0, 1);
+      out.ak.chips = lead.concat(mine).map(function (x) { return { label: line(x), pick: pick(x) }; })
+        .concat([{ label: 'None of these', pick: function () { c.setState({ askMore: true }); } }, send]);
+    }
+  }
+  // the engine's own choice, for a situation its three keyword rules never offer: the same rule (verified,
+  // in the situation, not declined, inside a hero's scope; the member's three first, then the extended
+  // heroes, then the library; near before far; then by id)
+  function chooseHere(c, sid) {
+    var d = _cpd, st = c.state, k = d.clock[st.clock] || d.clock[0], key = d.sit[sid].key;
+    c.setState({ ask: Object.assign({}, st.ask, { stage: 'loading', key: key }), askMore: false });
+    setTimeout(function () {
+      var s2 = c.state, A = s2.ask, core = s2.core || [], ext = (s2.extended || []).map(function (x) { return x.hero; }), scopes = s2.scopes || {}, declined = s2.declined || [];
+      var tier = function (h) { return core.indexOf(h) >= 0 ? 0 : ext.indexOf(h) >= 0 ? 1 : 2; };
+      var ok = d.stories.filter(function (x) { return x.keys.indexOf(key) >= 0 && x.verified && declined.indexOf(x.id) < 0 && !(scopes[x.hero] && scopes[x.hero].indexOf(key) < 0); })
+        .map(function (x) { return { s: x, tier: tier(x.hero) }; });
+      var near = ok.filter(function (o) { return o.s.reach !== 'far'; }), pool = (near.length ? near : ok).sort(function (a, b) { return a.tier - b.tier || (a.s.id < b.s.id ? -1 : 1); });
+      var p = pool[0], at = d.lab(k.day) + ', ' + k.hm;
+      if (!p) {
+        var mm = Object.assign({}, s2.msgs); mm[s2.p] = s2.msgs[s2.p].concat([{ id: 'a' + Date.now(), from: 'member', kind: 'ask', body: A.text, chip: d.sit[sid].chip, day: k.day, at: at, live: true }]);
+        return c.setState({ ask: Object.assign({}, A, { stage: 'else' }), msgs: mm, askHist: s2.askHist.concat([{ text: A.text, key: key, story: null, day: k.day }]) });
+      }
+      c.setState({ ask: Object.assign({}, A, { stage: 'answer', story: p.s.id, tier: p.tier }), askHist: s2.askHist.concat([{ text: A.text, key: key, story: p.s.id, day: k.day }]) });
+    }, 1200);
   }
   function relatedHero(c, out, st, lib) {
     var CLC = window.CLC, iconId = iconOf[st.hid] || st.hid, ic = lib.icon[iconId]; if (!ic) return;

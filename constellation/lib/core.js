@@ -167,7 +167,7 @@
     corpus.situations.forEach(function (s) {
       var L = labelByKey[s.match_key] || {};
       var x = { id: s.id, fam: s.id[0], family: s.family || FAMILY[s.id[0]], key: s.match_key, chip: L.chip || s.member_line, line: L.line || '',
-        member_line: s.member_line, owner: s.owner, literature: s.literature || [], calibration: calib[s.match_key] || null, outcome: outc[s.match_key] || null,
+        member_line: voice(s.member_line), owner: s.owner, literature: s.literature || [], calibration: calib[s.match_key] || null, outcome: outc[s.match_key] || null,
         moves: (corpus.moves || []).filter(function (m) { return m.match_key === s.match_key; }).sort(function (a, b) { return (a.variant || 0) - (b.variant || 0); }),
         lines: (corpus.lines || []).filter(function (l) { return l.match_key === s.match_key; }).sort(function (a, b) { return a.id < b.id ? -1 : 1; }),
         stories: lib.byKey[s.match_key] || [], icons: lib.iconsByKey[s.match_key] || [] };
@@ -551,7 +551,10 @@
     ['Someone replies to the position, not the data.', 'Someone replies to the position you took.'],
     ["A client repeats your point back to you, not the firm's.", 'A client repeats your own point back to you.'],
     ['You answered it, not the senior associate.', 'You answered it yourself, before the senior associate spoke.'],
-    ["He's for the weeks you stand on your own name, not for the pitch itself.", "He's for the weeks you stand on your own name. The pitch itself needs a different story."]
+    ["He's for the weeks you stand on your own name, not for the pitch itself.", "He's for the weeks you stand on your own name. The pitch itself needs a different story."],
+    // two member lines from the corpus (the fix belongs in the corpus repo; until then it is made here, at merge)
+    ['I got the job. Nobody told me what it actually asks.', 'I got the job. Nobody told me what it asks.'],
+    ['I have more people than I can actually see.', 'I have more people than I can see.']
   ];
   // returns a copy of v with every rewrite applied to every string in it; o.used collects the rewrites that fired
   function voice(v, o) {
