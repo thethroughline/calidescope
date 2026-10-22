@@ -40,7 +40,7 @@
     'developing-without-a-bench': 'grew people with no bench behind them',
     'stopping-the-old-work': 'stopped work people were proud of',
     'carrying-somebody-elses-decision': 'carried a decision they did not make',
-    'every-act-is-a-message': 'found everything they did read as a signal',
+    'every-act-is-a-message': 'had every act read as a signal',
     'agreeing-and-not-moving': 'faced a room that agreed and did not move',
     'the-loss-inside-the-promotion': 'lost what they were best at when they stepped up',
     'competent-and-becalmed': 'were good at it, and becalmed'

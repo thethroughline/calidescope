@@ -552,3 +552,9 @@ a.n-row:hover { background: var(--well); color: var(--ink); }
 }
 .meta.reach { margin-top: 4px; color: var(--pru); }
 .meta.reach.mad { color: var(--mad); }
+.standin-sit { display: block; font: 400 var(--t-meta)/1.4 var(--sans); color: var(--mute); margin-bottom: 2px; }
+.standin-sit b { font-weight: 500; color: var(--pru); }
+/* links inside tables are whole targets: 28px at a desk, 44px to a finger */
+table.season td a, table.cover th[scope="row"] a { display: inline-flex; align-items: center; min-height: 28px; }
+@media (hover: none), (max-width: 820px) { table.season td a, table.cover th[scope="row"] a { min-height: 44px; } }
+table.season td a b { font-weight: 500; }

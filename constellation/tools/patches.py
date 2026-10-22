@@ -35,6 +35,8 @@ What each patch adds (the behaviour behind it is in js/constellation-bridge.js):
                    links, from one of their heroes to the story's life, each link said in words
   ask-find         under a member's Ask in the coach's thread: Find a story for this, which opens the
                    Library's answer to the Ask, read for that member, with the situation they chose
+  mute-token       the light theme's secondary grey one step darker (#5E626B, as the Library has it), so it
+                   clears 4.5:1 on the tinted panels as well as on paper
   type-floor       no text under 12px: the export's 10px and 11px labels become 12px, and the 9px
                    initials in the 24px avatars become 11px (a regex over the template's inline styles)
 """
@@ -44,7 +46,7 @@ TABS = ('<div data-bridge="{mark}" style="flex:none;display:flex;align-items:cen
         '<button sc-camel-on-click="{{{{ lt.explore.go }}}}" style="height:30px;padding:0 14px;border-radius:15px;border:1px solid {{{{ lt.explore.bd }}}};background:{{{{ lt.explore.bg }}}};color:{{{{ lt.explore.fg }}}};font:500 12px var(--sans);cursor:pointer">Explore</button>'
         '<button sc-camel-on-click="{{{{ lt.send.go }}}}" style="height:30px;padding:0 14px;border-radius:15px;border:1px solid {{{{ lt.send.bd }}}};background:{{{{ lt.send.bg }}}};color:{{{{ lt.send.fg }}}};font:500 12px var(--sans);cursor:pointer">Find and send</button>'
         '<span style="margin-left:10px;font:400 12px var(--sans);color:var(--faint)">{{{{ lt.line }}}}</span><span style="flex:1"></span>'
-        '<a href="{{{{ cx.full }}}}" target="_blank" rel="noopener" style="font:500 12px var(--sans);color:var(--pru);text-decoration:none;display:flex;align-items:center;gap:6px">Open the library in a new tab <i class="ph ph-arrow-square-out"></i></a></div>')
+        '<a href="{{{{ cx.full }}}}" target="_blank" rel="noopener" style="font:500 12px var(--sans);color:var(--pru);text-decoration:none;display:flex;align-items:center;gap:6px;min-height:32px">Open the library in a new tab <i class="ph ph-arrow-square-out"></i></a></div>')
 
 # A related-reading row and its groups, shared by the story and hero overlays: the person's name and
 # place on one line, why it is here on the next, the whole row one target.
@@ -165,12 +167,13 @@ PATCHES = [
      '<button role="listitem" sc-camel-on-click="{{ p.open }}" style="border:0;background:transparent;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;width:84px;flex:none;color:var(--ink)"><span style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:500 14px var(--sans);background:{{ p.bg }};color:{{ p.fg }}">{{ p.ini }}</span>'
      '<span style="font:400 13px/1.3 var(--sans);text-align:center">{{ p.name }}<span style="display:block;font-size:12px;color:var(--faint)">{{ p.year }}</span></span></button></sc-for></div>'
      '<ol style="list-style:none;margin:12px 0 0;padding:0"><sc-for list="{{ sv.reach.steps }}" as="x"><li style="display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;padding:6px 0;font:400 15px/1.5 var(--serif)"><span aria-hidden="true" style="width:18px;height:18px;margin-top:3px;border-radius:50%;border:1.25px solid var(--pru);font:500 12px/16px var(--sans);color:var(--pru);text-align:center">{{ x.n }}</span><span>{{ x.text }}</span></li></sc-for></ol>'
-     '<p style="font:400 13px var(--sans);color:var(--mute);margin:8px 0 0">Tap a name to read about them.</p></div></sc-if>'),
+     '<p style="font:400 13px var(--sans);color:var(--ink);margin:8px 0 0">Tap a name to read about them.</p></div></sc-if>'),
     ("heroes-near", '<sc-if value="{{ hz.addClosed }}" hint-placeholder-val="{{ true }}">', "before",
      '<button data-bridge="heroes-near" sc-camel-on-click="{{ hz.near }}" style="display:flex;gap:14px;width:100%;text-align:left;padding:14px 16px;margin:-6px 0 16px;border:1px solid var(--hair);border-radius:16px;background:transparent;color:var(--ink);cursor:pointer;align-items:center" style-hover="border-color:var(--ink)">'
      '<div style="width:44px;height:44px;border-radius:50%;background:var(--well);display:flex;align-items:center;justify-content:center;flex:none"><i class="ph ph-circles-three" style="font-size:20px;color:var(--mad)"></i></div>'
      '<div style="flex:1;min-width:0"><div style="font:400 17px/1.3 var(--serif)">Who stands near your three</div><div style="font:400 14px/1.45 var(--sans);color:var(--mute);margin-top:3px">{{ hz.nearLine }}</div></div>'
      '<i class="ph ph-caret-right" style="color:var(--faint);flex:none;font-size:18px"></i></button>\n                      '),
+    ("mute-token", '--mute:#6B6F78;', "replace", '--mute:#5E626B;'),
 ]
 
 # Sizes as the export writes them inside inline `font:` shorthands, and what they become.

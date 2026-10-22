@@ -534,6 +534,33 @@
     return { reading: reading, total: res.length, results: res.slice(0, opts.limit || 12) };
   }
 
+  // ---------- the house voice, applied to the prototype's own copy ----------
+  // The export is the designer's source and is never edited by hand. Where its product copy (labels, moves,
+  // fit notes, a coach's note) breaks a house rule (no "X, not Y"; no actually, just, really, rather than,
+  // instead of), the rewrite lives here, exact text for exact text, and is applied wherever that copy enters:
+  // tools/build_demo.mjs (the Library and the API) and the bridge (the app). Members' own words, quotations
+  // and titles stay as written. A rewrite whose text has left the export is reported by the tests.
+  var COPY = [
+    ["Standing that's yours, not the firm's", 'Standing in your own name'],
+    ["Chosen because standing on your own name, not the firm's, is the work this year.", 'Chosen because standing on your own name is the work this year.'],
+    ['Chosen because everything you say this week will be read for what it means, not just what it says.', 'Chosen because this week everything you say will be read for what it means as well as what it says.'],
+    ['The restraint was a condition, not a temperament. Robinson spoke out forcefully once it lifted.', 'The restraint was a condition of the deal. Robinson spoke out forcefully once it lifted.'],
+    ['ask whether any rule actually bars you from the room. Then sit in.', 'ask whether any rule bars you from the room. Then sit in.'],
+    ['Useful for some of your weeks, not all.', 'Useful for some of your weeks.'],
+    ["You'll send analysis, not a position.", "You'll send analysis with no position in it."],
+    ['Someone replies to the position, not the data.', 'Someone replies to the position you took.'],
+    ["A client repeats your point back to you, not the firm's.", 'A client repeats your own point back to you.'],
+    ['You answered it, not the senior associate.', 'You answered it yourself, before the senior associate spoke.'],
+    ["He's for the weeks you stand on your own name, not for the pitch itself.", "He's for the weeks you stand on your own name. The pitch itself needs a different story."]
+  ];
+  // returns a copy of v with every rewrite applied to every string in it; o.used collects the rewrites that fired
+  function voice(v, o) {
+    if (typeof v === 'string') { var t = v; COPY.forEach(function (c, i) { if (t.indexOf(c[0]) >= 0) { t = t.split(c[0]).join(c[1]); if (o && o.used) o.used[i] = 1; } }); return t; }
+    if (Array.isArray(v)) return v.map(function (x) { return voice(x, o); });
+    if (v && typeof v === 'object') { var out = {}; Object.keys(v).forEach(function (k) { out[k] = typeof v[k] === 'function' ? v[k] : voice(v[k], o); }); return out; }
+    return v;
+  }
+
   // ---------- members ----------
   function member(lib, id) {
     var m = lib.members[id]; if (!m) return null;
@@ -706,5 +733,5 @@
     member: member, readingFor: readingFor, matcherMember: matcherMember,
     matcher: matcher, pick: pick, replay: replay, season: season, stanceProfile: stanceProfile,
     similarStories: similarStories, kindred: kindred, ego: ego, situationWeb: situationWeb, path: path, words: words,
-    interpret: interpret, ask: ask, sitIndex: sitIndex, queryVec: queryVec };
+    interpret: interpret, ask: ask, sitIndex: sitIndex, queryVec: queryVec, COPY: COPY, voice: voice };
 }));

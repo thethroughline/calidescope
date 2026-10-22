@@ -205,7 +205,7 @@
       outside.forEach(function (hid, j) {
         var i = lib.icon[hid], x = j % 2 === 0 ? 30 : W - 30, y = (k === 3 ? topPad + R * 0.35 : topPad + 2 * R + 46) + Math.floor(j / 2) * 70;
         if (k !== 3) x = W / 2 + (j - (outside.length - 1) / 2) * 110;
-        outN += '<a class="n-node n-hero out" href="' + esc(href(hid)) + '" aria-label="' + esc(i.name + ', one of ' + you + ' three, not in these situations yet') + '" data-tip="' + esc(i.name + '|One of ' + you + ' three. No story in these situations yet.') + '">' +
+        outN += '<a class="n-node n-hero out" href="' + esc(href(hid)) + '" aria-label="' + esc(i.name + ', one of ' + you + ' three, with no story in these situations yet') + '" data-tip="' + esc(i.name + '|One of ' + you + ' three. No story in these situations yet.') + '">' +
           '<circle class="d" cx="' + x + '" cy="' + f1(y) + '" r="15" stroke-dasharray="3 3"/><text class="i" x="' + x + '" y="' + f1(y + 4.5) + '" text-anchor="middle" font-size="12">' + esc(i.ini) + '</text>' +
           '<text x="' + x + '" y="' + f1(y + 32) + '" text-anchor="middle" font-size="13">' + esc(i.short || shortName(i.name)) + '</text></a>';
       });

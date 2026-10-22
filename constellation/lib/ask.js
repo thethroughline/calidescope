@@ -279,8 +279,9 @@
     res.refine = refine(lib, q, hit);
     res.nearest = hit.length < 4 && F.length > 1 ? F.map(function (f) {
       var others = F.filter(function (g) { return g !== f; }), n = filter(lib, others).length;
-      return { without: res.chips.filter(function (c) { return c.k === f.k; }).map(function (c) { return c.label; })[0] || f.k, n: n, q: drop(q, f.k) };
-    }).filter(function (x) { return x.n > hit.length; }).sort(function (a, b) { return b.n - a.n; }) : [];
+      return { k: f.k, without: res.chips.filter(function (c) { return c.k === f.k; }).map(function (c) { return c.label; })[0] || f.k, n: n, q: drop(q, f.k) };
+    // dropping a facet keeps the question; dropping the situation changes it, so that comes last
+    }).filter(function (x) { return x.n > hit.length; }).sort(function (a, b) { return (a.k === 'sit') - (b.k === 'sit') || b.n - a.n; }) : [];
     return res;
   }
   function drop(q, k, v) {
@@ -306,7 +307,7 @@
   }
 
   // ---------- the shelf: the questions coaches bring, each counted ----------
-  // Data, not code: Jim can reword, add or retire a question here. A count that falls to nought shows on the page.
+  // The questions are data: Jim can reword, add or retire one here. A count that falls to nought shows on the page.
   var SHELF = [
     ['What is happening', [
       ['Who has led people who used to be their peers?', { sit: 'A2' }],

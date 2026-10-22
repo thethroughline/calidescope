@@ -23,7 +23,10 @@ const read = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const ctx = { window: {} };
 vm.createContext(ctx);
 vm.runInContext(read('js/constellation-proto-data.js'), ctx);
-const CPD = JSON.parse(JSON.stringify(ctx.window.CPD, (k, v) => (typeof v === 'function' ? undefined : v)));
+import { createRequire } from 'node:module';
+const CLC = createRequire(import.meta.url)('../lib/core.js');
+// the house voice over the prototype's product copy (CLC.COPY); members' own words stay as written
+const CPD = CLC.voice(JSON.parse(JSON.stringify(ctx.window.CPD, (k, v) => (typeof v === 'function' ? undefined : v))));
 const corpus = JSON.parse(read('data/corpus.json'));
 
 const slug = (s) => s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');

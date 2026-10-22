@@ -182,3 +182,17 @@ test('net.js: every tie has two reasons, nobody is left alone, and every season 
   const nb = CLN.near(lib, 'sarah');
   assert.ok(nb.lives.some((l) => l.id === 'billie-jean-king' && l.held.length === 3));
 });
+
+test('voice: the house rules hold in our own copy, and every rewrite of the export still applies', () => {
+  const fs = require('node:fs'), vm = require('node:vm');
+  const files = ['../library/library.js', '../library/graph.js', '../lib/ask.js', '../lib/net.js', '../js/constellation-bridge.js', '../tools/patches.py', '../README.md'];
+  const bad = /\b(rather than|instead of|actually|really)\b|\bjust\b(?! ?[=(])|, not (?:a|an|the|my|your|their|his|her|in|for|just)\b/i;
+  for (const f of files) {
+    const lines = fs.readFileSync(new URL(f, import.meta.url), 'utf8').split('\n');
+    lines.forEach((l, i) => { if (!/STOPW|var COPY|^\s*\[["']/.test(l) && bad.test(l)) assert.fail(f + ':' + (i + 1) + ' ' + l.trim().slice(0, 120)); });
+  }
+  const ctx = { window: {} }; vm.createContext(ctx);
+  vm.runInContext(fs.readFileSync(new URL('../js/constellation-proto-data.js', import.meta.url), 'utf8'), ctx);
+  const used = {}; CLC.voice(JSON.parse(JSON.stringify(ctx.window.CPD, (k, v) => (typeof v === 'function' ? undefined : v))), { used });
+  CLC.COPY.forEach((c, i) => assert.ok(used[i], 'a rewrite no longer matches the export: ' + c[0]));
+});

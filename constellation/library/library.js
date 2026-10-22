@@ -83,7 +83,7 @@
     foot();
     document.getElementById('searchform').addEventListener('submit', function (e) {
       e.preventDefault(); var q = document.getElementById('q').value.trim(); if (!q) return;
-      // three words or more is a question, not a name: it goes to Ask
+      // three words or more read as a question and go to Ask; fewer are a name to search for
       location.hash = q.split(/\s+/).length >= 3 ? '#/ask?t=' + enc(q) + '&read=1' + (AS !== 'reader' && MID ? '&m=' + enc(MID) : '') : '#/search?q=' + enc(q);
     });
     var qt; document.getElementById('q').addEventListener('input', function (e) {
@@ -159,7 +159,7 @@
     first = false;
     post('cl:route', { route: location.hash || '#/', as: AS });
   }
-  function missing() { return { title: 'Not here', html: '<h1>Not in the library</h1><p class="lede">That page is not here. <a href="#/">Back to the library</a>.</p>' }; }
+  function missing() { return { title: 'Not here', html: '<h1>Not in the library</h1><p class="lede">That page is not here.</p><p style="margin-top:18px"><a class="btn" href="#/">Back to the library</a></p>' }; }
 
   // ---------- the trail ----------
   function step(node) {
@@ -723,7 +723,7 @@
     var who = '<div class="row" style="margin-top:6px"><span class="meta">For</span>' + lib.order.map(function (id) {
       return '<a class="btn sm' + (mid === id ? ' on' : '') + '" href="' + (mid === id ? '#/ask' : '#/ask?m=' + enc(id)) + '"' + (mid === id ? ' aria-pressed="true"' : '') + '>' + esc(lib.members[id].first) + '</a>';
     }).join('') + '</div>';
-    return sec('Or start from a question coaches ask', '<p class="note" style="margin:-6px 0 12px">Each count is live: it is how many stories in the library answer the question today.</p>' + who +
+    return sec('Or start from a question coaches ask', '<p class="note" style="margin:-6px 0 12px">Each count is how many stories answer the question today.</p>' + who +
       CLQ.shelf(lib, mid).map(function (g) {
         return '<h3 class="shelf-h">' + esc(g.group) + '</h3><ul class="list shelf">' + g.items.map(function (it) {
           return '<li><a class="rowlink" href="' + esc(askUrl(it.q)) + '"><span class="t">' + esc(it.text) + '</span><span class="meta tabular' + (it.n < 4 ? ' thin' : '') + '">' + n(it.n, 'story', 'stories') + '</span></a></li>';
@@ -853,8 +853,9 @@
       var x = held.length ? chips(held) : '<div class="n-why">' + (I.stories.length ? 'Not in ' + you + ' situations yet.' : 'Has no record in the library yet.') + '</div>';
       x += ins.map(function (si) {
         var st = lib.sitByKey[si.key];
-        if (!si.id) return '<div class="standin">In <b>' + esc(st.chip.toLowerCase()) + '</b>, nobody close to ' + esc(nm) + ' has a story yet.</div>';
-        return '<div class="standin">Nearest to ' + esc(nm) + ' in <b>' + esc(st.chip.toLowerCase()) + '</b>: <b>' + esc(lib.icon[si.id].name) + '</b>. ' + esc(CLN.nearWhy(lib, si.id, hid, si.a).join(' ')) + '</div>';
+        var where = '<span class="standin-sit"><b>' + esc(st.id) + '</b> ' + esc(st.chip) + '</span>';
+        if (!si.id) return '<div class="standin">' + where + 'Nobody close to ' + esc(nm) + ' has a story here yet.</div>';
+        return '<div class="standin">' + where + 'Nearest to ' + esc(nm) + ': <b>' + esc(lib.icon[si.id].name) + '</b>. ' + esc(CLN.nearWhy(lib, si.id, hid, si.a).join(' ')) + '</div>';
       }).join('');
       return row(l || { id: hid, hero: true }, x);
     }).join('') + '</ul>');
@@ -977,7 +978,7 @@
       var el = document.getElementById('season'); if (!el) return;
       el.innerHTML = '<table class="season"><thead><tr><th>Week</th><th>Situation</th><th>Move</th><th>Line</th><th>Story</th></tr></thead><tbody>' + rows.map(function (w) {
         var s = w.story && lib.story[CLC.resolve(lib, w.story.id)];
-        return '<tr><td class="tabular">' + w.week + '</td><td>' + (w.sit.id ? '<a href="' + H.sit(w.sit.id) + '">' + esc(w.sit.id) + '</a> ' : '') + esc(w.sit.chip) + '</td>' +
+        return '<tr><td class="tabular">' + w.week + '</td><td>' + (w.sit.id ? '<a href="' + H.sit(w.sit.id) + '"><span><b>' + esc(w.sit.id) + '</b> ' + esc(w.sit.chip) + '</span></a>' : esc(w.sit.chip)) + '</td>' +
           '<td><span class="t">' + esc(w.move ? w.move.behaviour : '') + '</span>' + (w.move ? '<div class="meta">' + (w.move.status === 'exemplar' ? 'Exemplar' : 'Draft') + (w.mode ? ' · ' + esc(w.mode) : '') + '</div>' : '') + '</td>' +
           '<td><span class="t" style="font-style:italic">' + esc(w.line ? w.line.message : '') + '</span></td>' +
           '<td>' + (s ? '<a href="' + H.story(s.id) + '">' + esc(lib.icon[s.icon].name) + '</a><div class="meta">' + esc(s.place || s.era) + '</div>' + reachLine(id, s, w.sit) + badge(s) : '<span class="meta">Nothing fits</span>') + '</td></tr>';

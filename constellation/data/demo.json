@@ -93,7 +93,7 @@
     ],
     "serena": [
      "partly",
-     "Her stories are mostly about owning the stage. Useful for some of your weeks, not all."
+     "Her stories are mostly about owning the stage. Useful for some of your weeks."
     ],
     "rihanna": [
      "partly",
@@ -257,8 +257,8 @@
     "trigger": "The product review, the week before the roadmap decision.",
     "behaviour": "Send one paragraph with a position in it to one person, the day before the meeting.",
     "grain": "On paper first (you think in writing)",
-    "failure": "You'll send analysis, not a position.",
-    "obs": "Someone replies to the position, not the data.",
+    "failure": "You'll send analysis with no position in it.",
+    "obs": "Someone replies to the position you took.",
     "retire": "You are asked for your view before the meeting."
    },
    "move": "Send one paragraph with a position in it to one person, the day before the meeting.",
@@ -411,7 +411,7 @@
     "behaviour": "In every pitch, say one thing only you would say, before the firm's credentials.",
     "grain": "Out front (you like the opening)",
     "failure": "Your first version will still be the firm's line, shortened.",
-    "obs": "A client repeats your point back to you, not the firm's.",
+    "obs": "A client repeats your own point back to you.",
     "retire": "A client asks for you by name."
    },
    "move": "In every pitch, say one thing only you would say, before the firm's credentials.",
@@ -428,7 +428,7 @@
     {
      "w": 2,
      "b": "Take the client's first question yourself.",
-     "o": "You answered it, not the senior associate.",
+     "o": "You answered it yourself, before the senior associate spoke.",
      "ins": null
     },
     {
@@ -733,7 +733,7 @@
     "id": "mi1",
     "from": "coach",
     "kind": "text",
-    "body": "Thanks for your three, Michael. We'll talk about how to use Ali when we meet. He's for the weeks you stand on your own name, not for the pitch itself.",
+    "body": "Thanks for your three, Michael. We'll talk about how to use Ali when we meet. He's for the weeks you stand on your own name. The pitch itself needs a different story.",
     "day": 7,
     "at": "Wed 7 Oct, 11:20"
    },
@@ -3378,7 +3378,7 @@
    "by": "Rickey, as Robinson told it",
    "why": "Chosen because, for a while, your restraint will say more than anything you could answer back.",
    "source": "Robinson, I Never Had It Made (1972). Check wording.",
-   "caution": "The restraint was a condition, not a temperament. Robinson spoke out forcefully once it lifted.",
+   "caution": "The restraint was a condition of the deal. Robinson spoke out forcefully once it lifted.",
    "gist": "He agreed to take it without answering, for a while.",
    "walk": "let the first reaction pass without an answer.",
    "deeper": [
@@ -3452,7 +3452,7 @@
    "moment": "Video of his former pastor's sermons was running on every channel. He did not issue a short statement and move on. On 18 March 2008, at the National Constitution Center in Philadelphia, he gave a long speech on race in America — condemning the remarks, refusing to disown the man, and naming the grievance on more than one side.",
    "pattern": "I can no more disown him than I can disown the black community.",
    "by": "",
-   "why": "Chosen because everything you say this week will be read for what it means, not just what it says.",
+   "why": "Chosen because this week everything you say will be read for what it means as well as what it says.",
    "source": "“A More Perfect Union,” transcript, National Constitution Center.",
    "caution": "",
    "gist": "He said the hardest part himself, at length, once.",
@@ -3506,7 +3506,7 @@
    "source": "Corpus draft. NASA oral-history interviews describe her asking to attend the briefings; verify the wording.",
    "caution": "",
    "gist": "She asked whether any rule barred her. None did.",
-   "walk": "ask whether any rule actually bars you from the room. Then sit in.",
+   "walk": "ask whether any rule bars you from the room. Then sit in.",
    "deeper": [
     "kj-hidden",
     "kj-film"
@@ -3576,7 +3576,7 @@
    "moment": "On 25 February 1964 he took the heavyweight title from Sonny Liston as Cassius Clay. The next morning he confirmed he was a member of the Nation of Islam, and within weeks he was introducing himself by a new name and insisting on it, whatever the press printed.",
    "pattern": "I don't have to be what you want me to be.",
    "by": "",
-   "why": "Chosen because standing on your own name, not the firm's, is the work this year.",
+   "why": "Chosen because standing on your own name is the work this year.",
    "source": "Corpus draft. Press conference, Miami Beach, 26 February 1964; the name followed on 6 March. Verify wording.",
    "caution": "",
    "gist": "Within weeks he was introducing himself by a new name.",
@@ -3848,7 +3848,7 @@
   {
    "id": "C2",
    "key": "borrowed-versus-owned-standing",
-   "chip": "Standing that's yours, not the firm's",
+   "chip": "Standing in your own name",
    "line": "Clients come for the firm. You want them to come for you.",
    "label_from": "prototype"
   },

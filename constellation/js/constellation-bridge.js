@@ -73,8 +73,15 @@
   var iconOf = {};  // prototype hero id -> library icon id
   function appId(iconId) { return appOf[iconId] || iconId; }
 
+  // the house voice over the prototype's product copy, in place, so the engine's own references hold (CLC.COPY)
+  function voiced(o, seen) {
+    seen = seen || [];
+    if (!o || typeof o !== 'object' || seen.indexOf(o) >= 0) return; seen.push(o);
+    Object.keys(o).forEach(function (k) { var v = o[k]; if (typeof v === 'string') { var t = window.CLC.voice(v); if (t !== v) o[k] = t; } else if (v && typeof v === 'object') voiced(v, seen); });
+  }
   function feed(d, corpus, demo) {
     var CLC = window.CLC;
+    if (!d.__voiced) { voiced(d); d.__voiced = true; }
     var lib = CLC.merge(corpus, demo);
     CLC.applyVerification(lib, B.ledger);
     B.lib = lib;
@@ -410,8 +417,9 @@
     var shown = {}; (c.state.saved || []).forEach(function (id) { shown[id] = 1; });
     var theirs = ic.stories.map(function (id) { return CLC.storyCard(lib, lib.story[id]); });
     if (theirs.length) groups.push({ label: (received ? 'All ' : '') + theirs.length + (theirs.length === 1 ? ' story' : ' stories') + ' from ' + CLG_short(ic.name), items: theirs.map(function (cd) { return row(c, cd, cd.first); }) });
-    var kin = CLC.kindred(lib, iconId, 3);
-    if (kin.length) groups.push({ label: 'Kindred lives', items: kin.map(function (x) { var k = x.icon; return { title: k.name, why: (x.reasons[0] || {}).text || '', open: function () { openHeroHere(c, appId(k.id)); } }; }) });
+    // kindred: a shared situation and one more reason, said in words, as the Library says it (lib/net.js)
+    var kin = window.CLN ? window.CLN.kindred(lib, iconId, 3) : [];
+    if (kin.length) groups.push({ label: 'Kindred lives', items: kin.map(function (x) { var k = lib.icon[x.id]; return { title: k.name, why: x.why.slice(0, 2).join(' '), open: function () { openHeroHere(c, appId(k.id)); } }; }) });
     out.hv.lib = groups; out.hv.hasLib = groups.length > 0;
     if (theirs.length) out.hv.moreInLib = false;
   }
