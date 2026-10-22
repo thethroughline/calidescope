@@ -284,3 +284,24 @@ test('round four: nothing the member has, and no life from last week, is offered
   const a = CLQ.answer(lib, CLQ.read(lib, 'Sarah announces the reorg Thursday and Dan wanted her job', {}).q);
   assert.ok(a.ready.story.icon !== 'barack-obama', 'the lead is not the life Sarah had last week');
 });
+
+test('round four: the check plan gives every member four, Golda Meir first, and shortens once a draft is checked', () => {
+  const CLQ = require('../lib/ask.js'), CLN = require('../lib/net.js');
+  const sent = {}, avoid = {};
+  for (const m of lib.order) { sent[m] = CLQ.sentTo(lib, m).map((x) => CLC.resolve(lib, x)); avoid[m] = CLQ.recentTo(lib, m).map((x) => x.icon); }
+  const plan = CLN.checkPlan(lib, { sent, avoid });
+  assert.equal(plan.picks.length, 9);
+  assert.equal(plan.members.find((m) => m.id === 'david').have, 0);
+  assert.ok(plan.members.every((m) => m.left === 0), 'every gap closes, David’s included');
+  assert.equal(plan.picks[0].story.icon, 'golda-meir');
+  assert.deepEqual(plan.picks[0].serves, ['david', 'priya']);
+  assert.ok(plan.picks[0].near.some((x) => x.id === 'priya' && x.links === 0), 'one of Priya’s three');
+  for (const p of plan.picks) assert.ok(!p.story.verified && ['near', 'mid'].includes(p.story.reach));
+  // check the first and plan again: one fewer
+  const s0 = lib.story[plan.picks[0].story.id];
+  s0.verified = true;
+  try { assert.equal(CLN.checkPlan(lib, { sent, avoid }).picks.length, 8); } finally { s0.verified = false; }
+  // a coach's own members only
+  const jim = lib.order.filter((m) => lib.members[m].coach === 'jim');
+  assert.deepEqual(CLN.checkPlan(lib, { members: jim, sent, avoid }).members.map((m) => m.id), jim);
+});

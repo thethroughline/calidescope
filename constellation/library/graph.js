@@ -257,10 +257,9 @@
 
   // ---------- kindred across time (CLN.kindred) ----------
   // A band for each situation the life shares with its kin, the year across on the map's own scale (early
-  // centuries pressed together, the last 125 years open). Filled dots have three reasons or more.
+  // centuries pressed together, the last 125 years open). Drawn only when a tie crosses more than fifty years.
   function kinTime(host, lib, me, kin, bands, o) {
     o = o || {}; var href = o.href || function (id) { return '#/icon/' + encodeURIComponent(id); };
-    var strong = function (k) { return k.tie.shared.length > 1 || k.tie.reasons.length >= 2; };
     var paint = function () {
       var W = host.clientWidth; if (!W) return;
       var L = 16, TOP = 54, fs = 13, LANE = 28, HEAD = 34;
@@ -297,7 +296,7 @@
           var b = bands.indexOf(key); if (b < 0) return;
           var y = bandTop[b] + HEAD + 12 + at[k.id + '|' + key] * LANE; pts.push(y);
           nodes += '<a class="kn" href="' + esc(href(k.id)) + '" data-id="' + esc(k.id) + '" aria-label="' + esc(i.name + ', ' + yearLabel(i.year) + '. ' + k.why.join(' ')) + '"><title>' + esc(i.name + ', ' + yearLabel(i.year) + '\n' + k.why.join('\n')) + '</title>' +
-            '<circle cx="' + f1(x) + '" cy="' + y + '" r="16" fill="transparent"/><circle class="kdot' + (strong(k) ? '' : ' weak') + '" cx="' + f1(x) + '" cy="' + y + '" r="6.5"/>' +
+            '<circle cx="' + f1(x) + '" cy="' + y + '" r="16" fill="transparent"/><circle class="kdot" cx="' + f1(x) + '" cy="' + y + '" r="6.5"/>' +
             '<text x="' + f1(x + 11) + '" y="' + (y + 4.5) + '" font-size="' + fs + '">' + esc(nm) + '</text></a>';
         });
         if (pts.length > 1) joins += '<line class="kjoin" x1="' + f1(x) + '" x2="' + f1(x) + '" y1="' + Math.min.apply(null, pts) + '" y2="' + Math.max.apply(null, pts) + '"/>';
@@ -315,44 +314,37 @@
   }
 
   // ---------- situations that travel together (CLN.web) ----------
-  // The situations as rows in family order, full words, never rotated. Arcs in a narrow gutter join two
-  // rows when the same lives lived both; by default only pairs three or more lives share, and a
-  // member's own pairs in madder. Tapping a row lights its arcs and says who lived both.
+  // The situations as rows in family order, full words, never rotated. Each row says how many lives hold it
+  // and the two situations it most often travels with; a member's own in madder. Tapping a row lists who
+  // lived both, for each situation it travels with.
   function ladder(host, lib, pairs, o) {
     o = o || {}; var mine = o.mine || [], on = null, list = function (a) { return a.length <= 1 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; };
-    var fam = '', h = '<svg class="arcs" aria-hidden="true"></svg><ul class="rows">';
+    // the situations as words: each row says how many lives hold it and the two it most often travels with
+    var fam = '', h = '<ul class="rows">';
+    var its = function (id) {
+      return pairs.filter(function (p) { return p.a === id || p.b === id; }).sort(function (x, y) { return y.lives.length - x.lives.length || ((x.a + x.b) < (y.a + y.b) ? -1 : 1); });
+    };
     lib.situations.forEach(function (s) {
       if (s.fam !== fam) { fam = s.fam; h += '<li class="fam">' + esc(s.fam + ' · ' + (o.family ? o.family[s.fam] : '')) + '</li>'; }
-      h += '<li data-id="' + esc(s.id) + '" class="' + (mine.indexOf(s.id) >= 0 ? 'mine' : '') + '"><button type="button" aria-expanded="false"><span class="c">' + esc(s.id) + '</span><span>' + esc(s.chip) + '</span><span class="n">' + n(s.icons.length) + '</span></button></li>';
+      var top = its(s.id).slice(0, 2).map(function (p) { return (p.a === s.id ? p.b : p.a) + ' (' + p.lives.length + ')'; });
+      h += '<li data-id="' + esc(s.id) + '" class="' + (mine.indexOf(s.id) >= 0 ? 'mine' : '') + '"><button type="button" aria-expanded="false" aria-controls="lp-' + esc(s.id) + '"><span class="c">' + esc(s.id) + '<span class="sr"> · </span></span><span class="t"><span class="l">' + esc(s.chip) + '</span>' +
+        '<span class="w"> · <span class="nw">' + n(s.icons.length) + '</span>' + (top.length ? ' · most often with ' + esc(list(top)) : '') + '</span></span></button><div class="pane" id="lp-' + esc(s.id) + '" hidden></div></li>';
     });
     function n(k) { return k + (k === 1 ? ' life' : ' lives'); }
     host.innerHTML = h + '</ul>';
-    var svg = host.querySelector('svg.arcs'), rows = host.querySelector('.rows');
-    function centre(id) { var b = rows.querySelector('li[data-id="' + id + '"] button'), hb = host.getBoundingClientRect(), r = b.getBoundingClientRect(); return r.top - hb.top + r.height / 2; }
-    var paint = function () {
-      var G = 96, s = '';
-      svg.setAttribute('width', G); svg.setAttribute('height', host.clientHeight);
-      pairs.forEach(function (p) {
-        var hot = on && (p.a === on || p.b === on), mn = mine.indexOf(p.a) >= 0 && mine.indexOf(p.b) >= 0;
-        if (p.lives.length < 3 && !hot && !mn) return;
-        var y1 = centre(p.a), y2 = centre(p.b), span = Math.abs(y2 - y1), bulge = Math.min(G - 8, 10 + Math.sqrt(span) * 2.6);
-        s += '<path class="arc' + (hot ? ' hot' : '') + (mn ? ' mine' : '') + '" stroke-width="' + f1(1 + 1.6 * (p.lives.length - 1)) + '" d="M' + G + ' ' + f1(y1) + ' C' + f1(G - bulge * 1.3) + ' ' + f1(y1) + ' ' + f1(G - bulge * 1.3) + ' ' + f1(y2) + ' ' + G + ' ' + f1(y2) + '"/>';
-      });
-      svg.innerHTML = s; host.classList.toggle('focus', !!on);
-    };
+    var rows = host.querySelector('.rows');
     rows.addEventListener('click', function (e) {
       var b = e.target.closest('button'); if (!b) return; var li = b.parentNode, id = li.dataset.id;
-      rows.querySelectorAll('.pane').forEach(function (x) { x.remove(); }); rows.querySelectorAll('li.on').forEach(function (x) { x.classList.remove('on'); x.querySelector('button').setAttribute('aria-expanded', 'false'); });
-      if (on === id) { on = null; paint(); return; }
+      rows.querySelectorAll('li.on').forEach(function (x) { x.classList.remove('on'); x.querySelector('button').setAttribute('aria-expanded', 'false'); var pn = x.querySelector('.pane'); pn.hidden = true; pn.innerHTML = ''; });
+      if (on === id) { on = null; return; }
       on = id; li.classList.add('on'); b.setAttribute('aria-expanded', 'true');
-      var its = pairs.filter(function (p) { return p.a === id || p.b === id; });
-      li.insertAdjacentHTML('beforeend', '<div class="pane">' + (its.length ? its.slice(0, 6).map(function (p) {
+      var mine2 = its(id), pane = li.querySelector('.pane');
+      pane.innerHTML = mine2.length ? mine2.slice(0, 6).map(function (p) {
         var other = lib.sit[p.a === id ? p.b : p.a];
-        return '<p><a href="#/situation/' + esc(other.id) + '"><b>' + esc(other.id) + '</b> ' + esc(other.chip) + '</a>: ' + list(p.lives.map(function (x) { return '<a href="#/icon/' + esc(x) + '">' + esc(lib.icon[x].name) + '</a>'; })) + '</p>';
-      }).join('') + (its.length > 6 ? '<p>And ' + (its.length - 6) + ' more situations.</p>' : '') + '<p><a href="#/situation/' + esc(id) + '">Open ' + esc(id) + '</a></p>' : 'No life in the library has a story here and in another situation yet.') + '</div>');
-      paint();
+        return '<p><a href="#/situation/' + esc(other.id) + '">' + esc(other.id + ' · ' + other.chip) + '</a> · ' + n(p.lives.length) + ': ' + list(p.lives.map(function (x) { return '<a href="#/icon/' + esc(x) + '">' + esc(lib.icon[x].name) + '</a>'; })) + '</p>';
+      }).join('') + (mine2.length > 6 ? '<p>And ' + (mine2.length - 6) + ' more situations.</p>' : '') + '<p><a href="#/situation/' + esc(id) + '">Open ' + esc(id) + '</a></p>' : '<p>No life in the library has a story here and in another situation yet.</p>';
+      pane.hidden = false;
     });
-    paint(); host._paint = paint;
     if (o.open) { var ob = rows.querySelector('li[data-id="' + o.open + '"] button'); if (ob) ob.click(); }
   }
 

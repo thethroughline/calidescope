@@ -228,6 +228,27 @@ table.season td .t { font: 400 17px/1.4 var(--serif); }
 .tip { position: absolute; z-index: 5; pointer-events: none; background: var(--ink); color: var(--paper); border-radius: 12px; padding: 9px 12px; font: 400 var(--t-meta)/1.4 var(--sans); max-width: 260px; transform: translate(-50%, calc(-100% - 12px)); white-space: nowrap; }
 .tip b { font: 400 17px var(--serif); display: block; white-space: normal; }
 .mapcap { margin-top: 12px; min-height: 24px; }
+.map svg:focus { outline: none; }
+.map svg:focus-visible { outline: 2px solid var(--pru); outline-offset: -3px; border-radius: 18px; }
+.map .cur { fill: none; stroke: var(--ink); stroke-width: 2; }
+/* when the map scrolls, the field names hold still in a column at its left edge */
+.mapfields { position: absolute; left: 1px; top: 1px; bottom: 1px; width: 0; pointer-events: none; }
+.mapfields span { position: absolute; left: 8px; transform: translateY(-50%); white-space: nowrap; padding: 2px 8px; border-radius: 8px; background: color-mix(in srgb, var(--paper) 88%, transparent); font: 500 13px/1.3 var(--sans); color: var(--mute); }
+.map.scrolls .bandlabel { visibility: hidden; }
+/* a chosen star's kin, or the lives of a field in view */
+.mapkin:empty { display: none; }
+.mapkin { margin-top: 14px; border-top: 1px solid var(--hair); padding-top: 12px; }
+.mapkin .kinhead { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.mapkin h3 { margin: 0; }
+.kinlist { list-style: decimal; margin: 8px 0 0; padding: 0 0 0 28px; color: var(--faint); font: 400 var(--t-meta) var(--sans); }
+.kinlist li { border-top: 1px solid var(--hair); }
+.kinlist li:first-child { border-top: 0; }
+.kinlist a { display: flex; flex-direction: column; justify-content: center; min-height: 44px; padding: 6px 0; color: var(--ink); text-decoration: none; }
+.kinlist a:hover b { text-decoration: underline; }
+.kinlist b { font: 400 17px/1.3 var(--serif); }
+.kinlist span { font: 400 var(--t-meta)/1.4 var(--sans); color: var(--mute); }
+.fieldlives { margin: 8px 0 0; font: 400 var(--t-ui)/1.75 var(--sans); color: var(--mute); }
+@media (hover: none), (max-width: 820px) { .fieldlives a { padding: 13px 0; margin: -13px 0; } }
 .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
 
 /* the time strip on a story: every story that shares a situation, placed by year */
@@ -503,6 +524,7 @@ a.n-row:hover { background: var(--well); color: var(--ink); }
 .n-fig a.kn:focus-visible .kdot, .n-fig a.kn:hover .kdot { stroke: var(--ink); stroke-width: 2; }
 .kfig.focus a.kn:not(.hot) { opacity: .25; }
 .kinlayout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 40px; align-items: start; margin-top: 22px; }
+.kinsolo { margin-top: 22px; max-width: 720px; }
 .spine { list-style: none; margin: 0 0 26px; padding: 0; position: relative; }
 .spine::before { content: ""; position: absolute; left: 63px; top: 8px; bottom: 8px; width: 1px; background: var(--hair); }
 .spine li { display: grid; grid-template-columns: 52px 22px minmax(0, 1fr); gap: 0 10px; padding: 12px 0; }
@@ -533,28 +555,23 @@ a.n-row:hover { background: var(--well); color: var(--ink); }
 .n-chain .who .disc.from { background: var(--ink); color: var(--paper); }
 .n-chain .who .disc.goal { background: var(--pru); color: var(--paper); }
 .n-steps li .ex { display: block; color: var(--mute); font-size: 15px; }
-/* the ladder: situations as rows, arcs in the gutter */
-.ladder { position: relative; --gut: 96px; }
-.ladder svg.arcs { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
-.ladder .arc { fill: none; stroke: var(--pru); opacity: .35; }
-.ladder .arc.hot { opacity: .9; }
-.ladder.focus .arc:not(.hot) { opacity: .06; }
-.ladder .arc.mine { stroke: var(--mad); opacity: .85; }
-.ladder .rows { list-style: none; margin: 0; padding: 0 0 0 var(--gut); }
+/* the ladder: situations as rows, each saying in words what it travels with */
+.ladder .rows { list-style: none; margin: 0; padding: 0; }
 .ladder .rows li { border-top: 1px solid var(--hair); }
 .ladder .rows li.fam { border-top: 0; font: 500 var(--t-label)/1.4 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--faint); padding: 18px 0 6px; }
-.ladder .rows button { all: unset; box-sizing: border-box; display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: center; width: 100%; min-height: 44px; padding: 6px 4px; cursor: pointer; font: 400 16px/1.35 var(--serif); color: var(--ink); }
+.ladder .rows button { all: unset; box-sizing: border-box; display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; align-items: baseline; width: 100%; min-height: 44px; padding: 10px 4px; cursor: pointer; font: 400 16px/1.35 var(--serif); color: var(--ink); }
 .ladder .rows button:focus-visible { outline: 2px solid var(--pru); outline-offset: -2px; border-radius: 8px; }
 .ladder .rows button:hover, .ladder .rows li.on button { background: var(--well); }
 .ladder .rows .c { font: 500 var(--t-meta) var(--sans); color: var(--pru); }
 .ladder .rows li.mine .c { color: var(--mad); }
-.ladder .rows .n { font: 400 var(--t-meta) var(--sans); color: var(--faint); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ladder .rows .w { font: 400 var(--t-meta)/1.5 var(--sans); color: var(--mute); font-variant-numeric: tabular-nums; }
+.ladder .rows .nw { white-space: nowrap; }
 .ladder .rows .pane { padding: 4px 4px 14px 44px; font: 400 var(--t-ui)/1.5 var(--sans); color: var(--mute); }
 .ladder .rows .pane a { display: inline-flex; min-height: 24px; align-items: center; }
+@media (hover: none), (max-width: 820px) { .ladder .rows .pane a { display: inline; padding: 13px 0; margin: -13px 0; } .ladder .rows .pane p { margin: 12px 0 0; line-height: 1.75; } }
 .ladder .rows .pane p { margin: 6px 0 0; }
 @media (max-width: 900px) { .kinlayout { grid-template-columns: minmax(0, 1fr); } .kinlayout .figcol { display: none; } }
 @media (max-width: 640px) {
-  .ladder { --gut: 56px; }
   .route { padding: 16px 14px 10px; }
   .route .n-chain { flex-direction: column; align-items: flex-start; gap: 0; }
   .route .n-chain .who { flex-direction: row; width: auto; gap: 12px; }
@@ -632,3 +649,19 @@ details.readas[open] > summary .change { display: none; }
 .saidline { margin: 10px 0 0; font: italic 400 16px/1.5 var(--serif); color: var(--ink); }
 .leadcard .saidline { margin: 0; }
 .moveline { margin: 10px 0 0; font: 400 15px/1.5 var(--sans); color: var(--mute); }
+
+/* the week, quieter or closer */
+.wgrid { width: 100%; max-width: 760px; border-collapse: separate; border-spacing: 6px; table-layout: fixed; }
+.wgrid caption { caption-side: top; text-align: left; font: 400 var(--t-body)/1.5 var(--serif); color: var(--ink); padding: 0 6px 10px; }
+.wgrid th { font: 500 var(--t-meta)/1.3 var(--sans); color: var(--mute); text-align: left; padding: 4px 6px; vertical-align: bottom; }
+.wgrid thead td { width: 28%; background: none; }
+.wgrid tbody th { vertical-align: middle; }
+.wgrid td { border-radius: 12px; background: var(--well); vertical-align: top; }
+.wgrid td.none { color: var(--faint); font: 400 var(--t-meta) var(--sans); padding: 12px; }
+.wgrid td a { display: flex; flex-direction: column; gap: 2px; min-height: 44px; padding: 10px 12px; color: var(--ink); text-decoration: none; border-radius: 12px; overflow-wrap: anywhere; }
+.wgrid td a:hover { background: var(--pru12); }
+.wgrid td.here { box-shadow: inset 0 0 0 2px var(--mad); }
+.wgrid .n { font: 500 var(--t-ui) var(--sans); }
+.wgrid .nm { font: 400 var(--t-meta)/1.35 var(--sans); color: var(--mute); }
+.wgrid .here-mark { color: var(--mad); }
+@media (max-width: 640px) { .wgrid { border-spacing: 4px; } .wgrid thead td { width: 30%; } .wgrid td a { padding: 8px; } .wgrid .nm { display: none; } .wgrid td.here .nm { display: block; } }

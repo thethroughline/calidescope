@@ -454,6 +454,7 @@
     var take = function (s, h, r) { if (!s) return null; used[s.icon] = 1; steps.push({ story: s, heading: h, reason: r }); return s; };
     var p1 = take(best(L.filter(function (s) { return s.reach !== 'far' && s.year >= 1950 && s.directness === 'direct'; }), typ) || best(L.filter(function (s) { return s.reach !== 'far'; }), typ) || best(L, typ),
       'Begin close to home', null);
+    if (p1.reach !== 'near') steps[0].heading = 'The plainest case';   // the heading never promises a closeness the story lacks
     steps[0].reason = (p1.reach === 'near' ? 'Close to an ordinary office' : 'Some way from an office') + (p1.directness ? ', and ' + (p1.directness === 'indirect' ? 'an' : 'a') + ' ' + DIR_WORD[p1.directness] + ' move' : '') + ': the plainest version of this week, in ' + yearLabel(p1.year) + '.';
     var old = L.filter(function (s) { return s.year != null && s.year < 1900; });
     var p2 = take(best(old.length ? old : L, function (s) { return -s.year + typ(s) * 100; }), 'The same week, long ago', '');

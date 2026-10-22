@@ -373,7 +373,11 @@
           return '<option value="' + esc(s.key) + '"' + (lit === s.key ? ' selected' : '') + '>' + esc(s.id + ' · ' + s.chip) + '</option>'; }).join('') + '</optgroup>'; }).join('') +
         '</select><i class="ph ph-caret-down" aria-hidden="true"></i></label></div>';
     }
-    return picker + '<div class="map" id="map"><div class="map-scroll"></div><div class="tip" id="tip" hidden></div></div><p class="mapcap meta" id="mapcap" aria-live="polite"></p>';
+    return picker + mapBox();
+  }
+  // the map, a sticky column of field names for when it scrolls, its caption, and the list a chosen star fills
+  function mapBox() {
+    return '<div class="map" id="map"><div class="map-scroll"></div><div class="mapfields" aria-hidden="true"></div><div class="tip" id="tip" hidden></div></div><p class="mapcap meta" id="mapcap" aria-live="polite"></p><div class="mapkin" id="mapkin"></div>';
   }
   function paintMap() {
     var host = document.getElementById('map'); if (!host) return;
@@ -382,8 +386,9 @@
     var mine = {}; (me && AS !== 'coach' ? me.core : []).forEach(function (id) { mine[id] = 1; });
     // SVG text scales with the drawing; hold the labels at 13px on screen whatever its width
     var sc0 = host.querySelector('.map-scroll'), drawn = Math.max(sc0.clientWidth || MW, 760), fs = (13 * MW / drawn).toFixed(1);
-    var Hh = TOP + FIELDS.length * BAND + 30, s = '<svg viewBox="0 0 ' + MW + ' ' + Hh + '" role="img" aria-label="' +
-      esc('A map of ' + lib.icons.length + ' lives by field and by the year of their defining moment' + (key ? ', with ' + lib.sitByKey[key].chip + ' lit' : '')) + '">';
+    var fresh = host.dataset.painted !== (key || '-'); host.dataset.painted = key || '-';
+    var Hh = TOP + FIELDS.length * BAND + 30, s = '<svg viewBox="0 0 ' + MW + ' ' + Hh + '" tabindex="0" role="group" aria-label="' +
+      esc('A map of ' + lib.icons.length + ' lives by field and by the year of their defining moment' + (key ? ', with ' + lib.sitByKey[key].chip + ' lit' : '') + '. Arrow keys move from life to life, Enter opens one.') + '">';
     FIELDS.forEach(function (f, k) { var y = TOP + k * BAND; if (k % 2 === 0) s += '<rect class="band" x="0" y="' + y + '" width="' + MW + '" height="' + BAND + '"/>'; s += '<text class="bandlabel" x="14" y="' + (y + BAND / 2 + fs * 0.35).toFixed(1) + '" font-size="' + fs + '">' + esc(FIELD_SHORT[f.id] || f.label) + '</text>'; });
     // a tick is drawn only where its label clears the last one drawn
     var lastRight = -1e9;
@@ -405,7 +410,7 @@
       if (mine[i.id]) s += '<circle class="ring" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + (r + 3.5).toFixed(1) + '"/>';
       if (mapOpts.focus === i.id) s += '<circle class="hl" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + (r + 5).toFixed(1) + '"/>';
     });
-    s += '<g class="threads" aria-hidden="true"></g>';
+    s += '<g class="threads" aria-hidden="true"></g><g class="curg" aria-hidden="true"></g>';
     lib.icons.forEach(function (i) { var p = pos[i.id]; if (p) s += '<circle class="hit" data-id="' + esc(i.id) + '" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="7"/>'; });
     s += '</svg>';
     host.classList.toggle('lit', !!key);
@@ -434,12 +439,14 @@
       var me0 = pos[id], kin = CLN.kindred(lib, id, 12).filter(function (k) { return pos[k.id]; }), t = '', boxes = [], w = function (txt) { return txt.length * fs * 0.56; };
       boxes.push({ x0: me0.x - 6, x1: me0.x + 6, y0: me0.y - 6, y1: me0.y + 6 });
       kin.forEach(function (k) {
-        var q = pos[k.id], cx = (me0.x + q.x) / 2, cy = Math.min(me0.y, q.y) - 18 - Math.abs(me0.x - q.x) * 0.12, strong = k.tie.shared.length > 1 || k.tie.reasons.length >= 2;
+        var q = pos[k.id], cx = (me0.x + q.x) / 2, lift = 18 + Math.abs(me0.x - q.x) * 0.12, cy = Math.min(me0.y, q.y) - lift, strong = k.tie.shared.length > 1 || k.tie.reasons.length >= 2;
+        // the top of a quadratic curve sits halfway between its control point and its ends: if that leaves the map, bow down
+        if ((me0.y + q.y) / 4 + cy / 2 < TOP + 4) cy = Math.min(Hh - 30, Math.max(me0.y, q.y) + lift);
         t += '<path class="thread' + (strong ? ' strong' : '') + '" d="M' + me0.x.toFixed(1) + ' ' + me0.y.toFixed(1) + ' Q' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ' ' + q.x.toFixed(1) + ' ' + q.y.toFixed(1) + '"/>';
       });
       kin.concat([{ id: id, me: true }]).forEach(function (k) {
         var q = pos[k.id], F = +fs, nm = k.me ? lib.icon[id].name : CLG.shortName(lib.icon[k.id].name), ww = w(nm), hh = F * 1.2, spots = [[q.x + 6, q.y + F * 0.35, 'start'], [q.x - 6, q.y + F * 0.35, 'end'], [q.x, q.y - 7, 'middle'], [q.x, q.y + F + 5, 'middle']];
-        var ok = spots.filter(function (sp) { var x0 = sp[2] === 'start' ? sp[0] : sp[2] === 'end' ? sp[0] - ww : sp[0] - ww / 2, b = { x0: x0, x1: x0 + ww, y0: sp[1] - hh, y1: sp[1] + 2 }; return b.x0 > 0 && b.x1 < MW && !boxes.some(function (o) { return b.x0 < o.x1 && b.x1 > o.x0 && b.y0 < o.y1 && b.y1 > o.y0; }); })[0];
+        var ok = spots.filter(function (sp) { var x0 = sp[2] === 'start' ? sp[0] : sp[2] === 'end' ? sp[0] - ww : sp[0] - ww / 2, b = { x0: x0, x1: x0 + ww, y0: sp[1] - hh, y1: sp[1] + 2 }; return b.x0 > 0 && b.x1 < MW && b.y0 > 0 && b.y1 < Hh - 26 && !boxes.some(function (o) { return b.x0 < o.x1 && b.x1 > o.x0 && b.y0 < o.y1 && b.y1 > o.y0; }); })[0];
         if (!ok) return;
         var x0 = ok[2] === 'start' ? ok[0] : ok[2] === 'end' ? ok[0] - ww : ok[0] - ww / 2; boxes.push({ x0: x0, x1: x0 + ww, y0: ok[1] - hh, y1: ok[1] + 2 });
         t += '<circle class="kin' + (k.me ? ' me' : '') + '" cx="' + q.x.toFixed(1) + '" cy="' + q.y.toFixed(1) + '" r="' + (k.me ? 4.5 : 3.6) + '"/><text class="kinlabel' + (k.me ? ' me' : '') + '" x="' + ok[0].toFixed(1) + '" y="' + ok[1].toFixed(1) + '" text-anchor="' + ok[2] + '" font-size="' + fs + '">' + esc(nm) + '</text>';
@@ -447,21 +454,89 @@
       g.innerHTML = t;
       if (cap) cap.innerHTML = n(kin.length, 'thread', 'threads') + ' from <b>' + esc(lib.icon[id].name) + '</b> to the lives closest to them, each sharing a situation and one more thing. <a href="' + H.icon(id) + '">Open ' + esc(CLG.shortName(lib.icon[id].name)) + '</a>';
     };
-    var show = function (e) {
-      var c = e.target.closest('.hit'); if (!c) { tip.hidden = true; threads(null); return; }
-      threads(lib.icon[c.dataset.id].stories.length ? c.dataset.id : null);
-      var i = lib.icon[c.dataset.id], b = host.getBoundingClientRect(), cb = c.getBoundingClientRect();
+    // a chosen star (a first tap, or the keys) keeps its threads, its tip and the list of its kin under the map
+    var kinBox = document.getElementById('mapkin'), mcur = null, scale = function () { return svg.getBoundingClientRect().width / MW; };
+    var tipAt = function (id) {
+      var i = lib.icon[id], c = svg.querySelector('.hit[data-id="' + id + '"]'); if (!c) return;
+      var b = host.getBoundingClientRect(), cb = c.getBoundingClientRect();
       tip.innerHTML = '<b>' + esc(i.name) + '</b>' + esc([yl(i.year), i.domainLabel, i.stories.length ? n(i.stories.length, 'story', 'stories') : 'no story yet'].filter(Boolean).join(' · '));
-      tip.style.left = (cb.left + cb.width / 2 - b.left) + 'px'; tip.style.top = (cb.top - b.top) + 'px'; tip.hidden = false;
+      tip.style.left = Math.max(70, Math.min(b.width - 70, cb.left + cb.width / 2 - b.left)) + 'px'; tip.style.top = (cb.top - b.top) + 'px'; tip.hidden = false;
     };
-    svg.addEventListener('mousemove', show); svg.addEventListener('mouseleave', function () { tip.hidden = true; threads(null); });
+    var choose = function (id, how) {
+      mcur = id; var g = svg.querySelector('g.curg');
+      if (!id) { g.innerHTML = ''; tip.hidden = true; threads(null); if (kinBox) kinBox.innerHTML = ''; return; }
+      var i = lib.icon[id], p = pos[id];
+      threads(i.stories.length ? id : null); tip.hidden = true;
+      g.innerHTML = '<circle class="cur" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="9"/>';
+      var kin = i.stories.length ? CLN.kindred(lib, id, 12) : [];
+      if (kinBox) kinBox.innerHTML = '<div class="kinhead"><h3>' + (kin.length ? 'Near ' + esc(i.name) : esc(i.name)) + '</h3><a class="btn sm" href="' + H.icon(id) + '">Open ' + esc(CLG.shortName(i.name)) + '</a></div>' +
+        (kin.length ? '<ol class="kinlist">' + kin.map(function (k) { var o = lib.icon[k.id]; return '<li><a href="' + H.icon(k.id) + '"><b>' + esc(o.name) + '</b><span>' + esc([yl(o.year), CLN.short(lib, id, k.id, k.tie)].filter(Boolean).join(' · ')) + '</span></a></li>'; }).join('') + '</ol>'
+          : '<p class="meta">No story yet, so no threads.</p>');
+      if (cap) cap.innerHTML = '<b>' + esc(i.name) + '</b>, ' + esc([yl(i.year), i.domainLabel].filter(Boolean).join(', ')) + '. ' + (kin.length ? n(kin.length, 'life stands', 'lives stand') + ' nearest, listed below. ' : '') +
+        (how === 'key' ? 'Left and right move through time, up and down change field, Enter opens.' : 'Tap again to open.');
+      // keep the chosen star in view, clear of the field names
+      var x = p.x * scale(), pad = sc.scrollWidth > sc.clientWidth + 4 ? 140 : 0;
+      if (x < sc.scrollLeft + pad || x > sc.scrollLeft + sc.clientWidth - 24) sc.scrollLeft = x - pad - (sc.clientWidth - pad) / 2;
+    };
+    var rest = function () { tip.hidden = true; threads(mcur && lib.icon[mcur].stories.length ? mcur : null); };
+    var show = function (e) {
+      var c = e.target.closest('.hit'); if (!c) { rest(); return; }
+      threads(lib.icon[c.dataset.id].stories.length ? c.dataset.id : null);
+      tipAt(c.dataset.id);
+    };
+    svg.addEventListener('mousemove', show); svg.addEventListener('mouseleave', rest);
     var armed = null;
     svg.addEventListener('click', function (e) {
-      var c = e.target.closest('.hit'); if (!c) return;
-      // on a touch screen the first tap names the star and the second opens it
-      if (matchMedia('(hover: none)').matches && armed !== c.dataset.id) { armed = c.dataset.id; show(e); return; }
+      var c = e.target.closest('.hit'), touch = matchMedia('(hover: none)').matches;
+      if (!c) {
+        // on a phone, a tap on a field's band names the lives of that field in view
+        if (!touch || !kinBox) return;
+        var pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; var sp = pt.matrixTransform(svg.getScreenCTM().inverse()), f = FIELDS[Math.floor((sp.y - TOP) / BAND)];
+        if (!f) return;
+        var k0 = scale(), x0 = (sc.scrollLeft + 130) / k0, x1 = (sc.scrollLeft + sc.clientWidth) / k0;
+        var inView = lib.icons.filter(function (i) { return i.field === f.id && pos[i.id] && pos[i.id].x >= x0 && pos[i.id].x <= x1; }).sort(function (a, b) { return a.year - b.year; });
+        choose(null); armed = null;
+        kinBox.innerHTML = '<div class="kinhead"><h3>' + esc(FIELD_SHORT[f.id] || f.label) + (inView.length ? ', ' + yl(inView[0].year) + ' to ' + yl(inView[inView.length - 1].year) : '') + '</h3><a class="btn sm" href="' + H.field(f.id) + '">All of ' + esc(FIELD_SHORT[f.id] || f.label) + '</a></div>' +
+          (inView.length ? '<p class="fieldlives">' + inView.map(function (i) { return '<a href="' + H.icon(i.id) + '">' + esc(i.name) + '</a> ' + yl(i.year); }).join(', ') + '</p>' : '<p class="meta">No life in this stretch of years.</p>');
+        return;
+      }
+      // on a touch screen the first tap chooses the star and the second opens it
+      if (touch && armed !== c.dataset.id) { armed = c.dataset.id; choose(c.dataset.id, 'tap'); return; }
       location.hash = H.icon(c.dataset.id);
     });
+    // the keys: one tab stop; left and right move through a field in time, up and down change field, Enter opens
+    var rows = FIELDS.map(function (f) { return lib.icons.filter(function (i) { return i.field === f.id && pos[i.id]; }).sort(function (a, b) { return a.year - b.year || pos[a.id].x - pos[b.id].x; }).map(function (i) { return i.id; }); });
+    var start = function () {
+      if (mapOpts.focus && pos[mapOpts.focus]) return mapOpts.focus;
+      var ids = Object.keys(key ? on : mine).filter(function (id) { return pos[id]; }).sort(function (a, b) { return lib.icon[a].year - lib.icon[b].year; });
+      if (ids.length) return ids[0];
+      return lib.icons.filter(function (i) { return pos[i.id]; }).sort(function (a, b) { return b.stories.length - a.stories.length || (a.id < b.id ? -1 : 1); })[0].id;
+    };
+    svg.addEventListener('focus', function () { if (!mcur && svg.matches(':focus-visible')) choose(start(), 'key'); });
+    svg.addEventListener('keydown', function (e) {
+      var k = e.key; if (!/^(ArrowLeft|ArrowRight|ArrowUp|ArrowDown|Home|End|Enter|Escape)$/.test(k)) return;
+      if (k === 'Escape') { if (mcur) { e.preventDefault(); choose(null); } return; }
+      e.preventDefault();
+      if (!mcur) { choose(start(), 'key'); return; }
+      if (k === 'Enter') { location.hash = H.icon(mcur); return; }
+      var f = fieldIx[lib.icon[mcur].field] || 0, row = rows[f], ix = row.indexOf(mcur), next = mcur;
+      if (k === 'ArrowLeft') next = row[Math.max(0, ix - 1)]; else if (k === 'ArrowRight') next = row[Math.min(row.length - 1, ix + 1)];
+      else if (k === 'Home') next = row[0]; else if (k === 'End') next = row[row.length - 1];
+      else {
+        var d = k === 'ArrowDown' ? 1 : -1, nf = f + d; while (rows[nf] && !rows[nf].length) nf += d;
+        if (rows[nf]) { var y = lib.icon[mcur].year; next = rows[nf].reduce(function (b, id) { return Math.abs(lib.icon[id].year - y) < Math.abs(lib.icon[b].year - y) ? id : b; }); }
+      }
+      choose(next, 'key');
+    });
+    // the field names stay put while the map scrolls under them
+    var fl = host.querySelector('.mapfields'), scrolls = sc.scrollWidth > sc.clientWidth + 4;
+    host.classList.toggle('scrolls', scrolls);
+    if (fl) fl.innerHTML = scrolls ? FIELDS.map(function (f, k) { return '<span style="top:' + ((TOP + k * BAND + BAND / 2) * scale() + 1).toFixed(1) + 'px">' + esc(FIELD_SHORT[f.id] || f.label) + '</span>'; }).join('') : '';
+    // on a phone the map opens on the last century, or on the first year the lit situation was lived
+    if (fresh && scrolls && innerWidth <= 600) {
+      var ys0 = key ? Object.keys(on).filter(function (id) { return pos[id]; }).map(function (id) { return pos[id].x; }) : [];
+      sc.scrollLeft = ys0.length ? Math.max(0, Math.min.apply(null, ys0) * scale() - 150) : sc.scrollWidth;
+    }
   }
 
   // ---------- pages ----------
@@ -558,7 +633,7 @@
     if (!kin.length) return { html: ic.stories.length ? sec('Kindred', '<p class="note">Nobody in the library shares a situation with ' + esc(ic.name) + ' and one more thing yet.</p>') : '' };
     var cnt = {}; kin.forEach(function (k) { k.tie.shared.forEach(function (x) { cnt[x] = (cnt[x] || 0) + 1; }); });
     var bands = ic.keys.filter(function (k) { return cnt[k]; }).sort(function (a, b) { return cnt[b] - cnt[a] || ic.keys.indexOf(a) - ic.keys.indexOf(b); }).slice(0, 4);
-    var strong = function (k) { return k.tie.shared.length > 1 || k.tie.reasons.length >= 2; }, seen = {};
+    var seen = {};
     var spine = bands.map(function (key) {
       var st = lib.sitByKey[key], mem = kin.filter(function (k) { return k.tie.shared.indexOf(key) >= 0 && !seen[k.id]; });
       mem.forEach(function (k) { seen[k.id] = 1; }); if (!mem.length) return '';
@@ -566,14 +641,16 @@
       return '<h3 class="n-h"><span class="code">' + esc(st.id) + '</span>Both ' + esc(CLN.both(key)) + '</h3><ol class="spine">' + rows.map(function (r) {
         if (r.me) return '<li class="me"><span class="y">' + esc(yl(ic.year)) + '</span><span class="pt"></span><span><span class="nm">' + esc(ic.name) + '</span></span></li>';
         var i = lib.icon[r.k.id], rest = r.k.why.slice(r.k.tie.shared.length), also = r.k.tie.shared.filter(function (x) { return x !== key; });
-        return '<li data-id="' + esc(r.k.id) + '"><span class="y">' + esc(yl(i.year)) + '</span><span class="pt' + (strong(r.k) ? '' : ' weak') + '"></span><span><a class="nm" href="' + H.icon(r.k.id) + '">' + esc(i.name) + '</a>' +
+        return '<li data-id="' + esc(r.k.id) + '"><span class="y">' + esc(yl(i.year)) + '</span><span class="pt"></span><span><a class="nm" href="' + H.icon(r.k.id) + '">' + esc(i.name) + '</a>' +
           '<div class="w">' + esc(also.map(function (x) { return 'Both ' + CLN.both(x) + '.'; }).concat(rest).join(' ')) + '</div></span></li>';
       }).join('') + '</ol>';
     }).join('');
     var lede = AS === 'member' ? n(all, 'life shares', 'lives share') + ' a situation with ' + esc(surname(ic.name)) + ' and one more thing. The closest ' + kin.length + ' sit at the year of their defining moment.'
       : 'The ' + kin.length + ' lives closest to ' + esc(ic.name) + ', of ' + all + ' who share a situation and one more thing. Each sits at the year of their defining moment.';
+    // the picture earns its place only when a tie crosses more than fifty years; closer than that the list says it all
+    var wide = ic.year != null && kin.some(function (k) { var y = lib.icon[k.id].year; return y != null && Math.abs(y - ic.year) > 50; });
     var html = sec('Kindred across time', '<p class="note" style="margin:-6px 0 0">' + lede + '</p>' +
-      '<div class="kinlayout"><div class="figcol"><div class="n-fig kfig graphbox" id="kfig"></div><ul class="n-key"><li><span class="sw" style="background:var(--pru)"></span>Three reasons or more</li><li><span class="sw" style="border:1.5px solid var(--pru);background:var(--paper)"></span>Two reasons</li><li><span class="ln dash"></span>' + esc(ic.name) + '</li></ul></div>' +
+      (wide ? '<div class="kinlayout"><div class="figcol"><div class="n-fig kfig graphbox" id="kfig"></div><ul class="n-key"><li><span class="ln dash"></span>' + esc(ic.name) + ', ' + esc(yl(ic.year)) + '</li></ul></div>' : '<div class="kinsolo">') +
       '<div id="spine">' + spine + '<p class="n-note">Ways of leading are proposed readings. Years are the year of each defining moment, written from recall.</p></div></div>');
     return { html: html, after: function () { var hst = document.getElementById('kfig'); if (hst) CLG.kinTime(hst, lib, ic, kin, bands, { list: 'spine' }); } };
   }
@@ -587,6 +664,21 @@
       (F.length ? '<h3 style="margin-top:26px">In the same field</h3><div class="grid">' + F.map(function (x) { return storyCard(x.story, { noQuote: true, why: x.reasons[0], world: true }); }).join('') + '</div>' : '')) + '</div>';
   }
   // Every story of this week: the plot, with the path's numbers, and a list of the path for small screens
+  // The week, quieter or closer: a 3x3 table of how directly each story was met against how close it sits to an
+  // ordinary office. Each cell counts its stories, names two, and opens that slice of the answer.
+  function gridHTML(key, hereId) {
+    var g = CLN.grid(lib, key), st = lib.sitByKey[key], here = hereId && lib.story[hereId];
+    var COLS = [['indirect', 'Indirect'], ['calibrated', 'Measured'], ['direct', 'Direct']], ROWS = [['near', 'Close to an ordinary office'], ['mid', 'Some way from one'], ['far', 'Far from one']];
+    var cell = function (c) {
+      var mine = here && here.reach === c.reach && here.directness === c.dir, names = c.ids.slice(0, 2).map(function (id) { var x = lib.story[id]; return esc(CLG.shortName(lib.icon[x.icon].name)) + (id === hereId ? ' <span class="here-mark">(this one)</span>' : ''); });
+      if (mine && c.ids.slice(0, 2).indexOf(hereId) < 0) names[1] = esc(CLG.shortName(lib.icon[here.icon].name)) + ' <span class="here-mark">(this one)</span>';
+      if (!c.n) return '<td class="none">None yet</td>';
+      return '<td' + (mine ? ' class="here"' : '') + '><a href="' + esc(askUrl({ sit: st.id, dir: c.dir, reach: c.reach })) + '"><span class="n">' + n(c.n, 'story', 'stories') + '</span><span class="nm">' + names.join(', ') + '</span></a></td>';
+    };
+    return '<table class="wgrid"><caption>' + esc(g.sentence) + '</caption><thead><tr><td></td>' + COLS.map(function (c) { return '<th scope="col">' + c[1] + '</th>'; }).join('') + '</tr></thead><tbody>' +
+      ROWS.map(function (r, ri) { return '<tr><th scope="row">' + r[1] + '</th>' + g.cells[ri].map(cell).join('') + '</tr>'; }).join('') + '</tbody></table>' +
+      (g.unrated ? '<p class="note" style="margin-top:6px">' + n(g.unrated, 'story is', 'stories are') + ' not rated yet.</p>' : '');
+  }
   function plotHTML(key, hereId, id) {
     var st = lib.sitByKey[key], P = CLC.readingPath(lib, key), all = (lib.byKey[key] || []).map(function (x) { return lib.story[x]; });
     return { P: P, html: '<div class="n-fig graphbox" id="' + id + '"></div><ul class="n-key"><li><span class="sw" style="background:var(--pru)"></span>Close to an ordinary office</li><li><span class="sw" style="background:var(--pru12);border:1.5px solid var(--pru)"></span>Some way from one</li><li><span class="sw" style="border:1.5px solid var(--pru)"></span>Far from one</li>' + (hereId ? '<li><span class="sw mad"></span>This story</li>' : '') + '<li><span class="sw" style="background:var(--ink)"></span>The path, in order</li></ul>' +
@@ -672,13 +764,12 @@
     h += '</aside></div>';
     // Stories like this one, in two kinds, each saying why; then the picture; then the same situation across time.
     h += othersHTML(s);
-    var plot = plotHTML(s.keys[0], s.id, 'splot'), stk = lib.sitByKey[s.keys[0]];
-    h += sec('Every story of this week', (stk ? '<p class="note" style="margin:-6px 0 14px">' + n((lib.byKey[s.keys[0]] || []).length, 'story', 'stories') + ' filed under ' + esc(stk.id + ' · ' + stk.chip) + '. This one is the red dot; the numbers are the situation’s <a href="' + H.sit(stk.id) + '">path in five stories</a>.</p>' : '') + plot.html);
+    var stk = lib.sitByKey[s.keys[0]];
+    h += sec('Every story of this week', '<div id="splot">' + gridHTML(s.keys[0], s.id) + '</div>' + (stk ? '<p class="note" style="margin-top:10px">' + tlink(H.sit(stk.id) + '?at=path', 'The situation’s path in five stories') + '</p>' : ''));
     h += otherWayHTML(s);
     if (t.moreFrom.length) h += sec('More from ' + esc(ic.name), '<div class="grid">' + t.moreFrom.map(function (c) { return storyCard(c, { noName: true }); }).join('') + '</div>');
     h += '<p style="margin-top:40px">' + tlink(H.era(t.era.id), 'Other stories from ' + esc(t.era.label.replace(/^The /, 'the '))) + '</p>';
-    return { title: ic.name + ', ' + (s.place || s.era), html: h, node: { k: 'story:' + s.id, label: ic.name + ', ' + (s.year != null ? yl(s.year) : s.era), href: H.story(s.id) },
-      after: plot.draw };
+    return { title: ic.name + ', ' + (s.place || s.era), html: h, node: { k: 'story:' + s.id, label: ic.name + ', ' + (s.year != null ? yl(s.year) : s.era), href: H.story(s.id) } };
   }
   function strip(list, here) {
     var ys = list.map(function (c) { return c.year; }).filter(function (y) { return y != null; });
@@ -716,10 +807,10 @@
     var seg = function (k, label) { return '<a class="btn sm' + (f === k ? ' on' : '') + '" href="' + H.sit(s.id) + (k === 'all' ? '' : '?f=' + k) + '">' + label + '</a>'; };
     var h = '<p class="meta" style="margin:0">' + esc(s.id + ' · ' + s.family) + '</p><h1 style="margin-top:6px">' + esc(s.chip) + '</h1><p class="lede">' + esc(s.line) + '</p>' +
       '<p class="note i" style="margin-top:10px">In a member’s words: “' + esc(s.member_line) + '”</p>';
-    var splot = plotHTML(s.key, null, 'sitplot');
-    h += '<section id="path"><header><h2>A path in five stories</h2></header><p class="note" style="margin:-6px 0 14px">An order that teaches: start close to home, go back in time, change worlds, see it handled the other way, then see the most at stake.</p>' + pathHTML(splot.P) + '</section>';
-    h += sec('Every story of this week', splot.html);
-    h += sec('Who has lived it', '<div class="map" id="map"><div class="map-scroll"></div><div class="tip" id="tip" hidden></div></div><p class="mapcap meta" id="mapcap"></p>' +
+    var splot = { P: CLC.readingPath(lib, s.key) };
+    h += '<section id="path"><header><h2>A path in five stories</h2></header><p class="note" style="margin:-6px 0 14px">An order that teaches: start with the plainest case, go back in time, change worlds, see it handled the other way, then see the most at stake.</p>' + pathHTML(splot.P) + '</section>';
+    h += sec('Every story of this week', '<div id="sitplot">' + gridHTML(s.key, null) + '</div>');
+    h += sec('Who has lived it', mapBox() +
       '<div class="people-row" style="margin-top:14px">' + s.icons.map(function (i) { return lib.icon[i]; }).sort(function (a, b) { return (a.year || 0) - (b.year || 0); }).map(function (i) { return pchip(CLC.iconCard(lib, i)); }).join('') + '</div>');
     h += sec(n(stories.length, 'story', 'stories'), stories.length ? '<div class="grid">' + stories.map(function (x) { return storyCard(CLC.storyCard(lib, x)); }).join('') + '</div>' : '<p class="empty">Nothing matches that filter yet.</p>',
       '<div class="row">' + seg('all', 'All') + seg('near', 'Near and mid') + seg('checked', 'Checked') + '</div>');
@@ -745,12 +836,12 @@
     var fam = lib.situations.filter(function (x) { return x.fam === s.fam && x.id !== s.id; });
     h += sec('The rest of ' + esc(s.fam + ' · ' + s.family), '<div class="row">' + fam.map(sitChip).join('') + '</div>');
     return { title: s.id + ' ' + s.chip, html: h, node: { k: 'sit:' + s.id, label: s.id + ' ' + s.chip, href: H.sit(s.id) },
-      after: function () { mapOpts = { key: s.key, chips: false }; lit = s.key; paintMap(); splot.draw(); } };
+      after: function () { mapOpts = { key: s.key, chips: false }; lit = s.key; paintMap(); } };
   }
   function sitsPage() {
     var pairs = CLN.web(lib), N = lib.situations.length, two = pairs.filter(function (p) { return p.lives.length >= 2; }).length;
     return { title: 'Situations', html: '<h1>Situations</h1><p class="lede">' + N + ' situations a new leader meets, in ' + Object.keys(CLC.FAMILY).length + ' families. Every story is filed under at least one.</p>' +
-      sec('Situations that travel together', '<p class="note" style="margin:-6px 0 14px">When one life has stories in two situations, an arc joins them; the thicker the arc, the more lives. ' + pairs.length + ' of the ' + (N * (N - 1) / 2) + ' pairs share a life, and ' + two + ' share two or more. Only arcs three or more lives share are drawn' + (me && AS === 'member' ? ', with yours in red' : '') + '. Tap a situation to see who lived both.</p><div class="ladder graphbox" id="ladder"></div>') +
+      sec('Situations that travel together', '<p class="note" style="margin:-6px 0 14px">When one life has stories in two situations, the two travel together. ' + pairs.length + ' of the ' + (N * (N - 1) / 2) + ' pairs share a life, and ' + two + ' share two or more. Each row names the two it travels with most, with the lives they share' + (me && AS === 'member' ? '; yours are in red' : '') + '. Tap a situation to see who lived both.</p><div class="ladder graphbox" id="ladder"></div>') +
       sec('All situations', fams()),
       after: function () { CLG.ladder(document.getElementById('ladder'), lib, pairs, { mine: me && AS === 'member' ? me.sits : [], family: CLC.FAMILY }); } };
   }

@@ -9,6 +9,7 @@
      CLN.bridge(lib, mid, icon, key) -> the chain from a member's three to a story's life
      CLN.near(lib, mid)            -> a member's situations, the lives in them, their three, stand-ins
      CLN.web(lib)                  -> situation pairs held by the same life, with the lives
+     CLN.checkPlan(lib, o)         -> { members: [{ id, have, left }], picks: [{ story, serves, near }] }  the checks to make first
 
    A tie needs one shared situation (the predicament) and one more reason: the same way of leading,
    within 15 years, or the same domain. Two shared situations make a tie on their own. Measured on the
@@ -239,6 +240,25 @@
     return { pick: out[0] || null, next: out.slice(1, 3), total: out.length };
   }
 
+  // ---------- the week, quieter or closer ----------
+  // A situation's stories in a 3x3: how directly each was met (indirect, measured, direct) against how close it
+  // sits to an ordinary office (near, mid, far), with a sentence that says what the grid shows.
+  var DIRS = ['indirect', 'calibrated', 'direct'], REACHES = ['near', 'mid', 'far'];
+  var DIR_WORDS = { indirect: 'indirect', calibrated: 'measured', direct: 'direct' };
+  function grid(lib, key) {
+    var all = (lib.byKey[key] || []).map(function (id) { return lib.story[id]; }).filter(Boolean), st = lib.sitByKey[key] || {};
+    var cells = REACHES.map(function (r) { return DIRS.map(function (dd) {
+      var ids = all.filter(function (s) { return s.reach === r && s.directness === dd; }).sort(function (a, b) { return (b.verified - a.verified) || ((a.year || 0) - (b.year || 0)); }).map(function (s) { return s.id; });
+      return { dir: dd, reach: r, n: ids.length, ids: ids };
+    }); });
+    var near = cells[0], nNear = near.reduce(function (a, c) { return a + c.n; }, 0), dirsNear = near.filter(function (c) { return c.n; });
+    var nInd = cells.reduce(function (a, row) { return a + row[0].n; }, 0), unrated = all.filter(function (s) { return !s.directness || REACHES.indexOf(s.reach) < 0; }).length;
+    var sentence = 'For ' + (st.id || key) + ', ' + (nNear === 0 ? 'no story sits close to an ordinary office.' : nNear + (nNear === 1 ? ' story sits' : ' stories sit') + ' close to an ordinary office' +
+      (dirsNear.length === 1 ? (nNear === 1 ? ', ' : ', all ') + DIR_WORDS[dirsNear[0].dir] + '.' : ': ' + dirsNear.map(function (c) { return c.n + ' ' + DIR_WORDS[c.dir]; }).join(', ') + '.')) +
+      (nInd === 0 ? ' None is indirect.' : '');
+    return { cells: cells, sentence: sentence, total: all.length, unrated: unrated };
+  }
+
   // ---------- how far a life is from a member's three ----------
   // hops: the fewest links from any of the three to every life with a story (0 for the three themselves),
   // breadth first over the ties, at most o.max (default 3). For sorting a list of stories by nearness.
@@ -282,6 +302,42 @@
     return { member: m, age: m.age, stories: out, near: out.filter(function (x) { return x.gap <= (o.span || 3); }) };
   }
 
+  // ---------- the check plan: the fewest checks that give every member enough to send ----------
+  // A member needs o.need checked stories (4 by default) in their situations that they have not been sent
+  // (o.sent[mid]) and whose life they did not have last week (o.avoid[mid]). The plan picks recall drafts, near
+  // or mid reach, greedily: the draft that closes the most gaps first, a gap counting 1.2 when the draft's life
+  // is within one link of that member's three. Check one and run it again: the plan shortens.
+  function checkPlan(lib, o) {
+    o = o || {}; var need = o.need || 4, ids = o.members || Object.keys(lib.members), sent = o.sent || {}, avoid = o.avoid || {}, th = o.three || {};
+    var M = ids.filter(function (mid) { return lib.members[mid]; }).map(function (mid) {
+      var keys = (lib.members[mid].sits || []).map(function (c) { return lib.sit[c] && lib.sit[c].key; }).filter(Boolean), ex = sent[mid] || [], av = avoid[mid] || [];
+      var seen = {}, have = 0, pool = [];
+      keys.forEach(function (k) { (lib.byKey[k] || []).forEach(function (sid) {
+        var s = lib.story[sid]; if (seen[sid] || !s) return; seen[sid] = 1;
+        if (ex.indexOf(sid) >= 0 || av.indexOf(s.icon) >= 0) return;
+        if (s.verified) have++; else if (s.reach === 'near' || s.reach === 'mid') pool.push(sid);
+      }); });
+      return { id: mid, have: have, gap: Math.max(0, need - have), pool: pool, near: hops(lib, mid, { max: 1, three: th[mid] }) };
+    });
+    var byId = {}; M.forEach(function (m) { byId[m.id] = m; });
+    var picks = [], used = {};
+    for (;;) {
+      var score = {}, best = null;
+      M.forEach(function (m) { if (m.gap <= 0) return; m.pool.forEach(function (sid) {
+        if (used[sid]) return; var x = score[sid] = score[sid] || { w: 0, serves: [] };
+        x.w += m.near[lib.story[sid].icon] ? 1.2 : 1; x.serves.push(m.id);
+      }); });
+      Object.keys(score).sort().forEach(function (sid) { if (!best || score[sid].w > best.w + 1e-9) best = { sid: sid, w: score[sid].w, serves: score[sid].serves }; });
+      if (!best) break;
+      used[best.sid] = 1;
+      var ic = lib.story[best.sid].icon;
+      best.serves.forEach(function (mid) { byId[mid].gap--; });
+      picks.push({ story: lib.story[best.sid], serves: best.serves,
+        near: best.serves.filter(function (mid) { return byId[mid].near[ic]; }).map(function (mid) { return { id: mid, links: byId[mid].near[ic].links, hero: byId[mid].near[ic].hero }; }) });
+    }
+    return { need: need, members: M.map(function (m) { return { id: m.id, have: m.have, left: Math.max(0, m.gap) }; }), picks: picks };
+  }
+
   // ---------- the situation web ----------
   function web(lib) {
     var pairs = {};
@@ -297,5 +353,5 @@
 
   return { BOTH: BOTH, STANCE: STANCE, FIELD: FIELD, NEAR_YEARS: NEAR_YEARS, both: both, apart: apart, world: world,
     tie: tie, why: why, short: short, graph: graph, kindred: kindred, route: route, routes: routes, bridge: bridge,
-    near: near, nearWhy: nearWhy, affinity: affinity, sendable: sendable, web: web, three: three, atAge: atAge, fillSlot: fillSlot, hops: hops, linksTo: linksTo };
+    near: near, nearWhy: nearWhy, affinity: affinity, sendable: sendable, web: web, three: three, atAge: atAge, fillSlot: fillSlot, hops: hops, linksTo: linksTo, grid: grid, checkPlan: checkPlan };
 }));

@@ -242,8 +242,10 @@
     if (!sits.length && !M) closest = situationScores(lib, rest, null).slice(0, 3).map(function (o) { return o.id; });
     if (M && M.sits) M.sits.forEach(function (id) { if (sits.indexOf(id) < 0 && alts.indexOf(id) < 0) alts.push(id); });
     var STOPW = /^(a|an|the|who|whom|has|have|had|for|of|to|in|on|at|is|was|were|with|and|or|their|they|them|someone|somebody|something|story|stories|member|members|people|person|i|my|me|we|our|that|this|it|be|been|about|one|what|from|by|did|do|does|whose|her|his|she|he|version|can|not|set|used|any|some|will|would|could|should|there|then|than|when|where|which|while|who's|she's|he's|i'm|it's|we're|they're|just|really|actually|again|still|next|week|being|getting|having|today|tomorrow|thursday|friday|monday|tuesday|wednesday|saturday|sunday)$/;
-    var unused = uniq(fold(text).split(/[^a-z0-9']+/).filter(function (w) { return w && !used[w] && !STOPW.test(w) && w.length > 2; }));
-    var sitOf = function (id) { return { id: id, label: id + ' · ' + cap(DID[id]), n: (lib.byKey[lib.sit[id].key] || []).length }; };
+    // the words not used, as the coach wrote them
+    var orig = {}; String(text).split(/[^A-Za-z\u00C0-\u024F0-9'’]+/).forEach(function (w) { var f = fold(w).replace(/[^a-z0-9']/g, ''); if (f && !orig[f]) orig[f] = w.replace(/’/g, "'"); });
+    var unused = uniq(fold(text).split(/[^a-z0-9']+/).filter(function (w) { return w && !used[w] && !STOPW.test(w) && w.length > 2; })).map(function (w) { return orig[w] || w; });
+    var sitOf = function (id) { return { id: id, label: id + ' · ' + (lib.sit[id].chip || cap(DID[id])), n: (lib.byKey[lib.sit[id].key] || []).length }; };
     return { q: q, chips: chips(lib, q), alts: alts.slice(0, 4).map(sitOf), closest: closest.map(sitOf), unused: unused };
   }
   // The demo's week is the move's second (19 October): the first week's story went out on 12 October, inside the
@@ -265,7 +267,7 @@
   // The query as plain-word chips: what the Library understood. Each one can be taken away.
   function chips(lib, q) {
     var c = [], M = memberOf(lib, q.m);
-    if (q.sit) q.sit.split('+').forEach(function (id) { if (lib.sit[id]) c.push({ k: 'sit', v: id, label: id + ' · ' + cap(DID[id]), kind: 'sit' }); });
+    if (q.sit) q.sit.split('+').forEach(function (id) { if (lib.sit[id]) c.push({ k: 'sit', v: id, label: id + ' · ' + (lib.sit[id].chip || cap(DID[id])), kind: 'sit' }); });
     if (q.mine && M) c.push({ k: 'mine', label: 'In ' + M.first + '’s situations: ' + M.sits.join(', '), kind: 'sit' });
     if (q.sex) c.push({ k: 'sex', label: q.sex === 'f' ? 'A woman' : 'A man' });
     if (q.field && FIELD_LABEL[q.field]) c.push({ k: 'field', label: 'From ' + FIELD_LABEL[q.field].toLowerCase() });
@@ -275,7 +277,7 @@
     else if (q.after) c.push({ k: 'after', label: 'Set since ' + q.after });
     if (q.age) c.push({ k: 'age', label: 'About ' + q.age + ' at the time' + (M && M.age === q.age ? ', as ' + M.first + ' is' : '') });
     if (q.notus) c.push({ k: 'notus', label: 'Outside the United States' });
-    if (q.dir) c.push({ k: 'dir', label: q.dir === 'quiet' ? 'A quieter way: measured or indirect' : 'Direct' });
+    if (q.dir) c.push({ k: 'dir', label: q.dir === 'quiet' ? 'A quieter way: measured or indirect' : q.dir === 'calibrated' ? 'Measured' : q.dir === 'indirect' ? 'Indirect' : 'Direct' });
     if (q.than && lib.icon[q.than]) c.push({ k: 'than', label: 'Quieter than ' + (lib.icon[q.than].short || lib.icon[q.than].name) });
     if (q.reach) c.push({ k: 'reach', label: REACH[q.reach] });
     if (q.stance) c.push({ k: 'stance', label: cap(STANCE_TRAIT.filter(function (t) { return t[1].join('+') === q.stance; }).map(function (t) { return t[3]; })[0] || q.stance) + ', as we read it' });
@@ -309,7 +311,7 @@
       lib.icon[q.than].stories.forEach(function (id) { (lib.story[id] || { keys: [] }).keys.forEach(function (k) { if (aks.indexOf(k) < 0) aks.push(k); }); });
       F.push({ k: 'than', t: function (s) { return s.icon !== q.than && s.keys.some(function (k) { return aks.indexOf(k) >= 0; }) && (ar == null || (s.directness && DIR_RANK[s.directness] < ar)); } });
     }
-    if (q.dir) F.push({ k: 'dir', t: function (s) { return !s.directness || (q.dir === 'quiet' ? s.directness === 'calibrated' || s.directness === 'indirect' : s.directness === 'direct'); } });
+    if (q.dir) F.push({ k: 'dir', t: function (s) { return q.dir === 'quiet' ? !s.directness || s.directness === 'calibrated' || s.directness === 'indirect' : q.dir === 'direct' ? !s.directness || s.directness === 'direct' : s.directness === q.dir; } });
     if (q.reach) F.push({ k: 'reach', t: function (s) { return s.reach === q.reach; } });
     if (q.stance) { var st = q.stance.split('+'); F.push({ k: 'stance', t: function (s) { return st.indexOf(I[s.icon].stance) >= 0; } }); }
     if (q.ok) F.push({ k: 'ok', t: function (s) { return s.verified; } });

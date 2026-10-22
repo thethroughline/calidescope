@@ -180,15 +180,53 @@
 
   // ---------- 2 · wrap the engine's view ----------
   var DRAFT = 'Draft — must verify';
+  // The rule's trace as a coach reads it: one sentence a line, no precedence numbers or tie-breaks
+  function traceWords(lines, r, lib, d) {
+    var M = lib.members[r.mid] || {}, first = M.first || 'the member', sit = lib.sit[String(r.key || '').split(' \u00b7 ')[0]];
+    var heroOf = function (x) { return String(x).trim(); }, out = [];
+    lines.forEach(function (t) {
+      if (typeof t !== 'string') { out.push(t); return; }
+      var m, x = t.replace(/^rule: /, '');
+      if (/^tie-break|^extended: none/.test(x)) return;
+      if ((m = /^coach (pinned|swapped)/.exec(x))) return out.push('You ' + m[1] + ' it; your choice wins.');
+      if (/^\u2713 situation /.test(x)) return out.push(sit ? 'It carries ' + sit.id + ' \u00b7 ' + sit.chip + '.' : 'It carries the week\u2019s situation.');
+      if (/^\u2713 verified/.test(x)) return out.push('It is checked against its source.');
+      if ((m = /^\u2713 hero: core \((.+)\)/.exec(x))) return out.push(heroOf(m[1]) + ' is one of ' + first + '\u2019s three.');
+      if ((m = /^\u2713 extended \((.+)\)/.exec(x))) return out.push(heroOf(m[1]) + ' is on ' + first + '\u2019s wider list.');
+      if ((m = /^\u2713 library \((.+)\)/.exec(x))) return out.push('From the library: ' + heroOf(m[1]) + '.');
+      if (/^core heroes: none eligible/.test(x)) return out.push('None of ' + first + '\u2019s three has a checked story for this.');
+      if ((m = /^\u2713 reach (\w+)/.exec(x))) return out.push(m[1] === 'near' ? 'Close to an ordinary office.' : m[1] === 'mid' ? 'Some way from an office.' : 'Far from an office.');
+      if ((m = /^\u00b7 skipped ([^:]+): (.+)$/.exec(x))) {
+        var who = m[1], why = m[2], k;
+        if ((k = /sent (\d+) days ago/.exec(why))) return out.push(who + ' went to ' + first + ' ' + k[1] + ' days ago, so the rule skipped ' + who + ' this week.');
+        if ((k = /^Already sent (.+)$/.exec(why))) return out.push('That story went to ' + first + ' on ' + k[1] + ', so the rule skipped it.');
+        if (/not for me/.test(why)) return out.push(first + ' said \u201cnot for me\u201d to ' + who + '\u2019s story.');
+        if (/^Far/.test(why)) return out.push(who + '\u2019s story is far from an office: Ask can still answer with it.');
+        if (/scoped to/.test(why)) return out.push(why.replace(/ is scoped to /, ' is kept for ') + '.');
+        return out.push(who + ': ' + why + '.');
+      }
+      if ((m = /^\u00b7 (\d+) recall drafts? also carr/.exec(x))) return out.push(m[1] + (m[1] === '1' ? ' recall draft also carries it, waiting for a check.' : ' recall drafts also carry it, each waiting for a check.'));
+      if ((m = /nothing eligible: (.+)$/.exec(x))) {
+        if (/every candidate is a recall draft/.test(m[1])) return out.push('Nothing checked carries this yet.');
+        return out.push('Nothing checked can go: ' + m[1].split('; ').map(function (why) {
+          var k = /^(.+) sent (\d+) days ago/.exec(why); if (k) return k[1] + ' went to ' + first + ' ' + k[2] + ' days ago';
+          k = /^Already sent (.+)$/.exec(why); if (k) return 'one went to ' + first + ' on ' + k[1];
+          return why.replace(/ \(no hero twice in 14 days\)/, '');
+        }).join('; ') + '.');
+      }
+      out.push(x);
+    });
+    return out;
+  }
   function collapseTrace(lines) {
     var n = 0, out = [];
     lines.forEach(function (t) {
       if (typeof t !== 'string') { out.push(t); return; }
       if (t.indexOf(DRAFT) >= 0 && /skipped/.test(t)) { n++; return; }
       if (t.indexOf('nothing eligible') >= 0) {
-        var parts = t.split('; '), k = parts.filter(function (p) { return p.indexOf(DRAFT) >= 0; }).length;
-        n += k; t = parts.filter(function (p) { return p.indexOf(DRAFT) < 0; }).join('; ');
-        if (/eligible:\s*$/.test(t)) t = t.replace(/:\s*$/, ': every candidate is a recall draft');
+        var at = t.indexOf(': '), head = t.slice(0, at + 2), parts = t.slice(at + 2).split('; '), k = parts.filter(function (p) { return p.indexOf(DRAFT) >= 0; }).length;
+        n += k; parts = parts.filter(function (p) { return p && p.indexOf(DRAFT) < 0; });
+        t = head + (parts.length ? parts.join('; ') : 'every candidate is a recall draft');
       }
       out.push(t);
     });
@@ -390,11 +428,13 @@
     if (pendingAsks.length) (out.ro || []).forEach(function (r) { if (r.mid === P) r.last = 'Asked for ' + (pendingAsks.length === 1 ? '1 check' : pendingAsks.length + ' checks'); });
     // Review stays honest: a row that shows a recall draft cannot be approved, and a row with nothing to send
     // (or a draft) offers the one check that fills it, done in the row (lib/net.js fillSlot)
+    var onReview = st.role === 'coach' && st.c === 'C3';
     if (out.rq && out.rq.rows && window.CLN) {
-      var flagged = [], short = function (id) { var I = lib.icon[id]; return I ? (I.short || I.name) : id; };
+      var short = function (id) { var I = lib.icon[id]; return I ? (I.short || I.name) : id; };
       out.rq.rows.forEach(function (r) {
         r.asked = r.mid === P && pendingAsks.length ? askedLine(lib.members[P], pendingAsks.length) : '';
         var sitId = String(r.key || '').split(' · ')[0], sit = lib.sit[sitId], M = lib.members[r.mid]; if (!sit || !M) return;
+        r.key = sit.id + ' \u00b7 ' + sit.chip;   // one name for a situation everywhere
         // the rule's fortnight, said on the row: a life the member had last week waits
         // one phrase for when a story goes, on every row
         var kd = (d.clock[st.clock] || d.clock[0]).day, at18 = 'at 18:00 ' + (kd === 18 ? 'today' : 'on Sunday'), okS = r.has && r.s && r.s.verified;
@@ -407,13 +447,14 @@
         var shownDraft = r.has && r.s && !r.s.verified, ap = r.btns && r.btns[0];
         if (shownDraft && ap && !ap.dis) {
           ap.dis = true; ap.op = 0.4; ap.title = 'The story shown is a recall draft. Check its source first.'; ap.go = function () {};
-          r.pairNote = 'Paired with the move. Recall draft: check the source before it can go.'; flagged.push(r.mid);
+          r.pairNote = 'Paired with the move. Recall draft: check the source before it can go.';
           r.status = 'Waiting for your check \u00b7 nothing goes to ' + M.first + ' until then';
         }
-        if (!(r.none || shownDraft)) return;
+        // the search for the draft that fills a slot is the costly part: done only while Review is on screen, and remembered
+        if (!(r.none || shownDraft) || !onReview) return;
         var hs = r.mid === P && st.core && st.core.length ? st.core.map(function (h) { return iconOf[h] || h; }) : null;
         var shownId = shownDraft ? window.CLC.resolve(lib, r.s.id) : null, shownIc = shownId && lib.story[shownId] ? lib.story[shownId].icon : null;
-        var f = window.CLN.fillSlot(lib, r.mid, sit.key, { three: hs, prefer: shownIc && avoid.indexOf(shownIc) < 0 ? shownId : null, exclude: window.CLQ.sentTo(lib, r.mid).map(function (x) { return window.CLC.resolve(lib, x); }), avoidIcons: avoid }); if (!f.pick) return;
+        var f = fillFor(lib, r.mid, sit.key, { three: hs, prefer: shownIc && avoid.indexOf(shownIc) < 0 ? shownId : null, exclude: window.CLQ.sentTo(lib, r.mid).map(function (x) { return window.CLC.resolve(lib, x); }), avoidIcons: avoid }); if (!f.pick) return;
         var x = f.pick, I = lib.icon[x.story.icon], first = M.first, poss = first + '’s';
         var why = x.links === 0 ? 'From one of ' + poss + ' three.' : x.links === 1 ? 'One link from ' + short(x.hero) + ': ' + window.CLN.why(lib, x.steps[0].a, x.steps[0].b, x.steps[0].tie)[0].replace(/^Both /, 'both ') : (x.links < 9 ? x.links + ' links from ' + poss + ' three.' : 'Not near ' + poss + ' three.');
         var open = st.fillOpen === r.mid;
@@ -422,17 +463,99 @@
           check: function () { S({ fillOpen: open ? null : r.mid }); }, read: function () { S({ c: 'CX', cm: r.mid, cxRoute: '#/story/' + encodeURIComponent(x.story.id) }); },
           hasNext: f.next.length > 0, next: f.next.length ? 'Also near: ' + f.next.map(function (y) { return lib.icon[y.story.icon].name + (y.links === 0 ? ' (one of the three)' : y.links === 1 ? ' (one link)' : y.links < 9 ? ' (' + y.links + ' links)' : ''); }).join(', ') + '.' : '' };
       });
-      var bulk0 = out.rq.bulk;
-      if (flagged.length && bulk0) out.rq.bulk = function () {
-        bulk0(); var rv = Object.assign({}, c.state.review);
-        flagged.forEach(function (mid) { if (rv[mid] && rv[mid].action === 'approve') rv[mid] = Object.assign({}, rv[mid], { action: null }); });
-        c.setState({ review: rv, ctoast: 'Approved every slot that can go. ' + flagged.length + (flagged.length === 1 ? ' shows' : ' show') + ' a recall draft and waits for a check.' });
-        setTimeout(function () { c.setState({ ctoast: null }); }, 3200);
-      };
     }
+    // "Your week, Jim": one line per member of the coach whose console this is (a switch shows everyone), each
+    // with when they meet, their week, what goes, the guard, an open Ask, and one action; a line folds open onto
+    // the row as it was. Below the lines, the checks that give every member enough to send (CLN.checkPlan).
+    if (out.rq && out.rq.rows && window.CLN) {
+      var cc = consoleCoach(st), CC = lib.coaches[cc] || { first: 'you' }, cPos = CC.first + '\u2019s', all = !!st.rvAll;
+      var mineM = function (mid) { return (lib.members[mid] || {}).coach === cc; };
+      var clip = function (t, n) { t = String(t).trim(); return t.length <= n ? t : t.slice(0, t.lastIndexOf(' ', n - 1) > n / 2 ? t.lastIndexOf(' ', n - 1) : n - 1) + '\u2026'; };
+      var dayNow = (d.clock[st.clock] || d.clock[0]).day, shown = function (m) { return m.live || m.day <= dayNow; };
+      var hm = function (x) { var m = /^(\w{3}) \d+ \w{3}, (\d\d:\d\d)$/.exec(String(x || '')); return m ? m[1] + ' ' + m[2] : String(x || 'Not booked'); };
+      var prepFor = function (mid) {
+        if (!mineM(mid)) return null;
+        return mid === P ? function () { S({ c: 'C7', cm: P }); } : function () { S({ c: 'CX', cm: mid, cxRoute: '#/member/' + encodeURIComponent(mid) }); };
+      };
+      var openAsk = function (mid) {
+        var l = (st.msgs[mid] || []).filter(shown), asks = l.filter(function (m) { return m.from === 'member' && m.kind === 'ask' && !l.some(function (x) { return x.from === 'coach' && x.replyTo === m.id; }); });
+        return asks[asks.length - 1] || null;
+      };
+      out.rq.rows.forEach(function (r) {
+        var M = lib.members[r.mid] || {}, first = M.first || r.name, open = st.rvOpen === r.mid, ap = r.btns && r.btns[0], act = (st.review[r.mid] || {}).action;
+        var S2 = function (p2) { S(Object.assign({ rvOpen: r.mid }, p2)); };
+        r.when = hm(r.mid === P ? st.slot : M.next) + (r.holdMode ? ' \u00b7 Hold for me' : '');
+        r.prep = prepFor(r.mid);
+        r.week = r.up + ' \u00b7 ' + r.key;
+        var sI = r.has && r.s && r.s.id && lib.story[window.CLC.resolve(lib, r.s.id)], who = sI ? (lib.icon[sI.icon].short || lib.icon[sI.icon].name) + ', ' + (sI.place || window.CLC.yearLabel(sI.year)) : '';
+        var ready = r.has && r.s && r.s.verified && act !== 'hold';
+        r.goes = act === 'hold' ? 'Held \u00b7 nothing goes to ' + first + ' this week'
+          : ready ? r.status + ' \u00b7 ' + who
+          : r.fill ? 'One check \u00b7 ' + r.fill.title.split(' \u00b7 ')[0]
+          : r.has ? 'Waiting for your check \u00b7 ' + who
+          : 'Nothing checked in ' + first + '\u2019s situations';
+        r.goesC = ready ? 'var(--ink)' : 'var(--mute)';
+        var ask = openAsk(r.mid);
+        r.askOpen = ask ? 'Asked ' + hm(ask.at) + ' \u00b7 \u201c' + clip(ask.body || '', 60) + '\u201d' : '';
+        // one action: what this line needs first
+        r.act = r.fill ? { label: 'Check', go: function () { S2({ fillOpen: r.mid }); } }
+          : r.has && !r.s.verified ? { label: 'Check', go: function () { S2({}); } }
+          : ready && !act && ap && !ap.dis ? { label: 'Approve', go: ap.go }
+          : ask ? { label: 'Answer', go: function () { S({ c: 'C8', thread: r.mid }); } }
+          : r.prep ? { label: 'Prep', go: r.prep } : null;
+        if (r.act && r.act.label === 'Prep') r.prep = null;
+        r.open = open; r.shut = !open; r.openS = open ? 'true' : 'false';
+        r.foldLabel = open ? 'Close' : 'Details'; r.foldIcon = open ? 'ph ph-caret-up' : 'ph ph-caret-down'; r.foldAria = (open ? 'Close ' : 'Open ') + first + '\u2019s week';
+        r.fold = function () { S({ rvOpen: open ? null : r.mid }); };
+      });
+      var scoped = out.rq.rows.filter(function (r) { return all || mineM(r.mid); });
+      var canGo = scoped.filter(function (r) { var ap = r.btns && r.btns[0]; return !(st.review[r.mid] || {}).action && ap && !ap.dis && !r.holdMode; });
+      var NUM = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'], word = function (k) { return NUM[k] || String(k); };
+      var checkN = scoped.filter(function (r) { return (st.review[r.mid] || {}).action !== 'hold' && !(r.has && r.s && r.s.verified); }).length, askN = scoped.filter(function (r) { return r.askOpen; }).length;
+      out.rq.every = out.rq.rows; out.rq.rows = scoped;   // lookups by member (swap, Find and send) use every row
+      out.rq.count = scoped.length + (scoped.length === 1 ? ' member' : ' members') + (checkN ? ' \u00b7 ' + checkN + (checkN === 1 ? ' waits' : ' wait') + ' for a check' : '') + (askN ? ' \u00b7 ' + askN + (askN === 1 ? ' Ask' : ' Asks') + ' to answer' : '');
+      (out.nav || []).forEach(function (n) { if (n.label === 'Review') { n.badge = checkN + askN; n.hasBadge = checkN + askN > 0; } });
+      out.rq.scope = { on: all ? 'true' : 'false', icon: all ? 'ph-fill ph-toggle-right' : 'ph ph-toggle-left', bd: all ? 'var(--ink)' : 'var(--hair)', go: function () { S({ rvAll: !all, rvOpen: null }); } };
+      out.rq.canBulk = canGo.length > 0;
+      out.rq.bulkLabel = canGo.length === 1 ? 'Approve the one ready' : 'Approve the ' + word(canGo.length) + ' ready';
+      out.rq.bulk = function () {
+        var rv = Object.assign({}, c.state.review); canGo.forEach(function (r) { rv[r.mid] = Object.assign({}, rv[r.mid], { action: 'approve' }); });
+        var waits = scoped.filter(function (r) { return canGo.indexOf(r) < 0 && !(c.state.review[r.mid] || {}).action && !r.holdMode; }).map(function (r) { return (lib.members[r.mid] || {}).first || r.name; });
+        var msg = 'Approved ' + canGo.length + '. ' + (waits.length ? waits.join(' and ') + (waits.length === 1 ? ' waits' : ' wait') + ' for a check.' : 'Everything goes at 18:00.');
+        c.setState({ review: rv, ctoast: msg }); setTimeout(function () { if (c.state.ctoast === msg) c.setState({ ctoast: null }); }, 3200);
+      };
+      if (st.c === 'C3') out.cTitle = 'Your week, ' + CC.first;
+      // the plan: checks first for the members in view
+      var pm = scoped.map(function (r) { return r.mid; }), sentM = {}, avoidM = {}, threeM = {};
+      pm.forEach(function (mid) {
+        sentM[mid] = window.CLQ ? window.CLQ.sentTo(lib, mid).map(function (x) { return window.CLC.resolve(lib, x); }) : [];
+        avoidM[mid] = window.CLQ ? window.CLQ.recentTo(lib, mid).map(function (x) { return x.icon; }) : [];
+      });
+      if (st.core && st.core.length) threeM[P] = st.core.map(function (h) { return iconOf[h] || h; });
+      var plan = onReview ? window.CLN.checkPlan(lib, { members: pm, sent: sentM, avoid: avoidM, three: threeM }) : { picks: [], members: [] };
+      var firstOf = function (mid) { return (lib.members[mid] || {}).first || mid; }, andList = function (a) { return a.length <= 1 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; };
+      out.rq.plan = plan.picks.length ? {
+        line: (function (t) { return t.charAt(0).toUpperCase() + t.slice(1); })(word(plan.picks.length) + (plan.picks.length === 1 ? ' check gives ' : ' checks give ') + (all ? 'every member ' : 'each of ' + cPos + ' members ') + word(plan.need) + ' checked stories to choose from.') +
+          (plan.members.some(function (m) { return m.left; }) ? ' ' + andList(plan.members.filter(function (m) { return m.left; }).map(function (m) { return firstOf(m.id); })) + ' still need more drafts written.' : ''),
+        items: plan.picks.slice(0, 3).map(function (pk) {
+          var sid = pk.story.id, I = lib.icon[pk.story.icon], open = st.planOpen === sid;
+          var own = pk.near.filter(function (x) { return x.links === 0; }).map(function (x) { return 'one of ' + firstOf(x.id) + '\u2019s three'; });
+          var card = open ? checkCard(c, sid, pk.serves[0], 'plan') : null;
+          if (card && card.send) { var s0 = card.send; card.send = function () { var n = String((c.state.checkNote || {})[sid] || '').trim(); s0(); if (n) c.setState({ planOpen: null }); }; }
+          return { title: I.name + ' \u00b7 ' + (pk.story.place || window.CLC.yearLabel(pk.story.year)), serves: 'Fills ' + andList(pk.serves.map(firstOf)) + (own.length ? '; ' + own.join(', ') : ''),
+            label: open ? 'Close' : 'Check', card: card, go: function () { S({ planOpen: open ? null : sid }); } };
+        })
+      } : null;
+    }
+    // prep for every member of the console's coach: Sarah's in the console, the others as the Library's reading
+    (out.ck || []).forEach(function (k, i) {
+      var mid = d.order[i], M = lib.members[mid] || {}, mine = M.coach === consoleCoach(st);
+      k.prepDis = !mine; k.prepOp = mine ? 1 : 0.4; k.prepTitle = mine ? '' : (lib.coaches[M.coach] || {}).first + '\u2019s member: prep is in their console.';
+      if (mine) k.prep = mid === P ? function () { S({ c: 'C7', cm: P }); } : function () { S({ c: 'CX', cm: mid, cxRoute: '#/member/' + encodeURIComponent(mid) }); };
+    });
     // one name for a draft on the coach's side too
     var relabel = function (x) { if (x && x.verLabel === DRAFT) x.verLabel = 'Recall draft'; };
-    (out.rq && out.rq.rows || []).forEach(function (r) { relabel(r.s); });
+    (out.rq && (out.rq.every || out.rq.rows) || []).forEach(function (r) { relabel(r.s); });
     if (out.lib) relabel(out.lib.p);
     // the answer desk: a member's Ask in the coach's thread opens the Library's answer to it, read for that
     // member, with the situation they chose kept as chosen
@@ -517,7 +640,7 @@
         var ss = lib.story[sel], upK = toM.up19 && lib.sit[toM.up19.sit] ? lib.sit[toM.up19.sit].key : null;
         var key = L.key !== 'all' ? L.key : upK && ss.keys.indexOf(upK) >= 0 ? upK : ss.keys[0], lt = window.CLN.linksTo(lib, to, ss.icon, key, { three: toThree });
         out.lib.forLine = 'For ' + toM.first + ': ' + (lt.links === 0 ? 'one of ' + toM.first + '\u2019s three.' : lt.links < 9 ? lt.line.charAt(0).toLowerCase() + lt.line.slice(1) : 'not near ' + toM.first + '\u2019s three.');
-        var wr = (out.rq && out.rq.rows || []).filter(function (r) { return r.mid === to; })[0], pick = wr && wr.has && wr.s && wr.s.id;
+        var wr = (out.rq && (out.rq.every || out.rq.rows) || []).filter(function (r) { return r.mid === to; })[0], pick = wr && wr.has && wr.s && wr.s.id;
         if (pick && pick !== sel) out.lib.cmp = { label: 'Compare with ' + toM.first + '\u2019s pick for the week', go: function () { S({ c: 'CX', cm: to, cxRoute: '#/cmp?a=' + encodeURIComponent(sel) + '&b=' + encodeURIComponent(pick) + '&m=' + encodeURIComponent(to) }); } };
       }
       // stories related to the one chosen, each with what sets it apart: one tap makes another the choice
@@ -529,18 +652,19 @@
         var c2 = x.story; return { title: c2.name + ' · ' + (c2.place || ''), why: (x.reasons[0] || {}).text || '', go: function () { S({ lib: Object.assign({}, st.lib, { sel: c2.id, msg: '' }) }); } };
       });
     }
-    if (out.rq && out.rq.rows) out.rq.rows.forEach(function (r) { r.trace = collapseTrace(r.trace || []); });
+    if (out.rq && out.rq.rows) (out.rq.every || out.rq.rows).forEach(function (r) { r.trace = traceWords(collapseTrace(r.trace || []), r, lib, d); });
     // Swap: the drafts that carry this week's situation, nearest the member's three first, each one check
     // away from the list above it; the hero chips are the member's own three
     if (out.sp && out.sp.open && out.sp.excluded) {
-      var srow = (out.rq && out.rq.rows || []).filter(function (r) { return r.mid === st.swapFor; })[0];
+      var srow = (out.rq && (out.rq.every || out.rq.rows) || []).filter(function (r) { return r.mid === st.swapFor; })[0];
       var ssit = srow && lib.sit[String(srow.key || '').split(' · ')[0]], smem = lib.members[st.swapFor];
       var rest = out.sp.excluded.filter(function (e) { return !e.draft; }), nDraft = out.sp.excluded.length - rest.length;
       out.sp.pairLine = srow && st.swapFor === P && srow.pairNote ? 'Paired with week 2 of the move. Choosing another story unpairs it.' : '';
+      if (ssit) out.sp.sit = String(out.sp.sit).replace(/ \u00b7 [a-z-]+$/, '') + ' \u00b7 ' + ssit.id + ' \u00b7 ' + ssit.chip;
       if (ssit && smem && window.CLN) {
         var three = st.swapFor === P && st.core && st.core.length ? st.core.map(function (h) { return iconOf[h] || h; }) : smem.heroes_icons.core;
         var sAvoid = window.CLQ.recentTo(lib, st.swapFor).map(function (x) { return x.icon; }), sEx = window.CLQ.sentTo(lib, st.swapFor).map(function (x) { return window.CLC.resolve(lib, x); });
-        var F = window.CLN.fillSlot(lib, st.swapFor, ssit.key, { three: three, exclude: sEx, avoidIcons: sAvoid }), picks = F.pick ? [F.pick].concat(F.next) : [];
+        var F = fillFor(lib, st.swapFor, ssit.key, { three: three, exclude: sEx, avoidIcons: sAvoid }), picks = F.pick ? [F.pick].concat(F.next) : [];
         var sfirst = smem.first, nm = function (id) { var I = lib.icon[id]; return I ? I.name : id; };
         var dr = picks.map(function (x) {
           var I = lib.icon[x.story.icon], key = 'swap:' + x.story.id, open = st.fillOpen === key;
@@ -735,6 +859,14 @@
       keep.push({ has: false, none: true, text: (names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1] + ' have' : names[0] + ' has') + ' no story for this yet.' });
     }
     out.ak.walk = keep;
+  }
+  // CLN.fillSlot remembered: the same member, situation and exclusions give the same draft until a check changes the
+  // index, so a keystroke in a check note does not search the graph again
+  var fillMemo = {};
+  function fillFor(lib, mid, key, o) {
+    var ver = 0; lib.stories.forEach(function (s) { if (s.verified) ver++; });
+    var k = [mid, key, o.prefer || '', (o.three || []).join(','), (o.exclude || []).join(','), (o.avoidIcons || []).join(','), ver].join('|');
+    return fillMemo[k] || (fillMemo[k] = window.CLN.fillSlot(lib, mid, key, o));
   }
   // The coach whose console is open: a check is recorded in their name
   function consoleCoach(st) { var lib = B.lib, m = lib && lib.members[st.p]; return (m && m.coach) || 'jim'; }
