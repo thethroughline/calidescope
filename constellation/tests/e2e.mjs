@@ -9,7 +9,14 @@
 //                  a hero page and a story each open the Library at the right page
 //   coach          Review collapses the drafts; Library opens on Explore; a source check reaches the engine
 //                  and the API ledger; Send to a member lands on Find and send with the story chosen
-//   library        every page type, reader and coach, desktop and phone, light and dark, no sideways scroll
+//   in-app         a story lists related reading that opens in place, back returns; a hero lists kindred lives;
+//                  a story from beyond the three says how it reaches them; Heroes shows who stands near them;
+//                  Add to my heroes reaches the coach, Suggest reaches the member's thread; a member's Ask in
+//                  the coach's thread opens the Library's answer to it
+//   library        every page type, reader and coach, desktop and phone, light and dark, no sideways scroll;
+//                  Ask reads a question into chips and answers; the shelf counts; kindred across time, the
+//                  situation ladder, routes between two lives and the circles of a member's three all draw
+//   phone          the demo bar fits, the member app fills the screen, the Demo sheet and stepper work
 import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { execSync } from 'node:child_process';
@@ -39,7 +46,7 @@ function watch(p, tag) {
 
 try {
   console.log('prototype');
-  const p = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  const p = await browser.newPage({ viewport: { width: 1920, height: 1000 } });  // the full demo bar, with its eleven pills
   watch(p, 'prototype');
   await p.goto(BASE + '/constellation');
   await p.waitForFunction(() => window.CLB && CLB.ready && CLB.c, null, { timeout: 20000 });
@@ -73,6 +80,34 @@ try {
   await p.frameLocator('iframe[title="The Constellation library"]').locator('.prose').waitFor();
   check(true, 'a story opens the Library on that story');
 
+  console.log('in-app reading, both ways');
+  const first = 's-A1-beverley-mclachlin';
+  await p.evaluate((s) => CLB.c.setState({ overlay: 'story', sid: s, sctx: {}, sstack: [] }), first); await p.waitForTimeout(250);
+  const rel = p.locator('[data-bridge="story-related"] button');
+  check(await rel.count() >= 3, 'a story lists related reading from the library under it');
+  await rel.first().click(); await p.waitForTimeout(250);
+  const moved = await p.evaluate(() => [CLB.state().sid, (CLB.state().sstack || []).length]);
+  check(moved[0] !== first && moved[1] === 1, 'a related story opens in place, keeping the first to go back to');
+  await p.locator('[data-screen-label="M7 Story"] button').first().click(); await p.waitForTimeout(250);
+  check(await p.evaluate(() => [CLB.state().overlay, CLB.state().sid].join()) === 'story,' + first, 'back returns to the story you came from');
+  await p.evaluate(() => CLB.c.setState({ overlay: 'hero', hid: 'obama', hctx: {}, sstack: [] })); await p.waitForTimeout(250);
+  const hrel = p.locator('[data-bridge="hero-related"] button');
+  check(await hrel.count() >= 3, 'a hero page lists their stories and kindred lives');
+  await hrel.last().click(); await p.waitForTimeout(250);
+  const kin = await p.evaluate(() => [CLB.state().overlay, CLB.state().hid, (CLB.state().sstack || []).length]);
+  check(kin[0] === 'hero' && kin[1] !== 'obama' && kin[2] === 1, `a kindred life opens as a hero page in the app (${kin[1]})`);
+  await p.evaluate(() => CLB.c.setState({ overlay: 'story', sid: 's-D3-bayard-rustin', sctx: {}, sstack: [] })); await p.waitForTimeout(250);
+  const reach = await p.locator('[data-bridge="story-reach"]').innerText().catch(() => '');
+  check(/two steps from your Obama/.test(reach) && /both /.test(reach), 'a story from beyond the three says how it reaches them, in words');
+  await p.locator('[data-bridge="story-reach"] button').nth(1).click(); await p.waitForTimeout(250);
+  check(await p.evaluate(() => CLB.state().overlay === 'hero' && (CLB.state().sstack || []).length === 1), 'a name in the chain opens that life in place');
+  await p.evaluate(() => CLB.c.setState({ overlay: null, sstack: [], tab: 'heroes', m: 'app' })); await p.waitForTimeout(250);
+  check(/Who stands near your three/.test(await p.locator('[data-bridge="heroes-near"]').innerText().catch(() => '')), 'Heroes offers who stands near the three');
+  await p.evaluate(() => CLB.c.setState({ overlay: 'library', libRoute: '#/icon/billie-jean-king', libBack: null, sstack: [] }));
+  const lf = p.frameLocator('iframe[title="The Constellation library"]');
+  await lf.locator('[data-act="add-hero"]').click(); await p.waitForTimeout(300);
+  check(await p.evaluate(() => CLB.state().pending.some((x) => x.why === 'Found in the library' && /Billie Jean King/.test(x.name))), 'Add to my heroes in the Library reaches the coach as a hero to add');
+
   console.log('coach');
   await p.locator('button[aria-label="Coach"]').click(); await p.waitForTimeout(300);
   await p.evaluate(() => CLB.c.setState({ c: 'C3' })); await p.waitForTimeout(300);
@@ -92,6 +127,7 @@ try {
   check(await p.evaluate((t) => fetch('/api/constellation/state').then((r) => r.json()).then((j) => !!j.ledger[t]), target), 'and the back end ledger');
   await cf.locator('[data-act="send"]').click(); await p.waitForTimeout(400);
   check((await p.evaluate(() => [CLB.state().c, CLB.state().lib.sel])).join() === 'C4,' + target, 'Send to a member lands on Find and send with the story chosen');
+  check(await p.locator('[data-bridge="send-related"] button').count() >= 2, 'Find and send lists stories related to the one chosen');
   await p.locator('button', { hasText: 'Send now' }).click(); await p.waitForTimeout(200);
   check(await p.evaluate((t) => { const st = CLB.state(); return st.msgs[st.lib.to].slice(-1)[0].story === t; }, target), 'Send now delivers it to the member thread');
   console.log('every persona, every step of the demo clock, both roles');
@@ -105,7 +141,36 @@ try {
     }
   }
   check(!stepErrs.length, '3 personas × 11 steps × 2 roles render with the bridge in place' + (stepErrs.length ? ': ' + stepErrs.slice(0, 3).join(' | ') : ''));
+  await p.locator('button[aria-label="Coach"]').click(); await p.evaluate(() => CLB.c.setState({ c: 'CX', cxRoute: '#/icon/billie-jean-king' }));
+  const sf = p.frameLocator('iframe[title="The Constellation library"]');
+  await sf.locator('[data-act="suggest-hero"]').click(); await p.waitForTimeout(300);
+  check(await p.evaluate(() => Object.values(CLB.state().msgs).some((t) => /suggest Billie Jean King/.test((t.slice(-1)[0] || {}).body || ''))), "Suggest in the Library lands in the member's thread");
+  await p.evaluate(() => {
+    const st = CLB.c.state, e1 = CPD.sits.find((x) => x.id === 'E1'), mm = Object.assign({}, st.msgs);
+    mm.sarah = (st.msgs.sarah || []).concat([{ id: 'e2e-ask', from: 'member', kind: 'ask', body: 'I am announcing the reorg on Thursday and Dan wanted my job.', chip: e1.chip, day: 1, at: 'Tue 08:10', live: true }]);
+    CLB.c.setState({ c: 'C8', thread: 'sarah', msgs: mm });
+  }); await p.waitForTimeout(300);
+  await p.locator('[data-bridge="ask-find"]').last().click();
+  await sf.locator('h2.count').waitFor();
+  const desk = await sf.locator('.readas a.qchip').allInnerTexts();
+  check(desk.some((t) => t.startsWith('E1')) && desk.some((t) => /For Sarah/.test(t)), "Find a story for this opens the Library's answer to the member's Ask, with the situation she chose");
   await p.close();
+
+  console.log('the demo on a phone');
+  const ph = await browser.newPage({ viewport: { width: 375, height: 812 }, hasTouch: true, isMobile: true });
+  watch(ph, 'phone');
+  await ph.goto(BASE + '/constellation');
+  await ph.waitForFunction(() => window.CLB && CLB.ready && CLB.c, null, { timeout: 20000 });
+  check(await ph.evaluate(() => document.querySelector('[data-screen-label="Demo bar"]').scrollWidth <= innerWidth), 'the demo bar fits a phone');
+  check(await ph.evaluate(() => { const f = document.querySelector('[data-screen-label="M0 Welcome"]'); return !!f && Math.round(f.getBoundingClientRect().width) === innerWidth; }), 'the member app fills the phone, with no device drawn around it');
+  await ph.locator('[data-bridge="demo-menu"]').click();
+  await ph.locator('[role="dialog"][aria-label="Demo controls"] button', { hasText: 'Coach console' }).click(); await ph.waitForTimeout(250);
+  check(await ph.evaluate(() => CLB.state().role) === 'coach' && await ph.locator('[data-bridge="demo-coach-note"]').count() === 1, 'the Demo sheet switches to the coach console, which says it is made for a laptop');
+  await ph.locator('[data-bridge="demo-menu"]').click();
+  await ph.locator('[role="dialog"][aria-label="Demo controls"] button', { hasText: 'Member app' }).click(); await ph.waitForTimeout(200);
+  await ph.locator('[data-bridge="demo-stepper"] button[aria-label="Next demo step"]').click(); await ph.waitForTimeout(250);
+  check(await ph.evaluate(() => CLB.state().clock) === 1, 'the stepper moves the demo clock');
+  await ph.close();
 
   console.log('library');
   const routes = ['#/', '#/situations', '#/situation/A2', '#/situation/E4?f=near', '#/people', '#/people?field=sport&sort=year', '#/eras', '#/era/1970s', '#/era/before-1800',
@@ -115,7 +180,7 @@ try {
     const ctx = await browser.newContext({ viewport: { width: w, height: h }, colorScheme: scheme });
     const q = await ctx.newPage(); watch(q, `library ${as} ${w}`);
     await q.goto(`${BASE}/constellation/library?as=${as}#/`); await q.waitForSelector('#map svg');
-    const all = routes.concat(as === 'coach' ? ['#/members', '#/member/sarah', '#/member/tom', '#/checks', '#/situation/C2'] : ['#/member/sarah', '#/nowhere']);
+    const all = routes.concat(as === 'coach' ? ['#/members', '#/member/sarah', '#/member/tom', '#/checks', '#/situation/C2', '#/ask', '#/ask?m=tom', '#/near?m=maya', '#/near?m=tom', '#/gaps', '#/ask?sit=D4&sex=f&m=tom'] : ['#/member/sarah', '#/nowhere', '#/ask', '#/ask?sit=A4&dir=quiet', '#/cmp?a=st-bjk-1973-riggs&b=s-A2-barack-obama']);
     let over = [], blank = [];
     for (const r of all) {
       await q.evaluate((r) => { location.hash = r; }, r); await q.waitForTimeout(r.startsWith('#/member/') ? 600 : 120);
@@ -132,12 +197,40 @@ try {
       check(await q.locator('table.season tbody tr').count() === 8, 'the season table has eight weeks from the back end');
     }
     if (w > 1000) {
-      await q.evaluate(() => { location.hash = '#/'; }); await q.waitForSelector('.chips [data-key="renegotiating-standing"]');
-      await q.click('.chips [data-key="renegotiating-standing"]');
+      await q.evaluate(() => { location.hash = '#/'; }); await q.waitForSelector('#litsel');
+      await q.selectOption('#litsel', 'renegotiating-standing');
       check(await q.locator('#map polyline.path').count() === 1 && /A2/.test(await q.locator('#mapcap').innerText()), 'lighting a situation draws its constellation');
       await q.fill('#q', 'mclachlin'); await q.waitForTimeout(500);
       check(await q.locator('main .card .nm', { hasText: 'Beverley McLachlin' }).count() === 1, 'search finds a person as you type');
       check((await q.evaluate(() => window.CLL.trail.map((t) => t.k))).length > 3, 'pages join the trail');
+      await q.evaluate(() => { location.hash = '#/ask'; }); await q.waitForSelector('#askq');
+      await q.fill('#askq', (as === 'coach' ? 'She is' : 'I am') + ' announcing the reorg on Thursday, and the person who wanted ' + (as === 'coach' ? 'her' : 'my') + ' job will be in the room.');
+      await q.click('#askform button[type=submit]'); await q.waitForSelector('main h2.count');
+      const read = (await q.locator('.readas a.qchip.sit').allInnerTexts()).map((t) => t.split(' ')[0]);
+      check(read[0] === 'E1' && read.includes('A2') && await q.locator('.grid.answers .card').count() > 3 && /\?.*sit=E1%2BA2/.test(await q.evaluate(() => location.hash)), `Ask reads the question as ${read.join(' and ')}, answers with stories, and the address holds the query`);
+      const before = await q.evaluate(() => location.hash);
+      await q.locator('.readas a.qchip.sit').nth(1).click();
+      check(await q.waitForFunction((h) => location.hash !== h && document.querySelectorAll('.readas a.qchip.sit').length === 1, before, { timeout: 5000 }).then(() => true, () => false), 'a chip taken away narrows the reading');
+      await q.evaluate(() => { location.hash = '#/ask?sit=C2&field=law'; }); await q.waitForSelector('main h2.count');
+      check(await q.locator('main section h2', { hasText: 'Nearest answers' }).count() === 1, 'a thin answer offers the nearest answers, one per part dropped');
+      if (as === 'coach') {
+        await q.evaluate(() => { location.hash = '#/ask?m=sarah'; }); await q.waitForSelector('.list.shelf');
+        check(await q.locator('.list.shelf li').count() > 20 && /For Sarah this week/.test(await q.locator('main').innerText()), 'the shelf of coach questions counts every answer, Sarah’s week first');
+        await q.evaluate(() => { location.hash = '#/near?m=sarah'; }); await q.waitForSelector('#venn svg circle.n-set');
+        check(await q.locator('#venn circle.n-set').count() === 3 && /Billie Jean King/.test(await q.locator('.n-sent').innerText()), 'Sarah’s three situations draw as circles, and the bridge across all three is named');
+      }
+      await q.evaluate(() => { location.hash = '#/icon/abraham-lincoln'; }); await q.waitForSelector('#spine li[data-id]');
+      check(await q.locator('#kfig a.kn').count() >= 6 && await q.locator('#spine li[data-id]').count() >= 6 && /Both became the boss/.test(await q.locator('#spine').innerText()), 'a life shows its kindred across time, each tie said in words');
+      await q.evaluate(() => { location.hash = '#/story/st-bjk-1973-riggs'; }); await q.waitForSelector('main svg.graph .g-story');
+      check(await q.locator('main svg.graph .g-story').count() >= 4, 'a story draws the stories near it');
+      await q.evaluate(() => { location.hash = '#/situations'; }); await q.waitForSelector('.ladder .rows li[data-id]');
+      check(await q.locator('.ladder .rows li[data-id]').count() === 22 && await q.locator('.ladder path.arc').count() > 5, 'the situations draw as a ladder with arcs between those lived together');
+      await q.locator('.ladder .rows li[data-id="A3"] button').click();
+      check(/Barack Obama/.test(await q.locator('.ladder .pane').innerText()), 'a situation in the ladder says who lived it with another');
+      await q.evaluate(() => { location.hash = '#/path?from=rihanna&to=abraham-lincoln'; }); await q.waitForSelector('.route .n-chain');
+      check(await q.locator('.route').count() >= 2 && await q.locator('.route .n-steps li').count() >= 2, 'two lives connect by the strongest way and another, every step said');
+      await q.evaluate(() => { location.hash = '#/cmp?a=st-bjk-1973-riggs&b=s-A2-barack-obama'; }); await q.waitForSelector('table.cmp');
+      check(await q.locator('table.cmp tbody tr').count() >= 3 && await q.locator('.cmpcol').count() === 2, 'two stories compare side by side, facts only');
     }
     await ctx.close();
   }

@@ -10,6 +10,7 @@ Idempotent: a patch already present (its data-bridge mark is in the page) is ski
 What each patch adds (the behaviour behind it is in js/constellation-bridge.js):
   scripts          lib/core.js and the bridge, in the real <head>, ahead of the export's scripts
   heroes-library   a Library card on the member's Heroes tab
+  heroes-near      under it: Who stands near your three, a line on where the three stand, opening the picture
   hero-library     "Explore <name> in the library" on a hero page
   story-library    "Follow this story into the library" on a story
   library-overlay  the Library inside the member app, in the detail pane (frames bind src through
@@ -18,8 +19,26 @@ What each patch adds (the behaviour behind it is in js/constellation-bridge.js):
   send-tabs        the same two tabs on the send screen
   send-verify      "Check the source in the Library" where a draft cannot be sent
   lib-none         the send screen's empty state: the corpus now covers all 22 situations
+  story-draft      on a story opened from the library, a line saying it is an unchecked recall draft
+  story-related    under a story in the app: the same kind of week, the same world, more from the person,
+                   each opening in the same overlay with a way back
+  hero-related     on a hero page: the rest of their stories and their kindred lives, inside the app
+  send-related     on Find and send: stories related to the one chosen, one tap to choose another
+  demo-bar         the prototype's own bar at every width (values set by fitBar in the bridge): one
+  demo-brand       clock stepper below 1880; below 600 only the wordmark, the stepper and a Demo button,
+  demo-clock       which opens demo-sheet with the view, the person, the device, the eleven moments,
+  demo-steps       the theme and reset; demo-css hides the full controls on a phone; demo-coach-note
+  demo-menu        says the coach console is made for a laptop when it is opened on a phone
+  demo-sheet       (demo-clock-word and demo-clock-line show the "Demo clock" word and the date line
+  demo-css         only where the eleven pills leave room for them)
+  story-reach      under Why this story, for a story from beyond the member's three: the chain, at most two
+                   links, from one of their heroes to the story's life, each link said in words
+  ask-find         under a member's Ask in the coach's thread: Find a story for this, which opens the
+                   Library's answer to the Ask, read for that member, with the situation they chose
+  type-floor       no text under 12px: the export's 10px and 11px labels become 12px, and the 9px
+                   initials in the 24px avatars become 11px (a regex over the template's inline styles)
 """
-import pathlib, sys
+import pathlib, re, sys
 
 TABS = ('<div data-bridge="{mark}" style="flex:none;display:flex;align-items:center;gap:6px;padding:10px 28px;border-bottom:1px solid var(--hair)">'
         '<button sc-camel-on-click="{{{{ lt.explore.go }}}}" style="height:30px;padding:0 14px;border-radius:15px;border:1px solid {{{{ lt.explore.bd }}}};background:{{{{ lt.explore.bg }}}};color:{{{{ lt.explore.fg }}}};font:500 12px var(--sans);cursor:pointer">Explore</button>'
@@ -27,9 +46,58 @@ TABS = ('<div data-bridge="{mark}" style="flex:none;display:flex;align-items:cen
         '<span style="margin-left:10px;font:400 12px var(--sans);color:var(--faint)">{{{{ lt.line }}}}</span><span style="flex:1"></span>'
         '<a href="{{{{ cx.full }}}}" target="_blank" rel="noopener" style="font:500 12px var(--sans);color:var(--pru);text-decoration:none;display:flex;align-items:center;gap:6px">Open the library in a new tab <i class="ph ph-arrow-square-out"></i></a></div>')
 
+# A related-reading row and its groups, shared by the story and hero overlays: the person's name and
+# place on one line, why it is here on the next, the whole row one target.
+ROW = ('<button sc-camel-on-click="{{ r.open }}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;min-height:56px;padding:10px 0;border:0;border-bottom:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer" style-hover="color:var(--pru)">'
+       '<span style="flex:1;min-width:0"><span style="display:block;font:400 17px/1.3 var(--serif)">{{ r.title }}</span><span style="display:block;font:400 13px/1.45 var(--sans);color:var(--mute);margin-top:3px">{{ r.why }}</span></span>'
+       '<i class="ph ph-caret-right" style="color:var(--faint);flex:none;font-size:16px"></i></button>')
+GROUPS = ('<sc-for list="{{ @LIST@ }}" as="g"><div style="font:500 13px var(--sans);color:var(--mute);margin-top:16px">{{ g.label }}</div>'
+          '<sc-for list="{{ g.items }}" as="r">' + ROW + '</sc-for></sc-for>')
+HEAD = '<div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">In the library</div>'
+
+STEP_BTN = ('<button sc-camel-on-click="{{{{ {fn} }}}}" aria-label="{label}" style="width:32px;height:32px;border-radius:16px;border:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;opacity:{{{{ {op} }}}}"><i class="ph ph-caret-{dir}"></i></button>')
+
+STEPPER = ('<sc-if value="{{ bar.compact }}"><div data-bridge="demo-stepper" role="group" aria-label="Demo clock" style="display:flex;align-items:center;gap:8px;flex:none">'
+           + STEP_BTN.format(fn="prevStep", label="Previous demo step", op="bar.prevOp", dir="left")
+           + '<span style="font:500 13px var(--sans);font-variant-numeric:tabular-nums;white-space:nowrap">{{ bar.step }}</span>'
+           '<sc-if value="{{ bar.labelOn }}"><span title="{{ bar.label }}" style="font:400 12px var(--sans);color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:{{ bar.labelMax }}px">{{ bar.label }}</span></sc-if>'
+           + STEP_BTN.format(fn="nextStep", label="Next demo step", op="bar.nextOp", dir="right")
+           + '</div></sc-if>')
+
+# The sheet a phone gets in place of the bar's controls: big targets, one column, every choice closes it.
+SHEET_H = '<div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:18px 0 8px">{t}</div>'
+SHEET_PILL = ('<button sc-camel-on-click="{{{{ {v}.go }}}}" style="min-height:44px;padding:0 16px;border-radius:22px;border:1px solid var(--hair);background:{{{{ {v}.bg }}}};color:{{{{ {v}.fg }}}};font:500 14px var(--sans);cursor:pointer;display:flex;align-items:center;gap:8px">{inner}</button>')
+SHEET = ('<sc-if value="{{ bar.sheet }}"><div data-bridge="demo-sheet" aria-hidden="true" sc-camel-on-click="{{ bar.close }}" style="position:fixed;left:0;right:0;top:52px;bottom:0;z-index:40;background:rgba(10,12,16,.32)"></div>'
+         '<div role="dialog" aria-label="Demo controls" style="position:fixed;left:0;right:0;top:52px;z-index:41;max-height:calc(100vh - 52px);overflow-y:auto;background:var(--paper);border-bottom:1px solid var(--hair);padding:2px 16px 22px;font-family:var(--sans);color:var(--ink);box-shadow:0 20px 40px rgba(0,0,0,.18)">'
+         + SHEET_H.format(t='View') +
+         '<div style="display:flex;gap:8px;flex-wrap:wrap">'
+         '<button sc-camel-on-click="{{ bar.toMember }}" style="min-height:44px;padding:0 16px;border-radius:22px;border:1px solid var(--hair);background:{{ roleM.bg }};color:{{ roleM.fg }};font:500 14px var(--sans);cursor:pointer;display:flex;align-items:center;gap:8px"><i class="ph ph-user"></i>Member app</button>'
+         '<button sc-camel-on-click="{{ bar.toCoach }}" style="min-height:44px;padding:0 16px;border-radius:22px;border:1px solid var(--hair);background:{{ roleC.bg }};color:{{ roleC.fg }};font:500 14px var(--sans);cursor:pointer;display:flex;align-items:center;gap:8px"><i class="ph ph-chalkboard-teacher"></i>Coach console</button></div>'
+         + SHEET_H.format(t='Member') +
+         '<sc-for list="{{ bar.people }}" as="q"><button sc-camel-on-click="{{ q.go }}" style="display:block;width:100%;text-align:left;min-height:56px;padding:10px 14px;margin-bottom:6px;border:1px solid var(--hair);border-radius:14px;background:{{ q.bg }};color:{{ q.fg }};cursor:pointer">'
+         '<span style="display:block;font:500 15px var(--sans)">{{ q.name }}</span><span style="display:block;font:400 13px/1.4 var(--sans);opacity:.85;margin-top:2px">{{ q.sub }}</span></button></sc-for>'
+         + SHEET_H.format(t='Device') +
+         '<div style="display:flex;gap:8px;flex-wrap:wrap"><sc-for list="{{ bar.devs }}" as="dv">' + SHEET_PILL.format(v='dv', inner='<i class="{{ dv.icon }}"></i>{{ dv.label }}') + '</sc-for></div>'
+         + SHEET_H.format(t='Demo clock') +
+         '<sc-for list="{{ bar.steps }}" as="s"><button sc-camel-on-click="{{ s.go }}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;min-height:44px;padding:0 12px;border:0;border-radius:10px;background:{{ s.bg }};color:var(--ink);font:{{ s.weight }} 14px var(--sans);cursor:pointer">'
+         '<span style="width:22px;text-align:right;color:var(--mute);font-variant-numeric:tabular-nums">{{ s.n }}</span><span>{{ s.title }}</span></button></sc-for>'
+         '<div style="display:flex;gap:8px;margin-top:18px">'
+         '<button sc-camel-on-click="{{ bar.theme }}" style="min-height:44px;padding:0 16px;border-radius:22px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 14px var(--sans);cursor:pointer;display:flex;align-items:center;gap:8px"><i class="{{ themeIcon }}"></i>{{ themeLabel }}</button>'
+         '<button sc-camel-on-click="{{ bar.reset }}" style="min-height:44px;padding:0 16px;border-radius:22px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 14px var(--sans);cursor:pointer;display:flex;align-items:center;gap:8px"><i class="ph ph-arrow-counter-clockwise"></i>Start again</button></div>'
+         '</div></sc-if>'
+         '<sc-if value="{{ bar.coachSmall }}"><div data-bridge="demo-coach-note" style="position:fixed;left:12px;right:12px;bottom:12px;z-index:30;padding:14px 16px;border-radius:14px;background:var(--ink);color:var(--paper);font:400 14px/1.45 var(--sans)">'
+         'The coach console is made for a laptop. Open this page on a wider screen to read it, or switch to the member app.</div></sc-if>')
+DEMO_CSS = ('\n<style data-bridge="demo-css">'
+            '[data-fit="phone"] [aria-label="Persona"],[data-fit="phone"] [aria-label="Device"],[data-fit="phone"] button[aria-label^="Device:"],'
+            '[data-fit="phone"] div:has(> button[aria-label="Member"]),[data-fit="phone"] button[aria-label="Reset the demo"],'
+            '[data-fit="phone"] button[aria-label="Dark"],[data-fit="phone"] button[aria-label="Light"]{display:none!important}'
+            '[data-fit="phone"]{justify-content:space-between}'
+            '[data-screen-label="Demo bar"]::-webkit-scrollbar{display:none}</style>')
+
 PATCHES = [
     ("scripts", '<script src="/constellation/js/support.js"></script>', "after",
      '\n<script data-bridge="scripts" src="/constellation/lib/core.js"></script>'
+     '\n<script data-bridge="scripts-net" src="/constellation/lib/net.js"></script>'
      '\n<script data-bridge="scripts-bridge" src="/constellation/js/constellation-bridge.js"></script>'),
     ("heroes-library", '<sc-if value="{{ hz.addClosed }}" hint-placeholder-val="{{ true }}">', "before",
      '<button data-bridge="heroes-library" sc-camel-on-click="{{ hz.explore }}" style="display:flex;gap:14px;width:100%;text-align:left;padding:16px;margin:0 0 16px;border:1px solid var(--hair);border-radius:16px;background:var(--well);color:var(--ink);cursor:pointer;align-items:center" style-hover="border-color:var(--ink)">'
@@ -58,17 +126,78 @@ PATCHES = [
      '<sc-if value="{{ lib.dis }}"><button data-bridge="send-verify" sc-camel-on-click="{{ lib.inLibrary }}" style="align-self:flex-start;height:30px;padding:0 12px;border-radius:15px;border:1px solid var(--pru);background:transparent;color:var(--pru);font:500 12px var(--sans);cursor:pointer">Check the source in the Library</button></sc-if>'),
     ("lib-none", "No stories match. The corpus covers eight of the twenty-two situations so far.", "replace",
      "No stories match these filters. Clear one, or open the Library to search the whole corpus."),
+    ("story-draft", '<sc-if value="{{ sv.hasPattern }}">', "before",
+     '<sc-if value="{{ sv.isDraft }}"><p data-bridge="story-draft" style="font:400 14px/1.45 var(--sans);color:var(--mad);margin:12px 0 0">{{ sv.draftNote }}</p></sc-if>\n                '),
+    ("story-related", '<button data-bridge="story-library"', "before",
+     '<sc-if value="{{ sv.hasRel }}"><div data-bridge="story-related" style="margin-top:22px;padding-top:14px;border-top:1px solid var(--hair)">' + HEAD + GROUPS.replace('@LIST@', 'sv.rel') + '</div></sc-if>\n                '),
+    ("hero-related", '<button data-bridge="hero-library"', "before",
+     '<sc-if value="{{ hv.hasLib }}"><div data-bridge="hero-related" style="margin-top:28px;padding-top:14px;border-top:1px solid var(--hair)">' + HEAD + GROUPS.replace('@LIST@', 'hv.lib') + '</div></sc-if>\n                '),
+    ("send-related", '<sc-if value="{{ lib.hasMsg }}"><div style="font:500 12px var(--sans);color:var(--pru)">{{ lib.msg }}</div></sc-if>', "after",
+     '<sc-if value="{{ lib.hasRel }}"><div data-bridge="send-related" style="margin-top:10px;border-top:1px solid var(--hair);padding-top:12px">'
+     '<div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Related in the library</div>'
+     '<sc-for list="{{ lib.rel }}" as="r"><button sc-camel-on-click="{{ r.go }}" style="display:block;width:100%;text-align:left;padding:9px 0;border:0;border-bottom:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer" style-hover="color:var(--pru)">'
+     '<span style="display:block;font:400 15px/1.35 var(--serif)">{{ r.title }}</span><span style="display:block;font:400 12px/1.45 var(--sans);color:var(--mute);margin-top:2px">{{ r.why }}</span></button></sc-for>'
+     '<button sc-camel-on-click="{{ lib.inLibrary }}" style="margin-top:10px;height:32px;padding:0 13px;border-radius:16px;border:1px solid var(--pru);background:transparent;color:var(--pru);font:500 12px var(--sans);cursor:pointer">Open this story in the Library</button></div></sc-if>'),
+    ("demo-bar", '<div data-screen-label="Demo bar" style="height:52px;display:flex;align-items:center;gap:14px;padding:0 18px;', "replace",
+     '<div data-bridge="demo-bar" data-fit="{{ bar.fit }}" data-screen-label="Demo bar" style="height:52px;display:flex;align-items:center;gap:{{ bar.gap }}px;padding:0 {{ bar.pad }}px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;'),
+    ("demo-brand", '<div style="font-family:var(--serif);font-size:20px;letter-spacing:-.02em">Constellation</div>', "replace",
+     '<div data-bridge="demo-brand" style="display:{{ bar.brandDisp }};flex:none;font-family:var(--serif);font-size:20px;letter-spacing:-.02em">Constellation</div>'),
+    ("demo-clock", '<div style="flex:1;display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0;overflow:hidden">', "replace",
+     '<div data-bridge="demo-clock" style="flex:1;display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:{{ bar.clockMin }};overflow:hidden">'),
+    ("demo-steps", '<div style="display:flex;gap:2px;flex:none;min-width:0">', "replace",
+     STEPPER + '<div data-bridge="demo-steps" style="display:{{ bar.pillsDisp }};gap:2px;flex:none;min-width:0">'),
+    ("demo-menu", '<button sc-camel-on-click="{{ toggleTheme }}"', "before",
+     '<sc-if value="{{ bar.phone }}"><button data-bridge="demo-menu" sc-camel-on-click="{{ bar.toggle }}" aria-expanded="{{ bar.sheet }}" aria-label="Demo controls" style="height:36px;padding:0 14px;border-radius:18px;border:1px solid var(--hair);background:{{ bar.menuBg }};color:{{ bar.menuFg }};font:500 13px var(--sans);display:flex;align-items:center;gap:6px;flex:none;cursor:pointer"><i class="ph ph-sliders-horizontal" style="font-size:16px"></i>Demo</button></sc-if>'),
+    ("demo-sheet", '<div style="position:relative;height:calc(100vh - 52px);display:flex;align-items:center;justify-content:center;overflow:hidden">', "before", SHEET + '\n  '),
+    ("demo-css", '<script src="/constellation/js/support.js"></script>', "after", DEMO_CSS),
+    ("demo-clock-word", '<sc-if value="{{ wide }}"><span style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);white-space:nowrap">Demo clock</span></sc-if>', "replace",
+     '<sc-if value="{{ bar.clockWord }}"><span data-bridge="demo-clock-word" style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);white-space:nowrap">Demo clock</span></sc-if>'),
+    ("demo-clock-line", '<sc-if value="{{ wide }}"><span title="{{ clockLabel }}"', "replace",
+     '<sc-if value="{{ bar.clockLine }}"><span data-bridge="demo-clock-line" title="{{ clockLabel }}"'),
+    ("ask-find", '<div style="font:400 11px var(--sans);color:var(--faint);margin-top:4px">{{ m.at }}</div>', "before",
+     '<sc-if value="{{ m.find }}"><button data-bridge="ask-find" sc-camel-on-click="{{ m.find }}" style="margin-top:8px;height:32px;padding:0 13px;border-radius:16px;border:1px solid var(--pru);background:transparent;color:var(--pru);font:500 12px var(--sans);cursor:pointer;display:flex;align-items:center;gap:6px"><i class="ph ph-books"></i>Find a story for this</button></sc-if>'),
+    ("story-reach", '<p style="font:400 16px/1.5 var(--serif);margin:6px 0 0">{{ sv.why }}</p>', "after",
+     '<sc-if value="{{ sv.hasReach }}"><div data-bridge="story-reach" style="margin-top:16px;padding:14px 16px 12px;border-radius:16px;background:var(--well)">'
+     '<div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">How it reaches your three</div>'
+     '<p style="font:400 16px/1.45 var(--serif);margin:6px 0 0">{{ sv.reach.lede }}</p>'
+     '<div role="list" style="display:flex;align-items:flex-start;margin-top:12px"><sc-for list="{{ sv.reach.people }}" as="p">'
+     '<sc-if value="{{ p.link }}"><span aria-hidden="true" style="flex:1;min-width:16px;max-width:90px;height:1.5px;background:var(--pru);opacity:.6;margin-top:22px;position:relative"><span style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;background:var(--paper);border:1.25px solid var(--pru);font:500 12px/16px var(--sans);color:var(--pru);text-align:center">{{ p.n }}</span></span></sc-if>'
+     '<button role="listitem" sc-camel-on-click="{{ p.open }}" style="border:0;background:transparent;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;width:84px;flex:none;color:var(--ink)"><span style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:500 14px var(--sans);background:{{ p.bg }};color:{{ p.fg }}">{{ p.ini }}</span>'
+     '<span style="font:400 13px/1.3 var(--sans);text-align:center">{{ p.name }}<span style="display:block;font-size:12px;color:var(--faint)">{{ p.year }}</span></span></button></sc-for></div>'
+     '<ol style="list-style:none;margin:12px 0 0;padding:0"><sc-for list="{{ sv.reach.steps }}" as="x"><li style="display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;padding:6px 0;font:400 15px/1.5 var(--serif)"><span aria-hidden="true" style="width:18px;height:18px;margin-top:3px;border-radius:50%;border:1.25px solid var(--pru);font:500 12px/16px var(--sans);color:var(--pru);text-align:center">{{ x.n }}</span><span>{{ x.text }}</span></li></sc-for></ol>'
+     '<p style="font:400 13px var(--sans);color:var(--mute);margin:8px 0 0">Tap a name to read about them.</p></div></sc-if>'),
+    ("heroes-near", '<sc-if value="{{ hz.addClosed }}" hint-placeholder-val="{{ true }}">', "before",
+     '<button data-bridge="heroes-near" sc-camel-on-click="{{ hz.near }}" style="display:flex;gap:14px;width:100%;text-align:left;padding:14px 16px;margin:-6px 0 16px;border:1px solid var(--hair);border-radius:16px;background:transparent;color:var(--ink);cursor:pointer;align-items:center" style-hover="border-color:var(--ink)">'
+     '<div style="width:44px;height:44px;border-radius:50%;background:var(--well);display:flex;align-items:center;justify-content:center;flex:none"><i class="ph ph-circles-three" style="font-size:20px;color:var(--mad)"></i></div>'
+     '<div style="flex:1;min-width:0"><div style="font:400 17px/1.3 var(--serif)">Who stands near your three</div><div style="font:400 14px/1.45 var(--sans);color:var(--mute);margin-top:3px">{{ hz.nearLine }}</div></div>'
+     '<i class="ph ph-caret-right" style="color:var(--faint);flex:none;font-size:18px"></i></button>\n                      '),
 ]
+
+# Sizes as the export writes them inside inline `font:` shorthands, and what they become.
+TYPE_FLOOR = {"9": "11", "10": "12", "11": "12"}
+FONT_RE = re.compile(r'(font:\s*(?:italic\s+)?\d{3}\s+)(9|10|11)(px)')
+
+def type_floor(html):
+    mark = '<meta data-bridge="type-floor" name="cl-type-floor" content="12">'
+    if mark in html: return html, False
+    head_end = html.index("</head>")
+    start = html.index("<x-dc>")
+    body = FONT_RE.sub(lambda m: m.group(1) + TYPE_FLOOR[m.group(2)] + m.group(3), html[start:])
+    return html[:head_end] + mark + "\n" + html[head_end:start] + body, True
 
 def apply(html):
     done = []
     for name, anchor, where, block in PATCHES:
         if f'data-bridge="{name}"' in html: continue
         if where == "replace" and block in html and anchor not in html: continue
+        # anchors are written as the export writes them; a page already held to the type floor is matched floored
+        if html.count(anchor) == 0 and 'data-bridge="type-floor"' in html: anchor = FONT_RE.sub(lambda m: m.group(1) + TYPE_FLOOR[m.group(2)] + m.group(3), anchor)
         n = html.count(anchor)
         if n != 1: raise SystemExit(f"patch {name}: its anchor appears {n} times in the export; update tools/patches.py")
         html = html.replace(anchor, block + anchor if where == "before" else anchor + block if where == "after" else block)
         done.append(name)
+    html, floored = type_floor(html)  # last, so the inserted blocks are held to the same floor
+    if floored: done.append("type-floor")
     return html, done
 
 if __name__ == "__main__":

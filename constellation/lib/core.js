@@ -281,6 +281,259 @@
     return Object.keys(c).map(function (k) { return c[k]; }).sort(function (a, b) { return (a.from == null ? 1e9 : a.from) - (b.from == null ? 1e9 : b.from); });
   }
 
+  // ---------- likeness ----------
+  // Two signals, and they answer different questions. Situations say "the same kind of week": strong
+  // and sparse (of 65,000 pairs of lives, 7,100 share one situation and 143 share two). The words of
+  // the moment say "the same world": courts and judges, bands and labels, cabinets and elections.
+  // Every link carries its reasons, so a reader can see why two things sit together.
+  var STOP = {};
+  ('the a an and or of to in on at by for with from as is was were be been being had has have he she his her him they them their it its ' +
+   'that this which who whom what when where while after before into over under than then there these those not no but if so up out about ' +
+   'one two three four five would could should may might did do does said says told also only more most other some such own same very can ' +
+   'will like first last new old years year time made make many much any all each every between during because through against without ' +
+   'within whose whom upon off again still even back down away later early late month months week weeks day days ' +
+   'thought people way part place took went came asked told gave called began became left got put set get take came come know knew ' +
+   'want wanted next whether though although around instead rather actually really just never always already enough something nothing ' +
+   'anyone someone everyone everything another himself herself themselves itself own nearly almost both either neither once twice ' +
+   'lost loss turned turn going went gone given give seen see saw found find kept keep held hold called call named front second rest ' +
+   'six seven eight nine ten eleven twelve twenty thirty forty fifty sixty seventy eighty ninety hundred thousand million billion ' +
+   'thirteen fourteen fifteen sixteen seventeen eighteen nineteen half too then keeps getting member members leader leaders ' +
+   'thursday monday tuesday wednesday friday whole').split(' ').forEach(function (w) { STOP[w] = 1; });
+  function words(text) { return (fold(text).match(/[a-z][a-z'-]{2,}/g) || []).filter(function (w) { return !STOP[w] && w.indexOf("'") < 0; }); }
+  function textIndex(lib) {
+    if (lib._tx) return lib._tx;
+    var N = lib.stories.length, df = {}, docs = {};
+    lib.stories.forEach(function (s) {
+      var name = {}; words((lib.icon[s.icon] || {}).name).forEach(function (w) { name[w] = 1; });
+      var d = words([s.moment, s.pattern_en || s.pattern, s.context].join(' ')).filter(function (w) { return !name[w]; });
+      docs[s.id] = d; var seen = {}; d.forEach(function (w) { if (!seen[w]) { seen[w] = 1; df[w] = (df[w] || 0) + 1; } });
+    });
+    function vecOf(d) {
+      var tf = {}, v = {}, n = 0; d.forEach(function (w) { tf[w] = (tf[w] || 0) + 1; });
+      Object.keys(tf).forEach(function (w) { if (df[w] < 2 || df[w] > N * 0.15) return; v[w] = (1 + Math.log(tf[w])) * Math.log(N / df[w]); n += v[w] * v[w]; });
+      n = Math.sqrt(n) || 1; Object.keys(v).forEach(function (w) { v[w] /= n; }); return v;
+    }
+    var vec = {}; lib.stories.forEach(function (s) { vec[s.id] = vecOf(docs[s.id]); });
+    var ivec = {};
+    lib.icons.forEach(function (i) {
+      if (!i.stories.length) return; var v = {}, n = 0;
+      i.stories.forEach(function (sid) { var x = vec[sid]; Object.keys(x).forEach(function (w) { v[w] = (v[w] || 0) + x[w]; }); });
+      Object.keys(v).forEach(function (w) { n += v[w] * v[w]; }); n = Math.sqrt(n) || 1; Object.keys(v).forEach(function (w) { v[w] /= n; });
+      ivec[i.id] = v;
+    });
+    var withStory = lib.icons.filter(function (i) { return i.stories.length; }).length, kidf = {};
+    lib.situations.forEach(function (s) { kidf[s.key] = Math.log(withStory / Math.max(1, s.icons.length)); });
+    lib._tx = { vec: vec, ivec: ivec, kidf: kidf };
+    return lib._tx;
+  }
+  function cosine(a, b) { var s = 0, k; if (Object.keys(a).length > Object.keys(b).length) { k = a; a = b; b = k; } for (k in a) if (b[k]) s += a[k] * b[k]; return s; }
+  function sharedWords(a, b, n) { return Object.keys(a).filter(function (w) { return b[w]; }).sort(function (x, y) { return b[y] * a[y] - b[x] * a[x]; }).slice(0, n || 3); }
+  function sitName(lib, k) { var s = lib.sitByKey[k]; return s ? s.id + ' · ' + s.chip : k; }
+
+  // Stories like this one. score = situations (rarity-weighted overlap) + words + small pulls for the same field,
+  // the same way of leading and nearby years. A different person every time: same-person stories live elsewhere.
+  function similarStories(lib, id, k, opt) {
+    opt = opt || {}; k = k || 6;
+    var s = lib.story[resolve(lib, id)]; if (!s) return [];
+    var tx = textIndex(lib), me = lib.icon[s.icon] || {}, out = [];
+    lib.stories.forEach(function (o) {
+      if (o.icon === s.icon) return;
+      if (opt.sameKey === true && !o.keys.some(function (x) { return s.keys.indexOf(x) >= 0; })) return;
+      if (opt.sameKey === false && o.keys.some(function (x) { return s.keys.indexOf(x) >= 0; })) return;
+      var oi = lib.icon[o.icon] || {}, shared = o.keys.filter(function (x) { return s.keys.indexOf(x) >= 0; });
+      var sk = shared.reduce(function (a, x) { return a + (tx.kidf[x] || 1); }, 0) / Math.max(1, Math.sqrt(s.keys.length * o.keys.length));
+      var c = cosine(tx.vec[s.id], tx.vec[o.id]), dy = s.year == null || o.year == null ? 999 : Math.abs(s.year - o.year);
+      var score = opt.mode === 'words' ? c : 0.9 * sk + 6 * c + (oi.field === me.field ? 0.25 : 0) + (oi.stance && oi.stance === me.stance ? 0.2 : 0) + 0.25 * Math.exp(-dy / 25);
+      if (opt.mode === 'words' && c < 0.05) return;
+      out.push({ o: o, score: score, shared: shared, c: c, dy: dy, oi: oi });
+    });
+    out.sort(function (a, b) { return b.score - a.score || (a.o.id < b.o.id ? -1 : 1); });
+    // one story per person, so a list of six is six lives
+    var seen = {}, res = [];
+    for (var i = 0; i < out.length && res.length < k; i++) {
+      var x = out[i]; if (seen[x.o.icon]) continue; seen[x.o.icon] = 1;
+      var r = [];
+      x.shared.forEach(function (key) { r.push({ type: 'situation', key: key, text: 'Also filed under ' + sitName(lib, key) }); });
+      if (x.c >= 0.06) r.push({ type: 'words', text: 'Shared words: ' + sharedWords(tx.vec[s.id], tx.vec[x.o.id], 3).join(', ') });
+      if (x.dy <= 10) r.push({ type: 'years', text: x.dy === 0 ? 'The same year, ' + yearLabel(x.o.year) : 'The same years: ' + yearLabel(x.o.year) });
+      if (x.oi.stance && x.oi.stance === me.stance) r.push({ type: 'stance', text: 'Both lead by ' + (x.oi.stanceName || x.oi.stance) });
+      if (x.oi.field === me.field && !r.length) r.push({ type: 'field', text: 'Both in ' + (x.oi.domainLabel || x.oi.field) });
+      res.push({ story: storyCard(lib, x.o), score: +x.score.toFixed(3), reasons: r });
+    }
+    return res;
+  }
+
+  // Lives most like this one: shared situations, weighted by how rare each is, then the words of their stories,
+  // the same way of leading, the same field and nearby years.
+  function kindred(lib, iconId, k, opt) {
+    k = k || 8; opt = opt || {}; var me = lib.icon[iconId]; if (!me) return [];
+    var tx = textIndex(lib), mv = tx.ivec[iconId] || {}, out = [];
+    lib.icons.forEach(function (o) {
+      if (o.id === iconId || !o.stories.length) return;
+      var shared = o.keys.filter(function (x) { return me.keys.indexOf(x) >= 0; });
+      var sk = shared.reduce(function (a, x) { return a + (tx.kidf[x] || 1); }, 0);
+      var c = me.stories.length ? cosine(mv, tx.ivec[o.id] || {}) : 0, dy = me.year == null || o.year == null ? 999 : Math.abs(me.year - o.year);
+      var score = 0.8 * sk + 5 * c + (o.stance && o.stance === me.stance ? 0.35 : 0) + (o.field === me.field ? 0.3 : 0) + 0.3 * Math.exp(-dy / 30);
+      if (opt.mode === 'words') { if (shared.length || c < 0.08) return; score = c; }
+      out.push({ o: o, score: score, shared: shared, c: c, dy: dy });
+    });
+    out.sort(function (a, b) { return b.score - a.score || (a.o.name < b.o.name ? -1 : 1); });
+    return out.slice(0, k).map(function (x) {
+      var r = [];
+      if (x.shared.length) r.push({ type: 'situation', keys: x.shared, text: (x.shared.length > 1 ? 'Lived ' + x.shared.length + ' of the same situations: ' : 'Lived the same situation: ') + x.shared.map(function (key) { return (lib.sitByKey[key] || {}).id || key; }).join(', ') });
+      if (x.c >= 0.08) r.push({ type: 'words', text: 'Shared words: ' + sharedWords(mv, tx.ivec[x.o.id] || {}, 3).join(', ') });
+      if (x.o.stance && x.o.stance === me.stance) r.push({ type: 'stance', text: 'Both lead by ' + x.o.stanceName });
+      if (x.dy <= 10) r.push({ type: 'years', text: 'The same years' });
+      if (!r.length && x.o.field === me.field) r.push({ type: 'field', text: 'Both in ' + x.o.domainLabel });
+      return { icon: iconCard(lib, x.o), score: +x.score.toFixed(3), reasons: r };
+    });
+  }
+
+  // The neighbourhood of one life, ready to draw: its situations, the closest lives in each, and kindred
+  // lives found by their words alone.
+  function ego(lib, iconId, per) {
+    per = per || 4; var me = lib.icon[iconId]; if (!me) return null;
+    var kin = kindred(lib, iconId, 60), rank = {}; kin.forEach(function (x, i) { rank[x.icon.id] = i; });
+    var used = {}; used[iconId] = 1;
+    var sits = me.keys.map(function (key) {
+      var st = lib.sitByKey[key]; if (!st) return null;
+      var people = (lib.iconsByKey[key] || []).filter(function (x) { return x !== iconId; })
+        .sort(function (a, b) { return (rank[a] == null ? 999 : rank[a]) - (rank[b] == null ? 999 : rank[b]) || (a < b ? -1 : 1); }).slice(0, per);
+      people.forEach(function (x) { used[x] = 1; });
+      return { sit: { id: st.id, key: st.key, chip: st.chip, fam: st.fam }, total: (lib.iconsByKey[key] || []).length - 1, people: people.map(function (x) { return iconCard(lib, lib.icon[x]); }) };
+    }).filter(Boolean);
+    var words = kindred(lib, iconId, 4, { mode: 'words' });
+    return { center: iconCard(lib, me), situations: sits, kindred: words };
+  }
+
+  // How the 22 situations sit together: stories filed under both, and lives with stories in both.
+  function situationWeb(lib) {
+    var links = {};
+    function add(a, b, f) { var k = a < b ? a + '|' + b : b + '|' + a; links[k] = links[k] || { a: a < b ? a : b, b: a < b ? b : a, stories: 0, lives: 0 }; links[k][f]++; }
+    lib.stories.forEach(function (s) { for (var i = 0; i < s.keys.length; i++) for (var j = i + 1; j < s.keys.length; j++) add(s.keys[i], s.keys[j], 'stories'); });
+    lib.icons.forEach(function (ic) { for (var i = 0; i < ic.keys.length; i++) for (var j = i + 1; j < ic.keys.length; j++) add(ic.keys[i], ic.keys[j], 'lives'); });
+    return { nodes: lib.situations.map(function (s) { return { id: s.id, key: s.key, chip: s.chip, fam: s.fam, stories: s.stories.length, lives: s.icons.length }; }),
+      links: Object.keys(links).map(function (k) { return links[k]; }).sort(function (x, y) { return (y.stories + y.lives) - (x.stories + x.lives); }) };
+  }
+
+  // From one life to another through the situations they lived: the shortest walk, life to situation to life.
+  function path(lib, from, to, maxDepth) {
+    maxDepth = maxDepth || 4; if (!lib.icon[from] || !lib.icon[to]) return null; if (from === to) return [{ icon: iconCard(lib, lib.icon[from]) }];
+    var prev = {}, q = [from], depth = {}; prev[from] = null; depth[from] = 0;
+    while (q.length) {
+      var cur = q.shift(); if (depth[cur] >= maxDepth) continue;
+      var keys = lib.icon[cur].keys.slice().sort(function (a, b) { return (lib.iconsByKey[a] || []).length - (lib.iconsByKey[b] || []).length; });
+      for (var i = 0; i < keys.length; i++) {
+        var nb = (lib.iconsByKey[keys[i]] || []).slice().sort();
+        for (var j = 0; j < nb.length; j++) {
+          var x = nb[j]; if (x in prev) continue;
+          prev[x] = { from: cur, key: keys[i] }; depth[x] = depth[cur] + 1;
+          if (x === to) { var steps = [], y = to; while (prev[y]) { steps.unshift({ icon: iconCard(lib, lib.icon[y]), via: { id: lib.sitByKey[prev[y].key].id, chip: lib.sitByKey[prev[y].key].chip } }); y = prev[y].from; } steps.unshift({ icon: iconCard(lib, lib.icon[from]) }); return steps; }
+          q.push(x);
+        }
+      }
+    }
+    return null;
+  }
+
+  // ---------- asking ----------
+  // A question in plain words, read against the 22 situations. Each situation is known by its own label
+  // and lines, by the words of its stories, and by the ways coaches and members say it. The reading is
+  // shown, so a reader can correct it; the stories that answer it say why they are there.
+  var SAYINGS = {
+    'unnamed-expectations': 'new job new role promoted promotion expectations nobody told criteria judged what the job asks unclear first days started',
+    'renegotiating-standing': 'peers former peers colleagues used to be boss of report to me reporting friends team I was on promoted over wanted my job rival rivals',
+    'naming-an-unseen-problem': 'inherited mess problem nobody sees everyone thinks fine warning risk denial broken hidden',
+    'following-a-legend': 'predecessor legend loved follow replace succeed shadow founder previous boss',
+    'judging-unfamiliar-work': 'can\'t judge expertise technical specialists accountable don\'t understand engineers scientists experts',
+    'credit-and-attribution': 'credit my work someone else voice attribution took credit recognition behind the scenes ghost',
+    'style-against-expectation': 'quiet introvert shouting loud style not the type soft-spoken calm presence reserved',
+    'contradictory-feedback': 'feedback too nice too tough mixed messages contradictory can\'t win perception',
+    'unclassifiable-profile': 'don\'t fit unusual background hard to place career change label box outsider',
+    'saying-it-in-your-own-words': 'announce own words voice speech introduce myself sound like everyone authentic statement',
+    'expertise-without-pull': 'expert not listened ignored overlooked influence analysis data not called answer present presented presenting presentation recommendation review roadmap',
+    'selling-what-you-used-to-make': 'sell sales win work business development pitch clients revenue rainmaker',
+    'borrowed-versus-owned-standing': 'firm name brand reputation my name ask for me own standing credentials',
+    'coalition-without-mandate': 'don\'t control influence without authority stakeholders persuade alliance before the meeting politics buy-in decide decides decided directors vp executives committee steering board',
+    'leading-beyond-line-of-sight': 'large team scale can\'t see everyone remote layers managers distance',
+    'developing-without-a-bench': 'develop people bench succession talent grow mentor no one to delegate',
+    'stopping-the-old-work': 'old job stop let go delegate still doing legacy kill project proud',
+    'carrying-somebody-elses-decision': 'decision I didn\'t make disagree disagreed change I didn\'t choose restructure restructuring layoffs redundancies carry defend defending',
+    'every-act-is-a-message': 'signal signals watched everything I do symbolic scrutiny read into announcement announcing announced announce reorg reorganisation all-hands',
+    'agreeing-and-not-moving': 'procrastinate avoid stuck know what to do not doing it delay conversation I avoid',
+    'the-loss-inside-the-promotion': 'lost miss best at craft no longer do identity grief',
+    'competent-and-becalmed': 'bored plateau stagnant coasting comfortable restless next challenge'
+  };
+  function sitIndex(lib) {
+    if (lib._sx) return lib._sx;
+    var tx = textIndex(lib), out = {};
+    lib.situations.forEach(function (s) {
+      var v = {};
+      (lib.byKey[s.key] || []).forEach(function (id) { var x = tx.vec[id] || {}; Object.keys(x).forEach(function (w) { v[w] = (v[w] || 0) + x[w] / 6; }); });
+      words([s.chip, s.line, s.member_line, SAYINGS[s.key] || ''].join(' ')).forEach(function (w) { v[w] = (v[w] || 0) + 1.2; });
+      var n = 0; Object.keys(v).forEach(function (w) { n += v[w] * v[w]; }); n = Math.sqrt(n) || 1; Object.keys(v).forEach(function (w) { v[w] /= n; });
+      out[s.key] = v;
+    });
+    lib._sx = out; return out;
+  }
+  // words too common in how people describe work to say which situation a question is about
+  var QSTOP = { job: 1, work: 1, team: 1, role: 1, group: 1, people: 1, person: 1, thing: 1, things: 1, company: 1, firm: 0, boss: 0, week: 1, today: 1, tomorrow: 1, next: 1 };
+  // "will be in the room" says who is present, not that the room is ignoring anyone
+  function queryVec(text) { var v = {}, n = 0; words(String(text || '').replace(/\b(?:be|is|was|were|are|being)\s+in the room\b/gi, ' ')).filter(function (w) { return !QSTOP[w]; }).forEach(function (w) { v[w] = (v[w] || 0) + 1; }); Object.keys(v).forEach(function (w) { n += v[w] * v[w]; }); n = Math.sqrt(n) || 1; Object.keys(v).forEach(function (w) { v[w] /= n; }); return v; }
+  function interpret(lib, text, k) {
+    k = k || 3; var q = queryVec(text), sx = sitIndex(lib), low = fold(text);
+    var r = lib.situations.map(function (s) {
+      // the words of the question, and their plain inflections, read against the situation
+      var c = cosine(q, sx[s.key]);
+      // a whole saying in the question ("wanted my job", "too nice") counts for more than its words
+      // a whole saying, in any person ("wanted my job", "wanted her job"), counts for more than its words
+      var P = '(?:my|her|his|their|your|our)';
+      var phrases = { 'renegotiating-standing': ['wanted ' + P + ' (?:job|role|seat)', 'former peers', P + ' (?:old )?peers', 'used to be (?:my|her|his|their) (?:peer|colleague)', 'promoted over'],
+        'contradictory-feedback': ['too nice', 'too tough', 'mixed messages'],
+        'every-act-is-a-message': ['reorg announcement', 'announc\\w* (?:the |a |our )?(?:reorg|reorganisation|restructure|changes?)', 'everything (?:i|she|he|they) do'],
+        'expertise-without-pull': ['(?:the )?room (?:decides|ignores|moves on|talks over)', 'not (?:being )?listened', 'nobody (?:listens|asks|hears)', 'expert in the room'], 'agreeing-and-not-moving': ['(?:keeps?|kept) putting off', 'not doing it', '(?:i|she|he|they) avoids?'],
+        'carrying-somebody-elses-decision': ["(?:didn't|did not) (?:choose|make|pick)", 'disagrees? with'], 'coalition-without-mandate': ["(?:don't|doesn't|do not) report to", 'without authority', 'before the meeting'],
+        'following-a-legend': ['(?:following|replacing|succeeding) (?:a|the|someone)'], 'credit-and-attribution': ['(?:took|takes|taking) (?:the )?credit'],
+        'the-loss-inside-the-promotion': ['(?:miss|misses|missing) (?:the|doing)'], 'competent-and-becalmed': ['(?:bored|coasting|plateau)'] }[s.key] || [];
+      phrases.forEach(function (ph) { if (new RegExp('\\b' + ph).test(low)) c += 0.25; });
+      if (s.key === 'every-act-is-a-message' && /\bannounc|\breorg/.test(low)) c += 0.12;
+      if (s.key === 'expertise-without-pull' && /\bpresent|\breview\b|\bdecide/.test(low)) c += 0.08;
+      if (s.key === 'coalition-without-mandate' && /\bdecide|\bdirectors?\b|\bvp\b|\bboard\b/.test(low)) c += 0.08;
+      return { sit: { id: s.id, key: s.key, chip: s.chip, line: s.line }, score: +c.toFixed(3) };
+    }).filter(function (x) { return x.score > 0.04; }).sort(function (a, b) { return b.score - a.score; });
+    return r.slice(0, k);
+  }
+  // Stories that answer a question. opts: keys (the reading to use), heroes (icon ids to put first), sex, era ('before-1900'|'1900-1970'|'after-1970'),
+  // reach ('near' = near and mid), quiet (indirect or calibrated), limit.
+  function ask(lib, text, opts) {
+    opts = opts || {}; var reading = opts.keys ? opts.keys.map(function (k) { var s = lib.sitByKey[k] || lib.sit[k]; return s ? { sit: { id: s.id, key: s.key, chip: s.chip, line: s.line }, score: 1 } : null; }).filter(Boolean) : interpret(lib, text, 3);
+    var keys = reading.map(function (r) { return r.sit.key; }), q = queryVec(text), tx = textIndex(lib), heroes = opts.heroes || [];
+    var pool = lib.stories.filter(function (s) {
+      if (keys.length && !s.keys.some(function (k) { return keys.indexOf(k) >= 0; })) return false;
+      if (!keys.length && cosine(q, tx.vec[s.id] || {}) < 0.06) return false;
+      var ic = lib.icon[s.icon] || {};
+      if (opts.sex && ic.sex !== opts.sex) return false;
+      if (opts.era === 'before-1900' && !(s.year < 1900)) return false;
+      if (opts.era === '1900-1970' && !(s.year >= 1900 && s.year < 1970)) return false;
+      if (opts.era === 'after-1970' && !(s.year >= 1970)) return false;
+      if (opts.reach === 'near' && s.reach === 'far') return false;
+      if (opts.quiet && !(s.directness === 'indirect' || s.directness === 'calibrated')) return false;
+      return true;
+    });
+    var res = pool.map(function (s) {
+      var rk = keys.indexOf(s.keys.filter(function (k) { return keys.indexOf(k) >= 0; })[0]);
+      var c = cosine(q, tx.vec[s.id] || {}), mine = heroes.indexOf(s.icon) >= 0;
+      var score = (rk < 0 ? 0 : (3 - rk) * 0.5) + 4 * c + (mine ? 1.5 : 0) + (s.reach === 'near' ? 0.3 : s.reach === 'mid' ? 0.2 : 0) + (s.verified ? 0.2 : 0);
+      var why = [];
+      if (mine && rk >= 0) why.push({ type: 'hero', text: (opts.heroLabel || 'One of their heroes') + ' · ' + sitName(lib, keys[rk]) });
+      else if (mine) why.push({ type: 'hero', text: opts.heroLabel || 'One of their heroes' });
+      else if (rk >= 0) why.push({ type: 'situation', text: 'Filed under ' + sitName(lib, keys[rk]) });
+      if (c >= 0.05) why.push({ type: 'words', text: 'Shares your words: ' + sharedWords(q, tx.vec[s.id] || {}, 3).join(', ') });
+      return { story: storyCard(lib, s), score: +score.toFixed(3), reasons: why };
+    }).sort(function (a, b) { return b.score - a.score || (a.story.id < b.story.id ? -1 : 1); });
+    return { reading: reading, total: res.length, results: res.slice(0, opts.limit || 12) };
+  }
+
   // ---------- members ----------
   function member(lib, id) {
     var m = lib.members[id]; if (!m) return null;
@@ -451,5 +704,7 @@
     merge: merge, applyVerification: applyVerification, resolve: resolve, storyCard: storyCard, iconCard: iconCard,
     search: search, iconTrails: iconTrails, storyTrails: storyTrails, eraView: eraView, eras: eras,
     member: member, readingFor: readingFor, matcherMember: matcherMember,
-    matcher: matcher, pick: pick, replay: replay, season: season, stanceProfile: stanceProfile };
+    matcher: matcher, pick: pick, replay: replay, season: season, stanceProfile: stanceProfile,
+    similarStories: similarStories, kindred: kindred, ego: ego, situationWeb: situationWeb, path: path, words: words,
+    interpret: interpret, ask: ask, sitIndex: sitIndex, queryVec: queryVec };
 }));

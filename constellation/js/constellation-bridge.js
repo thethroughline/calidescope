@@ -171,9 +171,80 @@
     };
   }
 
+  // ---------- frames at true size ----------
+  // The export shrinks a device to fit the window's height, so on a 1280 x 800 laptop the phone's body
+  // copy reads at 84% and the coach console's 11px labels at 9px. Hold the scale at 1 whenever the
+  // window is wide enough, and let the frame be shorter instead (down to three quarters of its height,
+  // or 70% for the console) before any type shrinks. The console also takes the window's own width,
+  // between 1360 and 1440, so its nine-column roster keeps room to breathe.
+  var DEVICE = { phone: [390, 844, 10], tabP: [834, 1194, 14], tabL: [1194, 834, 14], desk: [1280, 800, 0] };
+  function fitFrames(st, out) {
+    var vw = st.vw, vh = st.vh;
+    var dv = DEVICE[st.device];
+    if (out.dvf && dv) {
+      var pad = dv[2] ? 40 + dv[2] * 2 : 32, avail = vh - 52 - 36, iw = dv[0];
+      var s = Math.min(1, (vw - pad) / iw), ih = Math.min(dv[1], Math.max(Math.round(dv[1] * 0.75), Math.floor(avail / s)));
+      if (ih * s > avail) s = Math.max(0.2, avail / ih);
+      out.dvf.s = s; out.dvf.ih = ih; out.dvf.w = Math.round(iw * s); out.dvf.h = Math.round(ih * s);
+    }
+    if (out.cf) {
+      var tab = st.cdev === 'tab', bz = tab ? 14 : 0, cpad = bz ? 40 + bz * 2 : 32, cav = vh - 52 - 28;
+      var ciw = tab ? 1194 : Math.max(1360, Math.min(1440, vw - cpad)), cih0 = tab ? 834 : 900;
+      var cs = Math.min(1, (vw - cpad) / ciw), cih = Math.min(cih0, Math.max(Math.round(cih0 * 0.7), Math.floor(cav / cs)));
+      if (cih * cs > cav) cs = Math.max(0.2, cav / cih);
+      out.cf.s = cs; out.cf.iw = ciw; out.cf.ih = cih; out.cf.w = Math.round(ciw * cs); out.cf.h = Math.round(cih * cs);
+    }
+  }
+
+  // ---------- the demo bar at every width ----------
+  // Eleven numbered pills, a date line and six labelled buttons fit an 1880 window and nothing narrower:
+  // at 1280 the pills were cut to "0 · 11", at 320 half the bar was off screen. Below 1880 the clock
+  // becomes one stepper (back, "3 / 11", the moment, forward); below 1100 the personas drop their ages.
+  // Below 600 the bar keeps only the wordmark, the stepper and a Demo button; everything else moves
+  // into a sheet under the bar, and on a phone the member app fills the screen with no device drawn
+  // around it, because the phone in the hand is the device.
+  var PHONE = 600;
+  function fitBar(c, st, out) {
+    var vw = st.vw, n = (out.steps || []).length, i = st.clock || 0;
+    var wide = vw >= 1880, phone = vw < PHONE, open = !!(phone && st.barSheet);
+    var S = function (p) { c.setState(p); }, shut = function (f) { return function () { S({ barSheet: false }); f(); }; };
+    out.wide = wide; out.wideDisp = wide ? 'inline' : 'none';
+    out.narrow = vw < 1000 && !phone;
+    (out.devs || []).forEach(function (dv) { dv.disp = wide ? 'inline' : 'none'; });
+    var people = (out.personas || []).map(function (p) { return { name: p.label, sub: p.title, go: shut(p.go), bg: p.bg, fg: p.fg, on: p.on }; });
+    (out.personas || []).forEach(function (p) { if (vw < 1100) p.label = p.label.split(',')[0]; });
+    out.bar = {
+      fit: phone ? 'phone' : 'full', phone: phone, sheet: open,
+      toggle: function () { S({ barSheet: !st.barSheet }); }, close: function () { S({ barSheet: false }); },
+      menuBg: open ? 'var(--ink)' : 'transparent', menuFg: open ? 'var(--paper)' : 'var(--ink)',
+      brandDisp: vw >= 360 ? 'block' : 'none', gap: vw >= 1000 ? 14 : 8, pad: vw >= 480 ? 18 : 12,
+      pillsDisp: wide ? 'flex' : 'none', compact: !wide, clockMin: wide ? '0' : 'min-content',
+      clockWord: vw >= 2000, clockLine: wide,
+      step: (i + 1) + ' / ' + n, label: out.clockLabel || '', labelOn: vw >= 1000,
+      labelMax: vw >= 1300 ? 300 : vw >= 1150 ? 200 : 130,
+      prevOp: i <= 0 ? '0.4' : '1', nextOp: i >= n - 1 ? '0.4' : '1',
+      people: people,
+      devs: (out.devs || []).map(function (dv) { return { label: dv.label, icon: dv.icon, title: dv.title, go: shut(dv.go), bg: dv.bg, fg: dv.fg }; }),
+      steps: (out.steps || []).map(function (s, j) { var on = j === i; return { n: s.n, title: s.title.replace(/^\S+ · /, ''), go: shut(s.go), bg: on ? 'var(--well)' : 'transparent', weight: on ? 500 : 400 }; }),
+      toMember: shut(out.toMember), toCoach: shut(out.toCoach), theme: shut(out.toggleTheme), reset: shut(out.reset),
+      coachSmall: phone && st.role === 'coach'
+    };
+    if (phone && st.role === 'member' && st.device === 'phone' && out.dvf) {
+      var h = st.vh - 52;
+      out.dvf.s = 1; out.dvf.iw = vw; out.dvf.ih = h; out.dvf.w = vw; out.dvf.h = h;
+      out.dvf.r = 0; out.dvf.shadow = 'none'; out.dvf.status = false; out.dvf.top = 0; out.dvf.ob = vw;
+      if (out.col) out.col.max = vw;
+    }
+  }
+
   function decorate(c, out) {
     var st = c.state, d = _cpd, S = function (p) { c.setState(p); };
     var P = st.p, lib = B.lib;
+    fitFrames(st, out);
+    fitBar(c, st, out);
+    // a banner that arrives while a story, a hero or the Library is open waits until it closes, so it
+    // never sits over the back button
+    if (st.overlay && out.nt) out.nt.show = false;
     if (!lib) return;
     var nStories = d.stories.length, nLives = B.counts.withStory;
     var hasBack = function (b) { return b || !out.lg; };
@@ -190,6 +261,11 @@
     if (out.hz) {
       out.hz.explore = openLib('#/', null);
       out.hz.exploreLine = nStories + ' stories from ' + nLives + ' lives. Start from your three and follow the trail.';
+      // where the three stand among the member's own situations, said in one line, and the picture a tap away
+      out.hz.near = openLib('#/near', null);
+      var nb = window.CLN ? window.CLN.near(lib, P, { three: (st.core || []).map(function (h) { return iconOf[h] || h; }) }) : null;
+      var held = nb ? nb.three.filter(function (h) { return nb.lives.some(function (l) { return l.id === h && l.held.length; }); }).length : 0;
+      out.hz.nearLine = !nb ? '' : held === nb.three.length ? 'All three of your heroes have stood in your situations.' : held ? held + ' of your three ' + (held === 1 ? 'has' : 'have') + ' stood in your situations. See who stands near the others.' : 'None of your three has stood in your situations yet. See who stands near them.';
     }
     if (st.overlay === 'hero' && st.hid && out.hv) {
       var hh = d.hero[st.hid], n = d.libOf(st.hid).n;
@@ -199,7 +275,10 @@
     if (st.overlay === 'story' && st.sid && out.sv) {
       out.sv.explore = openLib('#/story/' + encodeURIComponent(st.sid), 'story');
       out.sv.exploreLabel = 'Follow this story into the library';
+      relatedStory(c, out, st, lib);
     }
+    if (st.overlay === 'hero' && st.hid && out.hv) relatedHero(c, out, st, lib);
+    stackBack(c, out, st);
 
     // coach: Library opens on Explore; the send screen is one tab along
     var onLib = st.c === 'C4' || st.c === 'CX';
@@ -209,6 +288,16 @@
       n.go = function () { S({ c: 'CX', swapFor: null }); };
     });
     out.cs.CX = st.c === 'CX';
+    // the answer desk: a member's Ask in the coach's thread opens the Library's answer to it, read for that
+    // member, with the situation they chose kept as chosen
+    if (out.msg && out.msg.list && st.thread) {
+      var tid = st.thread;
+      out.msg.list.forEach(function (m) {
+        if (!m.isAsk) return;
+        var chip = window.CLC.fold(m.chip || ''), sit = lib.situations.filter(function (x) { return window.CLC.fold(x.chip) === chip; })[0];
+        m.find = function () { S({ c: 'CX', cm: tid, cxRoute: '#/ask?t=' + encodeURIComponent(m.body || '') + '&read=1&m=' + encodeURIComponent(tid) + (sit ? '&sit=' + sit.id : '') }); };
+      });
+    }
     if (st.c === 'CX') out.cTitle = 'Library';
     var tab = function (on, go) { return { bg: on ? 'var(--ink)' : 'transparent', fg: on ? 'var(--paper)' : 'var(--ink)', bd: on ? 'var(--ink)' : 'var(--hair)', go: go }; };
     out.lt = {
@@ -233,6 +322,14 @@
       if (total > CAP) { out.lib.results = out.lib.results.slice(0, CAP); out.lib.count = total + ' stories · the first ' + CAP + ' shown. Pick a situation or a hero to narrow them.'; }
       var sel = d.story[L.sel] ? L.sel : null;
       out.lib.inLibrary = function () { S({ c: 'CX', cxRoute: sel ? '#/story/' + encodeURIComponent(sel) : '#/' }); };
+      // stories related to the one chosen: one tap makes another the choice
+      var rel = sel && lib.story[sel] ? window.CLC.similarStories(lib, sel, 4) : [];
+      out.lib.hasRel = rel.length > 0;
+      // situations by their name, the way the rest of the app writes them
+      (out.lib.pKeys || []).forEach(function (k) { var si = d.sitByKey[k.k]; if (si && si.id) k.k = si.id + ' · ' + si.chip; });
+      out.lib.rel = rel.map(function (x) {
+        var c2 = x.story; return { title: c2.name + ' · ' + (c2.place || ''), why: (x.reasons[0] || {}).text || '', go: function () { S({ lib: Object.assign({}, st.lib, { sel: c2.id, msg: '' }) }); } };
+      });
     }
     if (out.rq && out.rq.rows) out.rq.rows.forEach(function (r) { r.trace = collapseTrace(r.trace || []); });
     if (out.sp && out.sp.open && out.sp.excluded) {
@@ -244,6 +341,81 @@
       if (dl.length > ver.length) out.msg.drawerList = ver.concat([{ eyebrow: (dl.length - ver.length) + ' recall drafts are in the Library', first: 'Check one against its source there and it appears here, ready to send.', dis: true, op: 0.45, title: '', ver: 'Draft', go: function () {} }]);
     }
   }
+
+  // ---------- reading on inside the app ----------
+  // A story in the app opens onto the corpus: the same kind of week, the same world, more from the person.
+  // Each opens in the same overlay; the back button walks the way you came, one step at a time.
+  function here(st) { return { overlay: st.overlay, sid: st.sid, sctx: st.sctx, hid: st.hid, hctx: st.hctx }; }
+  function openStoryHere(c, sid) {
+    var st = c.state, stack = st.overlay ? (st.sstack || []).concat([here(st)]) : [];
+    c.setState({ overlay: 'story', sid: sid, sctx: { back: 'stack' }, sstack: stack, notForMe: false, opened: st.opened.indexOf(sid) >= 0 ? st.opened : st.opened.concat([sid]) });
+  }
+  function openHeroHere(c, hid) {
+    var st = c.state, stack = st.overlay ? (st.sstack || []).concat([here(st)]) : [];
+    c.setState({ overlay: 'hero', hid: hid, hctx: { back: 'stack' }, sstack: stack, notForMe: false });
+  }
+  function stackBack(c, out, st) {
+    var back = function () { var s2 = c.state, stk = (s2.sstack || []).slice(), prev = stk.pop(); if (!prev) return c.setState({ overlay: null }); c.setState(Object.assign({ sstack: stk, notForMe: false }, prev)); };
+    if (st.overlay === 'story' && st.sctx && st.sctx.back === 'stack' && out.sv) out.sv.back = back;
+    if (st.overlay === 'hero' && st.hctx && st.hctx.back === 'stack' && out.hv) out.hv.back = back;
+    // the engine sends a story's "more about" to the hero page with back: 'story'; keep the stack whole when it does
+    if (st.overlay === 'story' && out.sv && out.sv.openHero) { var hid0 = (_cpd.story[st.sid] || {}).hero; out.sv.openHero = function () { openHeroHere(c, hid0); }; }
+  }
+  function row(c, card, why) { return { title: card.name + ' · ' + (card.place || window.CLC.yearLabel(card.year)), why: why, open: function () { openStoryHere(c, card.id); } }; }
+  function relatedStory(c, out, st, lib) {
+    var CLC = window.CLC, s = lib.story[CLC.resolve(lib, st.sid)]; if (!s) return;
+    var week = CLC.similarStories(lib, s.id, 3), seen = {};
+    week.forEach(function (x) { seen[x.story.icon] = 1; });
+    var world = CLC.similarStories(lib, s.id, 4, { mode: 'words' }).filter(function (x) { return !seen[x.story.icon]; }).slice(0, 2);
+    var more = (lib.byIcon[s.icon] || []).filter(function (id) { return id !== s.id; }).slice(0, 3).map(function (id) { return CLC.storyCard(lib, lib.story[id]); });
+    var groups = [];
+    if (week.length) groups.push({ label: 'The same kind of week', items: week.map(function (x) { return row(c, x.story, (x.reasons[0] || {}).text || ''); }) });
+    if (world.length) groups.push({ label: 'The same world', items: world.map(function (x) { return row(c, x.story, ((x.reasons.filter(function (r) { return r.type === 'words'; })[0]) || x.reasons[0] || {}).text || ''); }) });
+    if (more.length) groups.push({ label: 'More from ' + (lib.icon[s.icon] || {}).name, items: more.map(function (cd) { return row(c, cd, cd.first); }) });
+    out.sv.rel = groups; out.sv.hasRel = groups.length > 0;
+    reachOf(c, out, st, lib, s);
+    out.sv.isDraft = !s.verified;
+    out.sv.draftNote = 'A recall draft from the library. ' + (st.role === 'coach' ? 'Check it against its source before you send it.' : 'Your coach has not checked it against its source yet.');
+  }
+  // How a story from beyond the three reaches them: the strongest chain, at most two links, from one of the
+  // member's heroes to the story's life, every link a shared situation and one more reason (lib/net.js).
+  // Hidden when the story is from one of the three, or when no chain is that short.
+  function reachOf(c, out, st, lib, s) {
+    var CLN = window.CLN; out.sv.hasReach = false;
+    if (!CLN || st.role !== 'member') return;
+    var core = (st.core || []).map(function (h) { return iconOf[h] || h; }).filter(function (id) { return lib.icon[id]; });
+    if (!core.length || core.indexOf(s.icon) >= 0 || !lib.icon[s.icon] || !lib.icon[s.icon].stories.length) return;
+    var mine = ((lib.members[st.p] || {}).sits || []).map(function (id) { return lib.sit[id] && lib.sit[id].key; });
+    var key = s.keys.filter(function (k) { return mine.indexOf(k) >= 0; })[0] || s.keys[0], best = null;
+    core.forEach(function (h) { var r = CLN.route(lib, h, s.icon, { max: 2, lastKey: key }); if (r && (!best || r.cost < best.r.cost)) best = { h: h, r: r }; });
+    if (!best || !best.r.length) return;
+    var H = lib.icon[best.h], X = lib.icon[s.icon], hn = H.short || H.name, ids = [best.h].concat(best.r.map(function (x) { return x.b; }));
+    var nm = function (id) { return id === best.h ? hn : lib.icon[id].name; };
+    var lede = best.r.length === 1 ? X.name + ' stands next to your ' + hn + '.' : X.name + ' is two steps from your ' + hn + ', through ' + lib.icon[ids[1]].name + '.';
+    out.sv.hasReach = true;
+    out.sv.reach = {
+      lede: lede,
+      people: ids.map(function (id, i) {
+        var I = lib.icon[id], last = i === ids.length - 1;
+        return { link: i > 0, n: i, ini: I.ini, name: nm(id), year: window.CLC.yearLabel(I.year),
+          bg: i === 0 ? 'var(--mad12)' : last ? 'var(--pru)' : 'var(--pru12)', fg: i === 0 ? 'var(--mad)' : last ? 'var(--paper)' : 'var(--pru)',
+          open: function () { openHeroHere(c, appId(id)); } };
+      }),
+      steps: best.r.map(function (x, i) { var w = CLN.why(lib, x.a, x.b, x.tie); return { n: i + 1, text: nm(x.a) + ' and ' + nm(x.b) + ' ' + w[0].replace(/^Both /, 'both ') }; })
+    };
+  }
+  function relatedHero(c, out, st, lib) {
+    var CLC = window.CLC, iconId = iconOf[st.hid] || st.hid, ic = lib.icon[iconId]; if (!ic) return;
+    var received = (out.hv.stories || []).length, groups = [];
+    var shown = {}; (c.state.saved || []).forEach(function (id) { shown[id] = 1; });
+    var theirs = ic.stories.map(function (id) { return CLC.storyCard(lib, lib.story[id]); });
+    if (theirs.length) groups.push({ label: (received ? 'All ' : '') + theirs.length + (theirs.length === 1 ? ' story' : ' stories') + ' from ' + CLG_short(ic.name), items: theirs.map(function (cd) { return row(c, cd, cd.first); }) });
+    var kin = CLC.kindred(lib, iconId, 3);
+    if (kin.length) groups.push({ label: 'Kindred lives', items: kin.map(function (x) { var k = x.icon; return { title: k.name, why: (x.reasons[0] || {}).text || '', open: function () { openHeroHere(c, appId(k.id)); } }; }) });
+    out.hv.lib = groups; out.hv.hasLib = groups.length > 0;
+    if (theirs.length) out.hv.moreInLib = false;
+  }
+  function CLG_short(name) { var w = String(name).split(' '); return w.length > 2 && !/^(de|van|von)$/i.test(w[w.length - 2]) ? w[0] + ' ' + w[w.length - 1] : name; }
 
   // ---------- 4 · messages from the Library frame ----------
   window.addEventListener('message', function (e) {
@@ -257,6 +429,23 @@
     if (m.type === 'cl:ask' && sid && d.story[sid]) c.setState({ overlay: 'thread', attach: sid });
     if (m.type === 'cl:route' && typeof m.route === 'string' && m.route.charAt(0) === '#') c.setState(m.as === 'coach' ? { cxRoute: m.route } : { libRoute: m.route });
     if (m.type === 'cl:close') c.setState({ overlay: st.libBack || null });
+    // the Library hands a story to the app: it opens here, and back returns to the Library where it was
+    if (m.type === 'cl:open' && sid && d.story[sid]) openStoryHere(c, sid);
+    var k = d.clock[st.clock] || d.clock[0], day = k.day, at = d.lab(k.day) + ', ' + k.hm;
+    // a member found someone in the Library: it goes to the coach as a hero to add, the prototype's own flow
+    if (m.type === 'cl:add-hero' && m.icon) {
+      var hid = appId(m.icon), name = (B.lib.icon[m.icon] || {}).name || m.name;
+      if (!st.pending.concat(st.extended).some(function (p) { return p.hero === hid; }) && st.core.indexOf(hid) < 0)
+        c.setState({ pending: st.pending.concat([{ name: name, hero: hid, why: 'Found in the library', day: day, live: true }]), toast: 'Sent to ' + (d.coaches[d.members[st.p].coach] || {}).first + '.' });
+      setTimeout(function () { c.setState({ toast: null }); }, 2800);
+    }
+    // a coach suggests someone to the member being prepped, in that member's thread
+    if (m.type === 'cl:suggest-hero' && m.icon && d.members[m.member]) {
+      var nm = (B.lib.icon[m.icon] || {}).name || m.name, mm = Object.assign({}, st.msgs);
+      mm[m.member] = (st.msgs[m.member] || []).concat([{ id: 'c' + Date.now(), from: 'coach', kind: 'text', body: "I'd like to suggest " + nm + ' for your heroes. Have a look in the library and tell me yes or no.', day: day, at: at, live: true }]);
+      c.setState({ msgs: mm, ctoast: 'Suggested ' + nm + ' to ' + d.members[m.member].first + '.' });
+      setTimeout(function () { c.setState({ ctoast: null }); }, 2800);
+    }
   });
   B.state = function () { return B.c ? B.c.state : null; };
 })();

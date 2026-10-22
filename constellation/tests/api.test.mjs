@@ -137,3 +137,39 @@ test('with a Redis store connected, records go to it over the Upstash REST proto
     delete process.env.KV_REST_API_URL; delete process.env.KV_REST_API_TOKEN; kv.close();
   }
 });
+
+test('likeness routes', async () => {
+  const s = await get('/stories/st-bjk-1973-riggs/similar');
+  assert.equal(s.status, 200); assert.equal(s.body.sameWeek.length, 6); assert.ok(s.body.sameWorld.length > 0);
+  const k = await get('/icons/obama/kindred');
+  assert.equal(k.body.icon, 'barack-obama'); assert.ok(k.body.sameWeek[0].reasons.length);
+  const e = await get('/icons/billie-jean-king/ego');
+  assert.ok(e.body.situations.length >= 3);
+  const w = await get('/situations/web');
+  assert.equal(w.body.nodes.length, 22);
+  const p = await get('/path?from=billie-jean-king&to=abraham-lincoln');
+  assert.equal(p.body.steps.length, 2);
+  assert.equal((await get('/path?from=nobody&to=rihanna')).status, 404);
+  assert.equal((await get('/icons/rihanna/nope')).status, 404);
+});
+
+test('asking and networks', async () => {
+  const a = await get('/ask?t=' + encodeURIComponent('Sarah is announcing the reorg Thursday and Dan wanted her job'));
+  assert.equal(a.status, 200);
+  assert.ok(/sit=E1%2BA2/.test(a.body.query) && /m=sarah/.test(a.body.query), a.body.query);
+  assert.equal(a.body.items[0].name, 'Barack Obama');
+  assert.ok(a.body.items[0].reasons.some((r) => r.type === 'scene'), 'the rival scene is quoted');
+  const thin = await get('/ask?sit=C2&field=law');
+  assert.ok(thin.body.total < 4 && thin.body.nearest.length >= 2);
+  assert.equal((await get('/ask')).status, 400);
+  assert.equal((await get('/ask?t=x&m=nobody')).status, 404);
+  const sh = await get('/members/sarah/shelf');
+  assert.equal(sh.body.groups[0].group, 'For Sarah this week'); assert.ok(sh.body.groups[0].items.every((i) => typeof i.n === 'number'));
+  const nr = await get('/members/sarah/near');
+  assert.deepEqual(nr.body.situations, ['A2', 'E1', 'D3']);
+  assert.ok(nr.body.lives.some((l) => l.id === 'billie-jean-king' && l.held.length === 3));
+  const k = await get('/icons/abraham-lincoln/kindred');
+  assert.ok(k.body.kin.length >= 6 && k.body.kin.every((x) => x.why.length >= 2));
+  const p = await get('/path?from=rihanna&to=abraham-lincoln');
+  assert.ok(p.body.ways.length >= 2 && p.body.ways.every((w) => w.every((s) => s.why.length >= 2)));
+});

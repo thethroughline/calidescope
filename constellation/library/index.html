@@ -23,12 +23,12 @@
 <link rel="stylesheet" href="/constellation/library/library.css">
 </head>
 <body>
-<a class="sr" href="#main">Skip to the page</a>
+<a class="skip" href="#main">Skip to the page</a>
 <header class="top">
   <div class="top-in">
     <a class="brand" href="#/" aria-label="The library, home">
       <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M11 3.5l1.6 5.9 5.9 1.6-5.9 1.6L11 18.5l-1.6-5.9L3.5 11l5.9-1.6z" fill="currentColor"/><circle cx="18.5" cy="4" r="1.2" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
-      Library <small>Constellation</small>
+      Library
     </a>
     <form class="search" role="search" id="searchform">
       <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
@@ -36,14 +36,16 @@
       <input id="q" type="search" autocomplete="off" placeholder="A name, a place, a year, a situation">
     </form>
     <nav class="links" id="links" aria-label="Library"></nav>
-    <div class="modes" id="modes" role="group" aria-label="Read the library as"></div>
-    <button class="iconbtn themebtn" id="theme" type="button" aria-label="Switch theme"><i class="ph ph-moon"></i></button>
   </div>
 </header>
-<div class="trail" id="trail" aria-label="Your trail"></div>
-<main id="main" tabindex="-1"><p class="empty">Opening the library…</p></main>
+<nav class="trail" id="trail" aria-label="Your trail" hidden></nav>
+<main id="main" tabindex="-1"><h1 class="sr">The library</h1><p class="empty">Opening the library…</p></main>
+<footer class="foot" id="foot"></footer>
 <div id="live" class="sr" aria-live="polite"></div>
 <script src="/constellation/lib/core.js"></script>
+<script src="/constellation/lib/ask.js"></script>
+<script src="/constellation/lib/net.js"></script>
+<script src="/constellation/library/graph.js"></script>
 <script src="/constellation/library/library.js"></script>
 </body>
 </html>

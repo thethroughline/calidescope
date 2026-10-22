@@ -46,7 +46,8 @@ constellation-corpus (data/)                    calidescope (constellation/)
 - **Twins.** Seven samples tell the same moment as a corpus record, such as the Law Review election. Each sample keeps its id, because the demo script points at it, and takes the corpus record's keys and examples. The corpus copy is not listed twice, and its id resolves to the sample everywhere.
 - **Situations.** The prototype listed 11 situations with a label and a line. All 22 now have one: five lines and six labels are new, written to match. A1 takes the corpus key, `unnamed-expectations`.
 - **The bridge** (`js/constellation-bridge.js`) runs from the page head. It holds the engine back until the corpus, the demo world (from `/api/constellation/demo`, else `data/demo.json`) and the ledger of source checks have loaded, then merges them into `window.CPD`. The runtime renders twice, so it feeds and wraps again on every assignment. The engine's rules are untouched. Corpus stories arrive as recall drafts, so the rule still sends verified stories only, and the scripted demo plays out as designed. A coach's source check in the Library lifts a draft at once.
-- **The template patches** (`tools/patches.py`) add the Library card on Heroes, the Library buttons on a hero page and a story, the Library overlay, and the coach's Explore tab. `unbundle.py` re-applies them to every new export and refuses if an anchor has moved. A fresh export reproduces today's `index.html` byte for byte.
+- **The template patches** (`tools/patches.py`, 26 of them, each listed at the top of the file) add the Library card on Heroes, the Library buttons on a hero page and a story, the Library overlay, the coach's Explore tab, related reading under a story and a hero, "How it reaches your three", "Who stands near your three", "Find a story for this" under a member's Ask, and the demo bar at every width. `unbundle.py` re-applies them to every new export and refuses if an anchor has moved. Anchors are written as the export writes them, so they match a fresh export and the floored page alike, and a fresh export reproduces today's `index.html`.
+- **Three engines, one index.** `lib/core.js` (the merge, the matcher, likeness), `lib/ask.js` (a question read into a query and answered, the shelf of coach questions, compare, gaps) and `lib/net.js` (kindred ties with their reasons, routes between two lives, how a story reaches a member's three, where the three stand). All are pure and run in the browser, the app and the API alike.
 
 ## The back end · `/api/constellation`
 
@@ -64,6 +65,13 @@ One function, `api/constellation.js`. `vercel.json` rewrites `/api/constellation
 | `GET /stories`, `/stories/:id` | stories, with filters (`sit`, `icon`, `reach`, `status`, `era`) and trails |
 | `GET /situations`, `/situations/:id` | the 22 situations, with moves, lines, calibration and outcome |
 | `GET /eras`, `/eras/:id`, `/search?q=` | eras and search |
+| `GET /stories/:id/similar` | the same kind of week, and the same world, each with its reason |
+| `GET /icons/:id/kindred`, `/icons/:id/ego` | kin (a shared situation and one more reason, said in words), and the neighbourhood to draw |
+| `GET /situations/web` | the situations, joined where the same lives lived both |
+| `GET /path?from=&to=` | up to three ways from one life to another, every step with its reasons |
+| `GET /ask?t=&m=` | a question read into a query (chips, other readings, words not used) and answered with reasons; or pass the query itself: `sit`, `sex`, `field`, `before`, `after`, `age`, `dir`, `reach`, `ok`, `m` |
+| `GET /members/:id/shelf` | the questions coaches bring, for this member, each counted |
+| `GET /members/:id/near` | where the member's three stand among the member's situations, the lives in more than one, stand-ins |
 | `GET /state?ns=` | the shared ledger of source checks, and this browser's own record |
 | `POST /state/ledger` | `{ story, by, note }`: a coach has read a story against its source |
 | `DELETE /state/ledger?story=` | take a check back |
@@ -78,20 +86,26 @@ The matcher in `lib/core.js` is a line-for-line port of the corpus repo's `scrip
 ## The Library · `/constellation/library`
 
 - **The constellation.** Each star is a life, placed by field and by the year of its defining moment; larger stars hold more stories. Pick one of the 22 situations and its lives light up and join in time order.
-- **Pages.** A life (stories, defining moments, works, trails), a story (source, caution, status, the same situation across time), a situation, an era, a field, a stance, people, search.
+- **Pages.** A life (stories, defining moments, works, kindred across time), a story (source, caution, status, stories near it, the same situation across time), a situation, an era, a field, a stance, people, search.
+- **Ask.** A question in plain words ("She is announcing the reorg on Thursday, and the person who wanted her job will be in the room") is read into chips: the situations, a woman or a man, a field, an era, an age, a quieter register, the member it is for. Every chip can be taken away, the situation can be changed, other readings are offered and words that were not used are named. The answer counts its stories and lives, offers ways to narrow with their counts, gives each card the reasons that set it apart, and when fewer than four stories fit, says what to drop. The query is the address, so an answer is a link.
+- **The shelf** (coach). The questions coaches bring, grouped (what is happening, who my member is, who will land with them, how it should land), each with its live count, the member's own week first. **Where the answers are thin** lists the questions with fewer than four stories and a grid of the situations against what coaches ask for. **Compare** sets two stories side by side: what they share, then only the rows where they differ.
+- **Networks.** Kindred across time on each life: a band for each situation the life shares with its kin, years across, and the same as a list with every tie said in words. **Situations that travel together**: the 22 as rows, arcs between those the same lives lived. **Connect two lives**: the strongest way and up to two others, each step a shared situation and one more reason. **Who stands near your three**: the member's situations as overlapping circles, their three where they stand, the lives in more than one, and for each hero the nearest life where they have no story.
 - **Trails.** Every page offers ways on: the same situation in another century, contemporaries, the same field, the same way of leading. Every page opened joins the trail along the top, and a trail can be saved and walked again.
 - **Modes.**
   - Reader: the default when standalone.
   - Member: inside the app, starting from the member's three.
   - Coach: everything, plus moves, lines, calibration, prep for each member, the season ahead, and source checks.
-- **Inside the app.** Members reach it from Heroes, a hero page or a story. Saving there saves in the app, and "Ask Jim about this" opens the thread with the story attached. Coaches reach it from the Library tab, which opens on Explore. A check there makes a story sendable in the engine at once, and "Send to a member" opens Find and send with the story chosen.
+- **Inside the app, both ways.** Members reach it from Heroes, a hero page or a story. A story in the app lists related reading from the Library (the same kind of week, the same world, more from the person) that opens in place, with a way back; a story from beyond the member's three says how it reaches them, in at most two links. A hero page lists all their stories and kindred lives. Heroes offers "Who stands near your three". In the Library, Save saves in the app, "Ask Jim about this" opens the thread with the story attached, and "Add to my heroes" goes to the coach. Coaches reach it from the Library tab, which opens on Explore. A check there makes a story sendable in the engine at once, "Send to a member" opens Find and send with the story chosen, "Suggest to Sarah" lands in her thread, and under a member's Ask in Messages, "Find a story for this" opens the Library's answer to it.
+- **The demo bar** fits every width: one clock stepper below 1880px, and below 600px only the stepper and a Demo button, which opens a sheet with the view, the member, the device, the eleven moments, the theme and reset. On a phone the member app fills the screen.
 
 ## Tests
 
 ```
-node --test constellation/tests/*.test.mjs     14 tests: matcher parity, the merge, every API route, the Redis protocol
-node constellation/tests/e2e.mjs               39 checks in a browser: prototype, Library, both roles, phone and desktop,
-                                               light and dark, every persona at every step of the clock, no console errors
+node --test constellation/tests/*.test.mjs     20 tests: matcher parity, the merge, every API route, the Redis protocol,
+                                               likeness, coach questions read as situations, the question engine, the networks
+node constellation/tests/e2e.mjs               75 checks in a browser: prototype, Library, both roles, phone and desktop,
+                                               light and dark, every persona at every step of the clock, in-app reading
+                                               both ways, Ask, the shelf, the networks, no console errors
 node constellation/tools/dev-server.mjs        the site and the API locally, routed as Vercel routes them
 ```
 
