@@ -16,6 +16,7 @@
      CLG.kinTime(host, lib, me, kin, bands)   kindred across time: a band per shared situation, years across
      CLG.ladder(host, lib, pairs, o)    the situations as rows, arcs between those the same lives lived
      CLG.ageStrip(host, lib, atAge, o)  stories by the age their person was then, beside the member's own age
+     CLG.situationPlot(host, lib, ...)  every story of a situation by order of year, in rows by directness
 
    o.fs is the font size in drawing units that renders at 13px on screen (the caller measures). */
 (function () {
@@ -403,5 +404,34 @@
     paint(); host._paint = paint;
   }
 
-  window.CLG = { ego: ego, storyHood: storyHood, web: web, bind: bind, shortName: shortName, venn: venn, kinTime: kinTime, ladder: ladder, ageStrip: ageStrip };
+  // ---------- every story of this week ----------
+  // One dot per story of a situation, in order of year (spaced by order, so centuries apart can sit side by
+  // side), in a row for how direct the move is; fill shows reach: solid near, pale mid, a ring far. This story
+  // is the large dot; the path's steps carry their numbers. Each dot links to its story.
+  function situationPlot(host, lib, list, hereId, pathIds, o) {
+    o = o || {}; pathIds = pathIds || [];
+    var ROWS = [['direct', 'Direct'], ['calibrated', 'Measured'], ['indirect', 'Indirect'], ['', 'Not marked']];
+    var paint = function () {
+      var W = host.clientWidth; if (!W) return;
+      var items = list.slice().sort(function (a, b) { return (a.year == null ? 1e9 : a.year) - (b.year == null ? 1e9 : b.year) || (a.id < b.id ? -1 : 1); });
+      var rows = ROWS.filter(function (r) { return items.some(function (x) { return (x.directness || '') === r[0]; }); });
+      var lw = Math.max.apply(null, rows.map(function (r) { return measure(r[1], '400 13px "IBM Plex Sans", system-ui, sans-serif'); })) + 12;
+      var L = lw + 8, R = 14, T = 8, RH = 44, H = T + rows.length * RH + 34, n = items.length;
+      var X = function (i) { return L + (W - L - R) * (n === 1 ? 0.5 : i / (n - 1)); }, s = '';
+      rows.forEach(function (r, ri) { var y = T + ri * RH + RH / 2; s += '<text class="t-mute" x="0" y="' + f1(y + 4.5) + '" font-size="13">' + r[1] + '</text><line class="ktick" x1="' + L + '" x2="' + (W - R) + '" y1="' + f1(y) + '" y2="' + f1(y) + '"/>'; });
+      items.forEach(function (x, i) {
+        var y = T + rows.map(function (r) { return r[0]; }).indexOf(x.directness || '') * RH + RH / 2, step = pathIds.indexOf(x.id), here = x.id === hereId;
+        var I = lib.icon[x.icon] || {}, r = here ? 9 : step >= 0 ? 10 : 5.5, cls = 'pdot ' + (x.reach || 'far') + (here ? ' here' : '') + (step >= 0 ? ' step' : '');
+        s += '<a class="pd" href="#/story/' + esc(x.id) + '" aria-label="' + esc(I.name + ', ' + yearLabel(x.year) + ', ' + (x.reach || '') + ' reach' + (step >= 0 ? ', step ' + (step + 1) : '') + (here ? ', this story' : '')) + '"><title>' + esc(I.name + ', ' + yearLabel(x.year)) + '</title>' +
+          '<circle cx="' + f1(X(i)) + '" cy="' + f1(y) + '" r="13" fill="transparent"/><circle class="' + cls + '" cx="' + f1(X(i)) + '" cy="' + f1(y) + '" r="' + r + '"/>' +
+          (step >= 0 ? '<text class="pnum" x="' + f1(X(i)) + '" y="' + f1(y + 4.5) + '" text-anchor="middle" font-size="12">' + (step + 1) + '</text>' : '') + '</a>';
+      });
+      var ticks = n > 2 ? [0, Math.floor((n - 1) / 2), n - 1] : n === 2 ? [0, 1] : [0];
+      ticks.forEach(function (i, j) { s += '<text class="t-mute" x="' + f1(X(i)) + '" y="' + (H - 8) + '" font-size="13" text-anchor="' + (j === 0 ? 'start' : j === ticks.length - 1 ? 'end' : 'middle') + '">' + yearLabel(items[i].year) + '</text>'; });
+      host.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" role="img" aria-label="' + esc(n + ' stories of this situation, oldest to newest, in rows by how direct the move is. The list says the same in words.') + '">' + s + '</svg>';
+    };
+    paint(); host._paint = paint;
+  }
+
+  window.CLG = { ego: ego, storyHood: storyHood, web: web, bind: bind, shortName: shortName, venn: venn, kinTime: kinTime, ladder: ladder, ageStrip: ageStrip, situationPlot: situationPlot };
 })();

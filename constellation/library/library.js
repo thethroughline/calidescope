@@ -9,10 +9,10 @@
      #/era/<id> #/field/<id> #/stance/<id> #/people #/situations #/eras #/search?q=
      #/member/<id>        a member's reading, and the season the matcher would serve them
      #/members #/checks   coach only: the roster, and the stories waiting for a source check
-     #/saved              saved stories and saved trails
+     #/saved              saved stories and kept trails
    Query string: as=reader|member|coach, m=<member id>, core=<icon ids>, embed=1, theme=dark.
 
-   Every page opened joins the trail along the top; a trail can be saved. Saves and trails live in
+   Every page opened joins the trail along the top; a trail can be kept. Saves and trails live in
    this browser and, when the back end has a store, on the server too. A coach's source check goes
    to the shared ledger, and inside the app it reaches the engine at once. */
 (function () {
@@ -26,8 +26,15 @@
   var lib = null, M = null, me = null, ledger = {}, storeKind = 'none';
   // the trail in progress belongs to this tab and to who is reading: a coach's wandering and a member's stay apart
   var TRAIL_KEY = 'cl-trail-now:' + AS + (MID ? ':' + MID : '');
-  var saved = LS.get('cl-saved', []), trails = LS.get('cl-trails', []), trail = SS.get(TRAIL_KEY, []);
+  // inside the member app the app's saved list is the only one: the frame asks for it and sets it, never toggles
+  var APPSAVE = EMBED && AS === 'member';
+  var saved = APPSAVE ? [] : LS.get('cl-saved', []), trails = LS.get('cl-trails', []), trail = SS.get(TRAIL_KEY, []);
   var NS = ns(), main = document.getElementById('main'), first = true;
+  // inside the app, the pages read in this frame, oldest first, so the app's Back can walk them back
+  // one at a time before it closes the frame: {k: the page, h: its hash, label, y: where the reader was}
+  var hops = [], backTo = null;
+  // the checks members have asked for, as the app holds them: [{mid, sid}] from ?asked=mid:sid,mid:sid
+  var ASKED = (Q.get('asked') || '').split(',').map(function (x) { var i = x.indexOf(':'); return i > 0 ? { mid: x.slice(0, i), sid: x.slice(i + 1) } : null; }).filter(Boolean);
 
   function store(s) {
     return { get: function (k, d) { try { var v = s.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
@@ -64,7 +71,7 @@
     storeKind = server.store || 'none';
     ledger = Object.assign({}, server.ledger || {}, LS.get('cl-ledger', {}));
     var u = server.user || {};
-    if (!saved.length && Array.isArray(u.saved)) saved = u.saved;
+    if (!APPSAVE && !saved.length && Array.isArray(u.saved)) saved = u.saved;
     if (!trails.length && Array.isArray(u.trails)) trails = u.trails;
     CLC.applyVerification(lib, ledger);
     if (MID && lib.members[MID]) {
@@ -74,6 +81,20 @@
     }
     layout(); chrome(); route();
     window.addEventListener('hashchange', route);
+    if (EMBED) window.addEventListener('message', function (e) {
+      if (e.source !== window.parent || e.origin !== location.origin || !e.data || e.data.type !== 'cl:back') return;
+      if (hops.length < 2) { post('cl:close'); return; }
+      hops.pop(); backTo = hops[hops.length - 1]; location.hash = backTo.h;
+    });
+    if (APPSAVE) {
+      window.addEventListener('message', function (e) {
+        if (e.source !== window.parent || e.origin !== location.origin || !e.data || e.data.type !== 'cl:state' || !Array.isArray(e.data.saved)) return;
+        saved = e.data.saved.slice();
+        if (Array.isArray(e.data.asked)) ASKED = e.data.asked.filter(function (x) { return typeof x === 'string'; }).map(function (x) { return { mid: MID, sid: x }; });
+        links(cur); if (cur === 'story' || cur === 'saved') route(true);
+      });
+      post('cl:hello');
+    }
   }).catch(function (e) {
     main.innerHTML = '<h1>The library</h1><p class="lede">It could not load: ' + esc(e.message) + '.</p>';
   });
@@ -81,6 +102,15 @@
   // ---------- chrome: links, modes, theme, search ----------
   function chrome() {
     foot();
+    // a member arriving from the app came for one page: search and the links wait behind one control
+    if (EMBED && AS === 'member') {
+      var top = document.querySelector('.top'), tin = top.querySelector('.top-in');
+      top.classList.add('folded');
+      tin.insertAdjacentHTML('afterbegin', '<button class="browse" type="button" aria-expanded="false" aria-controls="links"><i class="ph ph-magnifying-glass" aria-hidden="true"></i>Browse the library</button>');
+      tin.querySelector('.browse').addEventListener('click', function () {
+        top.classList.remove('folded'); this.setAttribute('aria-expanded', 'true'); document.getElementById('q').focus();
+      });
+    }
     document.getElementById('searchform').addEventListener('submit', function (e) {
       e.preventDefault(); var q = document.getElementById('q').value.trim(); if (!q) return;
       // three words or more read as a question and go to Ask; fewer are a name to search for
@@ -150,14 +180,46 @@
     var fn = R[parts[0]] || missing, v;
     try { v = fn(parts[1], qs) || missing(); } catch (e) { console.error(e); v = { title: 'Something went wrong', html: '<h1>Something went wrong</h1><p class="lede">' + esc(e.message) + '</p>' }; }
     document.title = (v.title ? v.title + ' · ' : '') + 'Constellation Library';
+    if (hops.length && !backTo) hops[hops.length - 1].y = window.scrollY;  // the page being left, unless Back already took it off
     main.innerHTML = v.html;
     if (v.after) v.after();
     if (v.node) step(v.node);
     cur = parts[0] || ''; trailBar(); links(cur);
     var qbox = document.getElementById('q'); if (cur !== 'search' && document.activeElement !== qbox) qbox.value = '';
-    if (!o.keepScroll && !o.typing) { window.scrollTo(0, 0); if (!first) main.focus({ preventScroll: true }); }
+    var at = qs.get('at') && document.getElementById(qs.get('at')), back = hop(parts, v);
+    if (back) { window.scrollTo(0, back.y || 0); main.focus({ preventScroll: true }); }
+    else if (at) at.scrollIntoView();
+    else if (!o.keepScroll && !o.typing) { window.scrollTo(0, 0); if (!first) main.focus({ preventScroll: true }); }
     first = false;
-    post('cl:route', { route: location.hash || '#/', as: AS });
+    var pv = hops.length > 1 ? hops[hops.length - 2] : null;
+    post('cl:route', { route: location.hash || '#/', as: AS, depth: hops.length, prev: pv ? pv.label : '', prevTo: pv ? pv.to : '' });
+    if (EMBED) { var stops = trail.filter(function (t) { return t.k !== 'home:'; });
+      post('cl:trail', { total: stops.length, nodes: stops.slice(-8).map(function (t) { return { label: t.label, href: t.href, kind: t.k.split(':')[0] }; }) }); }
+  }
+  // Keeps the frame's own history. A page read again on its own (search typing, a re-render) is the same hop;
+  // a page equal to the one before is a step back, whether the app's Back or the browser's made it.
+  // Returns the hop when this render is a step back, so the reader lands where they were.
+  function hop(parts, v) {
+    var k = parts.slice(0, 2).join('/'), h = location.hash || '#/', top = hops[hops.length - 1], b = backTo;
+    backTo = null;
+    if (b && b.k === k) return b;
+    if (hops.length > 1 && hops[hops.length - 2].k === k) { hops.pop(); return hops[hops.length - 1]; }
+    if (top && top.k === k) { top.h = h; return null; }
+    var L = hopLabel(parts, v); hops.push({ k: k, h: h, label: L[0], to: L[1], y: 0 });
+    if (hops.length > 40) hops.shift();
+    return null;
+  }
+  // What the app's Back button says for a page, and where the line under the title says it goes:
+  // a person's name when it is short, else the kind of page.
+  function hopLabel(parts, v) {
+    var ic = parts[0] === 'icon' && lib.icon[parts[1]], sid = parts[0] === 'story' && CLC.resolve(lib, parts[1]), s = sid && lib.story[sid];
+    if (ic) return [ic.name.length <= 16 ? ic.name : CLG.shortName(ic.name), ic.name];
+    if (s && lib.icon[s.icon]) return ['Story', lib.icon[s.icon].name + '\u2019s story'];
+    var W = { '': 'Library', story: 'Story', situation: 'This week', situations: 'Situations', people: 'People', era: 'Era', eras: 'Eras', field: 'Field',
+      stance: 'Stance', search: 'Search', path: 'Path', near: 'Your three', age: 'Your age', ask: 'Ask', questions: 'Ask', cmp: 'Compare', gaps: 'Gaps',
+      member: me && parts[1] === me.id ? 'For you' : 'Member', members: 'Members', checks: 'Checks', saved: 'Saved' };
+    var w = W[parts[0]] || (v.title && v.title.length <= 16 ? v.title : 'Back');
+    return [w, parts[0] === '' ? 'the library\u2019s front page' : v.title || w];
   }
   function missing() { return { title: 'Not here', html: '<h1>Not in the library</h1><p class="lede">That page is not here.</p><p style="margin-top:18px"><a class="btn" href="#/">Back to the library</a></p>' }; }
 
@@ -175,7 +237,7 @@
     el.hidden = false;
     el.innerHTML = '<div class="trail-in"><span class="trail-label">Your trail</span><ol>' + stops.map(function (t) {
       return '<li><a href="' + esc(safe(t.href)) + '" title="' + esc(t.label) + '"><span>' + esc(t.label) + '</span></a></li>'; }).join('') + '</ol>' +
-      '<div class="trail-act"><button class="btn sm" type="button" data-act="save-trail"><i class="ph ph-bookmark-simple" aria-hidden="true"></i>Save</button>' +
+      '<div class="trail-act"><button class="btn sm" type="button" data-act="save-trail"><i class="ph ph-bookmark-simple" aria-hidden="true"></i>Keep this trail</button>' +
       '<button class="btn sm quiet" type="button" data-act="clear-trail" aria-label="Clear the trail"><i class="ph ph-x" aria-hidden="true"></i></button></div></div>';
     var ol = el.querySelector('ol'); if (ol) ol.scrollLeft = ol.scrollWidth;
   }
@@ -187,12 +249,17 @@
     if (act === 'save') { toggleSave(id); route(true); }
     if (act === 'ask') { post('cl:ask', { story: id }); say('Opening a message to your coach.'); }
     if (act === 'send') { post('cl:send', { story: id, member: a.dataset.member || MID }); }
+    if (act === 'check') {
+      post('cl:check', { story: id }); ASKED.push({ mid: MID, sid: id });
+      var cf = me && me.coach ? me.coach.first : 'your coach';
+      a.outerHTML = '<span class="flash">Waiting for ' + esc(cf) + '’s check</span>'; say('Asked ' + cf + ' to check it against its source.');
+    }
     if (act === 'add-hero') { post('cl:add-hero', { icon: id, name: lib.icon[id].name }); a.outerHTML = '<span class="flash">Sent to ' + esc(me && me.coach ? me.coach.first : 'your coach') + '</span>'; say('Sent to your coach to add to your heroes.'); }
     if (act === 'suggest-hero') { post('cl:suggest-hero', { icon: id, name: lib.icon[id].name, member: MID }); a.outerHTML = '<span class="flash">Suggested to ' + esc(me ? me.first : '') + '</span>'; say('Suggested.'); }
     if (act === 'save-trail') {
       var stops = trail.filter(function (t) { return t.k !== 'home:'; });
       trails.unshift({ name: stops[0].label + ' to ' + stops[stops.length - 1].label, at: new Date().toISOString(), nodes: stops });
-      trails = trails.slice(0, 50); LS.set('cl-trails', trails); syncUser(); say('Trail saved.'); links(cur); a.outerHTML = '<span class="flash">Saved</span>';
+      trails = trails.slice(0, 50); LS.set('cl-trails', trails); syncUser(); say('Trail kept.'); links(cur); a.outerHTML = '<span class="flash">Kept</span>';
     }
     if (act === 'clear-trail') { trail = []; SS.set(TRAIL_KEY, trail); trailBar(); }
     if (act === 'cmp') { var pk = cmpPick(), at = pk.indexOf(id); if (at >= 0) pk.splice(at, 1); else { pk.push(id); if (pk.length > 2) pk.shift(); } SS.set('cl-cmp', pk); route(true); say(at >= 0 ? 'Taken out of the comparison.' : pk.length === 2 ? 'Two chosen. Compare them at the foot of the page.' : 'Chosen. Choose one more to compare.'); }
@@ -211,7 +278,8 @@
   function toggleSave(id) {
     var i = saved.indexOf(id);
     if (i >= 0) saved.splice(i, 1); else saved.unshift(id);
-    LS.set('cl-saved', saved); syncUser(); post('cl:save', { story: id });
+    if (!APPSAVE) { LS.set('cl-saved', saved); syncUser(); }
+    post('cl:save', { story: id, on: i < 0 });
     say(i >= 0 ? 'Removed from saved.' : 'Saved.');
   }
   var syncT; function syncUser() { clearTimeout(syncT); syncT = setTimeout(function () { send('PUT', '/api/constellation/state/user?ns=' + enc(NS), { saved: saved, trails: trails }); }, 600); }
@@ -220,20 +288,20 @@
     var entry = { by: by, at: new Date().toISOString(), note: note };
     ledger[id] = entry; var l = LS.get('cl-ledger', {}); l[id] = entry; LS.set('cl-ledger', l);
     s.verified = true; s.status = 'verified'; s.checked = entry;
-    send('POST', '/api/constellation/state/ledger', { story: id, by: by, note: note });
-    post('cl:verified', { story: id, entry: entry });
+    // the app hears of the check once the ledger has it: the frame may close as soon as the app knows
+    send('POST', '/api/constellation/state/ledger', { story: id, by: by, note: note }).then(function () { post('cl:verified', { story: id, entry: entry }); });
     say('Checked against the source. It can be sent now.'); route(true);
   }
   function unverify(id) {
     var s = lib.story[id]; if (!s) return;
     delete ledger[id]; var l = LS.get('cl-ledger', {}); delete l[id]; LS.set('cl-ledger', l);
     s.verified = false; s.status = s.origin === 'sample' ? 'sample-draft' : 'recall'; delete s.checked;
-    send('DELETE', '/api/constellation/state/ledger?story=' + enc(id));
-    post('cl:unverified', { story: id });
+    send('DELETE', '/api/constellation/state/ledger?story=' + enc(id)).then(function () { post('cl:unverified', { story: id }); });
     say('Check taken back.'); route(true);
   }
 
   // ---------- pieces ----------
+  function coachFirst() { return me && me.coach ? me.coach.first : 'your coach'; }
   function isMine(id) { return !!(me && AS !== 'coach' && me.core.indexOf(id) >= 0); }
   function badge(s) {
     var st = CLC.STATUS[s.status] || CLC.STATUS.recall, ok = st.tone === 'ok';
@@ -241,7 +309,7 @@
   }
   function cardBadge(c) {
     if (c.verified) return '<span class="badge ok"><i class="ph-fill ph-seal-check" aria-hidden="true"></i>Verified</span>';
-    return AS === 'coach' ? '<span class="badge draft">Draft</span>' : '';
+    return AS === 'coach' ? '<span class="badge draft">Recall draft</span>' : '';
   }
   function storyCard(c, o) {
     o = o || {};
@@ -500,6 +568,38 @@
       '<div id="spine">' + spine + '<p class="n-note">Ways of leading are proposed readings. Years are the year of each defining moment, written from recall.</p></div></div>');
     return { html: html, after: function () { var hst = document.getElementById('kfig'); if (hst) CLG.kinTime(hst, lib, ic, kin, bands, { list: 'spine' }); } };
   }
+  // Others who lived this week (CLC.likeThis) and the same field (CLC.sameField): one heading names the situation,
+  // each card says what sets it apart
+  function likeCtx() { return { role: AS, three: me && AS === 'member' ? me.core : [] }; }
+  function othersHTML(s) {
+    var L = CLC.likeThis(lib, s.id, 4, likeCtx()), F = CLC.sameField(lib, s.id, 3, L.map(function (x) { return x.story.icon; })), st = lib.sitByKey[s.keys[0]];
+    var head = AS === 'member' ? 'Others who lived this week' : 'Others who lived ' + (st ? st.id + ' · ' + st.chip : 'this week');
+    return '<div id="others">' + sec(esc(head), '<div class="grid">' + L.map(function (x) { return storyCard(x.story, { noQuote: true, why: x.reasons[0] }); }).join('') + '</div>' +
+      (F.length ? '<h3 style="margin-top:26px">In the same field</h3><div class="grid">' + F.map(function (x) { return storyCard(x.story, { noQuote: true, why: x.reasons[0], world: true }); }).join('') + '</div>' : '')) + '</div>';
+  }
+  // Every story of this week: the plot, with the path's numbers, and a list of the path for small screens
+  function plotHTML(key, hereId, id) {
+    var st = lib.sitByKey[key], P = CLC.readingPath(lib, key), all = (lib.byKey[key] || []).map(function (x) { return lib.story[x]; });
+    return { P: P, html: '<div class="n-fig graphbox" id="' + id + '"></div><ul class="n-key"><li><span class="sw" style="background:var(--pru)"></span>Close to an ordinary office</li><li><span class="sw" style="background:var(--pru12);border:1.5px solid var(--pru)"></span>Some way from one</li><li><span class="sw" style="border:1.5px solid var(--pru)"></span>Far from one</li>' + (hereId ? '<li><span class="sw mad"></span>This story</li>' : '') + '<li><span class="sw" style="background:var(--ink)"></span>The path, in order</li></ul>' +
+      '<p class="note" style="margin-top:6px">Spaced by the order of their years, so centuries apart can sit side by side.</p>',
+      draw: function () { var host = document.getElementById(id); if (host) CLG.situationPlot(host, lib, all, hereId, P.map(function (x) { return x.story.id; })); } };
+  }
+  function pathHTML(P) {
+    return '<ol class="pathsteps">' + P.map(function (x, i) {
+      var I = lib.icon[x.story.icon], c = CLC.storyCard(lib, x.story);
+      return '<li><span class="num" aria-hidden="true">' + (i + 1) + '</span><div><p class="sh">' + esc(x.heading) + '</p><p class="note preason">' + esc(x.reason) + '</p>' +
+        '<a class="who" href="' + H.story(x.story.id) + '">' + esc(I.name) + '</a>' + (x.story.verified ? '' : ' ' + (AS === 'coach' ? '<span class="badge draft">Recall draft</span>' : '<span class="meta">Recall draft</span>')) +
+        '<p class="meta" style="margin:2px 0 0">' + esc(x.story.place || yl(x.story.year)) + '</p>' + (c.pattern ? '<p class="pat">“' + esc(c.pattern) + '”</p>' : '') + '</div></li>';
+    }).join('') + '</ol>';
+  }
+  function otherWayHTML(s) {
+    var o = CLC.otherWay(lib, s.id); if (!o) return '';
+    var side = function (x) { var I = lib.icon[x.icon], c = CLC.storyCard(lib, x), mv = (x.move_examples || [])[0];
+      return '<div class="side"><p class="label">' + esc(cap(CLC.DIR_WORD[x.directness] || '')) + ' · ' + esc(yl(x.year)) + '</p><a class="who" href="' + H.story(x.id) + '" style="font:400 var(--t-title)/1.3 var(--serif);color:var(--ink);text-decoration:none">' + esc(I.name) + '</a>' +
+        (c.pattern ? '<p class="pat" style="font:italic 400 var(--t-body)/1.5 var(--serif);color:var(--mute);margin:6px 0 0">“' + esc(c.pattern) + '”</p>' : '') + (mv ? '<p class="mv"><b>The move it suggests.</b> ' + esc(mv) + '</p>' : '') + '</div>'; };
+    var A = lib.icon[s.icon], B = lib.icon[o.icon];
+    return sec('The other way', '<p class="note" style="margin:-6px 0 14px">' + esc(A.name) + ' made ' + (s.directness === 'indirect' ? 'an ' : 'a ') + esc(CLC.DIR_WORD[s.directness]) + ' move; ' + esc(B.name) + ' ' + (o.directness === 'indirect' ? 'an ' : 'a ') + esc(CLC.DIR_WORD[o.directness]) + ' one.</p><div class="pair">' + side(s) + side(o) + '</div>');
+  }
   // Back into the app: a member sends a life to their coach as a hero; a coach suggests one to the member being prepped.
   function heroAction(ic) {
     if (!EMBED || !ic.stories.length) return '';
@@ -539,37 +639,31 @@
       '<p class="prose">' + esc(s.moment) + '</p>' +
       (s.pattern ? '<blockquote class="quote">“' + esc(foreign ? s.pattern_en : s.pattern) + '”' + (foreign ? '<span class="orig" lang="' + esc(s.pattern_lang) + '">“' + esc(s.pattern) + '”</span>' : '') + '</blockquote>' +
         (s.by ? '<p class="meta" style="margin:8px 0 0">' + esc(s.by) + '</p>' : '') + (foreign && s.pattern_translation ? '<p class="meta" style="margin:8px 0 0">Translation: ' + esc(s.pattern_translation) + '</p>' : '') : '') +
-      '<dl class="kv" style="margin-top:26px"><dt>Source</dt><dd>' + esc(s.source || 'Not yet sourced.') + '</dd>' + (s.caution ? '<dt>Caution</dt><dd>' + esc(s.caution) + '</dd>' : '') +
+      '<dl class="kv" style="margin-top:26px"><dt>Source</dt><dd>' + esc(CLC.sourceFor(s, AS) || (s.verified ? 'Not yet sourced.' : 'Shown once ' + coachFirst() + ' has checked the story.')) + '</dd>' + (s.caution ? '<dt>Caution</dt><dd>' + esc(s.caution) + '</dd>' : '') +
       (s.why && AS !== 'reader' ? '<dt>Why it fits</dt><dd>' + esc(s.why) + '</dd>' : '') + '</dl>' +
       '</article><aside style="padding-top:8px">';
-    h += '<div class="panel"><div class="row">' + badge(s) + '</div><p class="note" style="margin:10px 0 0">' + esc(st.note) + '</p>' +
+    h += '<div class="panel"><div class="row">' + badge(s) + '</div><p class="note" style="margin:10px 0 0">' + esc(CLC.statusLine(s, AS, coachFirst())) + '</p>' +
       (s.checked ? '<p class="note" style="margin:8px 0 0">Checked by ' + esc((lib.coaches[s.checked.by] || {}).name || s.checked.by) + ', ' + esc(when(s.checked.at)) + (s.checked.note ? ': ' + esc(s.checked.note) : '.') + '</p>' : '') +
       (!s.verified && AS !== 'coach' ? '<p class="note" style="margin:8px 0 0">The quotation in a draft is unchecked.</p>' : '') +
       '<h3 style="margin-top:18px">Filed under</h3><div class="row">' + s.keys.map(function (k) { return lib.sitByKey[k] ? sitChip(lib.sitByKey[k]) : ''; }).join('') + '</div>' +
       '<div class="row" style="margin-top:18px">' +
       '<button class="btn' + (isSaved ? ' on' : '') + '" type="button" data-act="save" data-id="' + esc(s.id) + '"><i class="' + (isSaved ? 'ph-fill' : 'ph') + ' ph-bookmark-simple"></i>' + (isSaved ? 'Saved' : 'Save') + '</button>' +
       (EMBED && me && AS === 'member' ? '<button class="btn" type="button" data-act="ask" data-id="' + esc(s.id) + '">Ask ' + esc(me.coach ? me.coach.first : 'your coach') + ' about this</button>' : '') +
+      (EMBED && me && AS === 'member' && !s.verified ? (asked(s.id, me.id) ? '<span class="flash">Waiting for ' + esc(me.coach ? me.coach.first : 'your coach') + '’s check</span>'
+        : '<button class="btn" type="button" data-act="check" data-id="' + esc(s.id) + '">Ask ' + esc(me.coach ? me.coach.first : 'your coach') + ' to check it</button>') : '') +
       (EMBED && AS === 'coach' ? '<button class="btn solid" type="button" data-act="send" data-id="' + esc(s.id) + '"' + (s.verified ? '' : ' disabled title="Check the source first"') + '>Send to a member</button>' : '') +
       '</div></div>';
     if (AS === 'coach') h += coachPanel(s);
     h += '</aside></div>';
     // Stories like this one, in two kinds, each saying why; then the picture; then the same situation across time.
-    var week = CLC.similarStories(lib, s.id, 4), world = CLC.similarStories(lib, s.id, 3, { mode: 'words' });
-    h += sec('Stories like this',
-      '<h3>The same kind of week</h3><div class="grid">' + week.map(function (x) { return storyCard(x.story, { noQuote: true, why: x.reasons[0] }); }).join('') + '</div>' +
-      (world.length ? '<h3 style="margin-top:26px">The same world</h3><div class="grid">' + world.map(function (x) { return storyCard(x.story, { noQuote: true, why: x.reasons.filter(function (r) { return r.type === 'words'; })[0] || x.reasons[0], world: true }); }).join('') + '</div>' : '') +
-      '<div class="graphbox" id="hood" style="margin-top:26px"></div><p class="graphnote meta" id="hoodnote">On the left, the same kind of week; on the right, the same world. The nearer a story sits, the closer it is.</p>');
-    var across = t.situations.map(function (x) {
-      var here = x.stories[x.at], before = x.stories[x.at - 1], after = x.stories[x.at + 1];
-      return '<div class="trailgroup"><h3>' + tlink(H.sit(x.sit.id), '<span class="code">' + esc(x.sit.id) + '</span>' + esc(x.sit.chip)) + '</h3>' + strip(x.stories, here) +
-        '<div class="neighbours">' + (before ? '<div><p class="meta" style="margin:0 0 6px">Earlier</p>' + storyCard(before, { noQuote: true }) + '</div>' : '<div></div>') +
-        (after ? '<div><p class="meta" style="margin:0 0 6px">Later</p>' + storyCard(after, { noQuote: true }) + '</div>' : '') + '</div></div>';
-    }).join('');
-    h += sec('Across time', '<p class="note" style="margin:-8px 0 16px">Every story filed under the same situation, from the earliest to the latest. This one is the larger dot.</p><div class="panel well">' + across + '</div>');
+    h += othersHTML(s);
+    var plot = plotHTML(s.keys[0], s.id, 'splot'), stk = lib.sitByKey[s.keys[0]];
+    h += sec('Every story of this week', (stk ? '<p class="note" style="margin:-6px 0 14px">' + n((lib.byKey[s.keys[0]] || []).length, 'story', 'stories') + ' filed under ' + esc(stk.id + ' · ' + stk.chip) + '. This one is the red dot; the numbers are the situation’s <a href="' + H.sit(stk.id) + '">path in five stories</a>.</p>' : '') + plot.html);
+    h += otherWayHTML(s);
     if (t.moreFrom.length) h += sec('More from ' + esc(ic.name), '<div class="grid">' + t.moreFrom.map(function (c) { return storyCard(c, { noName: true }); }).join('') + '</div>');
     h += '<p style="margin-top:40px">' + tlink(H.era(t.era.id), 'Other stories from ' + esc(t.era.label.replace(/^The /, 'the '))) + '</p>';
     return { title: ic.name + ', ' + (s.place || s.era), html: h, node: { k: 'story:' + s.id, label: ic.name + ', ' + (s.year != null ? yl(s.year) : s.era), href: H.story(s.id) },
-      after: function () { drawGraph('hood', function (fs) { return CLG.storyHood(CLC.storyCard(lib, s), CLC.similarStories(lib, s.id, 6), CLC.similarStories(lib, s.id, 5, { mode: 'words' }), { fs: fs }); }, '#hoodnote'); } };
+      after: plot.draw };
   }
   function strip(list, here) {
     var ys = list.map(function (c) { return c.year; }).filter(function (y) { return y != null; });
@@ -606,6 +700,9 @@
     var seg = function (k, label) { return '<a class="btn sm' + (f === k ? ' on' : '') + '" href="' + H.sit(s.id) + (k === 'all' ? '' : '?f=' + k) + '">' + label + '</a>'; };
     var h = '<p class="meta" style="margin:0">' + esc(s.id + ' · ' + s.family) + '</p><h1 style="margin-top:6px">' + esc(s.chip) + '</h1><p class="lede">' + esc(s.line) + '</p>' +
       '<p class="note i" style="margin-top:10px">In a member’s words: “' + esc(s.member_line) + '”</p>';
+    var splot = plotHTML(s.key, null, 'sitplot');
+    h += '<section id="path"><header><h2>A path in five stories</h2></header><p class="note" style="margin:-6px 0 14px">An order that teaches: start close to home, go back in time, change worlds, see it handled the other way, then see the most at stake.</p>' + pathHTML(splot.P) + '</section>';
+    h += sec('Every story of this week', splot.html);
     h += sec('Who has lived it', '<div class="map" id="map"><div class="map-scroll"></div><div class="tip" id="tip" hidden></div></div><p class="mapcap meta" id="mapcap"></p>' +
       '<div class="people-row" style="margin-top:14px">' + s.icons.map(function (i) { return lib.icon[i]; }).sort(function (a, b) { return (a.year || 0) - (b.year || 0); }).map(function (i) { return pchip(CLC.iconCard(lib, i)); }).join('') + '</div>');
     h += sec(n(stories.length, 'story', 'stories'), stories.length ? '<div class="grid">' + stories.map(function (x) { return storyCard(CLC.storyCard(lib, x)); }).join('') + '</div>' : '<p class="empty">Nothing matches that filter yet.</p>',
@@ -632,7 +729,7 @@
     var fam = lib.situations.filter(function (x) { return x.fam === s.fam && x.id !== s.id; });
     h += sec('The rest of ' + esc(s.fam + ' · ' + s.family), '<div class="row">' + fam.map(sitChip).join('') + '</div>');
     return { title: s.id + ' ' + s.chip, html: h, node: { k: 'sit:' + s.id, label: s.id + ' ' + s.chip, href: H.sit(s.id) },
-      after: function () { mapOpts = { key: s.key, chips: false }; lit = s.key; paintMap(); } };
+      after: function () { mapOpts = { key: s.key, chips: false }; lit = s.key; paintMap(); splot.draw(); } };
   }
   function sitsPage() {
     var pairs = CLN.web(lib), N = lib.situations.length, two = pairs.filter(function (p) { return p.lives.length >= 2; }).length;
@@ -1028,6 +1125,23 @@
     };
     getJSON('/api/constellation/members/' + enc(id) + '/season?weeks=8').then(function (r) { paint(r.season, 'api'); }, function () { paint(CLC.season(lib, M, id, 8), 'local'); });
   }
+  function asked(sid, mid) { return ASKED.some(function (x) { return CLC.resolve(lib, x.sid) === CLC.resolve(lib, sid) && (!mid || x.mid === mid); }); }
+  // The drafts members asked to have checked: the most asked first, then one that fits the asker's next situation
+  function askedHTML() {
+    var by = {};
+    ASKED.forEach(function (x) {
+      var id = CLC.resolve(lib, x.sid), s = lib.story[id], m = lib.members[x.mid]; if (!s || s.verified || !m) return;
+      var e = by[id] || (by[id] = { s: s, who: [], fits: 0 });
+      if (e.who.indexOf(m.first) < 0) e.who.push(m.first);
+      var up = m.up19 && lib.sit[m.up19.sit]; if (up && s.keys.indexOf(up.key) >= 0) e.fits = 1;
+    });
+    var list = Object.keys(by).map(function (k) { return by[k]; }).sort(function (a, b) { return b.who.length - a.who.length || b.fits - a.fits || (a.s.id < b.s.id ? -1 : 1); });
+    if (!list.length) return '';
+    return sec('Members asked', '<ul class="list">' + list.map(function (e) {
+      return '<li><a class="rowlink" href="' + H.story(e.s.id) + '"><span><span class="t">' + esc(lib.icon[e.s.icon].name + ', ' + (e.s.place || e.s.era)) + '</span><span class="s" style="display:block">' +
+        esc(e.who.join(' and ') + ' asked' + (e.fits ? '. It fits ' + (e.who.length > 1 ? 'a' : e.who[0] + '’s') + ' next situation.' : '.')) + '</span></span></a></li>';
+    }).join('') + '</ul>');
+  }
   function checksPage() {
     if (AS !== 'coach') return missing();
     var seen = {}, need = [];
@@ -1042,6 +1156,7 @@
     var done = Object.keys(ledger).filter(function (id) { return lib.story[id]; }).sort(function (a, b) { return ledger[b].at < ledger[a].at ? -1 : 1; });
     var h = '<h1>Source checks</h1><p class="lede">A story reaches a member once a coach has read it against its source. These are the drafts each member’s next situation needs first.</p>' +
       '<p class="note" style="margin-top:10px">' + (storeKind === 'kv' ? 'Checks are shared: every coach on this deployment sees them.' : 'Checks are kept in this browser' + (storeKind === 'memory' ? ' and, for a while, on the server' : '') + '. Connect a Redis store to the deployment to share them between coaches.') + '</p>';
+    h += askedHTML();
     h += need.map(function (x) {
       return sec(esc(x.m.first + ' · ' + x.m.up19.label), '<p class="note" style="margin:-6px 0 14px"><a href="' + H.sit(x.up.id) + '">' + esc(x.up.id) + '</a> ' + esc(x.up.chip) + '</p>' +
         (x.list.length ? '<div class="grid">' + x.list.map(function (s) { return storyCard(CLC.storyCard(lib, s)); }).join('') + '</div>' : '<p class="empty">Nothing waiting here.</p>'));
@@ -1054,12 +1169,12 @@
   }
   function savedPage() {
     var ss = saved.filter(function (id) { return lib.story[CLC.resolve(lib, id)]; }).map(function (id) { return CLC.storyCard(lib, lib.story[CLC.resolve(lib, id)]); });
-    var h = '<h1>Saved</h1><p class="lede">Stories you saved and trails you kept, in this browser' + (storeKind === 'kv' ? ' and on the server' : '') + '.</p>';
+    var h = '<h1>Saved</h1><p class="lede">' + (APPSAVE ? 'Stories you saved, here or in the app, and trails you kept.' : 'Stories you saved and trails you kept, in this browser' + (storeKind === 'kv' ? ' and on the server' : '') + '.') + '</p>';
     h += sec('Stories', ss.length ? '<div class="grid">' + ss.map(function (c) { return storyCard(c); }).join('') + '</div>' : '<p class="empty">Nothing saved yet. Save a story from its page.</p>');
     h += sec('Trails', trails.length ? '<ul class="list">' + trails.map(function (t, i) {
       return '<li style="display:flex;gap:10px;align-items:center;padding:12px 4px"><span style="flex:1;min-width:0"><span class="t" style="font:400 17px/1.35 var(--serif);display:block">' + esc(t.name) + '</span><span class="meta">' + n(t.nodes.length, 'stop') + ' · ' + esc(when(t.at)) + ' · ' + esc(t.nodes.map(function (x) { return x.label; }).join(', ')) + '</span></span>' +
         '<button class="btn sm" type="button" data-act="open-trail" data-id="' + i + '">Walk it again</button><button class="btn sm" type="button" data-act="drop-trail" data-id="' + i + '" aria-label="Remove this trail"><i class="ph ph-x"></i></button></li>';
-    }).join('') + '</ul>' : '<p class="empty">No trails kept yet. Wander for a while, then save the trail from the bar along the top.</p>');
+    }).join('') + '</ul>' : '<p class="empty">No trails kept yet. Wander for a while, then keep the trail from the bar along the top.</p>');
     return { title: 'Saved', html: h };
   }
 

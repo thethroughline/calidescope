@@ -154,8 +154,8 @@
   function three(lib, mid) { var m = lib.members[mid]; return m ? ((m.heroes_icons || {}).core || []).filter(function (x) { return lib.icon[x]; }) : []; }
 
   // From the member's three to the life a story comes from. The last link should share the week's situation.
-  function bridge(lib, mid, iconId, key) {
-    var hs = three(lib, mid);
+  function bridge(lib, mid, iconId, key, o) {
+    var hs = o && o.three && o.three.length ? o.three : three(lib, mid);
     if (hs.indexOf(iconId) >= 0) return { hero: iconId, steps: [], own: true };
     var best = null;
     hs.forEach(function (h) {
@@ -224,6 +224,46 @@
     return out;
   }
 
+  // ---------- one check fills this slot ----------
+  // For a week with no checked story: the recall drafts in its situation that are near enough to send, ranked
+  // by how close their life is to the member's three (one of the three, then one link, then two), then by id.
+  // o.three: the heroes as the app holds them now; o.prefer: a draft already paired with the week, which comes first.
+  function fillSlot(lib, mid, key, o) {
+    o = o || {}; var hs = o.three && o.three.length ? o.three : three(lib, mid), out = [];
+    (lib.byKey[key] || []).forEach(function (sid) {
+      var s = lib.story[sid]; if (!s || s.verified || !(s.reach === 'near' || s.reach === 'mid')) return;
+      var own = hs.indexOf(s.icon) >= 0, b = own ? null : bridge(lib, mid, s.icon, key, { three: hs });
+      out.push({ story: s, links: own ? 0 : b && b.steps ? b.steps.length : 9, hero: own ? s.icon : b ? b.hero : null, steps: b ? b.steps : [] });
+    });
+    out.sort(function (a, b) { return (b.story.id === o.prefer) - (a.story.id === o.prefer) || a.links - b.links || (a.story.id < b.story.id ? -1 : 1); });
+    return { pick: out[0] || null, next: out.slice(1, 3), total: out.length };
+  }
+
+  // ---------- how far a life is from a member's three ----------
+  // hops: the fewest links from any of the three to every life with a story (0 for the three themselves),
+  // breadth first over the ties, at most o.max (default 3). For sorting a list of stories by nearness.
+  function hops(lib, mid, o) {
+    o = o || {}; var g = graph(lib), hs = o.three && o.three.length ? o.three : three(lib, mid), max = o.max || 3, out = {}, q = [];
+    hs.forEach(function (h) { if (lib.icon[h] && !out[h]) { out[h] = { links: 0, hero: h }; q.push(h); } });
+    for (var i = 0; i < q.length; i++) {
+      var u = q[i], du = out[u]; if (du.links >= max) continue;
+      (g.adj[u] || []).forEach(function (e) { if (!out[e.id]) { out[e.id] = { links: du.links + 1, hero: du.hero }; q.push(e.id); } });
+    }
+    return out;
+  }
+  // linksTo: how one life reaches the member, in words: the chain bridge() finds, and one line for it
+  // ("one link from Obama. Both had every act read as a signal.").
+  function linksTo(lib, mid, iconId, key, o) {
+    var hs = o && o.three && o.three.length ? o.three : three(lib, mid), b = bridge(lib, mid, iconId, key, { three: hs });
+    var nm = function (id) { var I = lib.icon[id]; return I ? I.short || I.name : id; };
+    if (!b) return { links: 9, hero: null, steps: [], line: 'Not near the three.' };
+    if (b.own) return { links: 0, hero: iconId, steps: [], line: 'One of the three.' };
+    var st = b.steps, w = why(lib, st[st.length - 1].a, st[st.length - 1].b, st[st.length - 1].tie)[0] || '';
+    var line = st.length === 1 ? 'One link from ' + nm(b.hero) + '. ' + w
+      : (st.length === 2 ? 'Two links' : st.length + ' links') + ' from ' + nm(b.hero) + ', through ' + st.slice(0, -1).map(function (x) { return nm(x.b); }).join(' and ') + '. ' + w;
+    return { links: st.length, hero: b.hero, steps: st, line: line.trim() };
+  }
+
   // ---------- your age, their age ----------
   // Every story in a member's situations, placed at the age its person was then (story year minus birth year),
   // beside the member's own age. Newly promoted leaders measure themselves by age; this ties the member to
@@ -257,5 +297,5 @@
 
   return { BOTH: BOTH, STANCE: STANCE, FIELD: FIELD, NEAR_YEARS: NEAR_YEARS, both: both, apart: apart, world: world,
     tie: tie, why: why, short: short, graph: graph, kindred: kindred, route: route, routes: routes, bridge: bridge,
-    near: near, nearWhy: nearWhy, affinity: affinity, sendable: sendable, web: web, three: three, atAge: atAge };
+    near: near, nearWhy: nearWhy, affinity: affinity, sendable: sendable, web: web, three: three, atAge: atAge, fillSlot: fillSlot, hops: hops, linksTo: linksTo };
 }));

@@ -44,11 +44,31 @@
     PK: 'Pakistan', PL: 'Poland', PT: 'Portugal', RO: 'Romania', RU: 'Russia', SE: 'Sweden', UK: 'United Kingdom', US: 'United States', VN: 'Vietnam', ZA: 'South Africa' };
   var STATUS = {
     'sample-verified': { label: 'Verified', tone: 'ok', note: 'A demo sample, checked for the prototype.' },
-    'sample-draft': { label: 'Draft', tone: 'draft', note: 'A demo sample still waiting for its source check.' },
+    'sample-draft': { label: 'Recall draft', tone: 'draft', note: 'Written from recall. Read it against the named source before it is sent.' },
     recall: { label: 'Recall draft', tone: 'draft', note: 'Written from recall. Read it against the named source before it is sent.' },
     verified: { label: 'Verified', tone: 'ok', note: 'Read against its source by a coach.' }
   };
 
+  // One name for a draft everywhere, and one line for a member, naming their coach
+  // The status as each reader should hear it: a coach the working note, a member their coach's name, anyone else plainly
+  function statusLine(s, role, coachFirst) {
+    var st = STATUS[s.status] || STATUS.recall;
+    if (role === 'coach') return st.note;
+    if (s.verified) return 'Checked against its source.';
+    return role === 'member' ? draftLine(coachFirst) : 'Not yet checked against its source.';
+  }
+  function draftLine(coachFirst) { return 'Recall draft. ' + (coachFirst || 'Your coach') + ' has not checked this against its source yet.'; }
+  // The source as a reader may see it. A coach sees everything. A member sees a citation once the story is
+  // checked. Nobody but a coach sees a working note ("Corpus draft", "Verify the numbers", "Check wording").
+  var NOTE = /^corpus draft\b|\b(?:verify|verified|check|checked|confirm)\b/i;
+  function sourceFor(s, as) {
+    var src = String((s && s.source) || '');
+    if (as === 'coach') return src;
+    if (as === 'member' && !s.verified) return '';
+    // clauses end at a full stop or a semicolon; a clause that tells a coach what to do is dropped
+    var kept = src.split(/(?<=\.)\s+|;\s*/).filter(function (x) { return x && !NOTE.test(x); }).map(function (x) { return x.trim(); });
+    return kept.join('. ').replace(/\.\./g, '.').replace(/([^.])$/, '$1.');
+  }
   function fold(s) { return String(s == null ? '' : s).normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
   function slug(s) { return fold(s).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
   function initials(name) { var w = String(name).replace(/[^\p{L}\s'-]/gu, '').split(/\s+/).filter(Boolean); if (!w.length) return '?'; return (w.length === 1 ? w[0].slice(0, 2) : w[0][0] + w[w.length - 1][0]).toUpperCase(); }
@@ -332,6 +352,110 @@
 
   // Stories like this one. score = situations (rarity-weighted overlap) + words + small pulls for the same field,
   // the same way of leading and nearby years. A different person every time: same-person stories live elsewhere.
+  // ---------- others who lived this week, and the same field ----------
+  // likeThis: stories of the same situation, ranked by how close the scene is (shared situations and words),
+  // then chosen for range: at most one from the story's own field, no two from the same century where another
+  // is close, and one from before 1900 when the situation has one. The lesson carries best from another world.
+  // Every card gets one reason no other card in the list repeats, and no reason names the situation (the
+  // heading does). ctx: { role, three: [icon ids], heroName: function } for "as Obama does".
+  var STANCE_BY = { front: 'by going out front', earn: 'by earning it daily', weight: 'by carrying the weight', grow: 'by growing others', close: 'by staying close', ootw: 'by stepping out of the way' };
+  var MOVE_WORD = { direct: 'a direct move', calibrated: 'a measured move', indirect: 'an indirect move' };
+  function likeThis(lib, id, k, ctx) {
+    ctx = ctx || {}; k = k || 4;
+    var s = lib.story[resolve(lib, id)]; if (!s) return [];
+    var tx = textIndex(lib), me = lib.icon[s.icon] || {}, best = {};
+    lib.stories.forEach(function (o) {
+      if (o.icon === s.icon || !o.keys.some(function (x) { return s.keys.indexOf(x) >= 0; })) return;
+      var shared = o.keys.filter(function (x) { return s.keys.indexOf(x) >= 0; });
+      var sk = shared.reduce(function (a, x) { return a + (tx.kidf[x] || 1); }, 0) / Math.max(1, Math.sqrt(s.keys.length * o.keys.length));
+      var score = 0.9 * sk + 6 * cosine(tx.vec[s.id], tx.vec[o.id]);
+      if (!best[o.icon] || score > best[o.icon].score || (score === best[o.icon].score && o.id < best[o.icon].o.id)) best[o.icon] = { o: o, score: score, oi: lib.icon[o.icon] || {} };
+    });
+    var pool = Object.keys(best).map(function (x) { return best[x]; }).sort(function (a, b) { return b.score - a.score || (a.o.id < b.o.id ? -1 : 1); });
+    var cent = function (y) { return y == null ? 'none' : Math.floor(y / 100); }, picked = [], fields = {}, cents = {};
+    while (picked.length < k && pool.length) {
+      var at = -1, top = -Infinity;
+      pool.forEach(function (x, i) {
+        var own = x.oi.field === me.field, v = x.score - (fields[x.oi.field] ? 0.8 : 0) - (cents[cent(x.o.year)] ? 0.4 : 0) - (own && fields.__own ? 10 : 0);
+        if (v > top) { top = v; at = i; }
+      });
+      var x = pool.splice(at, 1)[0]; picked.push(x); fields[x.oi.field] = 1; cents[cent(x.o.year)] = 1; if (x.oi.field === me.field) fields.__own = 1;
+    }
+    var isOwn = function (x) { return x.oi.field === me.field; }, isOld = function (x) { return x.o.year != null && x.o.year < 1900; };
+    if (picked.length && !picked.some(isOld)) {
+      var old = pool.filter(function (x) { return isOld(x) && !isOwn(x); })[0] || pool.filter(isOld)[0];
+      if (old) { var drop = picked.map(isOwn).lastIndexOf(true); picked[drop >= 0 && picked.filter(isOwn).length > 1 ? drop : picked.length - 1] = old; pool.splice(pool.indexOf(old), 1); }
+    }
+    // never more than one from the story's own field while another field can stand in
+    while (picked.filter(isOwn).length > 1) {
+      var alt = pool.filter(function (x) { return !isOwn(x); })[0]; if (!alt) break;
+      var j = picked.map(isOwn).lastIndexOf(true); if (isOld(picked[j]) && picked.filter(isOld).length === 1) j = picked.map(isOwn).indexOf(true);
+      picked[j] = alt; pool.splice(pool.indexOf(alt), 1);
+    }
+    var used = {}, oldest = Math.min.apply(null, (lib.byKey[s.keys[0]] || []).map(function (sid) { var y = lib.story[sid].year; return y == null ? 1e9 : y; }));
+    return picked.map(function (x) { var r = reasonFor(lib, s, x.o, ctx, used, oldest); used[r.text] = 1; return { story: storyCard(lib, x.o), score: +x.score.toFixed(3), reasons: [r] }; });
+  }
+  function reasonFor(lib, here, o, ctx, used, oldest) {
+    var oi = lib.icon[o.icon] || {}, me = lib.icon[here.icon] || {}, c = [];
+    (ctx.three || []).forEach(function (h) { var H = lib.icon[h]; if (ctx.role === 'member' && H && h !== o.icon && oi.stance && oi.stance === H.stance && STANCE_BY[oi.stance]) c.push({ type: 'fit', text: 'Leads ' + STANCE_BY[oi.stance] + ', as ' + (H.short || H.name) + ' does' }); });
+    if (o.year != null && o.year === oldest) c.push({ type: 'years', text: yearLabel(o.year) + ', the oldest of this week' });
+    else if (o.year != null && o.year < 1900) c.push({ type: 'years', text: 'Long ago: ' + yearLabel(o.year) });
+    if (o.year != null && here.year != null && Math.abs(o.year - here.year) <= 10) c.push({ type: 'years', text: o.year === here.year ? 'The same year: ' + yearLabel(o.year) : 'The same years: ' + yearLabel(o.year) });
+    var dom = String(oi.domainLabel || oi.field || '').toLowerCase(), mv = MOVE_WORD[o.directness];
+    if (oi.field !== me.field) c.push({ type: 'field', text: 'From ' + dom + ', ' + yearLabel(o.year) + (mv ? ' · ' + mv : '') });
+    c.push({ type: 'field', text: (oi.field === me.field ? 'Also in ' : 'From ') + dom + ', ' + yearLabel(o.year) });
+    if (mv) c.push({ type: 'move', text: cap1(mv) + ', ' + yearLabel(o.year) });
+    return c.filter(function (r) { return !used[r.text]; })[0] || { type: 'field', text: (oi.name || '') + ', ' + yearLabel(o.year) };
+  }
+  function cap1(t) { return t.charAt(0).toUpperCase() + t.slice(1); }
+  // sameField: the same domain (else the same field), nearest in time first, leaving out the lives in exclude
+  function sameField(lib, id, k, exclude) {
+    k = k || 3; var s = lib.story[resolve(lib, id)]; if (!s) return [];
+    var me = lib.icon[s.icon] || {}, ex = {}; (exclude || []).forEach(function (x) { ex[x] = 1; }); ex[s.icon] = 1;
+    var pick = function (test) {
+      var seen = {}; return lib.stories.filter(function (o) { var oi = lib.icon[o.icon] || {}; return !ex[o.icon] && test(oi); })
+        .sort(function (a, b) { return Math.abs((a.year || 0) - (s.year || 0)) - Math.abs((b.year || 0) - (s.year || 0)) || (a.id < b.id ? -1 : 1); })
+        .filter(function (o) { if (seen[o.icon]) return false; seen[o.icon] = 1; return true; });
+    };
+    var list = pick(function (oi) { return oi.domain && oi.domain === me.domain; });
+    if (list.length < k) list = list.concat(pick(function (oi) { return oi.field === me.field && oi.domain !== me.domain; }));
+    return list.slice(0, k).map(function (o) { var oi = lib.icon[o.icon] || {}; return { story: storyCard(lib, o), reasons: [{ type: 'field', text: 'Also in ' + String(oi.domainLabel || oi.field).toLowerCase() + ', ' + yearLabel(o.year) }] }; });
+  }
+
+  // ---------- a path in five stories, and the other way ----------
+  // One situation read in an order that teaches: recognise it close to home, see it is old, see it travel to
+  // another world, see it handled the other way, see it with the most at stake. Deterministic; each life once.
+  var DIR_WORD = { direct: 'direct', calibrated: 'measured', indirect: 'indirect' };
+  function readingPath(lib, key) {
+    var tx = textIndex(lib), L = (lib.byKey[key] || []).map(function (id) { return lib.story[id]; }).filter(Boolean);
+    if (L.length < 5) return [];
+    var cen = {}; L.forEach(function (s) { var v = tx.vec[s.id] || {}; Object.keys(v).forEach(function (w) { cen[w] = (cen[w] || 0) + v[w]; }); });
+    var typ = function (s) { return cosine(tx.vec[s.id] || {}, cen); }, F = function (s) { return (lib.icon[s.icon] || {}).field; }, used = {}, steps = [];
+    var best = function (arr, f) { return arr.filter(function (s) { return !used[s.icon]; }).sort(function (a, b) { return f(b) - f(a) || (a.id < b.id ? -1 : 1); })[0]; };
+    var take = function (s, h, r) { if (!s) return null; used[s.icon] = 1; steps.push({ story: s, heading: h, reason: r }); return s; };
+    var p1 = take(best(L.filter(function (s) { return s.reach !== 'far' && s.year >= 1950 && s.directness === 'direct'; }), typ) || best(L.filter(function (s) { return s.reach !== 'far'; }), typ) || best(L, typ),
+      'Begin close to home', null);
+    steps[0].reason = (p1.reach === 'near' ? 'Close to an ordinary office' : 'Some way from an office') + (p1.directness ? ', and ' + (p1.directness === 'indirect' ? 'an' : 'a') + ' ' + DIR_WORD[p1.directness] + ' move' : '') + ': the plainest version of this week, in ' + yearLabel(p1.year) + '.';
+    var old = L.filter(function (s) { return s.year != null && s.year < 1900; });
+    var p2 = take(best(old.length ? old : L, function (s) { return -s.year + typ(s) * 100; }), 'The same week, long ago', '');
+    if (p2) steps[1].reason = yearLabel(p2.year) + ': ' + Math.max(0, p1.year - p2.year) + ' years earlier, the same week was already hard.';
+    // the other way is the scarcest (D3 has one quieter story), so it is chosen before another world
+    var p4 = otherWay(lib, p1.id, used); if (p4) used[p4.icon] = 1;
+    var p3 = take(best(L.filter(function (s) { return F(s) !== F(p1) && (!p2 || F(s) !== F(p2)) && s.year >= 1800; }), typ) || best(L.filter(function (s) { return F(s) !== F(p1); }), typ), 'In another world', '');
+    if (p3) steps[steps.length - 1].reason = 'From ' + String((lib.icon[p3.icon] || {}).domainLabel || F(p3)).toLowerCase() + ': the week travels from one world to another.';
+    if (p4) take(p4, 'Handled the other way', (p4.directness === 'indirect' ? 'An' : 'A') + ' ' + DIR_WORD[p4.directness] + ' move, where step one was ' + DIR_WORD[p1.directness] + '. Set them side by side.');
+    var p5 = take(best(L.filter(function (s) { return s.reach === 'far'; }), typ), 'With the most at stake', '');
+    if (p5) steps[steps.length - 1].reason = 'Far from an ordinary office: the same week with the world watching, ' + yearLabel(p5.year) + '.';
+    return steps;
+  }
+  // The same situation handled with a different directness, the closest in words; o: lives to leave out
+  function otherWay(lib, id, skip) {
+    var s = lib.story[resolve(lib, id)]; if (!s || !s.directness) return null;
+    var tx = textIndex(lib), sk = skip || {};
+    return lib.stories.filter(function (o) { return o.icon !== s.icon && !sk[o.icon] && o.directness && o.directness !== s.directness && o.keys.some(function (k) { return s.keys.indexOf(k) >= 0; }); })
+      .sort(function (a, b) { return cosine(tx.vec[s.id] || {}, tx.vec[b.id] || {}) - cosine(tx.vec[s.id] || {}, tx.vec[a.id] || {}) || (a.id < b.id ? -1 : 1); })[0] || null;
+  }
+
   function similarStories(lib, id, k, opt) {
     opt = opt || {}; k = k || 6;
     var s = lib.story[resolve(lib, id)]; if (!s) return [];
@@ -736,5 +860,5 @@
     member: member, readingFor: readingFor, matcherMember: matcherMember,
     matcher: matcher, pick: pick, replay: replay, season: season, stanceProfile: stanceProfile,
     similarStories: similarStories, kindred: kindred, ego: ego, situationWeb: situationWeb, path: path, words: words,
-    interpret: interpret, ask: ask, sitIndex: sitIndex, queryVec: queryVec, COPY: COPY, voice: voice };
+    interpret: interpret, ask: ask, sitIndex: sitIndex, queryVec: queryVec, COPY: COPY, voice: voice, draftLine: draftLine, sourceFor: sourceFor, statusLine: statusLine, likeThis: likeThis, sameField: sameField, reasonFor: reasonFor, readingPath: readingPath, otherWay: otherWay, DIR_WORD: DIR_WORD };
 }));

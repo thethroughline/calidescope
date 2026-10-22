@@ -198,3 +198,35 @@ test('voice: the house rules hold in our own copy, and every rewrite of the expo
   assert.ok(lib.situations.every((s) => !/\b(actually|really|just)\b/.test(s.member_line)), 'member lines reach the reader in the house voice');
   CLC.COPY.forEach((c, i) => assert.ok(used[i], 'a rewrite no longer matches the export: ' + c[0]));
 });
+
+test('round two: others like this, the path in five, the other way, honest drafts, and the slot a check fills', () => {
+  const CLN = require('../lib/net.js');
+  for (const s of lib.stories) {
+    const L = CLC.likeThis(lib, s.id, 4, { role: 'reader' }), why = L.map((x) => x.reasons[0].text), me = lib.icon[s.icon];
+    assert.equal(new Set(why).size, why.length, s.id + ': each one has its own reason');
+    assert.equal(new Set(L.map((x) => x.story.icon)).size, L.length, s.id + ': one story per life');
+    assert.ok(L.filter((x) => lib.icon[x.story.icon].field === me.field).length <= 1, s.id + ': at most one from its own field');
+    const old = lib.stories.some((o) => o.icon !== s.icon && o.keys.some((k) => s.keys.includes(k)) && o.year != null && o.year < 1900);
+    if (old) assert.ok(L.some((x) => x.story.year != null && x.story.year < 1900), s.id + ': one from before 1900 when the week has one');
+  }
+  assert.ok(lib.situations.every((x) => CLC.readingPath(lib, x.key).length === 5), 'every situation has a path in five stories');
+  assert.equal(lib.stories.filter((s) => s.directness && CLC.otherWay(lib, s.id)).length, lib.stories.filter((s) => s.directness).length, 'every story with a way of acting finds the other way');
+  // a member never sees a coach's working note, and sees a citation only once the story is checked
+  for (const s of lib.stories) {
+    const m = CLC.sourceFor(s, 'member');
+    if (!s.verified) assert.equal(m, '');
+    assert.ok(!/\b(verify|verified|check|checked|confirm)\b|^corpus draft/i.test(CLC.sourceFor(s, 'reader')), s.id + ': no working note reaches a reader');
+  }
+  assert.match(CLC.statusLine({ status: 'sample-draft', verified: false }, 'member', 'Jim'), /Jim/);
+  const fill = (m, k) => CLN.fillSlot(lib, m, lib.sit[k].key).pick;
+  assert.equal(fill('michael', 'C2').story.id, 'st-ali-1964-miami');
+  assert.equal(fill('david', 'C1').story.id, 's-C1-billie-jean-king');
+  assert.equal(fill('sarah', 'E1').story.id, 'st-obama-1990-law-review');
+  assert.equal(fill('maya', 'B6').links, 2);
+  // how far each life sits from a member's three: the list's marker and the chosen story's line agree
+  for (const mid of lib.order) {
+    const H = CLN.hops(lib, mid);
+    for (const s of lib.stories.slice(0, 120)) assert.equal(H[s.icon] ? H[s.icon].links : 9, CLN.linksTo(lib, mid, s.icon, s.keys[0]).links, mid + ' ' + s.id);
+  }
+  assert.equal(CLN.linksTo(lib, 'sarah', 'jimmy-carter', lib.sit.E1.key).line, 'One link from Obama. Both had every act read as a signal.');
+});
