@@ -102,15 +102,9 @@
   // ---------- chrome: links, modes, theme, search ----------
   function chrome() {
     foot();
-    // a member arriving from the app came for one page: search and the links wait behind one control
-    if (EMBED && AS === 'member') {
-      var top = document.querySelector('.top'), tin = top.querySelector('.top-in');
-      top.classList.add('folded');
-      tin.insertAdjacentHTML('afterbegin', '<button class="browse" type="button" aria-expanded="false" aria-controls="links"><i class="ph ph-magnifying-glass" aria-hidden="true"></i>Browse the library</button>');
-      tin.querySelector('.browse').addEventListener('click', function () {
-        top.classList.remove('folded'); this.setAttribute('aria-expanded', 'true'); document.getElementById('q').focus();
-      });
-    }
+    // inside a member's app the app's bar is the only bar: the trail comes home to You, and search and the
+    // links show on the library's front page, which the bar's Browse opens
+    if (EMBED && AS === 'member') document.documentElement.classList.add('member-embed');
     document.getElementById('searchform').addEventListener('submit', function (e) {
       e.preventDefault(); var q = document.getElementById('q').value.trim(); if (!q) return;
       // three words or more read as a question and go to Ask; fewer are a name to search for
@@ -133,7 +127,7 @@
     main.addEventListener('submit', function (e) {
       if (e.target.id === 'askform') {
         e.preventDefault(); var v = document.getElementById('askq').value.trim(); if (!v) return;
-        var m = new URLSearchParams(location.hash.split('?')[1] || '').get('m') || (AS !== 'reader' && MID ? MID : '');
+        var m = e.target.dataset.m || new URLSearchParams(location.hash.split('?')[1] || '').get('m') || (AS !== 'reader' && MID ? MID : '');
         location.hash = '#/ask?t=' + enc(v) + '&read=1' + (m ? '&m=' + enc(m) : ''); return;
       }
       if (e.target.id !== 'pathform') return; e.preventDefault();
@@ -183,8 +177,10 @@
     if (hops.length && !backTo) hops[hops.length - 1].y = window.scrollY;  // the page being left, unless Back already took it off
     main.innerHTML = v.html;
     if (v.after) v.after();
+    if (window.matchMedia && matchMedia('(min-width: 761px)').matches) main.querySelectorAll('details[data-fold]').forEach(function (d) { d.open = true; });
     if (v.node) step(v.node);
     cur = parts[0] || ''; trailBar(); links(cur);
+    document.documentElement.classList.toggle('at-home', cur === '');
     var qbox = document.getElementById('q'); if (cur !== 'search' && document.activeElement !== qbox) qbox.value = '';
     var at = qs.get('at') && document.getElementById(qs.get('at')), back = hop(parts, v);
     if (back) { window.scrollTo(0, back.y || 0); main.focus({ preventScroll: true }); }
@@ -192,7 +188,9 @@
     else if (!o.keepScroll && !o.typing) { window.scrollTo(0, 0); if (!first) main.focus({ preventScroll: true }); }
     first = false;
     var pv = hops.length > 1 ? hops[hops.length - 2] : null;
-    post('cl:route', { route: location.hash || '#/', as: AS, depth: hops.length, prev: pv ? pv.label : '', prevTo: pv ? pv.to : '' });
+    var sic = parts[0] === 'story' && lib.story[CLC.resolve(lib, parts[1])] && lib.icon[lib.story[CLC.resolve(lib, parts[1])].icon];
+    var barTitle = sic && qs.get('at') === 'others' ? 'Others who lived ' + surname(sic.name) + '\u2019s week' : v.title || 'The library';
+    post('cl:route', { route: location.hash || '#/', as: AS, depth: hops.length, prev: pv ? pv.label : '', prevTo: pv ? pv.to : '', title: barTitle });
     if (EMBED) { var stops = trail.filter(function (t) { return t.k !== 'home:'; });
       post('cl:trail', { total: stops.length, nodes: stops.slice(-8).map(function (t) { return { label: t.label, href: t.href, kind: t.k.split(':')[0] }; }) }); }
   }
@@ -209,12 +207,13 @@
     if (hops.length > 40) hops.shift();
     return null;
   }
+  function surname(name) { var w = String(name).replace(/,? (Jr\.?|Sr\.?|II|III|IV)$/, '').split(' '); return w[w.length - 1]; }
   // What the app's Back button says for a page, and where the line under the title says it goes:
   // a person's name when it is short, else the kind of page.
   function hopLabel(parts, v) {
     var ic = parts[0] === 'icon' && lib.icon[parts[1]], sid = parts[0] === 'story' && CLC.resolve(lib, parts[1]), s = sid && lib.story[sid];
-    if (ic) return [ic.name.length <= 16 ? ic.name : CLG.shortName(ic.name), ic.name];
-    if (s && lib.icon[s.icon]) return ['Story', lib.icon[s.icon].name + '\u2019s story'];
+    if (ic) return [surname(ic.name), ic.name];
+    if (s && lib.icon[s.icon]) return [surname(lib.icon[s.icon].name), lib.icon[s.icon].name + '\u2019s story'];
     var W = { '': 'Library', story: 'Story', situation: 'This week', situations: 'Situations', people: 'People', era: 'Era', eras: 'Eras', field: 'Field',
       stance: 'Stance', search: 'Search', path: 'Path', near: 'Your three', age: 'Your age', ask: 'Ask', questions: 'Ask', cmp: 'Compare', gaps: 'Gaps',
       member: me && parts[1] === me.id ? 'For you' : 'Member', members: 'Members', checks: 'Checks', saved: 'Saved' };
@@ -224,9 +223,11 @@
   function missing() { return { title: 'Not here', html: '<h1>Not in the library</h1><p class="lede">That page is not here.</p><p style="margin-top:18px"><a class="btn" href="#/">Back to the library</a></p>' }; }
 
   // ---------- the trail ----------
+  // the trail is the way walked: a page equal to the one before the last is a step back, and takes the last off
   function step(node) {
-    var last = trail[trail.length - 1];
+    var last = trail[trail.length - 1], prev = trail[trail.length - 2];
     if (last && last.k === node.k) { last.label = node.label; }
+    else if (prev && prev.k === node.k) { trail.pop(); prev.label = node.label; }
     else { trail.push(node); if (trail.length > 30) trail = trail.slice(-30); }
     SS.set(TRAIL_KEY, trail);
   }
@@ -505,7 +506,8 @@
   function iconPage(id) {
     var ic = lib.icon[id] || lib.icon[lib.idmap[id]]; if (!ic) return missing();
     var t = CLC.iconTrails(lib, ic.id), mine = isMine(ic.id);
-    var stance = ic.stance ? '<a href="' + H.stance(ic.stance) + '" title="' + esc(ic.stanceGloss) + '">' + esc(ic.stanceName) + '</a>' + (ic.stanceStatus === 'proposed' ? ' <span class="meta">(proposed)</span>' : '') : '';
+    // a way of leading is our reading: a coach sees it marked proposed, everyone else reads it as ours
+    var stance = ic.stance ? '<a href="' + H.stance(ic.stance) + '" title="' + esc(ic.stanceGloss) + '">' + esc(ic.stanceName) + '</a>' + (ic.stanceStatus === 'proposed' ? (AS === 'coach' ? ' <span class="meta">(proposed)</span>' : ' <span class="meta">as we read it</span>') : '') : '';
     var facts = [ic.desc || ic.domainLabel, ic.place, ic.born != null ? 'born ' + yl(ic.born) : ''].filter(Boolean).join(' · ');
     var h = '<div class="person" style="gap:18px;align-items:flex-start"><span class="disc lg' + (ic.stories.length ? '' : ' thin') + (mine ? ' mine' : '') + '">' + esc(ic.ini) + '</span><div style="min-width:0">' +
       '<h1>' + esc(ic.name) + '</h1><p class="meta" style="font-size:15px;margin:8px 0 0">' + esc(cap(facts)) + '</p>' +
@@ -532,7 +534,7 @@
     var world = CLC.kindred(lib, ic.id, 4, { mode: 'words' });
     var right = '<div class="panel well trails"><h2>Ways on</h2>';
     if (!ic.stories.length) right += '<p class="note">' + esc(ic.name) + ' has no story here yet, so there is nobody to compare. These lead on.</p>';
-    if (world.length) right += '<h3 style="margin-top:14px">The same world</h3><p class="note" style="margin-top:-4px">Their stories share the words of these. A shared world, which is not the same as a shared week.</p><div style="margin-top:8px">' + world.map(function (x) { return kinRow(x, 'world'); }).join('') + '</div>';
+    if (world.length && AS !== 'member') right += '<h3 style="margin-top:14px">The same world</h3><p class="note" style="margin-top:-4px">Their stories share the words of these. A shared world, which is not the same as a shared week.</p><div style="margin-top:8px">' + world.map(function (x) { return kinRow(x, 'world'); }).join('') + '</div>';
     var ways = [];
     if (ic.year != null) ways.push(tlink(H.era(CLC.eraOf(ic.year).id), 'Their time: ' + esc(CLC.eraOf(ic.year).label.replace(/^The /, 'the '))));
     ways.push(tlink(H.field(ic.field), 'Same field: ' + esc(ic.domainLabel)));
@@ -563,7 +565,9 @@
           '<div class="w">' + esc(also.map(function (x) { return 'Both ' + CLN.both(x) + '.'; }).concat(rest).join(' ')) + '</div></span></li>';
       }).join('') + '</ol>';
     }).join('');
-    var html = sec('Kindred across time', '<p class="note" style="margin:-6px 0 0">The ' + kin.length + ' lives closest to ' + esc(ic.name) + ', of ' + all + ' who share a situation and one more thing. Each sits at the year of their defining moment.</p>' +
+    var lede = AS === 'member' ? n(all, 'life shares', 'lives share') + ' a situation with ' + esc(surname(ic.name)) + ' and one more thing. The closest ' + kin.length + ' sit at the year of their defining moment.'
+      : 'The ' + kin.length + ' lives closest to ' + esc(ic.name) + ', of ' + all + ' who share a situation and one more thing. Each sits at the year of their defining moment.';
+    var html = sec('Kindred across time', '<p class="note" style="margin:-6px 0 0">' + lede + '</p>' +
       '<div class="kinlayout"><div class="figcol"><div class="n-fig kfig graphbox" id="kfig"></div><ul class="n-key"><li><span class="sw" style="background:var(--pru)"></span>Three reasons or more</li><li><span class="sw" style="border:1.5px solid var(--pru);background:var(--paper)"></span>Two reasons</li><li><span class="ln dash"></span>' + esc(ic.name) + '</li></ul></div>' +
       '<div id="spine">' + spine + '<p class="n-note">Ways of leading are proposed readings. Years are the year of each defining moment, written from recall.</p></div></div>');
     return { html: html, after: function () { var hst = document.getElementById('kfig'); if (hst) CLG.kinTime(hst, lib, ic, kin, bands, { list: 'spine' }); } };
@@ -632,20 +636,23 @@
     var sid = CLC.resolve(lib, id), s = lib.story[sid]; if (!s) return missing();
     var ic = lib.icon[s.icon], t = CLC.storyTrails(lib, s.id, 4), st = CLC.STATUS[s.status] || CLC.STATUS.recall;
     var foreign = s.pattern_lang && s.pattern_lang !== 'en' && s.pattern_en, isSaved = saved.indexOf(s.id) >= 0;
+    // a member or a reader sees a draft marked once, under the title; a coach sees the working panel
+    var plain = AS !== 'coach', mineS = me && me.sits && s.keys.some(function (k) { return me.sits.some(function (x) { return lib.sit[x] && lib.sit[x].key === k; }); });
+    var src = CLC.sourceFor(s, AS), caution = CLC.cautionFor(s, AS), why = CLC.whyFor(s, AS, mineS);
     var h = '<div class="two"><article>' +
       '<div class="row"><span class="meta">' + esc(s.place || s.era) + '</span>' + (s.verified ? badge(s) : '') + '</div>' +
       '<h1 style="margin-top:8px"><a href="' + H.icon(ic.id) + '" style="color:inherit;text-decoration:none">' + esc(ic.name) + '</a></h1>' +
+      (plain && !s.verified ? '<p class="draftmark"><i class="ph ph-circle-dashed" aria-hidden="true"></i>' + esc(CLC.draftLine(AS === 'member' ? coachFirst() : '')) + '</p>' : '') +
       (s.context ? '<p class="meta" style="font-size:15px;margin:8px 0 0">' + esc(cap(s.context)) + '</p>' : '') +
       '<p class="prose">' + esc(s.moment) + '</p>' +
       (s.pattern ? '<blockquote class="quote">“' + esc(foreign ? s.pattern_en : s.pattern) + '”' + (foreign ? '<span class="orig" lang="' + esc(s.pattern_lang) + '">“' + esc(s.pattern) + '”</span>' : '') + '</blockquote>' +
         (s.by ? '<p class="meta" style="margin:8px 0 0">' + esc(s.by) + '</p>' : '') + (foreign && s.pattern_translation ? '<p class="meta" style="margin:8px 0 0">Translation: ' + esc(s.pattern_translation) + '</p>' : '') : '') +
-      '<dl class="kv" style="margin-top:26px"><dt>Source</dt><dd>' + esc(CLC.sourceFor(s, AS) || (s.verified ? 'Not yet sourced.' : 'Shown once ' + coachFirst() + ' has checked the story.')) + '</dd>' + (s.caution ? '<dt>Caution</dt><dd>' + esc(s.caution) + '</dd>' : '') +
-      (s.why && AS !== 'reader' ? '<dt>Why it fits</dt><dd>' + esc(s.why) + '</dd>' : '') + '</dl>' +
+      (src || caution || (why && AS !== 'reader') ? '<dl class="kv" style="margin-top:26px">' + (src ? '<dt>Source</dt><dd>' + esc(src) + '</dd>' : '') + (caution ? '<dt>' + (plain ? 'Context' : 'Caution') + '</dt><dd>' + esc(caution) + '</dd>' : '') +
+        (why && AS !== 'reader' ? '<dt>Why it fits</dt><dd>' + esc(why) + '</dd>' : '') + '</dl>' : '') +
       '</article><aside style="padding-top:8px">';
-    h += '<div class="panel"><div class="row">' + badge(s) + '</div><p class="note" style="margin:10px 0 0">' + esc(CLC.statusLine(s, AS, coachFirst())) + '</p>' +
+    h += '<div class="panel">' + (plain && !s.verified ? '' : '<div class="row">' + badge(s) + '</div><p class="note" style="margin:10px 0 0">' + esc(CLC.statusLine(s, AS, coachFirst())) + '</p>') +
       (s.checked ? '<p class="note" style="margin:8px 0 0">Checked by ' + esc((lib.coaches[s.checked.by] || {}).name || s.checked.by) + ', ' + esc(when(s.checked.at)) + (s.checked.note ? ': ' + esc(s.checked.note) : '.') + '</p>' : '') +
-      (!s.verified && AS !== 'coach' ? '<p class="note" style="margin:8px 0 0">The quotation in a draft is unchecked.</p>' : '') +
-      '<h3 style="margin-top:18px">Filed under</h3><div class="row">' + s.keys.map(function (k) { return lib.sitByKey[k] ? sitChip(lib.sitByKey[k]) : ''; }).join('') + '</div>' +
+      '<h3' + (plain && !s.verified ? '' : ' style="margin-top:18px"') + '>Filed under</h3><div class="row">' + s.keys.map(function (k) { return lib.sitByKey[k] ? sitChip(lib.sitByKey[k]) : ''; }).join('') + '</div>' +
       '<div class="row" style="margin-top:18px">' +
       '<button class="btn' + (isSaved ? ' on' : '') + '" type="button" data-act="save" data-id="' + esc(s.id) + '"><i class="' + (isSaved ? 'ph-fill' : 'ph') + ' ph-bookmark-simple"></i>' + (isSaved ? 'Saved' : 'Save') + '</button>' +
       (EMBED && me && AS === 'member' ? '<button class="btn" type="button" data-act="ask" data-id="' + esc(s.id) + '">Ask ' + esc(me.coach ? me.coach.first : 'your coach') + ' about this</button>' : '') +
@@ -755,11 +762,25 @@
     var cls = r.type === 'fit' ? ' fit' : r.type === 'scene' ? ' scene' : '';
     return '<span class="rsn' + cls + '">' + esc(you(r.text)) + '</span>';
   }
+  // What a coach can do now: the best checked story, ready to send, and the best draft, one check from it
+  function leadHTML(a, M) {
+    var who = M ? M.first : 'a member', card = function (it, kind) {
+      var c = it.card, ready = kind === 'ready';
+      var act = ready ? (EMBED ? '<button class="btn solid" type="button" data-act="send" data-id="' + esc(c.id) + '"' + (M ? ' data-member="' + esc(M.id) + '"' : '') + '>Send to ' + esc(who) + '</button>' : '<a class="btn" href="' + H.story(c.id) + '">Open it</a>')
+        : '<a class="btn pru" href="' + H.story(c.id) + '?at=check">Check the source</a>';
+      return '<div class="leadcard ' + kind + '"><p class="label">' + (ready ? 'Ready to send' : 'One check sends it') + '</p>' +
+        '<h3><a href="' + H.story(c.id) + '">' + esc(c.name + ' \u00b7 ' + (c.place || yl(c.year))) + '</a></h3>' +
+        '<p class="meta">' + esc(ready ? it.reasons.filter(function (r) { return r.type !== 'line' && r.type !== 'move'; }).map(function (r) { return r.text; }).slice(0, 2).join(' \u00b7 ') : 'Source: ' + (it.source || 'not given')) + '</p>' +
+        (it.reasons.some(function (r) { return r.type === 'line'; }) ? '<p class="saidline">' + esc(it.reasons.filter(function (r) { return r.type === 'line'; })[0].text) + '</p>' : '') + act + '</div>';
+    };
+    return '<div class="lead2' + (a.ready && a.oneCheck ? '' : ' one') + '">' + (a.ready ? card(a.ready, 'ready') : '') + (a.oneCheck ? card(a.oneCheck, 'check') : '') + '</div>';
+  }
   function answerCard(it) {
-    var c = it.card;
+    var c = it.card, said = it.own.filter(function (r) { return r.type === 'line'; })[0], mv = it.own.filter(function (r) { return r.type === 'move'; })[0];
+    var own = it.own.filter(function (r) { return r.type !== 'line' && r.type !== 'move'; });
     var card = '<a class="card" href="' + H.story(c.id) + '"><div class="top-line"><span class="place">' + esc(c.place || yl(c.year)) + '</span>' + cardBadge(c) + '</div>' +
       '<div class="who">' + esc(c.name) + '</div><div class="first">' + esc(c.first) + '</div>' +
-      (it.own.length ? '<div class="rsns">' + it.own.map(rsn).join('') + '</div>' : '') + '</a>';
+      (own.length ? '<div class="rsns">' + own.map(rsn).join('') + '</div>' : '') + (mv ? '<p class="moveline">' + esc(mv.text) + '</p>' : '') + (said ? '<p class="saidline">' + esc(said.text) + '</p>' : '') + '</a>';
     if (AS !== 'coach') return card;
     var on = cmpPick().indexOf(c.id) >= 0;
     return '<div class="cardwrap">' + card + '<button class="btn sm quiet cmpbtn" type="button" data-act="cmp" data-id="' + esc(c.id) + '" aria-pressed="' + on + '">' +
@@ -807,6 +828,12 @@
       : 'A woman who carried a decision she disagreed with';
     var h = '<h1>' + esc(title) + '</h1>' + askForm(q, ph);
     if (!CLQ.isQuery(q)) {
+      // words that name no situation: say so, offer the nearest readings, and keep the shelf below
+      if (q.t) {
+        var rd0 = CLQ.read(lib, q.t, { m: mid });
+        h += '<p class="lede" style="margin-top:18px">I could not tell the situation from this.' + (rd0.closest.length ? ' The closest three:' : ' Name the situation, or start from a question below.') + '</p>' +
+          (rd0.closest.length ? '<ul class="list">' + rd0.closest.map(function (x) { return '<li><a class="rowlink" href="' + esc(askUrl(Object.assign({}, q, { sit: x.id }))) + '"><span><span class="t">' + esc(x.label) + '</span><span class="s" style="display:block">' + esc(n(x.n, 'story', 'stories')) + '</span></span></a></li>'; }).join('') + '</ul>' : '');
+      }
       h += AS === 'member' ? memberStart() : shelfHTML(M ? M.id : '');
       return { title: 'Ask', html: h };
     }
@@ -819,9 +846,13 @@
     // what the words were read as, where the page now reads otherwise, comes first among the other readings
     var readSits = (rd2.q && rd2.q.sit ? rd2.q.sit.split('+') : []).map(function (id) { return { id: id, label: id + ' · ' + cap(CLQ.DID[id]) }; });
     var alts = readSits.concat(rd2.alts).filter(function (x, i, all) { return (q.sit || '').split('+').indexOf(x.id) < 0 && all.map(function (y) { return y.id; }).indexOf(x.id) === i; }).slice(0, 3);
-    h += '<div class="readas"><p class="label">Read as</p><div class="row">' + chipsH + sitSelect(q) + '</div>' +
+    // the reading folds to one line on a phone ("Read as E1 + A2 · for Sarah · Change"); on a desktop it stays open
+    var sumLine = (q.sit ? q.sit.split('+').join(' + ') : q.mine && M ? (AS === 'member' ? 'your situations' : M.first + '’s situations') : a.chips.filter(function (c) { return c.k !== 'm'; }).map(function (c) { return c.label; }).slice(0, 1).join('')) +
+      (M && AS !== 'member' ? ' \u00b7 for ' + M.first : '');
+    h += '<details class="readas" data-fold="1"><summary><span class="label">Read as</span> <span class="sumline">' + esc(sumLine) + '</span> <span class="change">Change</span></summary><div class="row">' + chipsH + sitSelect(q) + '</div>' +
       (alts.length ? '<p class="alts"><span class="meta">Or read it as</span>' + alts.map(function (x) { return '<a href="' + esc(askUrl(Object.assign({}, CLQ.drop(q, 'sit'), { sit: x.id }))) + '">' + esc(x.label) + '</a>'; }).join('') + '</p>' : '') +
-      (rd2.unused.length ? '<p class="meta" style="margin:10px 0 0">Not used: ' + esc(rd2.unused.join(', ')) + '</p>' : '') + '</div>';
+      (rd2.unused.length ? '<p class="meta" style="margin:10px 0 0">Not used: ' + esc(rd2.unused.join(', ')) + '</p>' : '') + '</details>';
+    if (coach && a.total && (a.ready || a.oneCheck)) h += leadHTML(a, M);
     if (!a.total) {
       h += '<h2 class="count">Nothing answers all of this</h2>';
     } else {
@@ -1084,6 +1115,14 @@
       '<p class="meta" style="font-size:15px;margin:8px 0 0">' + esc(m.role + ' · ' + m.co) + '</p><p class="lede" style="font-style:italic">“' + esc(m.goal) + '”</p>' +
       '<div class="row" style="margin-top:14px">' + m.situations.map(function (s) { return sitChip(s); }).join('') + '</div>';
     if (AS === 'coach') {
+      // the coach's question first, read from the member's week, answered here: ready to send, one check from it,
+      // and the first three stories
+      var M0 = lib.members[id], upL = M0.up19 ? String(M0.up19.label).split(' \u00b7 ').slice(1).join(' \u00b7 ') : '';
+      var rq = upL ? CLQ.read(lib, upL, { m: id }).q : {}; if (!CLQ.isQuery(rq) && M0.up19) rq = { sit: M0.up19.sit, m: id };
+      rq.m = id; var pa = CLQ.answer(lib, rq, { limit: 3 });
+      h += sec('What is ' + esc(m.first) + ' facing this week?', askForm({ t: upL }, 'What is ' + m.first + ' facing?').replace('<form id="askform"', '<form id="askform" data-m="' + esc(id) + '"') +
+        (pa.total ? leadHTML(pa, M0) + (pa.items.length ? '<div class="grid answers" style="margin-top:14px">' + pa.items.map(answerCard).join('') + '</div>' : '') +
+          '<p style="margin-top:12px"><a class="btn sm" href="' + esc(askUrl(rq)) + '">All ' + pa.total + ' stories for this</a></p>' : ''));
       var wk = CLQ.shelf(lib, id)[0];
       h += sec(esc(wk.group), '<ul class="list shelf">' + wk.items.map(function (it) {
         return '<li><a class="rowlink" href="' + esc(askUrl(it.q)) + '"><span class="t">' + esc(it.text) + '</span><span class="meta tabular' + (it.n < 4 ? ' thin' : '') + '">' + n(it.n, 'story', 'stories') + '</span></a></li>';

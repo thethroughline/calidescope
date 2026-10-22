@@ -157,8 +157,11 @@ test('asking and networks', async () => {
   const a = await get('/ask?t=' + encodeURIComponent('Sarah is announcing the reorg Thursday and Dan wanted her job'));
   assert.equal(a.status, 200);
   assert.ok(/sit=E1%2BA2/.test(a.body.query) && /m=sarah/.test(a.body.query), a.body.query);
-  assert.equal(a.body.items[0].name, 'Barack Obama');
-  assert.ok(a.body.items[0].reasons.some((r) => r.type === 'scene'), 'the rival scene is quoted');
+  // the answer leads with what a coach can do now, leaving out what Sarah already has
+  assert.ok(a.body.ready && a.body.ready.verified && a.body.ready.id !== 'st-obama-2008-clinton', 'a checked story Sarah does not have leads');
+  assert.ok(a.body.oneCheck && !a.body.oneCheck.verified && a.body.oneCheck.source, 'then the draft one check from sending, with its source');
+  assert.ok(a.body.items.slice(0, 3).some((it) => it.name === 'Barack Obama' && it.reasons.some((r) => r.type === 'scene')), 'the rival scene is quoted');
+  assert.ok(a.body.chips.some((c) => /^Said to: the colleague who wanted the job/.test(c.label)) && a.body.chips.some((c) => /^In the room: a team meeting/.test(c.label)), 'who the line is said to, and the room');
   const thin = await get('/ask?sit=C2&field=law');
   assert.ok(thin.body.total < 4 && thin.body.nearest.length >= 2);
   assert.equal((await get('/ask')).status, 400);

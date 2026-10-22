@@ -229,9 +229,9 @@
   // by how close their life is to the member's three (one of the three, then one link, then two), then by id.
   // o.three: the heroes as the app holds them now; o.prefer: a draft already paired with the week, which comes first.
   function fillSlot(lib, mid, key, o) {
-    o = o || {}; var hs = o.three && o.three.length ? o.three : three(lib, mid), out = [];
+    o = o || {}; var hs = o.three && o.three.length ? o.three : three(lib, mid), out = [], ex = o.exclude || [];
     (lib.byKey[key] || []).forEach(function (sid) {
-      var s = lib.story[sid]; if (!s || s.verified || !(s.reach === 'near' || s.reach === 'mid')) return;
+      var s = lib.story[sid]; if (!s || s.verified || !(s.reach === 'near' || s.reach === 'mid') || ex.indexOf(sid) >= 0) return;
       var own = hs.indexOf(s.icon) >= 0, b = own ? null : bridge(lib, mid, s.icon, key, { three: hs });
       out.push({ story: s, links: own ? 0 : b && b.steps ? b.steps.length : 9, hero: own ? s.icon : b ? b.hero : null, steps: b ? b.steps : [] });
     });

@@ -620,14 +620,14 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
                           <p style="font:400 17px/1.5 var(--serif);color:var(--mute);margin:6px 0 0;text-wrap:pretty">{{ wk.story.first }}</p>
                           <sc-if value="{{ wk.hasNote }}">
                             <div style="display:flex;gap:10px;align-items:flex-start;padding:12px 14px;background:var(--well);border-radius:12px;margin-top:16px">
-                              <div style="width:24px;height:24px;border-radius:50%;background:var(--paper);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font:500 11px var(--sans);flex:none">{{ coach.ini }}</div>
+                              <div style="width:24px;height:24px;border-radius:50%;background:var(--paper);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font:500 13px var(--sans);flex:none">{{ coach.ini }}</div>
                               <div style="font:italic 400 16px/1.45 var(--serif)">{{ wk.note }}</div>
                             </div>
                           </sc-if>
                           <div style="display:flex;align-items:center;gap:4px;margin-top:14px;font:500 13px var(--sans);color:var(--pru)">Read the story <i class="ph ph-caret-right"></i></div>
                         </div>
                       </sc-if>
-                      <div data-bridge="week-trail" style="margin-top:12px"><sc-for list="{{ wk.notes }}" as="n"><button sc-camel-on-click="{{ n.go }}" style="display:flex;align-items:center;gap:10px;width:100%;min-height:48px;padding:8px 0;border:0;border-top:1px solid var(--hair);background:transparent;color:var(--ink);font:400 14px/1.45 var(--sans);cursor:pointer;text-align:left" style-hover="color:var(--pru)"><i class="{{ n.icon }}" style="font-size:18px;color:var(--faint);flex:none"></i><span style="flex:1;min-width:0">{{ n.text }} <span style="color:var(--pru)">{{ n.cta }}</span></span><i class="ph ph-caret-right" style="color:var(--faint);flex:none"></i></button></sc-for></div>
+                      
                       <sc-if value="{{ wk.held }}"><p style="font:400 16px/1.5 var(--serif);color:var(--mute);margin:0">No story this week. {{ coach.first }} chose to wait.</p></sc-if>
                       <sc-if value="{{ wk.nothing }}"><div style="border-left:2px solid var(--hair);padding:2px 0 2px 16px"><div style="font:500 12px/1.4 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Inspired by</div><p style="font:400 16px/1.5 var(--serif);color:var(--mute);margin:8px 0 0">{{ wk.nothingText }}</p></div></sc-if>
                       <div style="border-left:2px solid var(--mad);padding:2px 0 2px 16px">
@@ -635,9 +635,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
                         <div style="font:400 20px/1.3 var(--serif);margin-top:8px;letter-spacing:-.01em">{{ wk.line }}</div>
                         <div style="font:400 12px var(--sans);color:var(--faint);margin-top:8px">Developed with Jennifer</div>
                       </div>
+                      <div data-bridge="week-trail" style="margin-top:4px"><sc-for list="{{ wk.notes }}" as="n"><button sc-camel-on-click="{{ n.go }}" style="display:flex;align-items:center;gap:10px;width:100%;min-height:48px;padding:8px 0;border:0;border-top:1px solid var(--hair);background:transparent;color:var(--ink);font:400 14px/1.45 var(--sans);cursor:pointer;text-align:left" style-hover="color:var(--pru)"><i class="{{ n.icon }}" style="font-size:18px;color:var(--faint);flex:none"></i><span style="flex:1;min-width:0">{{ n.text }} <span style="color:var(--pru)">{{ n.cta }}</span></span><i class="ph ph-caret-right" style="color:var(--faint);flex:none"></i></button></sc-for></div>
                       <div style="display:flex;flex-direction:column;gap:6px">
-                        <button sc-camel-on-click="{{ wk.prep }}" disabled="{{ wk.prepDis }}" style="height:48px;border-radius:24px;background:var(--ink);color:var(--paper);border:0;font:500 14px var(--sans);cursor:pointer;width:100%;opacity:{{ wk.prepOp }}">Start the prep</button>
-                        <sc-if value="{{ wk.prepDis }}"><div style="font:400 12px var(--sans);color:var(--faint);text-align:center">{{ wk.prepHint }}</div></sc-if>
+                        <sc-if value="{{ wk.prepOpen }}"><button sc-camel-on-click="{{ wk.prep }}" style="height:48px;border-radius:24px;background:var(--ink);color:var(--paper);border:0;font:500 14px var(--sans);cursor:pointer;width:100%">Start the prep</button></sc-if>
+                        <sc-if value="{{ wk.prepDis }}"><div data-bridge="week-prep" style="font:400 16px/1.5 var(--serif);color:var(--mute)">{{ wk.prepHint }}</div></sc-if>
                       </div>
                     </div>
                   </sc-if>
@@ -665,7 +666,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
                         <sc-for list="{{ ak.chips }}" as="c" hint-placeholder-count="3">
                           <button sc-camel-on-click="{{ c.pick }}" style="text-align:left;padding:14px 16px;min-height:52px;border:1px solid var(--hair);border-radius:12px;background:transparent;color:var(--ink);font:400 18px/1.35 var(--serif);cursor:pointer" style-hover="background:var(--well)" style-active="border-color:var(--ink)">{{ c.label }}</button>
                         </sc-for>
-                        <p style="font:400 13px/1.45 var(--sans);color:var(--faint);margin:4px 2px 0">You choose the shape. The story follows from it.</p>
+                        <p style="font:400 13px/1.45 var(--sans);color:var(--faint);margin:4px 2px 0">Pick the closest, and a story follows.</p>
                       </div>
                     </sc-if>
                     <sc-if value="{{ ak.loading }}">
@@ -683,21 +684,21 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
                           <div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:10px">About · {{ ak.chipLabel }}</div>
                         </div>
                         <div sc-camel-on-click="{{ ak.openStory }}" role="button" tabindex="0" style="cursor:pointer">
-                          <sc-if value="{{ ak.lib }}"><div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--mad);margin-bottom:6px">From the library — not one of your three</div></sc-if>
+                          <sc-if value="{{ ak.lib }}"><div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--mad);margin-bottom:6px">From the library, beyond your three</div></sc-if>
                           <div style="font:500 12px/1.4 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ ak.story.eyebrow }}</div>
                           <p style="font:400 18px/1.55 var(--serif);margin:8px 0 0;text-wrap:pretty">{{ ak.story.moment }}</p>
                           <sc-if value="{{ ak.storyHasPattern }}"><div style="border-top:1px solid var(--hair);padding-top:14px;margin-top:16px;font:italic 400 22px/1.35 var(--serif)">{{ ak.story.patternQ }}</div></sc-if>
                           <div style="display:flex;align-items:center;gap:4px;margin-top:14px;font:500 13px var(--sans);color:var(--pru)">Read the story <i class="ph ph-caret-right"></i></div>
                         </div>
                         <div>
-                          <div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:4px">How your three would walk in</div>
+                          <div data-bridge="ask-draft" style="margin:0 0 18px"><sc-if value="{{ ak.weekNote }}"><p style="font:400 14px/1.5 var(--sans);color:var(--mute);margin:0 0 8px">{{ ak.weekNote }}</p></sc-if><sc-if value="{{ ak.draftMark }}"><p style="font:500 13px/1.45 var(--sans);color:var(--mad);margin:0 0 8px">{{ ak.draftMark }}</p></sc-if><sc-if value="{{ ak.reach }}"><p style="font:400 15px/1.5 var(--serif);color:var(--ink);margin:0 0 10px">{{ ak.reach }}</p></sc-if><sc-if value="{{ ak.checkAsk }}"><button sc-camel-on-click="{{ ak.checkAsk.go }}" disabled="{{ ak.checkAsk.dis }}" style="min-height:44px;padding:0 18px;border-radius:22px;border:1px solid var(--mad);background:transparent;color:var(--mad);font:500 13px var(--sans);cursor:pointer">{{ ak.checkAsk.label }}</button></sc-if></div><div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:4px">How your three would walk in</div>
                           <sc-for list="{{ ak.walk }}" as="w" hint-placeholder-count="3">
                             <div style="padding:12px 0;border-top:1px solid var(--hair)">
                               <sc-if value="{{ w.has }}"><p style="font:400 17px/1.45 var(--serif);margin:0"><button sc-camel-on-click="{{ w.open }}" style="border:0;background:transparent;padding:0;color:var(--pru);font:500 17px/1.45 var(--serif);cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">{{ w.lead }}</button>{{ w.text }}</p></sc-if>
                               <sc-if value="{{ w.none }}"><p style="font:italic 400 16px/1.45 var(--serif);color:var(--mute);margin:0">{{ w.text }}</p></sc-if>
                             </div>
                           </sc-for>
-                          <div style="font:400 12px/1.4 var(--sans);color:var(--faint);padding-top:10px;border-top:1px solid var(--hair)">Interpretation, drawn from their stories. Not their words.</div>
+                          <div style="font:400 12px/1.4 var(--sans);color:var(--faint);padding-top:10px;border-top:1px solid var(--hair)">Our reading of their stories, in our words.</div>
                         </div>
                         <sc-if value="{{ ak.hasMove }}">
                           <div style="border-left:2px solid var(--pru);padding:2px 0 2px 16px">
@@ -711,7 +712,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
                             <button sc-camel-on-click="{{ ak.sendJim }}" style="height:48px;border-radius:24px;background:transparent;color:var(--ink);border:1px solid var(--ink);font:500 14px var(--sans);cursor:pointer;width:100%">Send to {{ coach.first }}</button>
                           </div>
                         </sc-if>
-                        <sc-if value="{{ ak.sent }}"><p style="font:400 16px/1.5 var(--serif);margin:0;display:flex;gap:8px;align-items:center"><i class="ph ph-check" style="color:var(--pru)"></i>Sent to {{ coach.first }}. He'll see it in your timeline.</p></sc-if>
+                        <sc-if value="{{ ak.sent }}"><p style="font:400 16px/1.5 var(--serif);margin:0;display:flex;gap:8px;align-items:center"><i class="ph ph-check" style="color:var(--pru)"></i>Sent to {{ coach.first }}. It shows in your timeline.</p></sc-if>
                         <button sc-camel-on-click="{{ ak.restart }}" style="height:44px;border:0;background:transparent;color:var(--pru);font:500 14px var(--sans);cursor:pointer">Ask something else</button>
                       </div>
                     </sc-if>
@@ -823,7 +824,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
               </div>
               <div style="flex:1;overflow-y:auto;padding:4px 24px 24px">
                 <sc-if value="{{ sv.pinned }}"><div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--pru);display:flex;align-items:center;gap:6px;margin-bottom:8px"><i class="ph-fill ph-push-pin"></i>Chosen by {{ coach.first }}</div></sc-if>
-                <sc-if value="{{ sv.lib }}"><div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--mad);margin-bottom:8px">From the library — not one of your three</div></sc-if>
+                <sc-if value="{{ sv.lib }}"><div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--mad);margin-bottom:8px">From the library, beyond your three</div></sc-if>
                 <h1 style="font:400 36px/1.06 var(--serif);letter-spacing:-.035em;margin:0"><button sc-camel-on-click="{{ sv.openHero }}" aria-label="{{ sv.heroAria }}" style="display:inline-flex;align-items:center;gap:8px;padding:0;border:0;background:transparent;color:inherit;font:inherit;letter-spacing:inherit;cursor:pointer;text-align:left;min-height:44px" style-hover="color:var(--pru)">{{ sv.hero }}<i class="ph ph-caret-right" style="font-size:18px;color:var(--faint);margin-top:6px"></i></button></h1>
                 <div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:6px">{{ sv.place }}</div>
                 <p style="font:400 18px/1.55 var(--serif);margin:18px 0 0;text-wrap:pretty">{{ sv.moment }}</p>
@@ -839,7 +840,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
                 <sc-if value="{{ sv.hasCaution }}"><div style="font:italic 400 14px/1.45 var(--serif);color:var(--mute);margin-top:6px">{{ sv.caution }}</div></sc-if>
                 <sc-if value="{{ sv.hasNote }}">
                   <div style="display:flex;gap:10px;align-items:flex-start;padding:12px 14px;background:var(--well);border-radius:12px;margin-top:18px">
-                    <div style="width:24px;height:24px;border-radius:50%;background:var(--paper);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font:500 11px var(--sans);flex:none">{{ coach.ini }}</div>
+                    <div style="width:24px;height:24px;border-radius:50%;background:var(--paper);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font:500 13px var(--sans);flex:none">{{ coach.ini }}</div>
                     <div style="font:italic 400 16px/1.45 var(--serif)">{{ sv.note }}</div>
                   </div>
                 </sc-if>
@@ -861,7 +862,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
                   </div>
                 </sc-if>
                 <sc-if value="{{ sv.hasRel }}"><div data-bridge="story-related" style="margin-top:22px;padding-top:14px;border-top:1px solid var(--hair)"><div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">In the library</div><sc-for list="{{ sv.rel }}" as="g"><div style="font:500 13px var(--sans);color:var(--mute);margin-top:16px">{{ g.label }}</div><sc-for list="{{ g.items }}" as="r"><button sc-camel-on-click="{{ r.open }}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;min-height:56px;padding:10px 0;border:0;border-bottom:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer" style-hover="color:var(--pru)"><span style="flex:1;min-width:0"><span style="display:block;font:400 17px/1.3 var(--serif)">{{ r.title }}</span><span style="display:block;font:400 13px/1.45 var(--sans);color:var(--mute);margin-top:3px">{{ r.why }}</span></span><i class="ph ph-caret-right" style="color:var(--faint);flex:none;font-size:16px"></i></button></sc-for></sc-for></div></sc-if>
-                <button data-bridge="story-library" sc-camel-on-click="{{ sv.explore }}" style="display:flex;align-items:center;justify-content:space-between;width:100%;min-height:48px;margin-top:18px;padding:0;border:0;border-top:1px solid var(--hair);background:transparent;color:var(--pru);font:500 14px var(--sans);cursor:pointer;text-align:left"><span style="display:flex;align-items:center;gap:8px"><i class="ph ph-path"></i>{{ sv.exploreLabel }}</span><i class="ph ph-caret-right"></i></button>
+                <sc-if value="{{ sv.exploreShow }}"><button data-bridge="story-library" sc-camel-on-click="{{ sv.explore }}" style="display:flex;align-items:center;justify-content:space-between;width:100%;min-height:48px;margin-top:18px;padding:0;border:0;border-top:1px solid var(--hair);background:transparent;color:var(--pru);font:500 14px var(--sans);cursor:pointer;text-align:left"><span style="display:flex;align-items:center;gap:8px"><i class="ph ph-path"></i>{{ sv.exploreLabel }}</span><i class="ph ph-caret-right"></i></button></sc-if>
                 <sc-if value="{{ sv.declined }}"><p style="font:italic 400 15px/1.45 var(--serif);color:var(--mute);margin:18px 0 0">{{ coach.first }} will see that. You won't get this one again.</p></sc-if>
               </div>
               <div style="flex:none;display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:8px;padding:12px 16px 30px;border-top:1px solid var(--hair)">
@@ -872,7 +873,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
             </div>
           </sc-if>
 
-          <sc-if value="{{ ov.library }}"><div data-bridge="library-overlay" data-screen-label="M15 Library" style="position:absolute;top:0;left:0;right:0;bottom:0;background:var(--paper);z-index:20;display:flex;flex-direction:column;animation:cpUp 420ms var(--ease) both"><div style="min-height:56px;flex:none;display:flex;align-items:center;gap:2px;padding:4px 6px;border-bottom:1px solid var(--hair)"><button sc-camel-on-click="{{ lx.back }}" aria-label="{{ lx.backLabel }}" style="flex:none;min-width:44px;height:44px;display:flex;align-items:center;justify-content:center;gap:2px;padding:0 10px 0 6px;border:0;border-radius:22px;background:transparent;color:var(--ink);font:500 15px var(--sans);cursor:pointer"><i class="{{ lx.backIcon }}" style="font-size:20px"></i><span>{{ lx.backText }}</span></button><div style="flex:1;min-width:0;padding:0 6px"><div style="font:500 15px/1.25 var(--sans);color:var(--ink)">Library</div><div data-bridge="library-where" style="font:400 12px/1.35 var(--sans);color:var(--mute);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ lx.line }}</div></div><a href="{{ lx.full }}" target="_blank" rel="noopener" aria-label="Open the library in a new tab" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--faint);font-size:18px"><i class="ph ph-arrow-square-out"></i></a></div><iframe sc-camel-src="{{ lx.src }}" title="The Constellation library" style="flex:1;width:100%;border:0;background:var(--paper)"></iframe></div></sc-if>
+          <sc-if value="{{ ov.library }}"><div data-bridge="library-overlay" data-screen-label="M15 Library" style="position:absolute;top:0;left:0;right:0;bottom:0;background:var(--paper);z-index:20;display:flex;flex-direction:column;animation:cpUp 420ms var(--ease) both"><div style="height:52px;flex:none;display:flex;align-items:center;gap:4px;padding:0 6px;border-bottom:1px solid var(--hair)"><button sc-camel-on-click="{{ lx.back }}" aria-label="{{ lx.backLabel }}" style="flex:none;max-width:42%;min-width:44px;height:44px;display:flex;align-items:center;gap:2px;padding:0 10px 0 4px;border:0;border-radius:22px;background:transparent;color:var(--pru);font:500 15px var(--sans);cursor:pointer;white-space:nowrap;overflow:hidden"><i class="{{ lx.backIcon }}" style="font-size:20px;flex:none"></i><span style="overflow:hidden;text-overflow:ellipsis">{{ lx.backText }}</span></button><div data-bridge="library-where" style="flex:1;min-width:0;padding:0 4px;font:500 15px var(--sans);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ lx.title }}</div><sc-if value="{{ lx.canBrowse }}"><button sc-camel-on-click="{{ lx.browse }}" style="flex:none;min-width:44px;height:44px;padding:0 10px;border:0;border-radius:22px;background:transparent;color:var(--pru);font:500 14px var(--sans);cursor:pointer">Browse</button></sc-if></div><iframe sc-camel-src="{{ lx.src }}" title="The Constellation library" style="flex:1;width:100%;border:0;background:var(--paper)"></iframe></div></sc-if>
           <sc-if value="{{ ov.thread }}">
             <div data-screen-label="M12 Coach thread" style="position:absolute;top:0;left:0;right:0;bottom:0;background:var(--paper);z-index:21;display:flex;flex-direction:column;animation:cpUp 420ms var(--ease) both">
               <div style="height:60px;flex:none;display:flex;align-items:center;gap:10px;padding:0 10px;border-bottom:1px solid var(--hair)">
@@ -1229,7 +1230,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
                 <div data-screen-label="C4 Library" style="display:grid;grid-template-columns:250px minmax(0,1fr) 470px;min-height:100%">
                   <div style="border-right:1px solid var(--hair);padding:18px 14px;display:flex;flex-direction:column;gap:16px">
                     <div>
-                      <div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:0 8px 6px">Situation</div>
+                      <div data-bridge="send-ask" style="padding:0 8px 16px"><div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:0 0 6px">Ask for {{ lib.toFirst }}</div><textarea rows="2" value="{{ lib.ask }}" sc-camel-on-change="{{ lib.setAsk }}" placeholder="{{ lib.askPh }}" aria-label="What is the member facing?" style="width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid var(--hair);border-radius:10px;background:var(--well);color:var(--ink);font:400 14px/1.45 var(--sans);resize:vertical"></textarea><button sc-camel-on-click="{{ lib.askGo }}" style="margin-top:6px;min-height:32px;padding:0 14px;border-radius:16px;border:1px solid var(--pru);background:transparent;color:var(--pru);font:500 12px var(--sans);cursor:pointer">Ask the library</button></div><div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:0 8px 6px">Situation</div>
                       <button sc-camel-on-click="{{ lib.all }}" style="display:block;width:100%;text-align:left;height:30px;padding:0 8px;border:0;border-radius:6px;background:{{ lib.allBg }};color:var(--ink);font:500 12px var(--sans);cursor:pointer">All situations</button>
                       <sc-for list="{{ lib.groups }}" as="g">
                         <div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:10px 8px 2px">{{ g.fam }}</div>
@@ -1241,7 +1242,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
                     <div><div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:0 8px 6px">Verification</div><div style="display:flex;flex-wrap:wrap;gap:4px;padding:0 4px"><sc-for list="{{ lib.verSegs }}" as="s"><button sc-camel-on-click="{{ s.go }}" style="height:26px;padding:0 9px;border-radius:13px;border:1px solid {{ s.bd }};background:{{ s.bg }};color:{{ s.fg }};font:500 12px var(--sans);cursor:pointer">{{ s.label }}</button></sc-for></div></div>
                   </div>
                   <div style="padding:18px 24px;border-right:1px solid var(--hair)">
-                    <div style="font:500 12px var(--sans);color:var(--mute);margin-bottom:8px">{{ lib.count }}</div>
+                    <div style="font:500 12px var(--sans);color:var(--mute);margin-bottom:8px">{{ lib.count }}</div><sc-if value="{{ lib.farChip }}"><button data-bridge="send-far" sc-camel-on-click="{{ lib.farChip.go }}" style="margin:0 0 10px;min-height:32px;padding:0 12px;border-radius:16px;border:1px dashed var(--hair);background:transparent;color:var(--mute);font:500 12px var(--sans);cursor:pointer">{{ lib.farChip.label }}</button></sc-if>
                     <sc-if value="{{ lib.none }}"><p style="font:400 15px var(--serif);color:var(--mute)">No stories match these filters. Clear one, or open the Library to search the whole corpus.</p></sc-if>
                     <sc-for list="{{ lib.results }}" as="r">
                       <button sc-camel-on-click="{{ r.go }}" style="display:block;width:100%;text-align:left;padding:14px 12px;border:0;border-bottom:1px solid var(--hair);background:{{ r.bg }};color:var(--ink);cursor:pointer;border-radius:6px">

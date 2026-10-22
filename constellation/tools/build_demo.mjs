@@ -104,7 +104,33 @@ const heroes = CPD.heroes.map((h) => ({
   stance: h.stance || '', desc: h.desc, q: h.q || [], wiki: h.wiki || null, year: h.year || null, cross: !!h.cross,
 }));
 const works = CPD.works.map((w) => ({ ...w, icon: idmap[w.hero] }));
-const samples = CPD.stories.map((s) => ({ ...s, keys: s.keys.map(mapKey), icon: idmap[s.hero], twin: TWINS[s.id] || null }));
+// The checked samples with no corpus twin carry no rating, no moves and no lines of their own, so a facet ("quieter",
+// "a line to borrow") would drop the only stories a coach can send. Rated here, the lines in our words,
+// as the corpus's lines are. A twin's own rating and lines win where a twin exists.
+const RATED = {
+  'st-bjk-1973-riggs': { directness: 'direct', move_examples: [
+    'This week, put the conversation you have been avoiding in the diary, and open it by naming what the two of you will decide. Ten minutes.',
+    'At the team meeting, say yes to the thing you turned down, and say why waiting costs more. One minute.'], line_examples: [
+    "To the colleague you have been putting off: Let's settle it this week. Here is when, and here is what we decide.",
+    "To your team: I said no once. I'm saying yes now, because waiting costs all of us more."] },
+  'st-michelle-obama-2016-go-high': { directness: 'calibrated', move_examples: [
+    'At the team meeting after a cruel remark, leave its author unnamed; say what the team stands for, then move to the next item. One minute.'], line_examples: [
+    "To your team, after a cruel remark in the meeting: We won't answer that in kind. Here is what we stand for, and we'll hold to it.",
+    "To a peer who wants you to hit back: Let the room compare us. I won't attack; watch what we do next."] },
+  'st-obama-2008-clinton': { directness: 'calibrated', move_examples: [
+    'At the first team meeting, give the colleague who wanted the job the senior seat on the biggest piece of work, and announce it standing beside them. Two minutes.'], line_examples: [
+    "To the colleague who wanted the job: I want you in the senior seat on this, and I'll say so in front of the team.",
+    "To your team: They were the strongest candidate for this job, and that is why they lead this work. I'm standing beside them as I say it."] },
+  'st-obama-2008-more-perfect-union': { directness: 'direct', move_examples: [
+    'At the team meeting, say the hardest part of the news yourself, in your own words, before anyone else can frame it. Three minutes.'], line_examples: [
+    "To your team, before the rumour reaches them: Here is the hard part, in my words, before anyone else tells it.",
+    "To your boss: I'm going to address it in full this week, in my own words. Here is the outline."] },
+  'st-stevie-wonder-1971-motown': { directness: 'direct', move_examples: [
+    'In your next client meeting, bring the finished piece and present it yourself, with your name on the cover. Twenty minutes.'], line_examples: [
+    "To your manager: This work is mine. I want my name on it when it goes out.",
+    "To the client lead: I'll bring the finished piece to the meeting, and I'll present it myself."] },
+};
+const samples = CPD.stories.map((s) => ({ ...s, keys: s.keys.map(mapKey), icon: idmap[s.hero], twin: TWINS[s.id] || null, ...(RATED[s.id] || {}) }));
 
 const members = {};
 for (const id of CPD.order) {

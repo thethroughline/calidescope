@@ -58,7 +58,8 @@ try {
   check(boot.errors.length === 0, 'the bridge reports no errors');
 
   await p.click('button[title^="6 ·"]'); await p.waitForTimeout(500);
-  check(/Barack Obama · Chicago, December 2008/.test(await p.locator('body').innerText()), 'the scripted Monday card still serves the Obama sample');
+  const mon = await p.locator('body').innerText();
+  check(/From Obama, one of your three/i.test(mon) && /Chicago, December 2008/.test(mon), 'the scripted Monday card still serves the Obama sample, naming the hero once');
   await p.locator('button', { hasText: 'Heroes' }).last().click(); await p.waitForTimeout(300);
   check(/531 stories/.test(await p.locator('[data-bridge="heroes-library"]').innerText()), 'Heroes shows the Library card');
   await p.click('[data-bridge="heroes-library"]');
@@ -69,7 +70,7 @@ try {
   await fr.locator('a.card[href^="#/story/"]').first().click();
   const sid = await fr.locator('[data-act="save"]').getAttribute('data-id');
   await fr.locator('[data-act="save"]').click(); await p.waitForTimeout(200);
-  check(await p.evaluate((id) => CLB.state().saved.includes(id), sid), 'Save in the Library saves in the app');
+  check(await p.evaluate((id) => CLB.state().saved.includes(id), sid) && await p.evaluate(() => /on You/.test(CLB.state().toast || '')), 'Save in the Library saves in the app, and says where it went');
   await fr.locator('[data-act="ask"]').click(); await p.waitForTimeout(200);
   check((await p.evaluate(() => [CLB.state().overlay, CLB.state().attach])).join() === 'thread,' + sid, 'Ask opens the thread with the story attached');
   await p.evaluate(() => CLB.c.setState({ overlay: 'hero', hid: 'obama', hctx: {} })); await p.waitForTimeout(200);
@@ -78,9 +79,19 @@ try {
   check(true, 'a hero page opens the Library on that life');
   await p.evaluate(() => CLB.c.setState({ overlay: 'story', sid: 's-A1-beverley-mclachlin', sctx: {} })); await p.waitForTimeout(200);
   check((await p.locator('[data-screen-label="M7 Story"] p').first().innerText()).startsWith('Beverley McLachlin, 37'), 'a corpus story drops the dateline the eyebrow already shows');
-  await p.click('[data-bridge="story-library"]');
-  await p.frameLocator('iframe[title="The Constellation library"]').locator('.prose').waitFor();
-  check(true, 'a story opens the Library on that story');
+  check(await p.locator('[data-bridge="story-library"]').count() === 0, 'a member’s story has one way into the library');
+  await p.locator('[data-bridge="story-related"] button', { hasText: 'Others who lived this week' }).click();
+  await p.frameLocator('iframe[title="The Constellation library"]').locator('#others').waitFor();
+  check(true, 'Others who lived this week opens the Library at the others');
+  // member-safe text: a draft is marked once, and no working note reaches the member
+  await p.evaluate(() => CLB.c.setState({ overlay: 'story', sid: 's-A2-elena-kagan', sctx: {}, sstack: [] })); await p.waitForTimeout(250);
+  const kag = (await p.locator('[data-screen-label="M7 Story"]').innerText()).split(/\nIN THE LIBRARY\n|\nIn the library\n/i)[0];
+  check(!/verify|Recall-authored|s-D4-/i.test(kag) && (kag.match(/Recall draft/g) || []).length === 1 && /It fits your week/.test(kag), 'a member’s draft says so once, with no coach’s note');
+  await p.evaluate(() => CLB.c.setState({ overlay: 'library', libRoute: '#/story/s-A2-condoleezza-rice', libBack: null, libDepth: 1 }));
+  const rf = p.frameLocator('iframe[title="The Constellation library"]'); await rf.locator('main h1').first().waitFor();
+  const rice = await rf.locator('main').innerText();
+  check((rice.match(/Recall draft/g) || []).length === 1 && !/verify|Shown once|unchecked/i.test(rice), 'the frame marks a draft once for a member');
+  await p.evaluate(() => CLB.c.setState({ overlay: null }));
 
   console.log('in-app reading, both ways');
   const first = 's-A1-beverley-mclachlin';
@@ -100,7 +111,7 @@ try {
   check(kin[0] === 'hero' && kin[1] !== 'obama' && kin[2] === 1, `a kindred life opens as a hero page in the app (${kin[1]})`);
   await p.evaluate(() => CLB.c.setState({ overlay: 'story', sid: 's-D3-bayard-rustin', sctx: {}, sstack: [] })); await p.waitForTimeout(250);
   const reach = await p.locator('[data-bridge="story-reach"]').innerText().catch(() => '');
-  check(/two steps from your Obama/.test(reach) && /both /.test(reach), 'a story from beyond the three says how it reaches them, in words');
+  check(/two steps from Obama, one of your three/.test(reach) && /both /.test(reach), 'a story from beyond the three says how it reaches them, in words');
   await p.locator('[data-bridge="story-reach"] button').nth(1).click(); await p.waitForTimeout(250);
   check(await p.evaluate(() => CLB.state().overlay === 'hero' && (CLB.state().sstack || []).length === 1), 'a name in the chain opens that life in place');
   await p.evaluate(() => CLB.c.setState({ overlay: null, sstack: [], tab: 'heroes', m: 'app' })); await p.waitForTimeout(250);
@@ -113,6 +124,10 @@ try {
   check(more.length >= 5 && !more.some((x) => /my old job/.test(x)), 'None of these opens the other situations');
   await p.locator('[data-screen-label="M8 Ask"] button').first().click(); await p.waitForTimeout(1700);
   check(['answer', 'else'].includes(await p.evaluate(() => CLB.c.state.ask.stage)), 'any situation chosen gets an answer or goes to the coach');
+  await askAs('I am announcing the reorg on Thursday and Dan wanted my job.');
+  await p.locator('[data-screen-label="M8 Ask"] button').first().click(); await p.waitForTimeout(1700);
+  const ans = await p.evaluate(() => CLB.c.state.ask), ansT = await p.locator('[data-screen-label="M8 Ask"]').innerText();
+  check(ans.stage === 'answer' && ans.story !== 'st-obama-2008-clinton' && /Ask Jim to check it|Waiting for Jim/.test(ansT) && !/isn’t in this one|isn't in this one/.test(ansT) && /You already have/.test(ansT), 'a member’s Ask answers with something new, one check away, and says what they already have');
   await p.evaluate(() => CLB.c.setState({ overlay: null, m: 'app', tab: 'you' })); await p.waitForTimeout(300);
   const you = await p.locator('[data-screen-label="M11 You"]').innerText();
   check(/At your age/.test(you) && !/Who stands near your three/.test(you), 'You leads into the library at your age; who stands near the three stays on Heroes');
@@ -120,10 +135,11 @@ try {
   await p.frameLocator('iframe[title="The Constellation library"]').locator('#agestrip svg').waitFor();
   check(true, 'At your age opens inside the app');
   await p.evaluate(() => CLB.c.setState({ overlay: 'story', sid: 'st-bjk-1973-riggs', sctx: {}, sstack: [] })); await p.waitForTimeout(250);
-  await p.click('[data-bridge="story-library"]');
+  await p.locator('[data-bridge="story-related"] button', { hasText: 'Others who lived this week' }).click();
   const bf = p.frameLocator('iframe[title="The Constellation library"]');
-  await bf.locator('#others a[href^="#/story/"]').first().waitFor();
-  check(/Back takes you to Billie Jean King’s story/.test(await p.locator('[data-bridge="library-where"]').innerText()) && await bf.locator('.browse').isVisible(), 'the Library frame says where Back goes, and folds its search for a member');
+  await bf.locator('#others a[href^="#/story/"]').first().waitFor(); await p.waitForTimeout(300);
+  const barT = await p.locator('[data-bridge="library-overlay"] > div').first().innerText();
+  check(/^King/.test(barT.trim()) && /Others who lived King’s week/.test(barT) && !(await bf.locator('header.top').isVisible()) && !(await bf.locator('#trail').isVisible()), 'one bar: Back names the story, the title names the page, and the frame adds no bars');
   await bf.locator('#others a[href^="#/story/"]').first().click(); await p.waitForTimeout(400);
   await bf.locator('main a[href^="#/icon/"]').first().click(); await p.waitForTimeout(400);
   const walk = [];
@@ -131,10 +147,14 @@ try {
   check(walk.join() === 'library,library,story', `Back walks the frame's own pages, then returns to the story (${walk.join()})`);
   await p.evaluate(() => CLB.c.setState({ overlay: null, tab: 'you' })); await p.waitForTimeout(300);
   const youT = await p.locator('[data-screen-label="M11 You"]').innerText();
-  check(/Your last trail/.test(youT) && /\d+ stops/.test(youT) && /Pick up where you left off/.test(youT), 'the trail read in the frame comes home to You');
+  check(/Your last trail/.test(youT) && /\d+ stops?/.test(youT) && /Pick up where you left off/.test(youT), 'the trail read in the frame comes home to You');
   await p.evaluate(() => CLB.c.setState({ tab: 'heroes' })); await p.waitForTimeout(300);
   const hz = await p.locator('[data-screen-label="M13 Heroes"]').innerText();
   check((hz.match(/1 story in the library, waiting for Jim’s check/g) || []).length === 2 && !/Nothing paired yet/.test(hz), 'Heroes says what the library holds for each of the three');
+  await p.evaluate(() => CLB.c.setState({ tab: 'week', clock: 5, published: true })); await p.waitForTimeout(300);
+  const wk3 = await p.locator('[data-screen-label="M6 This week"]').innerText();
+  const wkOrder = await p.evaluate(() => { const t = document.querySelector('[data-bridge="week-trail"]'), l = [...document.querySelectorAll('[data-screen-label="M6 This week"] div')].find((e) => e.textContent === 'Developed with Jennifer'); return !!(t && l && (l.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING)); });
+  check(/Prep opens Wednesday\./.test(wk3) && !/Start the prep/.test(wk3) && /From Obama, one of your three/i.test(wk3) && wkOrder, 'This week holds the story, the line and where you were, with no dead button');
   await p.evaluate(() => CLB.c.setState({ overlay: 'story', sid: 's-E3-serena-williams', sctx: {}, sstack: [] })); await p.waitForTimeout(250);
   await p.click('[data-bridge="story-check"]'); await p.waitForTimeout(250);
   const asked = await p.evaluate(() => { const st = CLB.state(), last = st.msgs[st.p].slice(-1)[0]; return [st.signals.some((g) => g.kind === 'check' && g.sid === 's-E3-serena-williams'), last.kind, last.story].join(); });
@@ -174,9 +194,14 @@ try {
   check(await p.locator('[data-bridge="send-related"] button').count() >= 2 && !/Also filed/.test(await p.locator('[data-screen-label="C4 Library"]').innerText()), 'Find and send lists stories related to the one chosen, each with its own reason');
   check(/^For Sarah: /.test(await p.locator('[data-bridge="send-for"]').innerText().catch(() => '')), 'Find and send says how the chosen story reaches the member');
   const marks = await p.evaluate(() => CPE.vals(CLB.c).lib.results.slice(0, 5).map((r) => r.reach));
-  check(marks.every((m) => /one of the three|1 link/.test(m)), 'Find and send lists the stories nearest the member first');
+  check(/one of Sarah’s three/.test(marks[0]) && !marks.some((m) => /1 link/.test(m)), 'Find and send lists Sarah’s three first, and marks only them');
+  check(!/Draft — must verify/.test(await p.locator('body').innerText()), 'one name for a draft everywhere');
   await p.locator('button', { hasText: 'Send now' }).click(); await p.waitForTimeout(200);
   check(await p.evaluate((t) => { const st = CLB.state(); return st.msgs[st.lib.to].slice(-1)[0].story === t; }, target), 'Send now delivers it to the member thread');
+  await p.evaluate(() => CLB.c.setState({ c: 'CX', lib: Object.assign({}, CLB.c.state.lib, { to: 'michael' }) })); await p.waitForTimeout(300);
+  await p.locator('[data-bridge="coach-tabs"] button', { hasText: 'Find and send' }).click(); await p.waitForTimeout(300);
+  const c4 = await p.evaluate(() => ({ key: CLB.c.state.lib.key, want: CLB.lib.sit[CLB.lib.members.michael.up19.sit].key, n: CPE.vals(CLB.c).lib.results.length, far: !!CPE.vals(CLB.c).lib.farChip }));
+  check(c4.key === c4.want && c4.n < 531 && c4.far, 'Find and send opens on the member’s week, with far stories set aside');
   console.log('every persona, every step of the demo clock, both roles');
   let stepErrs = [];
   for (const persona of ['Maya', 'Sarah', 'Michael']) {
@@ -264,6 +289,7 @@ try {
       await q.click('#askform button[type=submit]'); await q.waitForSelector('main h2.count');
       const read = (await q.locator('.readas a.qchip.sit').allInnerTexts()).map((t) => t.split(' ')[0]);
       check(read[0] === 'E1' && read.includes('A2') && await q.locator('.grid.answers .card').count() > 3 && /\?.*sit=E1%2BA2/.test(await q.evaluate(() => location.hash)), `Ask reads the question as ${read.join(' and ')}, answers with stories, and the address holds the query`);
+      if (as === 'coach') check(await q.locator('.lead2 .leadcard.ready').count() === 1 && await q.locator('.lead2 .leadcard.check a', { hasText: 'Check the source' }).count() === 1 && /Said to: the colleague who wanted the job/.test(await q.locator('.readas').innerText()), 'a coach’s answer leads with a story ready to send and the draft one check from it, and reads who the line is said to');
       const before = await q.evaluate(() => location.hash);
       await q.locator('.readas a.qchip.sit').nth(1).click();
       check(await q.waitForFunction((h) => location.hash !== h && document.querySelectorAll('.readas a.qchip.sit').length === 1, before, { timeout: 5000 }).then(() => true, () => false), 'a chip taken away narrows the reading');

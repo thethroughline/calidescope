@@ -185,6 +185,7 @@ const routes = {
     if (!CLQ.isQuery(q)) return fail(res, 400, 'say what you are looking for: t=<a question>, or sit=, sex=, field=, before=, after=, dir=, reach=, ok=, m=');
     const a = CLQ.answer(L, q, { limit: Math.max(1, Math.min(48, parseInt(req.query.limit, 10) || 12)) });
     ok(res, { query: CLQ.toQS(q), chips: a.chips, alts: read ? read.alts : [], unused: read ? read.unused : [], total: a.total, lives: a.lives, line: a.line, checked: a.checked,
+      ready: a.ready ? { ...a.ready.card, reasons: a.ready.reasons } : null, oneCheck: a.oneCheck ? { ...a.oneCheck.card, reasons: a.oneCheck.reasons, source: a.oneCheck.source } : null,
       items: a.items.map((it) => ({ ...it.card, reasons: it.reasons })), refine: a.refine, nearest: a.nearest.map((x) => ({ without: x.without, n: x.n, query: CLQ.toQS(x.q) })) });
   },
   async search(req, res) {

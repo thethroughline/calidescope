@@ -57,7 +57,8 @@
     if (s.verified) return 'Checked against its source.';
     return role === 'member' ? draftLine(coachFirst) : 'Not yet checked against its source.';
   }
-  function draftLine(coachFirst) { return 'Recall draft. ' + (coachFirst || 'Your coach') + ' has not checked this against its source yet.'; }
+  // the one mark a member or reader sees on a draft
+  function draftLine(coachFirst) { return 'Recall draft \u00b7 ' + (coachFirst || 'a coach') + ' checks it before it is sent'; }
   // The source as a reader may see it. A coach sees everything. A member sees a citation once the story is
   // checked. Nobody but a coach sees a working note ("Corpus draft", "Verify the numbers", "Check wording").
   var NOTE = /^corpus draft\b|\b(?:verify|verified|check|checked|confirm)\b/i;
@@ -68,6 +69,23 @@
     // clauses end at a full stop or a semicolon; a clause that tells a coach what to do is dropped
     var kept = src.split(/(?<=\.)\s+|;\s*/).filter(function (x) { return x && !NOTE.test(x); }).map(function (x) { return x.trim(); });
     return kept.join('. ').replace(/\.\./g, '.').replace(/([^.])$/, '$1.');
+  }
+  // A coach's caution as a reader may see it: a coach all of it; on a draft nobody else anything; on a checked
+  // story the first sentence that is context, with no working note, no aside to the coach and no internal id
+  var ASIDE = /recall-authored|\bverify\b|\bpublish|\bthe fit to\b|\ba member\b|\bmembers\b|\bcoach/i;
+  function cautionFor(s, as) {
+    var c = String((s && s.caution) || '');
+    if (as === 'coach') return c;
+    if (!s.verified) return '';
+    var kept = c.replace(/\s*\(s-[A-E]\d-[a-z0-9-]+\)/g, '').split(/(?<=\.)\s+/).filter(function (x) { return x && !NOTE.test(x) && !ASIDE.test(x); });
+    return kept.length ? kept[0].trim() : '';
+  }
+  // Why a story fits, as a reader hears it: nobody "chose" a story in the library, so the line names the week
+  // ("It fits your week: …" when it carries one of the member's situations, else "It fits a week where …")
+  function whyFor(s, as, mine) {
+    var w = String((s && s.why) || ''), m = /^Chosen because (.+)$/.exec(w);
+    if (as === 'coach' || !m) return w;
+    return (mine ? 'It fits your week: ' : 'It fits a week where ') + m[1];
   }
   function fold(s) { return String(s == null ? '' : s).normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
   function slug(s) { return fold(s).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
@@ -167,7 +185,8 @@
         keys: uniq(s.keys.concat(t ? t.keys : [])), reach: s.reach, moment: s.moment, pattern: s.pattern || '', pattern_lang: 'en', pattern_en: null, pattern_translation: null,
         by: s.by || '', source: s.source || '', caution: s.caution || '', why: s.why || '', gist: s.gist || '', walk: s.walk || '',
         verified: !!s.verified, status: s.verified ? 'sample-verified' : 'sample-draft', origin: 'sample', corpus: t ? t.id : null,
-        move_examples: t ? t.move_examples : [], line_examples: t ? t.line_examples : [], voice: t ? t.voice : null, directness: t ? t.directness : null,
+        move_examples: t && t.move_examples && t.move_examples.length ? t.move_examples : s.move_examples || [], line_examples: t && t.line_examples && t.line_examples.length ? t.line_examples : s.line_examples || [], voice: t ? t.voice : null,
+        directness: t && t.directness ? t.directness : s.directness || null,
         rights: t ? t.rights : {}, review: t ? t.review : {}, deeper: s.deeper || [] };
     }
     (demo.samples || []).forEach(function (s) { lib.stories.push(fromSample(s)); });
@@ -399,7 +418,7 @@
     var oi = lib.icon[o.icon] || {}, me = lib.icon[here.icon] || {}, c = [];
     (ctx.three || []).forEach(function (h) { var H = lib.icon[h]; if (ctx.role === 'member' && H && h !== o.icon && oi.stance && oi.stance === H.stance && STANCE_BY[oi.stance]) c.push({ type: 'fit', text: 'Leads ' + STANCE_BY[oi.stance] + ', as ' + (H.short || H.name) + ' does' }); });
     if (o.year != null && o.year === oldest) c.push({ type: 'years', text: yearLabel(o.year) + ', the oldest of this week' });
-    else if (o.year != null && o.year < 1900) c.push({ type: 'years', text: 'Long ago: ' + yearLabel(o.year) });
+    else if (o.year != null && o.year < 1900) c.push({ type: 'years', text: 'The same week, in ' + yearLabel(o.year) });
     if (o.year != null && here.year != null && Math.abs(o.year - here.year) <= 10) c.push({ type: 'years', text: o.year === here.year ? 'The same year: ' + yearLabel(o.year) : 'The same years: ' + yearLabel(o.year) });
     var dom = String(oi.domainLabel || oi.field || '').toLowerCase(), mv = MOVE_WORD[o.directness];
     if (oi.field !== me.field) c.push({ type: 'field', text: 'From ' + dom + ', ' + yearLabel(o.year) + (mv ? ' · ' + mv : '') });
@@ -676,6 +695,11 @@
     ["A client repeats your point back to you, not the firm's.", 'A client repeats your own point back to you.'],
     ['You answered it, not the senior associate.', 'You answered it yourself, before the senior associate spoke.'],
     ["He's for the weeks you stand on your own name, not for the pitch itself.", "He's for the weeks you stand on your own name. The pitch itself needs a different story."],
+    ['He had just beaten Hillary Clinton in a primary that ran seventeen months.', 'Weeks earlier he had beaten Hillary Clinton in a primary that ran seventeen months.'],
+    // members' goals, as the demo script gives them: the same aims, said once
+    ['Be the person they call before the decision, not after it.', 'Be the person they call before the decision.'],
+    ["The partner clients ask for by name, not the firm's name on the door.", 'The partner clients ask for by name.'],
+    ['Leading the change, not being changed by it.', 'Leading the change from the front.'],
     // two member lines from the corpus (the fix belongs in the corpus repo; until then it is made here, at merge)
     ['I got the job. Nobody told me what it actually asks.', 'I got the job. Nobody told me what it asks.'],
     ['I have more people than I can actually see.', 'I have more people than I can see.']
@@ -860,5 +884,5 @@
     member: member, readingFor: readingFor, matcherMember: matcherMember,
     matcher: matcher, pick: pick, replay: replay, season: season, stanceProfile: stanceProfile,
     similarStories: similarStories, kindred: kindred, ego: ego, situationWeb: situationWeb, path: path, words: words,
-    interpret: interpret, ask: ask, sitIndex: sitIndex, queryVec: queryVec, COPY: COPY, voice: voice, draftLine: draftLine, sourceFor: sourceFor, statusLine: statusLine, likeThis: likeThis, sameField: sameField, reasonFor: reasonFor, readingPath: readingPath, otherWay: otherWay, DIR_WORD: DIR_WORD };
+    interpret: interpret, ask: ask, sitIndex: sitIndex, queryVec: queryVec, COPY: COPY, voice: voice, STANCE_BY: STANCE_BY, draftLine: draftLine, sourceFor: sourceFor, cautionFor: cautionFor, whyFor: whyFor, statusLine: statusLine, likeThis: likeThis, sameField: sameField, reasonFor: reasonFor, readingPath: readingPath, otherWay: otherWay, DIR_WORD: DIR_WORD };
 }));

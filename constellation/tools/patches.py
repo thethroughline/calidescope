@@ -13,7 +13,9 @@ What each patch adds (the behaviour behind it is in js/constellation-bridge.js):
   you-library      on You, In the library: the last trail read, at your age, who stands near your three
   heroes-near      under it: Who stands near your three, a line on where the three stand, opening the picture
   hero-library     "Explore <name> in the library" on a hero page
-  week-trail       on This week: a check the member asked for, now done, and where they were in the Library
+  week-trail       on This week, below the line: a check the member asked for, now done, and where they were in
+                   the Library
+  week-prep        until prep opens there is no dead button, only the day it opens ("Prep opens Wednesday.")
   story-check      on a recall draft in the member's story: Ask <coach> to check it (a thread card and a signal)
   review-asked     on a Review row: <member> asked for N checks
   story-library    "Follow this story into the library" on a story
@@ -43,12 +45,20 @@ What each patch adds (the behaviour behind it is in js/constellation-bridge.js):
                    Library's answer to the Ask, read for that member, with the situation they chose
   mute-token       the light theme's secondary grey one step darker (#5E626B, as the Library has it), so it
                    clears 4.5:1 on the tinted panels as well as on paper
+  send-ask         on Find and send, above the filters: the member's question, answered by the Library's Ask
+  send-far         far stories set aside behind one chip until the coach asks for them
   send-for         on Find and send, under the story chosen: how it reaches the member it would go to, and a
                    button to compare it with that member's pick for the week
+  ask-lib-a/-b     "From the library, beyond your three" where the export said "— not one of your three"
+  ask-shape        "Pick the closest, and a story follows." under the member's choice of situation
+  ask-words        "Our reading of their stories, in our words." for the export's "X. Not Y." line
+  ask-sent         the coach's pronoun is not assumed: "It shows in your timeline."
+  ask-draft        on a member's Ask answer: a checked story they already hold is named, a draft is marked once
+                   and can be sent to the coach to check, and how its life reaches the three is said in words
   swap-check       in the Swap panel, the recall drafts nearest the member, each with "Check the source" opening
                    the check in the panel (the export's disabled "Draft — must verify" buttons go)
   type-floor       no text under 12px: the export's 10px and 11px labels become 12px, and the 9px
-                   initials in the 24px avatars become 11px (a regex over the template's inline styles)
+                   initials in the 24px avatars become 13px (a regex over the template's inline styles)
 """
 import pathlib, re, sys
 
@@ -121,19 +131,18 @@ PATCHES = [
     ("hero-library", '<sc-if value="{{ hv.hasWorks }}">', "before",
      '<button data-bridge="hero-library" sc-camel-on-click="{{ hv.explore }}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:48px;margin-top:22px;padding:0 18px;border:1px solid var(--ink);border-radius:24px;background:transparent;color:var(--ink);font:500 14px var(--sans);cursor:pointer;text-align:left" style-hover="background:var(--well)">'
      '<span style="display:flex;align-items:center;gap:8px"><i class="ph ph-books"></i>{{ hv.exploreLabel }}</span><i class="ph ph-caret-right"></i></button>\n                '),
-    ("week-trail", '<sc-if value="{{ wk.held }}">', "before",
-     '<div data-bridge="week-trail" style="margin-top:12px"><sc-for list="{{ wk.notes }}" as="n"><button sc-camel-on-click="{{ n.go }}" style="display:flex;align-items:center;gap:10px;width:100%;min-height:48px;padding:8px 0;border:0;border-top:1px solid var(--hair);background:transparent;color:var(--ink);font:400 14px/1.45 var(--sans);cursor:pointer;text-align:left" style-hover="color:var(--pru)">'
-     '<i class="{{ n.icon }}" style="font-size:18px;color:var(--faint);flex:none"></i><span style="flex:1;min-width:0">{{ n.text }} <span style="color:var(--pru)">{{ n.cta }}</span></span><i class="ph ph-caret-right" style="color:var(--faint);flex:none"></i></button></sc-for></div>\n                      '),
+    ("week-trail", 'Developed with Jennifer</div>\n                      </div>', "after",
+     '\n                      <div data-bridge="week-trail" style="margin-top:4px"><sc-for list="{{ wk.notes }}" as="n"><button sc-camel-on-click="{{ n.go }}" style="display:flex;align-items:center;gap:10px;width:100%;min-height:48px;padding:8px 0;border:0;border-top:1px solid var(--hair);background:transparent;color:var(--ink);font:400 14px/1.45 var(--sans);cursor:pointer;text-align:left" style-hover="color:var(--pru)">'
+     '<i class="{{ n.icon }}" style="font-size:18px;color:var(--faint);flex:none"></i><span style="flex:1;min-width:0">{{ n.text }} <span style="color:var(--pru)">{{ n.cta }}</span></span><i class="ph ph-caret-right" style="color:var(--faint);flex:none"></i></button></sc-for></div>'),
     ("story-library", '<sc-if value="{{ sv.declined }}">', "before",
-     '<button data-bridge="story-library" sc-camel-on-click="{{ sv.explore }}" style="display:flex;align-items:center;justify-content:space-between;width:100%;min-height:48px;margin-top:18px;padding:0;border:0;border-top:1px solid var(--hair);background:transparent;color:var(--pru);font:500 14px var(--sans);cursor:pointer;text-align:left">'
-     '<span style="display:flex;align-items:center;gap:8px"><i class="ph ph-path"></i>{{ sv.exploreLabel }}</span><i class="ph ph-caret-right"></i></button>\n                '),
+     '<sc-if value="{{ sv.exploreShow }}"><button data-bridge="story-library" sc-camel-on-click="{{ sv.explore }}" style="display:flex;align-items:center;justify-content:space-between;width:100%;min-height:48px;margin-top:18px;padding:0;border:0;border-top:1px solid var(--hair);background:transparent;color:var(--pru);font:500 14px var(--sans);cursor:pointer;text-align:left">'
+     '<span style="display:flex;align-items:center;gap:8px"><i class="ph ph-path"></i>{{ sv.exploreLabel }}</span><i class="ph ph-caret-right"></i></button></sc-if>\n                '),
     ("library-overlay", '<sc-if value="{{ ov.thread }}">', "before",
      '<sc-if value="{{ ov.library }}"><div data-bridge="library-overlay" data-screen-label="M15 Library" style="position:absolute;top:0;left:0;right:0;bottom:0;background:var(--paper);z-index:20;display:flex;flex-direction:column;animation:cpUp 420ms var(--ease) both">'
-     '<div style="min-height:56px;flex:none;display:flex;align-items:center;gap:2px;padding:4px 6px;border-bottom:1px solid var(--hair)">'
-     '<button sc-camel-on-click="{{ lx.back }}" aria-label="{{ lx.backLabel }}" style="flex:none;min-width:44px;height:44px;display:flex;align-items:center;justify-content:center;gap:2px;padding:0 10px 0 6px;border:0;border-radius:22px;background:transparent;color:var(--ink);font:500 15px var(--sans);cursor:pointer"><i class="{{ lx.backIcon }}" style="font-size:20px"></i><span>{{ lx.backText }}</span></button>'
-     '<div style="flex:1;min-width:0;padding:0 6px"><div style="font:500 15px/1.25 var(--sans);color:var(--ink)">Library</div>'
-     '<div data-bridge="library-where" style="font:400 12px/1.35 var(--sans);color:var(--mute);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ lx.line }}</div></div>'
-     '<a href="{{ lx.full }}" target="_blank" rel="noopener" aria-label="Open the library in a new tab" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--faint);font-size:18px"><i class="ph ph-arrow-square-out"></i></a></div>'
+     '<div style="height:52px;flex:none;display:flex;align-items:center;gap:4px;padding:0 6px;border-bottom:1px solid var(--hair)">'
+     '<button sc-camel-on-click="{{ lx.back }}" aria-label="{{ lx.backLabel }}" style="flex:none;max-width:42%;min-width:44px;height:44px;display:flex;align-items:center;gap:2px;padding:0 10px 0 4px;border:0;border-radius:22px;background:transparent;color:var(--pru);font:500 15px var(--sans);cursor:pointer;white-space:nowrap;overflow:hidden"><i class="{{ lx.backIcon }}" style="font-size:20px;flex:none"></i><span style="overflow:hidden;text-overflow:ellipsis">{{ lx.backText }}</span></button>'
+     '<div data-bridge="library-where" style="flex:1;min-width:0;padding:0 4px;font:500 15px var(--sans);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ lx.title }}</div>'
+     '<sc-if value="{{ lx.canBrowse }}"><button sc-camel-on-click="{{ lx.browse }}" style="flex:none;min-width:44px;height:44px;padding:0 10px;border:0;border-radius:22px;background:transparent;color:var(--pru);font:500 14px var(--sans);cursor:pointer">Browse</button></sc-if></div>'
      '<iframe sc-camel-src="{{ lx.src }}" title="The Constellation library" style="flex:1;width:100%;border:0;background:var(--paper)"></iframe></div></sc-if>\n          '),
     ("coach-explore", '<sc-if value="{{ cs.C4 }}">', "before",
      '<sc-if value="{{ cs.CX }}"><div data-bridge="coach-explore" data-screen-label="CX Library" style="height:100%;display:flex;flex-direction:column">'
@@ -148,7 +157,7 @@ PATCHES = [
      '<sc-if value="{{ sv.isDraft }}"><p data-bridge="story-draft" style="font:400 14px/1.45 var(--sans);color:var(--mad);margin:12px 0 0">{{ sv.draftNote }}</p></sc-if>\n                '),
     ("story-check", '<sc-if value="{{ sv.hasPattern }}">', "before",
      '<sc-if value="{{ sv.checkAsk }}"><button data-bridge="story-check" sc-camel-on-click="{{ sv.checkAsk.go }}" disabled="{{ sv.checkAsk.dis }}" style="margin-top:10px;min-height:44px;padding:0 18px;border-radius:22px;border:1px solid var(--mad);background:transparent;color:var(--mad);font:500 13px var(--sans);cursor:pointer">{{ sv.checkAsk.label }}</button></sc-if>\n                '),
-    ("story-related", '<button data-bridge="story-library"', "before",
+    ("story-related", '<sc-if value="{{ sv.exploreShow }}"><button data-bridge="story-library"', "before",
      '<sc-if value="{{ sv.hasRel }}"><div data-bridge="story-related" style="margin-top:22px;padding-top:14px;border-top:1px solid var(--hair)">' + HEAD + GROUPS.replace('@LIST@', 'sv.rel') + '</div></sc-if>\n                '),
     ("hero-related", '<button data-bridge="hero-library"', "before",
      '<sc-if value="{{ hv.hasLib }}"><div data-bridge="hero-related" style="margin-top:28px;padding-top:14px;border-top:1px solid var(--hair)">' + HEAD + GROUPS.replace('@LIST@', 'hv.lib') + '</div></sc-if>\n                '),
@@ -213,13 +222,35 @@ PATCHES = [
     ("send-for", '<p style="font:400 16px/1.55 var(--serif);margin:12px 0 0">{{ lib.p.moment }}</p>', "after",
      '<sc-if value="{{ lib.forLine }}"><div data-bridge="send-for" style="margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--well);font:400 13px/1.5 var(--sans);color:var(--ink)">{{ lib.forLine }}'
      '<sc-if value="{{ lib.cmp }}"><button sc-camel-on-click="{{ lib.cmp.go }}" style="display:block;margin-top:8px;min-height:32px;padding:0 14px;border-radius:16px;border:1px solid var(--pru);background:transparent;color:var(--pru);font:500 12px var(--sans);cursor:pointer">{{ lib.cmp.label }}</button></sc-if></div></sc-if>'),
+    ("ask-lib-a", 'margin-bottom:6px">From the library — not one of your three', "replace", 'margin-bottom:6px">From the library, beyond your three'),
+    ("ask-lib-b", 'margin-bottom:8px">From the library — not one of your three', "replace", 'margin-bottom:8px">From the library, beyond your three'),
+    ("ask-words", "Interpretation, drawn from their stories. Not their words.", "replace", "Our reading of their stories, in our words."),
+    ("ask-sent", "He'll see it in your timeline.", "replace", "It shows in your timeline."),
+    ("ask-draft", '<div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:4px">How your three would walk in</div>', "before",
+     '<div data-bridge="ask-draft" style="margin:0 0 18px">'
+     '<sc-if value="{{ ak.weekNote }}"><p style="font:400 14px/1.5 var(--sans);color:var(--mute);margin:0 0 8px">{{ ak.weekNote }}</p></sc-if>'
+     '<sc-if value="{{ ak.draftMark }}"><p style="font:500 13px/1.45 var(--sans);color:var(--mad);margin:0 0 8px">{{ ak.draftMark }}</p></sc-if>'
+     '<sc-if value="{{ ak.reach }}"><p style="font:400 15px/1.5 var(--serif);color:var(--ink);margin:0 0 10px">{{ ak.reach }}</p></sc-if>'
+     '<sc-if value="{{ ak.checkAsk }}"><button sc-camel-on-click="{{ ak.checkAsk.go }}" disabled="{{ ak.checkAsk.dis }}" style="min-height:44px;padding:0 18px;border-radius:22px;border:1px solid var(--mad);background:transparent;color:var(--mad);font:500 13px var(--sans);cursor:pointer">{{ ak.checkAsk.label }}</button></sc-if>'
+     '</div>'),
+    ("week-prep", '<button sc-camel-on-click="{{ wk.prep }}" disabled="{{ wk.prepDis }}" style="height:48px;border-radius:24px;background:var(--ink);color:var(--paper);border:0;font:500 14px var(--sans);cursor:pointer;width:100%;opacity:{{ wk.prepOp }}">Start the prep</button>', "replace",
+     '<sc-if value="{{ wk.prepOpen }}"><button sc-camel-on-click="{{ wk.prep }}" style="height:48px;border-radius:24px;background:var(--ink);color:var(--paper);border:0;font:500 14px var(--sans);cursor:pointer;width:100%">Start the prep</button></sc-if>'),
+    ("week-prep-hint", '<sc-if value="{{ wk.prepDis }}"><div style="font:400 12px var(--sans);color:var(--faint);text-align:center">{{ wk.prepHint }}</div></sc-if>', "replace",
+     '<sc-if value="{{ wk.prepDis }}"><div data-bridge="week-prep" style="font:400 16px/1.5 var(--serif);color:var(--mute)">{{ wk.prepHint }}</div></sc-if>'),
+    ("send-ask", '<div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:0 8px 6px">Situation</div>', "before",
+     '<div data-bridge="send-ask" style="padding:0 8px 16px"><div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:0 0 6px">Ask for {{ lib.toFirst }}</div>'
+     '<textarea rows="2" value="{{ lib.ask }}" sc-camel-on-change="{{ lib.setAsk }}" placeholder="{{ lib.askPh }}" aria-label="What is the member facing?" style="width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid var(--hair);border-radius:10px;background:var(--well);color:var(--ink);font:400 14px/1.45 var(--sans);resize:vertical"></textarea>'
+     '<button sc-camel-on-click="{{ lib.askGo }}" style="margin-top:6px;min-height:32px;padding:0 14px;border-radius:16px;border:1px solid var(--pru);background:transparent;color:var(--pru);font:500 12px var(--sans);cursor:pointer">Ask the library</button></div>'),
+    ("send-far", '<div style="font:500 12px var(--sans);color:var(--mute);margin-bottom:8px">{{ lib.count }}</div>', "after",
+     '<sc-if value="{{ lib.farChip }}"><button data-bridge="send-far" sc-camel-on-click="{{ lib.farChip.go }}" style="margin:0 0 10px;min-height:32px;padding:0 12px;border-radius:16px;border:1px dashed var(--hair);background:transparent;color:var(--mute);font:500 12px var(--sans);cursor:pointer">{{ lib.farChip.label }}</button></sc-if>'),
+    ("ask-shape", "You choose the shape. The story follows from it.", "replace", "Pick the closest, and a story follows."),
     ("swap-check", '<sc-if value="{{ x.draft }}"><button disabled="{{ true }}" title="Verify the source before sending." style="margin-top:6px;height:28px;padding:0 10px;border-radius:14px;border:1px solid var(--mad);background:transparent;color:var(--mad);font:500 11px var(--sans);opacity:.6">Draft — must verify</button></sc-if>', "replace",
      '<sc-if value="{{ x.go }}"><button data-bridge="swap-check" sc-camel-on-click="{{ x.go }}" style="margin-top:8px;min-height:32px;padding:0 14px;border-radius:16px;border:1px solid var(--pru);background:transparent;color:var(--pru);font:500 12px var(--sans);cursor:pointer">{{ x.goLabel }}</button></sc-if>'
      '<sc-if value="{{ x.open }}"><iframe sc-camel-src="{{ x.src }}" title="Check the source" style="display:block;width:100%;height:520px;margin-top:10px;border:1px solid var(--hair);border-radius:10px;background:var(--paper)"></iframe></sc-if>'),
 ]
 
 # Sizes as the export writes them inside inline `font:` shorthands, and what they become.
-TYPE_FLOOR = {"9": "11", "10": "12", "11": "12"}
+TYPE_FLOOR = {"9": "13", "10": "12", "11": "12"}
 FONT_RE = re.compile(r'(font:\s*(?:italic\s+)?\d{3}\s+)(9|10|11)(px)')
 
 def type_floor(html):

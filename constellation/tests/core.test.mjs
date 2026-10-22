@@ -230,3 +230,36 @@ test('round two: others like this, the path in five, the other way, honest draft
   }
   assert.equal(CLN.linksTo(lib, 'sarah', 'jimmy-carter', lib.sit.E1.key).line, 'One link from Obama. Both had every act read as a signal.');
 });
+
+test('round three: member-safe text, questions read right, the lead pair, who the line is said to, and the room', () => {
+  const CLQ = require('../lib/ask.js');
+  // nobody but a coach reads a working note, an internal id or a publishing aside
+  for (const s of lib.stories) for (const as of ['member', 'reader']) {
+    const t = [CLC.cautionFor(s, as), CLC.whyFor(s, as, true)].join(' '), src = CLC.sourceFor(s, as);
+    assert.ok(!/\bverify\b|Recall-authored|publish|s-[A-E]\d-/.test(t), s.id + ' ' + as + ': ' + t.slice(0, 120));
+    assert.ok(!/\bverify\b|Recall-authored|s-[A-E]\d-/.test(src), s.id + ' ' + as + ' source: ' + src.slice(0, 120));   // a citation may say where it was published
+    if (!s.verified) assert.equal(CLC.cautionFor(s, as), '');
+  }
+  assert.match(CLC.whyFor({ why: 'Chosen because the people you sat beside now report to you.' }, 'member', true), /^It fits your week: the people/);
+  const read = (t, m) => CLQ.read(lib, t, { m }).q;
+  const tom = CLQ.answer(lib, read('something from before 1900 for Tom'));
+  assert.equal(tom.total, 8, 'a member named keeps their situations, whatever else is asked');
+  assert.equal(CLQ.answer(lib, read('who got fired and came back stronger')).total, 11, 'a scene asked for on its own filters');
+  const ardent = read('The Ardent pitch is Thursday and their general counsel knows the firm, not me.', 'michael');
+  assert.ok(!ardent.field && /C1/.test(ardent.sit) && ardent.to === 'out' && CLQ.answer(lib, ardent).total >= 50, 'general counsel is a person in the room, never a field');
+  assert.ok(read('The VP picked the roadmap I argued against and I have to present it', 'maya').sit.startsWith('D4'));
+  assert.equal(read('Sarah still rewrites every deck her team sends her').sit, 'D3');
+  assert.ok(read('who has walked into a team that did not want them').sit.startsWith('A4'));
+  assert.ok(read('Priya keeps getting talked over in the leadership meeting').sit.startsWith('B6'));
+  for (const id of lib.order) { const M = lib.members[id]; if (M.ask1) assert.ok(!read(M.ask1, id).field, id + ': a member’s own Ask reads no field'); }
+  // the lead pair: a checked story the member does not have, and a draft one check from sending
+  const reorg = read('Sarah announces the reorg Thursday and the person who wanted her job will be in the room');
+  const a = CLQ.answer(lib, reorg);
+  assert.ok(a.ready.story.verified && !CLQ.sentTo(lib, 'sarah').includes(a.ready.story.id) && !a.oneCheck.story.verified && a.oneCheck.source);
+  assert.equal(reorg.to, 'rival'); assert.equal(reorg.room, 'team');
+  const top = [a.ready, a.oneCheck].concat(a.items).slice(0, 10);
+  assert.ok(top.filter((x) => CLQ.moveIn(x.story, 'team')).length >= 8, 'the room ranks the stories whose move is set there');
+  assert.ok(top.slice(0, 6).some((x) => x.story.id === 's-A2-elena-kagan'), 'a line said to the colleague who wanted the job ranks high');
+  // facets keep a checked story whose field is empty
+  assert.equal(CLQ.answer(lib, { sit: 'A2', line: 1 }).total, CLQ.answer(lib, { sit: 'A2' }).total);
+});

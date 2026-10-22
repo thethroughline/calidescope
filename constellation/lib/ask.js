@@ -32,23 +32,23 @@
     A1: ['judged on', 'success looks like', 'what the job', 'nobody told', 'expected of', 'no brief', 'expects', 'criteria', 'first ninety days', 'new job'],
     A2: ['peer', 'old team', 'teammates', 'my friends', 'used to sit', 'report to me', 'their manager', 'their boss', 'wanted my job', 'wanted her job', 'wanted his job', 'wanted their job', 'wanted the job', 'promoted over', 'promoted above', 'former colleague', 'applied for', 'rival', 'trained with', 'captain over', 'over teammates', 'over her teammates', 'over his teammates'],
     A3: ['everything is fine', 'things are fine', 'inherited', 'a mess', 'numbers are bad', 'nobody sees', 'nobody saw', 'nobody else saw', 'in trouble', 'named a problem', 'problem nobody'],
-    A4: ['predecessor', 'replaced', 'before me', 'adored', 'loved', 'legend', 'shoes', 'would have done', 'comparing me', 'founder', 'followed', 'the last director', 'the last head', 'still quote', 'built this'],
+    A4: ['predecessor', 'replaced', 'before me', 'adored', 'loved', 'legend', 'shoes', 'would have done', 'comparing me', 'founder', 'followed', 'the last director', 'the last head', 'still quote', 'built this', 'did not want', "didn't want", 'walked into', 'walk into', 'hostile'],
     A5: ["can't check", "can't judge", 'could not judge', 'know more than', 'sign off', 'specialist', 'not my field', "i'm not a", 'could not do'],
     B1: ['credit', 'as his own', 'as her own', 'his name on', 'her name on', 'another voice', 'somebody else'],
     B2: ['quiet in', 'is quiet', 'introvert', 'forceful', 'louder', 'shout', 'presence', 'speak up', 'style', 'will not shout'],
     B3: ['too soft', 'too harsh', 'too nice', 'too tough', 'too direct', 'assertive enough', 'mixed messages', 'contradict', 'one thing, then'],
     B4: ['background', "don't fit", 'hard to place', 'what to do with me', 'unusual', 'take me seriously', 'came from'],
     B5: ['introduction', 'introduce myself', 'announce myself', 'announce herself', 'announce himself', 'town hall', 'generic', 'own words', 'my voice', 'how it sounds'],
-    B6: ['expert', 'never invite', 'not in the room', 'steer around', 'after the strategy', 'room that decides', 'heard'],
+    B6: ['expert', 'never invite', 'not in the room', 'steer around', 'after the strategy', 'room that decides', 'heard', 'talked over', 'talks over', 'talk over', 'interrupt'],
     C1: ['selling', 'sell', 'pitch', 'new clients', 'win work', 'find my own work', 'business development', 'bring in'],
     C2: ["firm's name", 'own name', 'stood on', 'stand on', 'knows the firm', 'by name', 'name on the door', 'for the agency', 'the firm, not'],
     C3: ['steering committee', "don't report", "doesn't report", 'no authority', 'other departments', 'stakeholders', 'before the meeting', 'do not control', "don't control", 'coalition'],
     D1: ['hundred', 'offices', 'only see', 'two levels down', 'skip-level', "can't see", 'more people than'],
     D2: ['delegate to', 'no one to', 'bench', 'people left', 'moved to another', 'grow people', 'without a bench'],
-    D3: ['old job', 'let go of', 'old clients', 'on top of', 'still doing', 'still review', 'still answer', 'still write', 'still do the', 'shut down', 'stop the', 'stopped work'],
+    D3: ['old job', 'let go of', 'old clients', 'on top of', 'still doing', 'still review', 'still answer', 'still write', 'still rewrit', 'rewrites every', 'rewrit', 'still do the', 'shut down', 'stop the', 'stopped work'],
     D4: ['head office', 'layoffs', 'redundanc', 'not my decision', 'argued against', "didn't choose", 'did not choose', 'disagree', 'did not make', "didn't make", 'reorg', 'restructur', 'closing', 'the board picked', 'have to sell it', 'a decision', 'orders', 'carri', 'carry', 'thought were wrong', 'thought was wrong'],
-    E1: ['read into', 'signal', 'every move', 'noticed', 'meant something', 'thought i was', 'announc', 'whole group', 'watching', 'watched', 'explains every', 'explaining', 'every decision'],
-    E2: ["keep not", 'keep saying', 'kept agreeing', 'never acted', 'nothing happens', 'nothing moves', 'meaning to', 'avoid', 'hard conversation', 'agrees and'],
+    E1: ['read into', 'signal', 'every move', 'noticed', 'meant something', 'thought i was', 'announc', 'announcing the', 'announces the', 'announce the', 'whole group', 'watching', 'watched', 'explains every', 'explaining', 'every decision'],
+    E2: ["keep not", 'keep saying', 'kept agreeing', 'never acted', 'nothing happens', 'nothing moves', 'meaning to', 'avoid', 'hard conversation', 'agrees and', 'saying yes', 'say yes to', 'says yes to'],
     E3: ['miss doing', 'miss it', 'used to be the best', "don't get to", 'craft', 'best at'],
     E4: ['bored', 'coasting', 'nothing left to learn', 'plateau', 'becalmed', 'autopilot', 'gone stale', 'stale']
   };
@@ -56,7 +56,7 @@
   var FIELD_WORDS = [
     ['law', /\b(law|lawyers?|legal|a judge|judges|attorneys?|barristers?|solicitors?|courts?)\b/],
     ['business', /\b(business|bankers?|banking|finance|financiers?|investors?|ceos?|companies|company|chief executives?)\b/],
-    ['public', /\b(politic\w*|government|public life|public service|ministers?|presidents?|generals?|military|diplomats?)\b/],
+    ['public', /\b(politic\w*|government|public life|public service|ministers?|presidents?|military|diplomats?)\b/],
     ['media', /\b(advertising|ad agenc\w*|media|journalis\w*|marketing|editors?|creators?)\b/],
     ['sport', /\b(sport|sports|athletes?|players?|captains?)\b/],
     ['music', /\b(music|musicians?|singers?|bands?|composers?)\b/],
@@ -72,12 +72,56 @@
     [/hides? behind/, ['front'], 'hides behind the firm', 'leads out front']
   ];
   var SCENE = {
-    rival: { ask: /wanted (?:my|her|his|their|the) (?:job|role)|thought (?:he|she|they)'?d get|passed over|\brival|applied for (?:my|this|the) job/, scene: /\brival|wanted (?:the|his|her) job|wanted the job themselves|passed over|had wanted/i, label: 'someone who wanted the job' },
-    predecessor: { ask: /predecessor|before me|still in the building|founder/, scene: /predecessor|took over from|founder|succeeded/i, label: 'a predecessor' },
-    forced: { ask: /fired|sacked|forced out|pushed out|let go of me/, scene: /\bfired\b|dismissed|sacked|ousted|forced out/i, label: 'being forced out' },
-    first: { ask: /first woman|only woman|first black|only black/, scene: /first wom[ae]n|only wom[ae]n|first black|first african/i, label: 'being the first' },
-    writing: { ask: /in writing|a letter|a memo|an email/, scene: /\bletter\b|\bmemo\b|wrote to/i, label: 'putting it in writing' }
+    rival: { heading: 'with someone who wanted the job', ask: /wanted (?:my|her|his|their|the) (?:job|role)|thought (?:he|she|they)'?d get|passed over|\brival|applied for (?:my|this|the) job/, scene: /\brival|wanted (?:the|his|her) job|wanted the job themselves|passed over|had wanted/i, label: 'someone who wanted the job' },
+    predecessor: { heading: 'with a predecessor', ask: /predecessor|before me|still in the building|founder/, scene: /predecessor|took over from|founder|succeeded/i, label: 'a predecessor' },
+    forced: { ask: /fired|sacked|forced out|pushed out|let go of me/, scene: /\bfired\b|dismissed|sacked|ousted|forced out/i, label: 'being forced out', heading: 'where someone was forced out' },
+    first: { heading: 'where someone was the first', ask: /first woman|only woman|first black|only black/, scene: /first wom[ae]n|only wom[ae]n|first black|first african/i, label: 'being the first' },
+    writing: { heading: 'where it was put in writing', ask: /in writing|a letter|a memo|an email/, scene: /\bletter\b|\bmemo\b|wrote to/i, label: 'putting it in writing' }
   };
+  // Who a story's line is said to ("To the colleague who wanted the job: …"), in seven kinds of person, and the
+  // words in a question that name one. First match wins, in this order.
+  var TO = [
+    ['rival', 'the colleague who wanted the job', /wanted the job|went for the same role|passed over|\brival|former peers?|was your peer|were your peers|your peer last|former teammates|used to sit|sat beside you|used to brief|now on your team|now runs your old team/,
+      /wanted (?:her|his|their|my|the) (?:job|role)|passed over|former peers?|old peers?|promoted over|used to be (?:my|her|his|their) peers?/],
+    ['out', 'a client or their counsel', /client|prospect|counsel|customer|investor|buyer|journalist|reporter|\bpress\b|regulator/, /\b(?:general counsel|counsel|clients?|prospects?|customers?|investors?)\b/],
+    ['guide', 'a mentor or a sponsor', /mentor|coach|sponsor|advis/, /\b(?:mentor|sponsor)\b/],
+    ['home', 'someone at home', /at home|spouse|family|a friend/, /\b(?:at home|my partner at home|my family)\b/],
+    ['up', 'someone above them', /managing partner|practice head|manager|boss|board|chair|chief|director|head of|department head|group head|editor|owner|president|founder|\bceo\b|\bvp\b|partner who hired/,
+      /\b(?:my|her|his|their|the) boss\b|\bthe vp\b|\bthe board\b|\bthe ceo\b|\bmanaging partner\b|\bthe chair\b/],
+    ['down', 'their team', /team|deputy|report|staff|associate|junior|new hire|successor|crew|players/, /\b(?:my|her|his|their|the) (?:new )?team\b|\bdirect reports?\b/],
+    ['peer', 'a peer', /peer|colleague|partner/, /\b(?:a|my|her|his|their) peers?\b/]
+  ];
+  var TO_LABEL = {}; TO.forEach(function (t) { TO_LABEL[t[0]] = t[1]; });
+  function saidTo(s) {
+    if (s._saidTo) return s._saidTo;
+    return (s._saidTo = (s.line_examples || []).map(function (l) {
+      var m = /^To ([^:]{2,80}):/.exec(l); if (!m) return null;
+      var who = m[1].toLowerCase(), b = TO.filter(function (t) { return t[2].test(who); })[0];
+      return { to: b ? b[0] : null, who: m[1], text: l };
+    }).filter(Boolean));
+  }
+  var WHO_STOP = /^(your|their|that|this|with|from|have|been|will|when|what|team|person|someone|people|colleague|the|who|and)$/;
+  function sharesWord(who, text) {
+    var t = ' ' + fold(text) + ' ';
+    return fold(who).split(/[^a-z']+/).some(function (w) { return w.length >= 4 && !WHO_STOP.test(w) && t.indexOf(' ' + w.replace(/s$/, '')) >= 0; });
+  }
+  function lineTo(s, to) { return saidTo(s).filter(function (x) { return x.to === to; })[0] || null; }
+  // The room a story's move is set in ("At the all-hands…", "In your first client meeting…"), and the words in a
+  // question that name one. It ranks; it never filters.
+  var ROOM = [
+    ['team', 'a team meeting', /\b(all-hands|all hands|offsite|town hall|team meeting|stand-?up|staff meeting|first meeting|group meeting|weekly meeting|the team)\b/i,
+      /\b(announc\w*|offsite|town hall|all-hands|all hands|team meeting|staff meeting|group meeting)\b/],
+    ['board', 'a board or committee', /\b(board|committee|steering)\b/i, /\b(steering committee|committee|board meeting)\b/],
+    ['pitch', 'a client meeting or a pitch', /\b(client|pitch|prospect|proposal)\b/i, /\b(pitch\w*|client meeting)\b/],
+    ['writing', 'in writing', /\b(e-?mails?|memos?|decks?|letters?|written|in writing|slack|note to)\b/i, /\b(e-?mails?|memo|decks?|in writing|a letter)\b/],
+    ['one', 'a one-to-one', /\b(one-to-one|1:1|one-on-one|coffee|in private|privately|1-1)\b/i, /\b(one-to-one|1:1|one on one|in private|a coffee)\b/],
+    ['pub', 'in public', /\b(press|speech|keynote|conference|panel|interview)\b/i, /\b(speech|keynote|the press|conference|panel)\b/]
+  ];
+  var ROOM_LABEL = {}; ROOM.forEach(function (r) { ROOM_LABEL[r[0]] = r[1]; });
+  function moveIn(s, room) {
+    var R = ROOM.filter(function (r) { return r[0] === room; })[0]; if (!R) return null;
+    return (s.move_examples || []).filter(function (m) { return R[2].test(m); })[0] || null;
+  }
   var DIRECT = { direct: 'Direct', calibrated: 'Measured', indirect: 'Indirect' };
   var REACH = { near: 'Close to an ordinary office', mid: 'Some way from an office', far: 'Far from an ordinary office' };
   var AREA_FIELD = { Sport: 'sport', Music: 'music', 'Film & TV': 'arts', Creators: 'media', Art: 'arts', 'Books & writing': 'arts', Business: 'business', 'Politics & public life': 'public' };
@@ -98,12 +142,17 @@
     var sc = {}, low = ' ' + fold(text).replace(/[^a-z0-9' ]+/g, ' ') + ' ';
     lib.situations.forEach(function (s) { sc[s.id] = 0; });
     CLC.interpret(lib, text, lib.situations.length).forEach(function (x) { sc[x.sit.id] = x.score; });
+    var strong = {};
     Object.keys(CUES).forEach(function (id) {
-      CUES[id].forEach(function (c) { if (new RegExp('\\b' + esc(c).replace(/'/g, "'?")).test(low)) sc[id] += CUE_WEIGHT; });
+      CUES[id].forEach(function (c) { if (new RegExp('\\b' + esc(c).replace(/'/g, "'?")).test(low)) { sc[id] += CUE_WEIGHT; if (/ /.test(c)) strong[id] = 1; } });
     });
     if (M && M.sits) M.sits.forEach(function (id) { if (sc[id] > 0) sc[id] += 0.04; });   // a tie goes to the member's own
-    return Object.keys(sc).map(function (id) { return { id: id, score: sc[id] }; }).filter(function (x) { return x.score > 0.06; })
-      .sort(function (a, b) { return b.score - a.score; });
+    // a phrase people use for a situation ("argued against", "talked over") outranks a reading of loose words;
+    // two such phrases keep the order the words gave them
+    var top = Math.max.apply(null, Object.keys(sc).map(function (id) { return sc[id]; })), orig = Object.assign({}, sc);
+    Object.keys(strong).forEach(function (id) { sc[id] = Math.max(sc[id], top + 0.01); });
+    return Object.keys(sc).map(function (id) { return { id: id, score: sc[id], orig: orig[id] }; }).filter(function (x) { return x.score > 0.06; })
+      .sort(function (a, b) { return b.score - a.score || b.orig - a.orig; });
   }
 
   // ---------- reading a question ----------
@@ -124,6 +173,9 @@
     STANCE_TRAIT.forEach(function (t) { if (!q.stance && take(g(t[0]))) { q.stance = t[1].join('+'); q.trait = t[2]; } });
     if (take(/\b(a woman|women|female|herself)\b/g)) q.sex = 'f';
     else if (take(/\b(a man|men|male|himself)\b/g)) q.sex = 'm';
+    ROOM.forEach(function (r) { var m = !q.room && fold(text).match(r[3]); if (m) { q.room = r[0]; m[0].split(/[^a-z0-9']+/).forEach(function (w) { if (w) used[w] = 1; }); } });
+    TO.forEach(function (t) { var m = !q.to && fold(text).match(t[3]); if (m) { q.to = t[0]; m[0].split(/[^a-z0-9']+/).forEach(function (w) { if (w) used[w] = 1; }); } });
+    take(/\bgeneral counsel\b/g);   // a person in the room, never a field: the line is said to them
     if (take(/\b(celebrit\w*|famous people|stars)\b/g)) q.nocel = 1;
     else FIELD_WORDS.forEach(function (f) { if (!q.field && take(g(f[1]))) q.field = f[0]; });
     var b = rest.match(/\b(?:before|earlier than|pre)\s*(\d{3,4})\b/); if (b) { q.before = +b[1]; take(/\b(?:before|earlier than|pre)\s*\d{3,4}\b/g); }
@@ -144,7 +196,10 @@
     else if (take(/\b(big story|grand|epic)\b/g)) q.reach = 'far';
     if (take(/\b(send today|ready to send|checked|verified|can send)\b/g)) q.ok = 1;
     if (take(/\b(a line|something to say|words to say|quotable)\b/g)) q.line = 1;
-    Object.keys(SCENE).forEach(function (k) { if (!q.cue && SCENE[k].ask.test(fold(text))) q.cue = k; });
+    Object.keys(SCENE).forEach(function (k) {
+      var m = !q.cue && fold(text).match(SCENE[k].ask); if (!m) return;
+      q.cue = k; m[0].split(/[^a-z0-9']+/).forEach(function (w) { if (w) used[w] = 1; });
+    });
 
     // the situation: an explicit code, else the proposal from the words left, else the member's own
     var sits = [], alts = [], code = rest.match(/\b([a-e][1-6])\b/);
@@ -167,13 +222,22 @@
     if (q.trait === 'too nice' && sits.indexOf('B3') < 0) alts.unshift('B3');
     if (q.trait === 'does it all' && !sits.length) sits = ['D3'];
     if (q.trait === 'hides behind the firm' && !sits.length) sits = ['C2'];
-    if (sits.length) q.sit = sits.join('+'); else if (M && !q.trait && !hasFacet(q)) q.mine = 1;
+    // with a member named and no situation read, the answer stays inside the member's own situations
+    if (sits.length) q.sit = sits.join('+'); else if (M) q.mine = 1;
+    var closest = [];
+    if (!sits.length && !M) closest = situationScores(lib, rest, null).slice(0, 3).map(function (o) { return o.id; });
     if (M && M.sits) M.sits.forEach(function (id) { if (sits.indexOf(id) < 0 && alts.indexOf(id) < 0) alts.push(id); });
     var STOPW = /^(a|an|the|who|whom|has|have|had|for|of|to|in|on|at|is|was|were|with|and|or|their|they|them|someone|somebody|something|story|stories|member|members|people|person|i|my|me|we|our|that|this|it|be|been|about|one|what|from|by|did|do|does|whose|her|his|she|he|version|can|not|set|used|any|some|will|would|could|should|there|then|than|when|where|which|while|who's|she's|he's|i'm|it's|we're|they're|just|really|actually|again|still|next|week|being|getting|having|today|tomorrow|thursday|friday|monday|tuesday|wednesday|saturday|sunday)$/;
     var unused = uniq(fold(text).split(/[^a-z0-9']+/).filter(function (w) { return w && !used[w] && !STOPW.test(w) && w.length > 2; }));
-    return { q: q, chips: chips(lib, q), alts: alts.slice(0, 4).map(function (id) { return { id: id, label: id + ' · ' + cap(DID[id]), n: (lib.byKey[lib.sit[id].key] || []).length }; }), unused: unused };
+    var sitOf = function (id) { return { id: id, label: id + ' · ' + cap(DID[id]), n: (lib.byKey[lib.sit[id].key] || []).length }; };
+    return { q: q, chips: chips(lib, q), alts: alts.slice(0, 4).map(sitOf), closest: closest.map(sitOf), unused: unused };
   }
-  function hasFacet(q) { return ['sex', 'field', 'nocel', 'before', 'after', 'age', 'notus', 'dir', 'reach', 'stance', 'ok', 'line', 'cue'].some(function (k) { return q[k] != null && q[k] !== ''; }); }
+  // the stories a member has already been given (each week's pairing in the demo), which an answer leaves out of its lead
+  function sentTo(lib, mid) {
+    var M = memberOf(lib, mid); if (!M) return [];
+    return (M.micro || []).map(function (x) { return x && x.ins && x.ins.story; }).filter(Boolean);
+  }
+  function hasFacet(q) { return ['sex', 'field', 'nocel', 'before', 'after', 'age', 'notus', 'dir', 'reach', 'stance', 'ok', 'line', 'cue', 'to', 'room'].some(function (k) { return q[k] != null && q[k] !== ''; }); }
 
   // The query as plain-word chips: what the Library understood. Each one can be taken away.
   function chips(lib, q) {
@@ -190,11 +254,13 @@
     if (q.notus) c.push({ k: 'notus', label: 'Outside the United States' });
     if (q.dir) c.push({ k: 'dir', label: q.dir === 'quiet' ? 'A quieter way: measured or indirect' : 'Direct' });
     if (q.reach) c.push({ k: 'reach', label: REACH[q.reach] });
-    if (q.stance) c.push({ k: 'stance', label: cap(STANCE_TRAIT.filter(function (t) { return t[1].join('+') === q.stance; }).map(function (t) { return t[3]; })[0] || q.stance) + ' (proposed)' });
+    if (q.stance) c.push({ k: 'stance', label: cap(STANCE_TRAIT.filter(function (t) { return t[1].join('+') === q.stance; }).map(function (t) { return t[3]; })[0] || q.stance) + ', as we read it' });
     if (q.ok) c.push({ k: 'ok', label: 'Checked against its source' });
     if (q.line) c.push({ k: 'line', label: 'Has a line to borrow' });
     if (q.nothero && M) c.push({ k: 'nothero', label: 'Beyond ' + M.first + '’s heroes' });
     if (q.cue && SCENE[q.cue]) c.push({ k: 'cue', label: 'Scenes with ' + SCENE[q.cue].label + ' first', kind: 'cue' });
+    if (q.to && TO_LABEL[q.to]) c.push({ k: 'to', label: 'Said to: ' + TO_LABEL[q.to], kind: 'to' });
+    if (q.room && ROOM_LABEL[q.room]) c.push({ k: 'room', label: 'In the room: ' + ROOM_LABEL[q.room], kind: 'to' });
     if (q.m && M) c.push({ k: 'm', label: 'For ' + M.first, kind: 'member' });
     return c;
   }
@@ -212,12 +278,15 @@
     else if (q.after) F.push({ k: 'after', t: function (s) { return s.year != null && s.year >= q.after; } });
     if (q.age) F.push({ k: 'age', t: function (s) { var a = ageAt(lib, s); return a != null && Math.abs(a - q.age) <= 4; } });
     if (q.notus) F.push({ k: 'notus', t: function (s) { return !/US/.test(I[s.icon].geo || 'US'); } });
-    if (q.dir) F.push({ k: 'dir', t: function (s) { return q.dir === 'quiet' ? s.directness === 'calibrated' || s.directness === 'indirect' : s.directness === 'direct'; } });
+    // a story with no rating is kept, and says so on its card: a facet never drops a story for a field it lacks
+    if (q.dir) F.push({ k: 'dir', t: function (s) { return !s.directness || (q.dir === 'quiet' ? s.directness === 'calibrated' || s.directness === 'indirect' : s.directness === 'direct'); } });
     if (q.reach) F.push({ k: 'reach', t: function (s) { return s.reach === q.reach; } });
     if (q.stance) { var st = q.stance.split('+'); F.push({ k: 'stance', t: function (s) { return st.indexOf(I[s.icon].stance) >= 0; } }); }
     if (q.ok) F.push({ k: 'ok', t: function (s) { return s.verified; } });
     if (q.nothero && M) F.push({ k: 'nothero', t: function (s) { return heroesOf(M).indexOf(s.icon) < 0; } });
-    if (q.line) F.push({ k: 'line', t: function (s) { return !!s.pattern; } });
+    if (q.line) F.push({ k: 'line', t: function (s) { return !!s.pattern || !!(s.line_examples && s.line_examples.length); } });
+    // a scene asked for on its own ("who got fired") is the question: it filters; beside a situation it only ranks
+    if (q.cue && SCENE[q.cue] && !q.sit && !q.mine) F.push({ k: 'cue', t: function (s) { return SCENE[q.cue].scene.test(s.moment); } });
     return F;
   }
   function filter(lib, F) { return lib.stories.filter(function (s) { return F.every(function (f) { return f.t(s); }); }); }
@@ -238,9 +307,11 @@
     if (q.before || q.after) r.push({ type: 'year', text: yl(s.year) });
     if (q.age && a != null) r.push({ type: 'age', text: 'About ' + a + ' at the time' });
     if (q.notus) r.push({ type: 'place', text: ic.place || 'Outside the United States' });
-    if (q.dir && s.directness) r.push({ type: 'dir', text: DIRECT[s.directness] });
+    if (q.dir) r.push({ type: 'dir', text: s.directness ? DIRECT[s.directness] : 'Not rated' });
     if (q.reach) r.push({ type: 'reach', text: REACH[s.reach] });
-    if (q.stance && ic.stanceName) r.push({ type: 'stance', text: 'Leads by ' + ic.stanceName.toLowerCase() + ' (proposed)' });
+    if (q.stance && ic.stance && CLC.STANCE_BY[ic.stance]) r.push({ type: 'stance', text: cap('Leads ' + CLC.STANCE_BY[ic.stance]) + ', as we read it' });
+    var said = q.to && lineTo(s, q.to); if (said) r.push({ type: 'line', text: said.text });
+    var mv = q.room && moveIn(s, q.room); if (mv) r.push({ type: 'move', text: mv });
     if (M) {
       if (heroesOf(M).indexOf(s.icon) >= 0) r.push({ type: 'fit', text: 'One of ' + M.first + '’s heroes' });
       if (!q.age && M.age && a != null && Math.abs(a - M.age) <= 4) r.push({ type: 'fit', text: 'About ' + a + ' at the time; ' + M.first + ' is ' + M.age });
@@ -257,6 +328,9 @@
       if ((M.ints || []).some(function (i) { return AREA_FIELD[i] === ic.field; })) n += 1;
     }
     if (q.cue && SCENE[q.cue] && SCENE[q.cue].scene.test(s.moment)) n += 4;
+    var said = q.to && lineTo(s, q.to);
+    if (said) { n += 3; if (q.t && sharesWord(said.who, q.t)) n += 1.5; }   // the addressee in the question's own words
+    if (q.room && moveIn(s, q.room)) n += 2;
     var two = (q.sit || '').split('+').filter(function (id) { return lib.sit[id]; });
     if (two.length > 1 && two.every(function (id) { return s.keys.indexOf(lib.sit[id].key) >= 0; })) n += 2.5;
     return n + (s.verified ? 1.5 : 0) + (s.reach === 'near' ? 0.6 : s.reach === 'mid' ? 0.3 : 0);
@@ -267,15 +341,22 @@
     var hit = filter(lib, F);
     hit.sort(function (a, b) { return fitScore(lib, b, q) - fitScore(lib, a, q) || ((a.year || 0) - (b.year || 0)) || (a.id < b.id ? -1 : 1); });
     var ys = hit.map(function (s) { return s.year; }).filter(function (y) { return y != null; }).sort(function (a, b) { return a - b; });
-    var items = hit.slice(0, o.limit || 24).map(function (s) { return { story: s, card: CLC.storyCard(lib, s), reasons: reasons(lib, s, q) }; });
+    // the answer leads with what a coach can do now: the best checked story, and the best draft one check from it,
+    // leaving out what the member already has
+    var ex = (o.exclude || (q.m ? sentTo(lib, q.m) : [])).map(function (id) { return CLC.resolve(lib, id); });
+    var fresh = hit.filter(function (s) { return ex.indexOf(s.id) < 0; });
+    var rd = fresh.filter(function (s) { return s.verified; })[0] || null, oc = fresh.filter(function (s) { return !s.verified && (s.reach === 'near' || s.reach === 'mid'); })[0] || null;
+    var lead = function (s) { return s ? { story: s, card: CLC.storyCard(lib, s), reasons: reasons(lib, s, q), source: clause(String(CLC.sourceFor(s, 'coach') || '').split(/;\s*|(?<=[a-z]{2}\.)\s+(?=[A-Z])/)[0]) } : null; };
+    function clause(t) { if (t.length <= 110) return t; var c = t.slice(0, 110).lastIndexOf(','); return t.slice(0, c > 40 ? c : 110) + '\u2026'; }
+    var items = hit.filter(function (s) { return s !== rd && s !== oc; }).slice(0, o.limit || 24).map(function (s) { return { story: s, card: CLC.storyCard(lib, s), reasons: reasons(lib, s, q) }; });
     // a reason every card shares is said once, above them; each card keeps what sets it apart
     var shared = items.length > 1 ? items[0].reasons.filter(function (r) { return r.type !== 'fit' && r.type !== 'scene' && items.every(function (it) { return it.reasons.some(function (x) { return x.text === r.text; }); }); }).map(function (r) { return r.text; }) : [];
     items.forEach(function (it) { it.own = it.reasons.filter(function (r) { return shared.indexOf(r.text) < 0; }); });
     var did = (q.sit ? q.sit.split('+') : []).filter(function (id) { return DID[id]; }).map(function (id) { return DID[id]; });
     var span = ys.length ? [ys[0], ys[ys.length - 1]] : null;
     var res = { q: q, chips: chips(lib, q), total: hit.length, lives: uniq(hit.map(function (s) { return s.icon; })).length, span: span,
-      line: (did.length ? 'Someone who ' + did.join(', or who ') : 'Stories') + (span ? (span[0] === span[1] ? ', in ' + yl(span[0]) : ', between ' + yl(span[0]) + ' and ' + yl(span[1])) : '') + '.',
-      checked: hit.filter(function (s) { return s.verified; }).length, items: items, shared: shared };
+      line: (did.length ? 'Someone who ' + did.join(', or who ') : q.cue && SCENE[q.cue] && !q.mine ? 'Scenes ' + SCENE[q.cue].heading : 'Stories') + (span ? (span[0] === span[1] ? ', in ' + yl(span[0]) : ', between ' + yl(span[0]) + ' and ' + yl(span[1])) : '') + '.',
+      checked: hit.filter(function (s) { return s.verified; }).length, items: items, shared: shared, ready: lead(rd), oneCheck: lead(oc), excluded: ex };
     res.refine = refine(lib, q, hit);
     res.nearest = hit.length < 4 && F.length > 1 ? F.map(function (f) {
       var others = F.filter(function (g) { return g !== f; }), n = filter(lib, others).length;
@@ -300,9 +381,14 @@
     add('before', 1950, 'Before 1950', function (s) { return s.year < 1950; });
     add('after', 2000, 'Since 2000', function (s) { return s.year >= 2000; });
     add('reach', 'near', 'Close to an office', function (s) { return s.reach === 'near'; });
-    add('dir', 'quiet', 'Quieter', function (s) { return s.directness === 'calibrated' || s.directness === 'indirect'; });
+    add('dir', 'quiet', 'Quieter', function (s) { return !s.directness || s.directness === 'calibrated' || s.directness === 'indirect'; });
     add('nocel', 1, 'No celebrities', function (s) { return CELEB.indexOf(I[s.icon].domain) < 0; });
     add('ok', 1, 'Checked', function (s) { return s.verified; });
+    // who the line is said to ranks; it never filters, so its count is how many carry such a line
+    if (!q.room) ROOM.map(function (r) { return { k: r[0], n: hit.filter(function (s) { return moveIn(s, r[0]); }).length }; }).filter(function (x) { return x.n > 0; })
+      .sort(function (a, b) { return b.n - a.n; }).slice(0, 1).forEach(function (x) { out.push({ k: 'room', v: x.k, label: 'In ' + ROOM_LABEL[x.k].replace(/^in /, ''), n: x.n }); });
+    if (!q.to) TO.map(function (t) { return { k: t[0], n: hit.filter(function (s) { return lineTo(s, t[0]); }).length }; }).filter(function (x) { return x.n > 0; })
+      .sort(function (a, b) { return b.n - a.n; }).slice(0, 2).forEach(function (x) { out.push({ k: 'to', v: x.k, label: 'Said to ' + TO_LABEL[x.k], n: x.n }); });
     return out;
   }
 
@@ -405,7 +491,7 @@
   }
   function isQuery(q) { return !!(q.sit || q.mine || hasFacet(q)); }
 
-  return { DID: DID, CUES: CUES, SCENE: SCENE, DIRECT: DIRECT, REACH: REACH, FIELD_LABEL: FIELD_LABEL, SHELF: SHELF,
+  return { sentTo: sentTo, saidTo: saidTo, lineTo: lineTo, TO_LABEL: TO_LABEL, moveIn: moveIn, ROOM_LABEL: ROOM_LABEL, DID: DID, CUES: CUES, SCENE: SCENE, DIRECT: DIRECT, REACH: REACH, FIELD_LABEL: FIELD_LABEL, SHELF: SHELF,
     read: read, chips: chips, answer: answer, reasons: reasons, drop: drop, shelf: shelf, compare: compare, gaps: gaps,
     toQS: toQS, fromQS: fromQS, isQuery: isQuery, ageAt: ageAt, heroesOf: heroesOf, situationScores: situationScores };
 }));

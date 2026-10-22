@@ -203,7 +203,7 @@
    "coach": "bret",
    "role": "Product lead, newly promoted",
    "co": "Fernhill Labs",
-   "goal": "Be the person they call before the decision, not after it.",
+   "goal": "Be the person they call before the decision.",
    "sits": [
     "B6",
     "C3",
@@ -357,7 +357,7 @@
    "coach": "jennifer",
    "role": "Managing partner, newly elected",
    "co": "Hale & Carver LLP",
-   "goal": "The partner clients ask for by name, not the firm's name on the door.",
+   "goal": "The partner clients ask for by name.",
    "sits": [
     "C2",
     "C1",
@@ -602,7 +602,7 @@
    "ini": "TW",
    "role": "CMO, six weeks in",
    "co": "Calder Foods",
-   "goal": "Leading the change, not being changed by it.",
+   "goal": "Leading the change from the front.",
    "sits": [
     "D4",
     "E2"
@@ -3361,7 +3361,16 @@
     "bjk-bots"
    ],
    "icon": "billie-jean-king",
-   "twin": null
+   "twin": null,
+   "directness": "direct",
+   "move_examples": [
+    "This week, put the conversation you have been avoiding in the diary, and open it by naming what the two of you will decide. Ten minutes.",
+    "At the team meeting, say yes to the thing you turned down, and say why waiting costs more. One minute."
+   ],
+   "line_examples": [
+    "To the colleague you have been putting off: Let's settle it this week. Here is when, and here is what we decide.",
+    "To your team: I said no once. I'm saying yes now, because waiting costs all of us more."
+   ]
   },
   {
    "id": "st-jackie-robinson-1945-rickey",
@@ -3412,7 +3421,15 @@
     "michelle-becoming-doc"
    ],
    "icon": "michelle-obama",
-   "twin": null
+   "twin": null,
+   "directness": "calibrated",
+   "move_examples": [
+    "At the team meeting after a cruel remark, leave its author unnamed; say what the team stands for, then move to the next item. One minute."
+   ],
+   "line_examples": [
+    "To your team, after a cruel remark in the meeting: We won't answer that in kind. Here is what we stand for, and we'll hold to it.",
+    "To a peer who wants you to hit back: Let the room compare us. I won't attack; watch what we do next."
+   ]
   },
   {
    "id": "st-obama-2008-clinton",
@@ -3424,7 +3441,7 @@
    ],
    "reach": "mid",
    "verified": true,
-   "moment": "He had just beaten Hillary Clinton in a primary that ran seventeen months. Four weeks after the election he named her Secretary of State — the senior post in his cabinet — and announced it standing next to her, with the rest of his national security team.",
+   "moment": "Weeks earlier he had beaten Hillary Clinton in a primary that ran seventeen months. Four weeks after the election he named her Secretary of State — the senior post in his cabinet — and announced it standing next to her, with the rest of his national security team.",
    "pattern": "",
    "by": "",
    "why": "Chosen because, like you, he had to lead alongside someone who had wanted his job.",
@@ -3437,7 +3454,15 @@
     "obama-hbo"
    ],
    "icon": "barack-obama",
-   "twin": null
+   "twin": null,
+   "directness": "calibrated",
+   "move_examples": [
+    "At the first team meeting, give the colleague who wanted the job the senior seat on the biggest piece of work, and announce it standing beside them. Two minutes."
+   ],
+   "line_examples": [
+    "To the colleague who wanted the job: I want you in the senior seat on this, and I'll say so in front of the team.",
+    "To your team: They were the strongest candidate for this job, and that is why they lead this work. I'm standing beside them as I say it."
+   ]
   },
   {
    "id": "st-obama-2008-more-perfect-union",
@@ -3462,7 +3487,15 @@
     "obama-hbo"
    ],
    "icon": "barack-obama",
-   "twin": null
+   "twin": null,
+   "directness": "direct",
+   "move_examples": [
+    "At the team meeting, say the hardest part of the news yourself, in your own words, before anyone else can frame it. Three minutes."
+   ],
+   "line_examples": [
+    "To your team, before the rumour reaches them: Here is the hard part, in my words, before anyone else tells it.",
+    "To your boss: I'm going to address it in full this week, in my own words. Here is the outline."
+   ]
   },
   {
    "id": "st-stevie-wonder-1971-motown",
@@ -3487,7 +3520,15 @@
     "stevie-ribowsky"
    ],
    "icon": "stevie-wonder",
-   "twin": null
+   "twin": null,
+   "directness": "direct",
+   "move_examples": [
+    "In your next client meeting, bring the finished piece and present it yourself, with your name on the cover. Twenty minutes."
+   ],
+   "line_examples": [
+    "To your manager: This work is mine. I want my name on it when it goes out.",
+    "To the client lead: I'll bring the finished piece to the meeting, and I'll present it myself."
+   ]
   },
   {
    "id": "st-kjohnson-1958-langley",

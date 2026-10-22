@@ -156,15 +156,22 @@
     var names = nodes.slice(-3).map(function (n) { return n.label; }).join(' \u2192 ');
     return { last: last, day: d.lab(st.trail.day), names: (nodes.length > 3 ? '\u2026 ' : '') + names,
       count: (st.trail.total || nodes.length) + ((st.trail.total || nodes.length) === 1 ? ' stop' : ' stops') + (sv ? ', ' + sv + ' saved' : ''),
-      where: (last.kind === 'story' ? 'You were reading ' : last.kind === 'icon' ? 'You were reading about ' : 'You were in the library: ') + last.label + '.' };
+      where: last.kind === 'story' ? 'You were reading ' + last.label + '.' : last.kind === 'icon' ? 'You were reading ' + last.label + '\u2019s life.' : 'You were in the library: ' + last.label + '.' };
   }
   // Where the Library frame returns to when its own pages run out: the word for the Back button and the line
+  // Find and send opens on the member's week: their next situation (or the chosen story's own), far stories aside
+  function sendEntry(st, to, sid) {
+    var lib = B.lib, M = lib && lib.members[to], up = M && M.up19 && lib.sit[M.up19.sit], s = sid && lib && lib.story[window.CLC.resolve(lib, sid)];
+    var key = up ? up.key : 'all';
+    if (s && s.keys.indexOf(key) < 0) key = s.keys[0];
+    return Object.assign({}, st.lib, { to: to || st.lib.to, key: key, reach: 'all', hideFar: true, msg: '' });
+  }
   function libHome(st, lib) {
     if (st.libBack === 'story') {
       var sid = lib && window.CLC.resolve(lib, st.sid), s = sid && lib.story[sid], ic = s && lib.icon[s.icon];
-      return { word: 'Story', to: ic ? ic.name + '\u2019s story' : 'the story' };
+      return { word: ic ? surname(ic.name) : 'Story', to: ic ? ic.name + '\u2019s story' : 'the story' };
     }
-    if (st.libBack === 'hero') { var hi = lib && lib.icon[iconOf[st.hid] || st.hid]; return { word: 'Hero', to: hi ? hi.name : 'your hero' }; }
+    if (st.libBack === 'hero') { var hi = lib && lib.icon[iconOf[st.hid] || st.hid]; return { word: hi ? surname(hi.name) : 'Hero', to: hi ? hi.name : 'your hero' }; }
     var t = { week: 'This week', ask: 'Ask', heroes: 'Heroes', you: 'You' }[st.tab] || 'This week';
     return { word: t, to: t };
   }
@@ -293,8 +300,9 @@
       backIcon: canBack ? 'ph ph-caret-left' : 'ph ph-x',
       backText: depth > 1 ? st.libPrev || 'Back' : canBack ? home.word : '',
       backLabel: depth > 1 ? 'Back to ' + (st.libPrevTo || st.libPrev || 'the page before') : canBack ? 'Back to ' + home.to : 'Close the library',
-      line: depth > 1 ? 'Back takes you to ' + (st.libPrevTo || st.libPrev || 'the page before') : (canBack ? 'Back takes you to ' : 'Close takes you back to ') + home.to,
-      full: libSrc(st.libRoute || '#/', 'member', P).replace('embed=1&', '')
+      title: st.libTitle || 'Library',
+      // Browse opens the library's front page in the frame, where search and the ways in are
+      canBrowse: (st.libRoute || '#/').replace(/\?.*$/, '') !== '#/', browse: function () { S({ libRoute: '#/' }); }
     };
     var openLib = function (route, back) { return function () { S({ overlay: 'library', libRoute: route, libBack: back || null, libDepth: 1, libPrev: '', libPrevTo: '' }); }; };
     if (out.hz) {
@@ -324,11 +332,13 @@
     }
     if (st.overlay === 'story' && st.sid && out.sv) {
       out.sv.explore = openLib('#/story/' + encodeURIComponent(st.sid), 'story');
+      out.sv.exploreShow = st.role === 'coach';   // a member reaches the library from Others who lived this week
       out.sv.exploreLabel = 'Follow this story into the library';
       relatedStory(c, out, st, lib);
     }
     if (st.overlay === 'hero' && st.hid && out.hv) relatedHero(c, out, st, lib);
     if (st.role === 'member' && out.ak && out.ak.confirm) askChoices(c, out, st, lib);
+    if (st.role === 'member' && out.ak && out.ak.answer) askAnswer(c, out, st, lib);
     // You: the member's own ways into the library, each said in one line
     if (out.yu && window.CLN) {
       var mem = lib.members[P], core3 = (st.core || []).map(function (h) { return iconOf[h] || h; }), rows = [];
@@ -349,8 +359,19 @@
         var s1 = d.story[g.sid]; if (!s1 || !s1.verified || (st.checkSeen || []).indexOf(g.sid) >= 0) return;
         notes.push({ icon: 'ph ph-seal-check', text: cf1 + ' checked ' + d.hero[s1.hero].name + '\u2019s story.', cta: 'Read it', go: function () { c.setState({ checkSeen: (c.state.checkSeen || []).concat([g.sid]) }); openStoryHere(c, g.sid); } });
       });
-      if (tw) notes.push({ icon: 'ph ph-path', text: tw.where, cta: 'Pick up where you left off', go: openLib(tw.last.href, null) });
+      // the trail, unless its last page is a story the member has already read here
+      var lastSid = tw && tw.last.kind === 'story' ? window.CLC.resolve(lib, decodeURIComponent(tw.last.href.replace(/^#\/story\//, '').split('?')[0])) : null;
+      if (tw && !(lastSid && (st.opened || []).some(function (x) { return window.CLC.resolve(lib, x) === lastSid; }))) notes.push({ icon: 'ph ph-path', text: tw.where, cta: 'Pick up there', go: openLib(tw.last.href, null) });
       out.wk.notes = notes;
+      // prep: no dead button until it opens, only the day it opens
+      var WD = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], ev = WD.indexOf(String(out.wk.coming || '').split(' ')[0]);
+      out.wk.prepOpen = !out.wk.prepDis;
+      if (out.wk.prepDis) out.wk.prepHint = ev >= 0 ? 'Prep opens ' + WD[(ev + 6) % 7] + '.' : 'Prep opens the day before.';
+      // the story card names the hero once: "From Obama, one of your three", then the place
+      if (out.wk.hasStory && out.wk.ins && /^From one of your three/.test(out.wk.ins.eyebrow) && out.wk.story) {
+        out.wk.ins = Object.assign({}, out.wk.ins, { eyebrow: 'From ' + out.wk.story.short + ', one of your three' });
+        out.wk.story = Object.assign({}, out.wk.story, { eyebrow: out.wk.story.place });
+      }
     }
     stackBack(c, out, st);
 
@@ -398,7 +419,7 @@
       };
     }
     // one name for a draft on the coach's side too
-    var relabel = function (x) { if (x && x.verLabel === DRAFT) x.verLabel = 'Recall draft · check the source'; };
+    var relabel = function (x) { if (x && x.verLabel === DRAFT) x.verLabel = 'Recall draft'; };
     (out.rq && out.rq.rows || []).forEach(function (r) { relabel(r.s); });
     if (out.lib) relabel(out.lib.p);
     // the answer desk: a member's Ask in the coach's thread opens the Library's answer to it, read for that
@@ -415,7 +436,7 @@
     var tab = function (on, go) { return { bg: on ? 'var(--ink)' : 'transparent', fg: on ? 'var(--paper)' : 'var(--ink)', bd: on ? 'var(--ink)' : 'var(--hair)', go: go }; };
     out.lt = {
       explore: tab(st.c === 'CX', function () { S({ c: 'CX' }); }),
-      send: tab(st.c === 'C4', function () { S({ c: 'C4' }); }),
+      send: tab(st.c === 'C4', function () { S({ c: 'C4', lib: sendEntry(st, st.lib.to) }); }),
       line: nStories + ' stories from ' + nLives + ' lives · ' + d.stories.filter(function (s) { return !s.verified && s.origin === 'corpus'; }).length + ' recall drafts waiting for a source check',
       // the coach's Explore walks back through its own pages; Find and send has none
       hasBack: st.c === 'CX' && (st.cxDepth || 1) > 1, backLabel: st.cxPrev || 'Back', backAria: 'Back to ' + (st.cxPrev || 'the page before'),
@@ -436,14 +457,27 @@
       out.lib.heroSegs = [seg('all', 'All')].concat(mine.filter(function (h) { return d.hero[h]; }).map(function (h) { return seg(h, d.hero[h].short); }));
       // for the member it would go to: the stories nearest their three first, each marked with its links
       var to = lib.members[L.to] ? L.to : P, toM = lib.members[to], toThree = to === P && st.core && st.core.length ? st.core.map(function (h) { return iconOf[h] || h; }) : toM ? toM.heroes_icons.core : [];
+      var farN = 0;
       var fil = d.stories.filter(function (s) { return (L.key === 'all' || s.keys.indexOf(L.key) >= 0) && (L.hero === 'all' || s.hero === L.hero) && (L.reach === 'all' || s.reach === L.reach) && (L.ver === 'all' || (L.ver === 'verified') === s.verified); });
       if (toM && window.CLN && fil.length === (out.lib.results || []).length) {
         var hk = to + ':' + toThree.join(','), Hm = hopsCache[hk] || (hopsCache[hk] = window.CLN.hops(lib, to, { three: toThree }));
         var lk = function (s) { var ic = lib.story[s.id] ? lib.story[s.id].icon : null, h = ic && Hm[ic]; return h ? h.links : 9; };
-        var mark = function (n) { return n === 0 ? 'one of the three' : n === 1 ? '1 link' : n < 9 ? n + ' links' : ''; };
-        out.lib.results = out.lib.results.map(function (r, i) { var n = lk(fil[i]); r.reach = r.reach + (mark(n) ? ' \u00b7 ' + mark(n) : ''); return { r: r, n: n, i: i }; })
+        var mark = function (n) { return n === 0 ? 'one of ' + toM.first + '\u2019s three' : ''; };   // nearly every life is one link away, so only the three are marked
+        var hideFar = L.hideFar && L.reach === 'all';
+        out.lib.results = out.lib.results.map(function (r, i) { var n = lk(fil[i]); r.reach = r.reach + (mark(n) ? ' \u00b7 ' + mark(n) : ''); return { r: r, n: n, i: i, far: fil[i].reach === 'far' }; })
+          .filter(function (x) { if (hideFar && x.far) { farN++; return false; } return true; })
           .sort(function (a, b) { return a.n - b.n || a.i - b.i; }).map(function (x) { return x.r; });
       }
+      // far stories wait behind one chip until the coach asks for them
+      if (farN) out.lib.count = out.lib.results.length + (out.lib.results.length === 1 ? ' story' : ' stories') + ' close enough to send this week';
+      out.lib.farChip = farN ? { label: 'Far stories (' + farN + ')', go: function () { S({ lib: Object.assign({}, st.lib, { hideFar: false }) }); } } : null;
+      (out.lib.results || []).forEach(function (r) { if (r.ver === DRAFT) r.ver = 'Recall draft'; });
+      var toM2 = lib.members[L.to] || null;
+      out.lib.toFirst = toM2 ? toM2.first : 'a member';
+      out.lib.askPh = toM2 && toM2.up19 ? 'What is ' + toM2.first + ' facing? ' + toM2.up19.label : 'What is the member facing?';
+      out.lib.ask = st.c4ask || '';
+      out.lib.setAsk = function (e) { S({ c4ask: e.target.value }); };
+      out.lib.askGo = function () { var t = (c.state.c4ask || '').trim(); S({ c: 'CX', cm: L.to, cxRoute: t ? '#/ask?t=' + encodeURIComponent(t) + '&read=1&m=' + encodeURIComponent(L.to) : '#/ask?m=' + encodeURIComponent(L.to) }); };
       var CAP = 120, total = (out.lib.results || []).length;
       if (total > CAP) { out.lib.results = out.lib.results.slice(0, CAP); out.lib.count = total + ' stories · the first ' + CAP + ' shown. Pick a situation or a hero to narrow them.'; }
       var sel = d.story[L.sel] ? L.sel : null;
@@ -549,9 +583,9 @@
         var I = lib.icon[next.o.icon] || {}, why = core.indexOf(next.o.icon) >= 0 ? 'From ' + (I.short || I.name) + ', one of your three' : CLC.reasonFor(lib, s, next.o, { role: 'member', three: core }, {}, oldest).text;
         if (M.age && I.born != null && next.o.year != null && Math.abs((next.o.year - I.born) - M.age) <= 4) why += '. ' + (next.o.year - I.born) + ' that week; you are ' + M.age;
         var co = (lib.coaches[M.coach] || {}).first || 'your coach';
-        groups.push({ label: 'Next, when you want it', items: [row(c, CLC.storyCard(lib, next.o), why + (next.o.verified ? '' : '. Recall draft: ' + co + ' has not checked it yet'))] });
+        groups.push({ label: 'Next, when you want it', items: [row(c, CLC.storyCard(lib, next.o), why + (next.o.verified ? '' : ' \u00b7 Recall draft'))] });
       }
-      groups.push({ label: '', items: [{ title: 'More like this, in the library', why: 'Others who lived this week, and the same field', open: function () { S_(c, { overlay: 'library', libRoute: '#/story/' + encodeURIComponent(s.id) + '?at=others', libBack: 'story', libDepth: 1, libPrev: '', libPrevTo: '' }); } }] });
+      groups.push({ label: '', items: [{ title: 'Others who lived this week', why: 'In the library, each with what sets it apart', open: function () { S_(c, { overlay: 'library', libRoute: '#/story/' + encodeURIComponent(s.id) + '?at=others', libBack: 'story', libDepth: 1, libPrev: '', libPrevTo: '' }); } }] });
     }
     out.sv.rel = groups; out.sv.hasRel = groups.length > 0;
     reachOf(c, out, st, lib, s);
@@ -563,7 +597,12 @@
     var co = ((lib.members[st.p] || {}).coach && lib.coaches[lib.members[st.p].coach]) || {};
     out.sv.draftNote = st.role === 'coach' ? 'Recall draft. Check it against its source before you send it.' : window.CLC.draftLine(co.first);
     // a coach's working note never reaches a member; the citation shows once the story is checked
-    if (st.role !== 'coach') { var src = window.CLC.sourceFor(s, 'member'); out.sv.source = src ? 'Source: ' + src : ''; }
+    if (st.role !== 'coach') {
+      var src = window.CLC.sourceFor(s, 'member'), cau = window.CLC.cautionFor(s, 'member'), M0 = lib.members[st.p] || {};
+      var mine0 = (M0.sits || []).some(function (id) { return lib.sit[id] && s.keys.indexOf(lib.sit[id].key) >= 0; });
+      out.sv.source = src ? 'Source: ' + src : ''; out.sv.caution = cau; out.sv.hasCaution = !!cau;
+      if (out.sv.why) out.sv.why = window.CLC.whyFor({ why: out.sv.why }, 'member', mine0);
+    }
   }
   // How a story from beyond the three reaches them: the strongest chain, at most two links, from one of the
   // member's heroes to the story's life, every link a shared situation and one more reason (lib/net.js).
@@ -579,13 +618,19 @@
     if (!best || !best.r.length) return;
     var H = lib.icon[best.h], X = lib.icon[s.icon], hn = H.short || H.name, ids = [best.h].concat(best.r.map(function (x) { return x.b; }));
     var nm = function (id) { return id === best.h ? hn : lib.icon[id].name; };
-    var lede = best.r.length === 1 ? X.name + ' stands next to your ' + hn + '.' : X.name + ' is two steps from your ' + hn + ', through ' + lib.icon[ids[1]].name + '.';
+    var lede = best.r.length === 1 ? X.name + ' is one step from ' + hn + ', one of your three.' : X.name + ' is two steps from ' + hn + ', one of your three, through ' + lib.icon[ids[1]].name + '.';
+    // each person at the year of their own story in the situation they share with the next
+    var yearIn = function (id, i) {
+      var step = best.r[i] || best.r[i - 1], ks = step && step.tie ? step.tie.shared : [];
+      var y = (lib.byIcon[id] || []).map(function (x) { return lib.story[x]; }).filter(function (x) { return x && x.keys.some(function (k) { return ks.indexOf(k) >= 0; }); }).map(function (x) { return x.year; })[0];
+      return window.CLC.yearLabel(y != null ? y : lib.icon[id].year);
+    };
     out.sv.hasReach = true;
     out.sv.reach = {
       lede: lede,
       people: ids.map(function (id, i) {
         var I = lib.icon[id], last = i === ids.length - 1;
-        return { link: i > 0, n: i, ini: I.ini, name: nm(id), year: window.CLC.yearLabel(I.year),
+        return { link: i > 0, n: i, ini: I.ini, name: nm(id), year: yearIn(id, i),
           bg: i === 0 ? 'var(--mad12)' : last ? 'var(--pru)' : 'var(--pru12)', fg: i === 0 ? 'var(--mad)' : last ? 'var(--paper)' : 'var(--pru)',
           open: function () { openHeroHere(c, appId(id)); } };
       }),
@@ -602,7 +647,9 @@
     (CLQ ? CLQ.situationScores(lib, text, M) : []).forEach(function (x) { sc[x.id] = x.score; });
     var engine = {}; (out.ak.chips || []).forEach(function (ch) { var hit = d.sits.filter(function (x) { return x.chip === ch.label; })[0]; if (hit) engine[hit.id] = ch.pick; else engine.else = ch.pick; });
     var reset = function (f) { return function () { c.setState({ askMore: false }); f(); }; };
-    var pick = function (sid) { return engine[sid] ? reset(engine[sid]) : function () { chooseHere(c, sid); }; };
+    // every situation goes through one rule, the bridge's: what the member already has is left out, and a draft
+    // near their three answers when nothing checked does
+    var pick = function (sid) { return function () { chooseHere(c, sid); }; };
     var line = function (sid) { var x = lib.sit[sid]; return x ? '“' + x.member_line + '”' : d.sit[sid].chip; };
     var byScore = function (a, b) { return (sc[b] || 0) - (sc[a] || 0) || (a < b ? -1 : 1); };
     var mine = (M.sits || []).filter(function (x) { return d.sit[x]; }).sort(byScore);
@@ -620,21 +667,61 @@
   // the engine's own choice, for a situation its three keyword rules never offer: the same rule (verified,
   // in the situation, not declined, inside a hero's scope; the member's three first, then the extended
   // heroes, then the library; near before far; then by id)
+  // The member's answer: a draft says so once and can be sent to the coach to check; how its life reaches the
+  // three is said in words; a checked story the member already holds is named; heroes with no story share a line
+  function askAnswer(c, out, st, lib) {
+    var d = _cpd, A = st.ask || {}, ds = A.story && d.story[A.story], s = ds && lib.story[window.CLC.resolve(lib, A.story)];
+    var co = (lib.coaches[(lib.members[st.p] || {}).coach] || {}).first || 'your coach';
+    out.ak.weekNote = ''; out.ak.reach = ''; out.ak.checkAsk = null; out.ak.draftMark = '';
+    if (A.weekHad && d.story[A.weekHad]) { var w = d.story[A.weekHad]; out.ak.weekNote = 'You already have ' + d.hero[w.hero].name + '’s story from ' + w.place + ' for this. Here is another.'; }
+    if (s && !s.verified) {
+      var was = asksOf(st).some(function (g) { return g.sid === A.story; });
+      out.ak.draftMark = window.CLC.draftLine(co);
+      out.ak.checkAsk = { label: was ? 'Waiting for ' + co + '\u2019s check' : 'Ask ' + co + ' to check it', dis: was, go: function () { askCheck(c, A.story); } };
+    }
+    if (s && window.CLN) {
+      var three = (st.core || []).map(function (h) { return iconOf[h] || h; }), key = A.key || s.keys[0], lt = window.CLN.linksTo(lib, st.p, s.icon, key, { three: three });
+      var nm = function (id) { var I = lib.icon[id]; return I ? I.short || I.name : id; };
+      out.ak.reach = lt.links === 0 ? 'From ' + nm(lt.hero) + ', one of your three.' : lt.links === 1 ? 'One step from ' + nm(lt.hero) + ': ' + (window.CLN.why(lib, lt.steps[0].a, lt.steps[0].b, lt.steps[0].tie)[0] || '').replace(/^Both /, 'both ') : lt.links < 9 ? lt.line : '';
+    }
+    var none = (out.ak.walk || []).filter(function (w) { return w.none && !/using/.test(w.text); }), keep = (out.ak.walk || []).filter(function (w) { return !(w.none && !/using/.test(w.text)); });
+    if (none.length) {
+      var names = none.map(function (w) { return w.text.split(' isn')[0]; }).map(function (sh) { var h = d.heroes.filter(function (x) { return x.short === sh; })[0]; return h ? h.name : sh; });
+      keep.push({ has: false, none: true, text: (names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1] + ' have' : names[0] + ' has') + ' no story for this yet.' });
+    }
+    out.ak.walk = keep;
+  }
+  // what a member already has: each week's pairing, the stories a coach sent them, and what they declined
+  function hasAlready(st, lib) {
+    var P = st.p, d = _cpd, out = window.CLQ ? window.CLQ.sentTo(lib, P).map(function (x) { return window.CLC.resolve(lib, x); }) : [];
+    (st.msgs && st.msgs[P] || []).forEach(function (m) { if (m.from === 'coach' && m.kind === 'story' && m.story) out.push(m.story); });
+    return out.concat(st.declined || []);
+  }
   function chooseHere(c, sid) {
     var d = _cpd, st = c.state, k = d.clock[st.clock] || d.clock[0], key = d.sit[sid].key;
-    c.setState({ ask: Object.assign({}, st.ask, { stage: 'loading', key: key }), askMore: false });
+    c.setState({ ask: Object.assign({}, st.ask, { stage: 'loading', key: key, draft: false, weekHad: null }), askMore: false });
     setTimeout(function () {
-      var s2 = c.state, A = s2.ask, core = s2.core || [], ext = (s2.extended || []).map(function (x) { return x.hero; }), scopes = s2.scopes || {}, declined = s2.declined || [];
+      var s2 = c.state, A = s2.ask, core = s2.core || [], ext = (s2.extended || []).map(function (x) { return x.hero; }), scopes = s2.scopes || {}, lib = B.lib, had = hasAlready(s2, lib);
       var tier = function (h) { return core.indexOf(h) >= 0 ? 0 : ext.indexOf(h) >= 0 ? 1 : 2; };
-      var ok = d.stories.filter(function (x) { return x.keys.indexOf(key) >= 0 && x.verified && declined.indexOf(x.id) < 0 && !(scopes[x.hero] && scopes[x.hero].indexOf(key) < 0); })
-        .map(function (x) { return { s: x, tier: tier(x.hero) }; });
+      var inKey = d.stories.filter(function (x) { return x.keys.indexOf(key) >= 0 && x.verified && !(scopes[x.hero] && scopes[x.hero].indexOf(key) < 0); });
+      var ok = inKey.filter(function (x) { return had.indexOf(x.id) < 0; }).map(function (x) { return { s: x, tier: tier(x.hero) }; });
       var near = ok.filter(function (o) { return o.s.reach !== 'far'; }), pool = (near.length ? near : ok).sort(function (a, b) { return a.tier - b.tier || (a.s.id < b.s.id ? -1 : 1); });
       var p = pool[0], at = d.lab(k.day) + ', ' + k.hm;
+      // the member already holds the checked story for this: say so, and offer the draft nearest their three
+      var heldIt = inKey.filter(function (x) { return had.indexOf(x.id) >= 0 && (s2.declined || []).indexOf(x.id) < 0; })[0];
+      if (!p && lib && window.CLN) {
+        var three = core.map(function (h) { return iconOf[h] || h; }), f = window.CLN.fillSlot(lib, s2.p, key, { three: three, exclude: had });
+        if (f.pick && d.story[f.pick.story.id]) {
+          var dr = f.pick.story.id;
+          return c.setState({ ask: Object.assign({}, A, { stage: 'answer', story: dr, tier: f.pick.links === 0 ? 0 : 2, draft: true, weekHad: heldIt ? heldIt.id : null }),
+            askHist: s2.askHist.concat([{ text: A.text, key: key, story: dr, day: k.day }]) });
+        }
+      }
       if (!p) {
         var mm = Object.assign({}, s2.msgs); mm[s2.p] = s2.msgs[s2.p].concat([{ id: 'a' + Date.now(), from: 'member', kind: 'ask', body: A.text, chip: d.sit[sid].chip, day: k.day, at: at, live: true }]);
         return c.setState({ ask: Object.assign({}, A, { stage: 'else' }), msgs: mm, askHist: s2.askHist.concat([{ text: A.text, key: key, story: null, day: k.day }]) });
       }
-      c.setState({ ask: Object.assign({}, A, { stage: 'answer', story: p.s.id, tier: p.tier }), askHist: s2.askHist.concat([{ text: A.text, key: key, story: p.s.id, day: k.day }]) });
+      c.setState({ ask: Object.assign({}, A, { stage: 'answer', story: p.s.id, tier: p.tier, draft: false, weekHad: heldIt ? heldIt.id : null }), askHist: s2.askHist.concat([{ text: A.text, key: key, story: p.s.id, day: k.day }]) });
     }, 1200);
   }
   function S_(c, p) { c.setState(p); }
@@ -650,29 +737,33 @@
     out.hv.lib = groups; out.hv.hasLib = groups.length > 0;
     if (theirs.length) out.hv.moreInLib = false;
   }
+  // the name a Back button carries: the surname, without Jr. or III ("Kagan", "King"); one name stays whole
+  function surname(name) { var w = String(name).replace(/,? (Jr\.?|Sr\.?|II|III|IV)$/, '').split(' '); return w[w.length - 1]; }
   function CLG_short(name) { var w = String(name).split(' '); return w.length > 2 && !/^(de|van|von)$/i.test(w[w.length - 2]) ? w[0] + ' ' + w[w.length - 1] : name; }
 
   // ---------- 4 · messages from the Library frame ----------
+  var SAVED_TOAST = 'Saved. It\u2019s on You.';
   window.addEventListener('message', function (e) {
     if (e.origin !== location.origin || !e.data || typeof e.data.type !== 'string' || e.data.type.indexOf('cl:') !== 0) return;
     var c = B.c, m = e.data; if (!c || !_cpd) return;
     var st = c.state, d = _cpd, sid = m.story && B.lib ? window.CLC.resolve(B.lib, m.story) : m.story;
     if (m.type === 'cl:verified' && sid) { markVerified(sid, m.entry); c.setState({ _ledger: Date.now() }); }
     if (m.type === 'cl:unverified' && sid) { markUnverified(sid); c.setState({ _ledger: Date.now() }); }
-    if (m.type === 'cl:send' && sid && d.story[sid]) c.setState({ c: 'C4', lib: Object.assign({}, st.lib, { sel: sid, key: 'all', hero: 'all', reach: 'all', ver: 'all', to: m.member && d.members[m.member] ? m.member : st.lib.to, msg: '' }) });
+    if (m.type === 'cl:send' && sid && d.story[sid]) c.setState({ c: 'C4', lib: Object.assign({}, sendEntry(st, m.member && d.members[m.member] ? m.member : st.lib.to, sid), { sel: sid, hero: 'all', reach: 'all', ver: 'all', to: m.member && d.members[m.member] ? m.member : st.lib.to, msg: '' }) });
     // one saved list, the app's: the frame says on or off and is told the list back
     var tell = function (list) { if (e.source) e.source.postMessage({ type: 'cl:state', saved: list, asked: asksOf(c.state).map(function (g) { return g.sid; }) }, location.origin); };
     if (m.type === 'cl:hello') tell(st.saved || []);
     if (m.type === 'cl:save' && sid && d.story[sid]) {
       var has = st.saved.indexOf(sid) >= 0, on = typeof m.on === 'boolean' ? m.on : !has;
       var next = on ? (has ? st.saved : st.saved.concat([sid])) : st.saved.filter(function (x) { return x !== sid; });
-      c.setState({ saved: next }); tell(next);
+      c.setState({ saved: next, toast: on ? SAVED_TOAST : null }); tell(next);
+      if (on) setTimeout(function () { if (c.state.toast === SAVED_TOAST) c.setState({ toast: null }); }, 2800);
     }
     if (m.type === 'cl:ask' && sid && d.story[sid]) c.setState({ overlay: 'thread', attach: sid });
     if (m.type === 'cl:check' && sid && d.story[sid]) { askCheck(c, sid); tell(c.state.saved || []); }
     if (m.type === 'cl:route' && typeof m.route === 'string' && m.route.charAt(0) === '#') {
-      var hop = { depth: Math.max(1, m.depth | 0), prev: String(m.prev || '').slice(0, 24), to: String(m.prevTo || '').slice(0, 80) };
-      c.setState(m.as === 'coach' ? { cxRoute: m.route, cxDepth: hop.depth, cxPrev: hop.prev } : { libRoute: m.route, libDepth: hop.depth, libPrev: hop.prev, libPrevTo: hop.to });
+      var hop = { depth: Math.max(1, m.depth | 0), prev: String(m.prev || '').slice(0, 24), to: String(m.prevTo || '').slice(0, 80), title: String(m.title || '').slice(0, 120) };
+      c.setState(m.as === 'coach' ? { cxRoute: m.route, cxDepth: hop.depth, cxPrev: hop.prev } : { libRoute: m.route, libDepth: hop.depth, libPrev: hop.prev, libPrevTo: hop.to, libTitle: hop.title });
     }
     // the trail read in the frame comes home: You can pick it up where it stopped
     if (m.type === 'cl:trail' && Array.isArray(m.nodes) && m.nodes.length) {
