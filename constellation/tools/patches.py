@@ -10,6 +10,7 @@ Idempotent: a patch already present (its data-bridge mark is in the page) is ski
 What each patch adds (the behaviour behind it is in js/constellation-bridge.js):
   scripts          lib/core.js and the bridge, in the real <head>, ahead of the export's scripts
   heroes-library   a Library card on the member's Heroes tab
+  you-library      on You, In the library: at your age, who stands near your three, and the trails saved
   heroes-near      under it: Who stands near your three, a line on where the three stand, opening the picture
   hero-library     "Explore <name> in the library" on a hero page
   story-library    "Follow this story into the library" on a story
@@ -175,6 +176,11 @@ PATCHES = [
      '<div style="flex:1;min-width:0"><div style="font:400 17px/1.3 var(--serif)">Who stands near your three</div><div style="font:400 14px/1.45 var(--sans);color:var(--mute);margin-top:3px">{{ hz.nearLine }}</div></div>'
      '<i class="ph ph-caret-right" style="color:var(--faint);flex:none;font-size:18px"></i></button>\n                      '),
     ("mute-token", '--mute:#6B6F78;', "replace", '--mute:#5E626B;'),
+    ("you-library", '<div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:26px 0 4px">Your moves</div>', "before",
+     '<div data-bridge="you-library" style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:26px 0 4px">In the library</div>'
+     '<sc-for list="{{ yu.lib }}" as="r"><button sc-camel-on-click="{{ r.go }}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;min-height:56px;padding:10px 0;border:0;border-top:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer" style-hover="color:var(--pru)">'
+     '<i class="{{ r.icon }}" style="font-size:20px;color:var(--faint);flex:none"></i><span style="flex:1;min-width:0"><span style="display:block;font:400 17px/1.3 var(--serif)">{{ r.title }}</span><span style="display:block;font:400 13px/1.45 var(--sans);color:var(--mute);margin-top:2px">{{ r.line }}</span></span>'
+     '<i class="ph ph-caret-right" style="color:var(--faint);flex:none;font-size:16px"></i></button></sc-for>\n                    '),
 ]
 
 # Sizes as the export writes them inside inline `font:` shorthands, and what they become.

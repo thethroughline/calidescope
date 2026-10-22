@@ -286,6 +286,15 @@
     }
     if (st.overlay === 'hero' && st.hid && out.hv) relatedHero(c, out, st, lib);
     if (st.role === 'member' && out.ak && out.ak.confirm) askChoices(c, out, st, lib);
+    // You: the member's own ways into the library, each said in one line
+    if (out.yu && window.CLN) {
+      var mem = lib.members[P], core3 = (st.core || []).map(function (h) { return iconOf[h] || h; }), rows = [];
+      var A = mem && mem.age ? window.CLN.atAge(lib, P, { three: core3 }) : null;
+      if (A) rows.push({ icon: 'ph ph-hourglass-medium', title: 'At your age', line: A.near.length + ' stories in your situations happened to someone within three years of ' + A.age + '.', go: openLib('#/age', null) });
+      rows.push({ icon: 'ph ph-circles-three', title: 'Who stands near your three', line: out.hz && out.hz.nearLine ? out.hz.nearLine : 'Your situations, and where your heroes stand in them.', go: openLib('#/near', null) });
+      rows.push({ icon: 'ph ph-books', title: 'The whole library', line: nStories + ' stories from ' + nLives + ' lives.', go: openLib('#/', null) });
+      out.yu.lib = rows;
+    }
     stackBack(c, out, st);
 
     // coach: Library opens on Explore; the send screen is one tab along

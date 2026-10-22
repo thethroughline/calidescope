@@ -224,6 +224,24 @@
     return out;
   }
 
+  // ---------- your age, their age ----------
+  // Every story in a member's situations, placed at the age its person was then (story year minus birth year),
+  // beside the member's own age. Newly promoted leaders measure themselves by age; this ties the member to
+  // lives through something true of both. o.three: the member's heroes as the app holds them now.
+  function atAge(lib, mid, o) {
+    o = o || {}; var m = lib.members[mid]; if (!m || !m.age) return null;
+    var keys = (m.sits || []).map(function (c) { return lib.sit[c] && lib.sit[c].key; }).filter(Boolean);
+    var hs = o.three && o.three.length ? o.three : three(lib, mid), seen = {}, out = [];
+    keys.forEach(function (k) { (lib.byKey[k] || []).forEach(function (sid) {
+      if (seen[sid]) return; seen[sid] = 1;
+      var s = lib.story[sid], ic = lib.icon[s.icon]; if (!ic || ic.born == null || s.year == null) return;
+      var age = s.year - ic.born; if (age < 12 || age > 95) return;
+      out.push({ story: s, age: age, hero: hs.indexOf(s.icon) >= 0, gap: Math.abs(age - m.age), sit: lib.sitByKey[s.keys.filter(function (x) { return keys.indexOf(x) >= 0; })[0]].id });
+    }); });
+    out.sort(function (a, b) { return a.gap - b.gap || b.hero - a.hero || (a.story.id < b.story.id ? -1 : 1); });
+    return { member: m, age: m.age, stories: out, near: out.filter(function (x) { return x.gap <= (o.span || 3); }) };
+  }
+
   // ---------- the situation web ----------
   function web(lib) {
     var pairs = {};
@@ -239,5 +257,5 @@
 
   return { BOTH: BOTH, STANCE: STANCE, FIELD: FIELD, NEAR_YEARS: NEAR_YEARS, both: both, apart: apart, world: world,
     tie: tie, why: why, short: short, graph: graph, kindred: kindred, route: route, routes: routes, bridge: bridge,
-    near: near, nearWhy: nearWhy, affinity: affinity, sendable: sendable, web: web, three: three };
+    near: near, nearWhy: nearWhy, affinity: affinity, sendable: sendable, web: web, three: three, atAge: atAge };
 }));

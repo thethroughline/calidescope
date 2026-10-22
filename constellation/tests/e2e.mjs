@@ -41,7 +41,9 @@ const browser = await chromium.launch();
 function watch(p, tag) {
   p.on('console', (m) => { if (m.type() === 'error') errs.push(`${tag}: ${m.text()}`); });
   p.on('pageerror', (e) => errs.push(`${tag}: ${e.message}`));
-  p.on('requestfailed', (r) => errs.push(`${tag}: failed ${r.url()}`));
+  // a load cut short because its frame closed is not a fault; anything the server refuses is
+  p.on('requestfailed', (r) => { if (!/ERR_ABORTED/.test((r.failure() || {}).errorText || '')) errs.push(`${tag}: failed ${r.url()} ${(r.failure() || {}).errorText}`); });
+  p.on('response', (r) => { if (r.status() >= 400 && !/\/api\/constellation\/(path\?from=nobody|nope)/.test(r.url())) errs.push(`${tag}: ${r.status()} ${r.url()}`); });
 }
 
 try {
@@ -111,6 +113,13 @@ try {
   check(more.length >= 5 && !more.some((x) => /my old job/.test(x)), 'None of these opens the other situations');
   await p.locator('[data-screen-label="M8 Ask"] button').first().click(); await p.waitForTimeout(1700);
   check(['answer', 'else'].includes(await p.evaluate(() => CLB.c.state.ask.stage)), 'any situation chosen gets an answer or goes to the coach');
+  await p.evaluate(() => CLB.c.setState({ overlay: null, m: 'app', tab: 'you' })); await p.waitForTimeout(300);
+  const you = await p.locator('[data-screen-label="M11 You"]').innerText();
+  check(/At your age/.test(you) && /Who stands near your three/.test(you), 'You leads into the library: at your age, and who stands near the three');
+  await p.locator('[data-screen-label="M11 You"] button', { hasText: 'At your age' }).click();
+  await p.frameLocator('iframe[title="The Constellation library"]').locator('#agestrip svg').waitFor();
+  check(true, 'At your age opens inside the app');
+  await p.evaluate(() => CLB.c.setState({ overlay: null }));
   await p.evaluate(() => CLB.c.setState({ overlay: 'library', libRoute: '#/icon/billie-jean-king', libBack: null, sstack: [] }));
   const lf = p.frameLocator('iframe[title="The Constellation library"]');
   await lf.locator('[data-act="add-hero"]').click(); await p.waitForTimeout(300);
@@ -188,7 +197,7 @@ try {
     const ctx = await browser.newContext({ viewport: { width: w, height: h }, colorScheme: scheme });
     const q = await ctx.newPage(); watch(q, `library ${as} ${w}`);
     await q.goto(`${BASE}/constellation/library?as=${as}#/`); await q.waitForSelector('#map svg');
-    const all = routes.concat(as === 'coach' ? ['#/members', '#/member/sarah', '#/member/tom', '#/checks', '#/situation/C2', '#/ask', '#/ask?m=tom', '#/near?m=maya', '#/near?m=tom', '#/gaps', '#/ask?sit=D4&sex=f&m=tom'] : ['#/member/sarah', '#/nowhere', '#/ask', '#/ask?sit=A4&dir=quiet', '#/cmp?a=st-bjk-1973-riggs&b=s-A2-barack-obama']);
+    const all = routes.concat(as === 'coach' ? ['#/members', '#/member/sarah', '#/member/tom', '#/checks', '#/situation/C2', '#/ask', '#/ask?m=tom', '#/near?m=maya', '#/near?m=tom', '#/age?m=maya', '#/age?m=tom', '#/gaps', '#/ask?sit=D4&sex=f&m=tom'] : ['#/member/sarah', '#/nowhere', '#/ask', '#/ask?sit=A4&dir=quiet', '#/cmp?a=st-bjk-1973-riggs&b=s-A2-barack-obama']);
     let over = [], blank = [];
     for (const r of all) {
       await q.evaluate((r) => { location.hash = r; }, r); await q.waitForTimeout(r.startsWith('#/member/') ? 600 : 120);
@@ -226,6 +235,13 @@ try {
         check(await q.locator('.list.shelf li').count() > 20 && /For Sarah this week/.test(await q.locator('main').innerText()), 'the shelf of coach questions counts every answer, Sarah’s week first');
         await q.evaluate(() => { location.hash = '#/near?m=sarah'; }); await q.waitForSelector('#venn svg circle.n-set');
         check(await q.locator('#venn circle.n-set').count() === 3 && /Billie Jean King/.test(await q.locator('.n-sent').innerText()), 'Sarah’s three situations draw as circles, and the bridge across all three is named');
+      }
+      await q.evaluate(() => { location.hash = '#/'; }); await q.waitForSelector('#map svg .hit');
+      await q.locator('#map svg .hit[data-id="billie-jean-king"]').dispatchEvent('mousemove');
+      check(await q.locator('#map .thread').count() >= 8 && /threads from/.test(await q.locator('#mapcap').innerText()), 'a star on the map draws threads to its kin');
+      if (as === 'coach') {
+        await q.evaluate(() => { location.hash = '#/age?m=sarah'; }); await q.waitForSelector('#agestrip svg');
+        check(await q.locator('#agestrip .agedot').count() > 40 && /within three years of 41/.test(await q.locator('main .lede').innerText()), 'At Sarah’s age places her situations’ stories by age, the nearest named');
       }
       await q.evaluate(() => { location.hash = '#/icon/abraham-lincoln'; }); await q.waitForSelector('#spine li[data-id]');
       check(await q.locator('#kfig a.kn').count() >= 6 && await q.locator('#spine li[data-id]').count() >= 6 && /Both became the boss/.test(await q.locator('#spine').innerText()), 'a life shows its kindred across time, each tie said in words');

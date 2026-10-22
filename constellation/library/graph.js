@@ -15,6 +15,7 @@
      CLG.venn(host, lib, near, o)       a member's situations as overlapping circles, their three where they stand
      CLG.kinTime(host, lib, me, kin, bands)   kindred across time: a band per shared situation, years across
      CLG.ladder(host, lib, pairs, o)    the situations as rows, arcs between those the same lives lived
+     CLG.ageStrip(host, lib, atAge, o)  stories by the age their person was then, beside the member's own age
 
    o.fs is the font size in drawing units that renders at 13px on screen (the caller measures). */
 (function () {
@@ -354,5 +355,53 @@
     if (o.open) { var ob = rows.querySelector('li[data-id="' + o.open + '"] button'); if (ob) ob.click(); }
   }
 
-  window.CLG = { ego: ego, storyHood: storyHood, web: web, bind: bind, shortName: shortName, venn: venn, kinTime: kinTime, ladder: ladder };
+  // ---------- your age, their age (CLN.atAge) ----------
+  // One axis, age at the moment, 15 to 80. The member's age is a madder line; every story in their situations
+  // is a dot at the age its person was then, the three in madder; within three years, the dots are named.
+  function ageStrip(host, lib, A, o) {
+    o = o || {}; var who = o.who || 'You';
+    var paint = function () {
+      var W = host.clientWidth; if (!W) return;
+      var L = 14, R = 14, a0 = 15, a1 = 80, X = function (a) { return L + (W - L - R) * (Math.max(a0, Math.min(a1, a)) - a0) / (a1 - a0); };
+      // the dots: a beeswarm on one line, each in the first lane where it clears its neighbours
+      var lanes = [], placed = [];
+      A.stories.slice().sort(function (p, q) { return p.age - q.age || (q.hero - p.hero); }).forEach(function (x) {
+        var px = X(x.age), j = 0; while (lanes[j] && lanes[j].some(function (v) { return Math.abs(v - px) < 8; })) j++;
+        (lanes[j] = lanes[j] || []).push(px); placed.push({ x: x, px: px, lane: j });
+      });
+      var gap = 9, half = Math.ceil((Math.max(1, lanes.length) - 1) / 2), ROWS = 3, RH = 17;
+      var top = 34, yc = top + ROWS * RH + 12 + half * gap, below = yc + (half + 1) * gap + 18, H = below + ROWS * RH + 34;
+      var ly = function (j) { return yc + Math.ceil(j / 2) * (j % 2 ? 1 : -1) * gap; };
+      var s = '', mx = X(A.age), boxes = [], font = '400 13px "IBM Plex Sans", system-ui, sans-serif';
+      [20, 30, 40, 50, 60, 70, 80].forEach(function (t) { s += '<line class="ktick" x1="' + f1(X(t)) + '" x2="' + f1(X(t)) + '" y1="' + top + '" y2="' + (H - 26) + '"/><text class="t-mute" x="' + f1(X(t)) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="13">' + t + '</text>'; });
+      s += '<rect class="agenear" x="' + f1(X(A.age - 3)) + '" y="' + top + '" width="' + f1(X(A.age + 3) - X(A.age - 3)) + '" height="' + (H - 26 - top) + '" rx="6"/>';
+      var me = who + ', ' + A.age, mw = measure(me, '500 14px "IBM Plex Sans", system-ui, sans-serif'), mcx = Math.min(W - mw / 2 - 4, Math.max(mw / 2 + 4, mx));
+      s += '<line class="ageme" x1="' + f1(mx) + '" x2="' + f1(mx) + '" y1="' + (top - 8) + '" y2="' + (H - 26) + '"/><text class="t-mad" x="' + f1(mcx) + '" y="' + (top - 14) + '" text-anchor="middle" font-size="14" font-weight="500">' + esc(me) + '</text>';
+      var dots = '';
+      placed.forEach(function (p) {
+        p.y = ly(p.lane); var x = p.x, nm = lib.icon[x.story.icon].name;
+        dots += '<a class="agedot' + (x.hero ? ' hero' : '') + '" href="#/story/' + esc(x.story.id) + '" aria-label="' + esc(nm + ', about ' + x.age + ' then, ' + x.sit) + '"><title>' + esc(nm + ', about ' + x.age + '. ' + (x.story.place || '')) + '</title><circle cx="' + f1(p.px) + '" cy="' + f1(p.y) + '" r="12" fill="transparent"/><circle class="d" cx="' + f1(p.px) + '" cy="' + f1(p.y) + '" r="' + (x.hero ? 5 : 3.6) + '"/></a>';
+      });
+      // names for the stories within three years: rows above and below the dots, nearest rows first, never overlapping
+      var rows = [];
+      for (var r = 0; r < ROWS; r++) { rows.push(yc - (half + 1) * gap - 10 - r * RH); rows.push(below + r * RH); }
+      var named = {};
+      placed.filter(function (p) { return p.x.gap <= 3 || p.x.hero; }).sort(function (a, b) { return b.x.hero - a.x.hero || a.x.gap - b.x.gap; }).slice(0, 14).forEach(function (p) {
+        var nm = shortName(lib.icon[p.x.story.icon].name) + ' ' + p.x.age, w = measure(nm, font);
+        if (named[nm]) return; named[nm] = 1;
+        for (var i = 0; i < rows.length; i++) {
+          var yy = rows[i], x0 = Math.min(W - w - 2, Math.max(2, p.px - w / 2)), bx = { x0: x0 - 3, x1: x0 + w + 3, y0: yy - 12, y1: yy + 3 };
+          if (boxes.some(function (o2) { return bx.x0 < o2.x1 && bx.x1 > o2.x0 && bx.y0 < o2.y1 && bx.y1 > o2.y0; })) continue;
+          boxes.push(bx);
+          var up = yy < yc;
+          s += '<line class="agelead" x1="' + f1(p.px) + '" x2="' + f1(p.px) + '" y1="' + f1(up ? yy + 4 : yy - 13) + '" y2="' + f1(p.y + (up ? -5 : 5)) + '"/><text class="agename' + (p.x.hero ? ' t-mad' : '') + '" x="' + f1(x0) + '" y="' + f1(yy) + '" font-size="13">' + esc(nm) + '</text>';
+          break;
+        }
+      });
+      host.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" role="img" aria-label="' + esc(A.stories.length + ' stories placed by the age of their person then, from 15 to 80; ' + who + ' at ' + A.age + '. The list below names the nearest.') + '">' + s + dots + '</svg>';
+    };
+    paint(); host._paint = paint;
+  }
+
+  window.CLG = { ego: ego, storyHood: storyHood, web: web, bind: bind, shortName: shortName, venn: venn, kinTime: kinTime, ladder: ladder, ageStrip: ageStrip };
 })();

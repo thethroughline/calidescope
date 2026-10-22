@@ -140,7 +140,7 @@
 
   // ---------- routing ----------
   var R = { '': home, icon: iconPage, story: storyPage, situation: sitPage, situations: sitsPage, people: peoplePage, era: eraPage, eras: erasPage,
-    field: fieldPage, stance: stancePage, search: searchPage, path: pathPage, near: nearPage, ask: askPage, questions: askPage, cmp: cmpPage, gaps: gapsPage, member: memberPage, members: membersPage, checks: checksPage, saved: savedPage };
+    field: fieldPage, stance: stancePage, search: searchPage, path: pathPage, near: nearPage, age: agePage, ask: askPage, questions: askPage, cmp: cmpPage, gaps: gapsPage, member: memberPage, members: membersPage, checks: checksPage, saved: savedPage };
   var cur = '';
   function route(o) {
     if (!lib) return;
@@ -331,6 +331,7 @@
       if (mine[i.id]) s += '<circle class="ring" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + (r + 3.5).toFixed(1) + '"/>';
       if (mapOpts.focus === i.id) s += '<circle class="hl" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + (r + 5).toFixed(1) + '"/>';
     });
+    s += '<g class="threads" aria-hidden="true"></g>';
     lib.icons.forEach(function (i) { var p = pos[i.id]; if (p) s += '<circle class="hit" data-id="' + esc(i.id) + '" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="7"/>'; });
     s += '</svg>';
     host.classList.toggle('lit', !!key);
@@ -349,13 +350,37 @@
     var sc = host.querySelector('.map-scroll');
     if (cap && sc.scrollWidth > sc.clientWidth + 4 && !cap.querySelector('.swipe')) cap.insertAdjacentHTML('afterbegin', '<span class="swipe">Swipe the map sideways to move through time. </span>');
     var tip = document.getElementById('tip'), svg = host.querySelector('svg');
+    // threads: a life's kin (lib/net.js) drawn across the map, bowing upwards, thicker for three reasons or more;
+    // the rest of the sky dims so the shape of the kinship shows: it leaps fields and centuries
+    var thrOn = null, capText = cap ? cap.innerHTML : '';
+    var threads = function (id) {
+      var g = svg.querySelector('g.threads'); if (thrOn === id) return; thrOn = id;
+      host.classList.toggle('threading', !!id);
+      if (!id) { g.innerHTML = ''; if (cap) cap.innerHTML = capText; return; }
+      var me0 = pos[id], kin = CLN.kindred(lib, id, 12).filter(function (k) { return pos[k.id]; }), t = '', boxes = [], w = function (txt) { return txt.length * fs * 0.56; };
+      boxes.push({ x0: me0.x - 6, x1: me0.x + 6, y0: me0.y - 6, y1: me0.y + 6 });
+      kin.forEach(function (k) {
+        var q = pos[k.id], cx = (me0.x + q.x) / 2, cy = Math.min(me0.y, q.y) - 18 - Math.abs(me0.x - q.x) * 0.12, strong = k.tie.shared.length > 1 || k.tie.reasons.length >= 2;
+        t += '<path class="thread' + (strong ? ' strong' : '') + '" d="M' + me0.x.toFixed(1) + ' ' + me0.y.toFixed(1) + ' Q' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ' ' + q.x.toFixed(1) + ' ' + q.y.toFixed(1) + '"/>';
+      });
+      kin.concat([{ id: id, me: true }]).forEach(function (k) {
+        var q = pos[k.id], nm = k.me ? lib.icon[id].name : CLG.shortName(lib.icon[k.id].name), ww = w(nm), hh = fs * 1.2, spots = [[q.x + 6, q.y + fs * 0.35, 'start'], [q.x - 6, q.y + fs * 0.35, 'end'], [q.x, q.y - 7, 'middle'], [q.x, q.y + fs + 5, 'middle']];
+        var ok = spots.filter(function (sp) { var x0 = sp[2] === 'start' ? sp[0] : sp[2] === 'end' ? sp[0] - ww : sp[0] - ww / 2, b = { x0: x0, x1: x0 + ww, y0: sp[1] - hh, y1: sp[1] + 2 }; return b.x0 > 0 && b.x1 < MW && !boxes.some(function (o) { return b.x0 < o.x1 && b.x1 > o.x0 && b.y0 < o.y1 && b.y1 > o.y0; }); })[0];
+        if (!ok) return;
+        var x0 = ok[2] === 'start' ? ok[0] : ok[2] === 'end' ? ok[0] - ww : ok[0] - ww / 2; boxes.push({ x0: x0, x1: x0 + ww, y0: ok[1] - hh, y1: ok[1] + 2 });
+        t += '<circle class="kin' + (k.me ? ' me' : '') + '" cx="' + q.x.toFixed(1) + '" cy="' + q.y.toFixed(1) + '" r="' + (k.me ? 4.5 : 3.6) + '"/><text class="kinlabel' + (k.me ? ' me' : '') + '" x="' + ok[0].toFixed(1) + '" y="' + ok[1].toFixed(1) + '" text-anchor="' + ok[2] + '" font-size="' + fs + '">' + esc(nm) + '</text>';
+      });
+      g.innerHTML = t;
+      if (cap) cap.innerHTML = n(kin.length, 'thread', 'threads') + ' from <b>' + esc(lib.icon[id].name) + '</b> to the lives closest to them, each sharing a situation and one more thing. <a href="' + H.icon(id) + '">Open ' + esc(CLG.shortName(lib.icon[id].name)) + '</a>';
+    };
     var show = function (e) {
-      var c = e.target.closest('.hit'); if (!c) { tip.hidden = true; return; }
+      var c = e.target.closest('.hit'); if (!c) { tip.hidden = true; threads(null); return; }
+      if (lib.icon[c.dataset.id].stories.length) threads(c.dataset.id);
       var i = lib.icon[c.dataset.id], b = host.getBoundingClientRect(), cb = c.getBoundingClientRect();
       tip.innerHTML = '<b>' + esc(i.name) + '</b>' + esc([yl(i.year), i.domainLabel, i.stories.length ? n(i.stories.length, 'story', 'stories') : 'no story yet'].filter(Boolean).join(' · '));
       tip.style.left = (cb.left + cb.width / 2 - b.left) + 'px'; tip.style.top = (cb.top - b.top) + 'px'; tip.hidden = false;
     };
-    svg.addEventListener('mousemove', show); svg.addEventListener('mouseleave', function () { tip.hidden = true; });
+    svg.addEventListener('mousemove', show); svg.addEventListener('mouseleave', function () { tip.hidden = true; threads(null); });
     var armed = null;
     svg.addEventListener('click', function (e) {
       var c = e.target.closest('.hit'); if (!c) return;
@@ -373,7 +398,7 @@
       var three = me.core.map(function (id) { return CLC.iconCard(lib, lib.icon[id]); });
       h += sec('Start from your three', '<div class="grid people">' + three.map(personCard).join('') + '</div>' +
         '<div class="row" style="margin-top:16px">' + me.sits.map(function (c) { return lib.sit[c] ? sitChip(lib.sit[c]) : ''; }).join('') + '</div>',
-        '<div class="row"><a class="btn sm" href="#/near">Who stands near them</a><a class="btn sm" href="' + H.member(me.id) + '">Reading for you</a></div>');
+        '<div class="row"><a class="btn sm" href="#/near">Who stands near them</a>' + (lib.members[me.id].age ? '<a class="btn sm" href="#/age">At your age</a>' : '') + '<a class="btn sm" href="' + H.member(me.id) + '">Reading for you</a></div>');
     }
     if (AS === 'coach') {
       h += sec('Prep for a member', '<div class="grid">' + lib.order.map(function (id) { return memberCard(id); }).join('') + '</div>', '<div class="row"><a class="btn sm" href="#/ask">Questions</a><a class="btn sm" href="#/checks">Source checks</a></div>');
@@ -825,6 +850,23 @@
     return { title: from && to ? 'From ' + from.name + ' to ' + to.name : 'Connect two lives', html: h, node: from && to ? { k: 'path:' + from.id + ':' + to.id, label: CLG.shortName(from.name) + ' to ' + CLG.shortName(to.name), href: '#/path?from=' + enc(from.id) + '&to=' + enc(to.id) } : null };
   }
 
+  // Your age, their age: who stood in the member's situations at about the member's age.
+  function agePage(id, qs) {
+    var mid = AS === 'member' && me ? me.id : AS === 'coach' ? qs.get('m') || MID : null;
+    if (!mid || !lib.members[mid]) return missing();
+    var m = lib.members[mid], coach = AS === 'coach', A = CLN.atAge(lib, mid, { three: AS === 'member' && me ? me.core : null });
+    var title = coach ? 'At ' + m.first + '’s age' : 'At your age';
+    if (!A) return { title: title, html: '<h1>' + esc(title) + '</h1><p class="lede">' + esc(m.first) + ' has not given a birth year, so there is no age to stand beside. A coach can add it to the member’s record.</p>' };
+    var you = coach ? m.first + ' is ' : 'you are ', near = A.stories.slice(0, Math.max(6, A.near.length));
+    var h = '<h1>' + esc(title) + '</h1><p class="lede">' + n(A.near.length, 'story', 'stories') + ' in ' + (coach ? m.first + '’s' : 'your') + ' situations happened to someone within three years of ' + A.age + '. Each dot is a story, placed at the age its person was then.</p>' +
+      '<section><div class="n-fig graphbox" id="agestrip"></div><ul class="n-key"><li><span class="sw mad"></span>' + (coach ? m.first + '’s' : 'Your') + ' three</li><li><span class="sw dot"></span>A story in ' + (coach ? m.first + '’s' : 'your') + ' situations</li></ul></section>';
+    h += sec('Nearest to ' + A.age, '<div class="grid">' + near.map(function (x) {
+      return storyCard(CLC.storyCard(lib, x.story), { noQuote: true, why: { text: 'About ' + x.age + ' then; ' + you + A.age + (x.hero ? '. One of ' + (coach ? m.first + '’s' : 'your') + ' three' : '') } });
+    }).join('') + '</div><p class="note" style="margin-top:14px">Ages are the story’s year less the year of birth, so each can be a year out. Most stories are recall drafts.</p>');
+    return { title: title, html: h, node: { k: 'age:' + mid, label: title, href: '#/age' + (coach ? '?m=' + enc(mid) : '') },
+      after: function () { CLG.ageStrip(document.getElementById('agestrip'), lib, A, { who: coach ? m.first : 'You' }); } };
+  }
+
   // Who stands near a member's three: their situations as overlapping circles, the three where they stand,
   // the few lives in more than one, and for each of the three the nearest life where they have no story.
   function nearPage(id, qs) {
@@ -949,7 +991,7 @@
       h += sec(esc(wk.group), '<ul class="list shelf">' + wk.items.map(function (it) {
         return '<li><a class="rowlink" href="' + esc(askUrl(it.q)) + '"><span class="t">' + esc(it.text) + '</span><span class="meta tabular' + (it.n < 4 ? ' thin' : '') + '">' + n(it.n, 'story', 'stories') + '</span></a></li>';
       }).join('') + '</ul>', '<a class="btn sm" href="#/ask?m=' + enc(id) + '">Every question for ' + esc(m.first) + '</a>');
-      h += '<div style="margin-top:6px">' + tlink('#/near?m=' + enc(id), 'Who stands near ' + esc(m.first) + '’s three') + '</div>';
+      h += '<div style="margin-top:6px">' + tlink('#/near?m=' + enc(id), 'Who stands near ' + esc(m.first) + '’s three') + (lib.members[id].age ? tlink('#/age?m=' + enc(id), 'Who stood here at ' + esc(m.first) + '’s age') : '') + '</div>';
     }
     h += r.bySituation.map(function (b) {
       return sec('<a href="' + H.sit(b.sit.id) + '" style="color:inherit;text-decoration:none">' + esc(b.sit.id + ' · ' + b.sit.chip) + '</a>',

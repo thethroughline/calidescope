@@ -85,27 +85,29 @@ The matcher in `lib/core.js` is a line-for-line port of the corpus repo's `scrip
 
 ## The Library · `/constellation/library`
 
-- **The constellation.** Each star is a life, placed by field and by the year of its defining moment; larger stars hold more stories. Pick one of the 22 situations and its lives light up and join in time order.
+- **The constellation.** Each star is a life, placed by field and by the year of its defining moment; larger stars hold more stories. Pick one of the 22 situations and its lives light up and join in time order. Hover a star (or tap it once on a phone) and threads run to its closest kin, across fields and centuries.
 - **Pages.** A life (stories, defining moments, works, kindred across time), a story (source, caution, status, stories near it, the same situation across time), a situation, an era, a field, a stance, people, search.
 - **Ask.** A question in plain words ("She is announcing the reorg on Thursday, and the person who wanted her job will be in the room") is read into chips: the situations, a woman or a man, a field, an era, an age, a quieter register, the member it is for. Every chip can be taken away, the situation can be changed, other readings are offered and words that were not used are named. The answer counts its stories and lives, offers ways to narrow with their counts, gives each card the reasons that set it apart, and when fewer than four stories fit, says what to drop. The query is the address, so an answer is a link.
 - **The shelf** (coach). The questions coaches bring, grouped (what is happening, who my member is, who will land with them, how it should land), each with its live count, the member's own week first. **Where the answers are thin** lists the questions with fewer than four stories and a grid of the situations against what coaches ask for. **Compare** sets two stories side by side: what they share, then only the rows where they differ.
-- **Networks.** Kindred across time on each life: a band for each situation the life shares with its kin, years across, and the same as a list with every tie said in words. **Situations that travel together**: the 22 as rows, arcs between those the same lives lived. **Connect two lives**: the strongest way and up to two others, each step a shared situation and one more reason. **Who stands near your three**: the member's situations as overlapping circles, their three where they stand, the lives in more than one, and for each hero the nearest life where they have no story.
+- **Networks.** Kindred across time on each life: a band for each situation the life shares with its kin, years across, and the same as a list with every tie said in words. **Situations that travel together**: the 22 as rows, arcs between those the same lives lived. **Connect two lives**: the strongest way and up to two others, each step a shared situation and one more reason. **Who stands near your three**: the member's situations as overlapping circles, their three where they stand, the lives in more than one, and for each hero the nearest life where they have no story. **At your age**: every story in the member's situations placed by the age its person was then, beside the member's own age, the nearest named.
 - **Trails.** Every page offers ways on: the same situation in another century, contemporaries, the same field, the same way of leading. Every page opened joins the trail along the top, and a trail can be saved and walked again.
 - **Modes.**
   - Reader: the default when standalone.
   - Member: inside the app, starting from the member's three.
   - Coach: everything, plus moves, lines, calibration, prep for each member, the season ahead, and source checks.
-- **Inside the app, both ways.** Members reach it from Heroes, a hero page or a story. A story in the app lists related reading from the Library (the same kind of week, the same world, more from the person) that opens in place, with a way back; a story from beyond the member's three says how it reaches them, in at most two links. A hero page lists all their stories and kindred lives. Heroes offers "Who stands near your three". In the Library, Save saves in the app, "Ask Jim about this" opens the thread with the story attached, and "Add to my heroes" goes to the coach. Coaches reach it from the Library tab, which opens on Explore. A check there makes a story sendable in the engine at once, "Send to a member" opens Find and send with the story chosen, "Suggest to Sarah" lands in her thread, and under a member's Ask in Messages, "Find a story for this" opens the Library's answer to it.
+- **Inside the app, both ways.** Members reach it from Heroes, a hero page or a story. A story in the app lists related reading from the Library (the same kind of week, the same world, more from the person) that opens in place, with a way back; a story from beyond the member's three says how it reaches them, in at most two links. A hero page lists all their stories and kindred lives, each tie said in words. Heroes offers "Who stands near your three"; You offers it too, with "At your age" and the whole library. Ask lists the member's own situations in their own words, ordered by what they wrote, with "None of these" and "Send it to Jim as it is". In the Library, Save saves in the app, "Ask Jim about this" opens the thread with the story attached, and "Add to my heroes" goes to the coach. Coaches reach it from the Library tab, which opens on Explore. A check there makes a story sendable in the engine at once, "Send to a member" opens Find and send with the story chosen, "Suggest to Sarah" lands in her thread, and under a member's Ask in Messages, "Find a story for this" opens the Library's answer to it.
 - **The demo bar** fits every width: one clock stepper below 1880px, and below 600px only the stepper and a Demo button, which opens a sheet with the view, the member, the device, the eleven moments, the theme and reset. On a phone the member app fills the screen.
 
 ## Tests
 
 ```
-node --test constellation/tests/*.test.mjs     20 tests: matcher parity, the merge, every API route, the Redis protocol,
-                                               likeness, coach questions read as situations, the question engine, the networks
-node constellation/tests/e2e.mjs               75 checks in a browser: prototype, Library, both roles, phone and desktop,
+node --test constellation/tests/*.test.mjs     21 tests: matcher parity, the merge, every API route, the Redis protocol,
+                                               likeness, coach questions read as situations, the question engine, the networks,
+                                               the house voice
+node constellation/tests/e2e.mjs               83 checks in a browser: prototype, Library, both roles, phone and desktop,
                                                light and dark, every persona at every step of the clock, in-app reading
-                                               both ways, Ask, the shelf, the networks, no console errors
+                                               both ways, Ask, the shelf, the networks, no console errors and no
+                                               request the server refuses
 node constellation/tools/dev-server.mjs        the site and the API locally, routed as Vercel routes them
 ```
 
@@ -119,4 +121,5 @@ node constellation/tools/dev-server.mjs        the site and the API locally, rou
 - Every corpus story is a recall draft until a coach reads it against its source. Of the 13 samples, six are verified for the demo.
 - Quotations are cleared for prototype use only; each needs permission or a fair-use review before publishing.
 - Stances are proposed for every life until a coach rules on them. Defining-moment years are recall-authored.
+- The house voice is applied to the prototype's product copy by eleven rewrites in `lib/core.js` (`COPY`). Members' own words in the demo script keep the prototype's phrasing, including four goals and an Ask written as "X, not Y"; the designer may want to change them at the source. Two corpus member lines (A1, D1) lose "actually" at merge; the fix belongs in the corpus repo.
 - In the demo script, Maya's first message says none of her three has a story in the record. The corpus now holds one recall draft for Simone Biles. The script's words are the prototype's and are left as written.
