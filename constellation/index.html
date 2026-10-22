@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Constellation</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/constellation/favicon.svg" type="image/svg+xml">
+<script>window.__resources = {"https://unpkg.com/react@18.3.1/umd/react.production.min.js": "/constellation/vendor/react.production.min.js", "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "/constellation/vendor/react-dom.production.min.js"};</script>
+<script src="/constellation/js/support.js"></script>
+
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<style>/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/constellation/fonts/ibm-plex-sans-cyrillic-ext.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/constellation/fonts/ibm-plex-sans-cyrillic.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/constellation/fonts/ibm-plex-sans-greek.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/constellation/fonts/ibm-plex-sans-vietnamese.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/constellation/fonts/ibm-plex-sans-latin-ext.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/constellation/fonts/ibm-plex-sans-latin.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/constellation/fonts/ibm-plex-sans-cyrillic-ext.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/constellation/fonts/ibm-plex-sans-cyrillic.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/constellation/fonts/ibm-plex-sans-greek.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/constellation/fonts/ibm-plex-sans-vietnamese.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/constellation/fonts/ibm-plex-sans-latin-ext.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/constellation/fonts/ibm-plex-sans-latin.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/constellation/fonts/newsreader-italic-vietnamese.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/constellation/fonts/newsreader-italic-latin-ext.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/constellation/fonts/newsreader-italic-latin.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/constellation/fonts/newsreader-italic-vietnamese.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/constellation/fonts/newsreader-italic-latin-ext.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/constellation/fonts/newsreader-italic-latin.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/constellation/fonts/newsreader-vietnamese.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/constellation/fonts/newsreader-latin-ext.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/constellation/fonts/newsreader-latin.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/constellation/fonts/newsreader-vietnamese.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/constellation/fonts/newsreader-latin-ext.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/constellation/fonts/newsreader-latin.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/constellation/fonts/newsreader-vietnamese.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/constellation/fonts/newsreader-latin-ext.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/constellation/fonts/newsreader-latin.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+<script src="/constellation/js/phosphor-icons.js"></script>
+<script src="/constellation/js/constellation-proto-data.js"></script>
+<script src="/constellation/js/constellation-proto-engine.js"></script>
+<style>
+html,body{margin:0;padding:0;background:#E8E4DA}
+*{box-sizing:border-box}
+[data-theme="light"]{--paper:#FBFAF7;--ink:#12141A;--mute:#6B6F78;--faint:#696D75;--hair:#DDD8CD;--well:#F4F1E9;--pru:#1B3A5C;--mad:#A6453C;--pru12:rgba(27,58,92,.12);--mad12:rgba(166,69,60,.12);--oc-t:#2E6A4E;--oc-b:#E6F0EA;--one-t:#7A5A12;--one-b:#F5ECD6;--stage:#E8E4DA;--bezel:#1A1C22;--scrim:rgba(18,20,26,.28)}
+[data-theme="dark"]{--paper:#0B0D10;--ink:#F2EFE7;--mute:#949BA6;--faint:#79818C;--hair:#262C35;--well:#13171D;--pru:#6E9DD0;--mad:#DC7A6E;--pru12:rgba(110,157,208,.16);--mad12:rgba(220,122,110,.16);--oc-t:#8FCBAA;--oc-b:#13261D;--one-t:#D9B25E;--one-b:#2A2213;--stage:#050608;--bezel:#2A2F38;--scrim:rgba(0,0,0,.5)}
+[data-theme]{--serif:"Newsreader",Georgia,"Times New Roman",serif;--sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--ease:cubic-bezier(.16,1,.3,1)}
+a{color:var(--pru)}
+a:hover{color:var(--ink)}
+button{font-family:inherit}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,[role="button"]:focus-visible{outline:2px solid var(--pru);outline-offset:2px}
+::placeholder{color:var(--faint)}
+@keyframes cpIn1{from{opacity:0;transform:translateX(36px)}to{opacity:1;transform:none}}
+@keyframes cpIn2{from{opacity:0;transform:translateX(36px)}to{opacity:1;transform:none}}
+@keyframes cpUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes cpDrop{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
+@keyframes cpShake{0%,100%{transform:none}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+@keyframes cpLand{from{opacity:0;transform:scale(3.2)}to{opacity:1;transform:scale(1)}}
+@keyframes cpShim{0%,100%{opacity:.45}50%{opacity:1}}
+@keyframes cpBar{0%,100%{transform:scaleY(.45)}50%{transform:scaleY(1)}}
+@media (prefers-reduced-motion:reduce){@keyframes cpIn1{from{opacity:0}to{opacity:1}}@keyframes cpIn2{from{opacity:0}to{opacity:1}}@keyframes cpUp{from{opacity:0}to{opacity:1}}@keyframes cpDrop{from{opacity:0}to{opacity:1}}@keyframes cpLand{from{opacity:0}to{opacity:1}}@keyframes cpShake{from{opacity:.6}to{opacity:1}}}
+</style>
+</helmet>
+<sc-if value="{{ booted }}" hint-placeholder-val="{{ true }}">
+<div data-theme="{{ theme }}" style="min-height:100vh;background:var(--stage);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased">
+
+  <div data-screen-label="Demo bar" style="height:52px;display:flex;align-items:center;gap:14px;padding:0 18px;border-bottom:1px solid var(--hair);background:var(--paper);font-family:var(--sans);font-size:13px;color:var(--ink);position:relative;z-index:5">
+    <div style="font-family:var(--serif);font-size:20px;letter-spacing:-.02em">Constellation</div>
+    <sc-if value="{{ wide }}"><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Prototype</div></sc-if>
+    <div style="display:flex;border:1px solid var(--hair);border-radius:18px;padding:2px;margin-left:8px">
+      <button sc-camel-on-click="{{ toMember }}" aria-label="Member" title="Member app" style="height:30px;padding:0 12px;border-radius:15px;border:0;background:{{ roleM.bg }};color:{{ roleM.fg }};font:500 13px var(--sans);cursor:pointer;display:flex;align-items:center;gap:7px"><i class="ph ph-user" style="font-size:16px"></i><span style="display:{{ midDisp }}">Member</span></button>
+      <button sc-camel-on-click="{{ toCoach }}" aria-label="Coach" title="Coach console" style="height:30px;padding:0 12px;border-radius:15px;border:0;background:{{ roleC.bg }};color:{{ roleC.fg }};font:500 13px var(--sans);cursor:pointer;display:flex;align-items:center;gap:7px"><i class="ph ph-chalkboard-teacher" style="font-size:16px"></i><span style="display:{{ midDisp }}">Coach</span></button>
+    </div>
+    <div role="group" aria-label="Persona" style="display:flex;border:1px solid var(--hair);border-radius:18px;padding:2px">
+      <sc-for list="{{ personas }}" as="p" hint-placeholder-count="3">
+        <button sc-camel-on-click="{{ p.go }}" aria-pressed="{{ p.on }}" title="{{ p.title }}" style="height:30px;padding:0 12px;border-radius:15px;border:0;background:{{ p.bg }};color:{{ p.fg }};font:500 13px var(--sans);cursor:pointer;white-space:nowrap">{{ p.label }}</button>
+      </sc-for>
+    </div>
+    <sc-if value="{{ narrow }}"><button sc-camel-on-click="{{ cycleDev }}" aria-label="Device: {{ curDevLabel }}. Change device" title="Device: {{ curDevLabel }}" style="width:30px;height:30px;border-radius:15px;border:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px"><i class="{{ curDevIcon }}"></i></button></sc-if>
+    <div role="group" aria-label="Device" style="display:{{ devGroupDisp }};border:1px solid var(--hair);border-radius:18px;padding:2px">
+      <sc-for list="{{ devs }}" as="d" hint-placeholder-count="3">
+        <button sc-camel-on-click="{{ d.go }}" aria-pressed="{{ d.on }}" title="{{ d.title }}" aria-label="{{ d.label }}" style="height:30px;padding:0 12px;border-radius:15px;border:0;background:{{ d.bg }};color:{{ d.fg }};font:500 13px var(--sans);cursor:pointer;display:flex;align-items:center;gap:7px"><i class="{{ d.icon }}" style="font-size:16px"></i><span style="display:{{ d.disp }}">{{ d.label }}</span></button>
+      </sc-for>
+    </div>
+    <sc-if value="{{ canRotate }}"><button sc-camel-on-click="{{ rotate }}" aria-label="Rotate tablet" title="Rotate" style="width:30px;height:30px;border-radius:15px;border:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px"><i class="ph ph-arrows-clockwise"></i></button></sc-if>
+    <div style="flex:1;display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0;overflow:hidden">
+      <sc-if value="{{ wide }}"><span style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);white-space:nowrap">Demo clock</span></sc-if>
+      <sc-if value="{{ wide }}"><button sc-camel-on-click="{{ prevStep }}" aria-label="Previous demo step" style="width:28px;height:28px;border-radius:14px;border:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="ph ph-caret-left"></i></button></sc-if>
+      <div style="display:flex;gap:2px;flex:none;min-width:0">
+        <sc-for list="{{ steps }}" as="s" hint-placeholder-count="11">
+          <button sc-camel-on-click="{{ s.go }}" title="{{ s.title }}" style="width:{{ stepPx }}px;height:24px;border-radius:12px;border:1px solid {{ s.bd }};background:{{ s.bg }};color:{{ s.fg }};font:500 11px var(--sans);cursor:pointer;font-variant-numeric:tabular-nums;padding:0">{{ s.n }}</button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ wide }}"><button sc-camel-on-click="{{ nextStep }}" aria-label="Next demo step" style="width:28px;height:28px;border-radius:14px;border:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="ph ph-caret-right"></i></button></sc-if>
+      <sc-if value="{{ wide }}"><span title="{{ clockLabel }}" style="font:400 12px var(--sans);color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto;font-variant-numeric:tabular-nums">{{ clockLabel }}</span></sc-if>
+    </div>
+    <button sc-camel-on-click="{{ toggleTheme }}" title="{{ themeLabel }}" aria-label="{{ themeLabel }}" style="height:30px;padding:0 10px;border-radius:15px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer;display:flex;align-items:center;gap:6px"><i class="{{ themeIcon }}" style="font-size:15px"></i><span style="display:{{ wideDisp }}">{{ themeLabel }}</span></button>
+    <button sc-camel-on-click="{{ reset }}" title="Reset the demo" aria-label="Reset the demo" style="height:30px;padding:0 10px;border-radius:15px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer;display:flex;align-items:center;gap:6px"><i class="ph ph-arrow-counter-clockwise" style="font-size:15px"></i><span style="display:{{ wideDisp }}">Reset</span></button>
+  </div>
+
+  <div style="position:relative;height:calc(100vh - 52px);display:flex;align-items:center;justify-content:center;overflow:hidden">
+
+    <sc-if value="{{ isMember }}" hint-placeholder-val="{{ true }}">
+      <div style="width:{{ dvf.w }}px;height:{{ dvf.h }}px;position:relative;flex:none">
+        <div data-screen-label="Member app" style="position:absolute;left:0;top:0;width:{{ dvf.iw }}px;height:{{ dvf.ih }}px;transform:scale({{ dvf.s }});transform-origin:0 0;background:var(--paper);color:var(--ink);border-radius:{{ dvf.r }}px;overflow:hidden;box-shadow:{{ dvf.shadow }}">
+          <sc-if value="{{ dvf.status }}" hint-placeholder-val="{{ true }}">
+          <div style="position:absolute;top:0;left:0;right:0;height:{{ dvf.top }}px;display:flex;align-items:center;justify-content:space-between;padding:{{ dvf.sbPad }};font:500 14px var(--sans);font-variant-numeric:tabular-nums;z-index:30">
+            <span>{{ statusTime }}</span>
+            <span style="display:flex;gap:6px;font-size:15px"><i class="ph-fill ph-cell-signal-full"></i><i class="ph ph-wifi-high"></i><i class="ph-fill ph-battery-full"></i></span>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ sc.M0 }}">
+            <div data-screen-label="M0 Welcome" style="position:absolute;top:{{ dvf.top }}px;left:0;right:0;bottom:0;width:100%;max-width:{{ dvf.ob }}px;margin:0 auto;padding:84px 28px 40px;display:flex;flex-direction:column;animation:cpUp 420ms var(--ease) both">
+              <div style="font:400 46px/1.04 var(--serif);letter-spacing:-.035em">Constellation</div>
+              <p style="font:300 24px/1.32 var(--serif);letter-spacing:-.015em;margin:22px 0 0;text-wrap:pretty">The right story, from someone you chose, on the morning you need it.</p>
+              <div style="flex:1"></div>
+              <div style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--well);border-radius:14px">
+                <div style="width:56px;height:56px;border-radius:50%;background:var(--pru12);color:var(--pru);display:flex;align-items:center;justify-content:center;font:500 17px var(--sans);flex:none">{{ coach.ini }}</div>
+                <div style="font:400 19px/1.3 var(--serif)">Your coach: {{ coach.name }}</div>
+              </div>
+              <p style="font:400 15px/1.5 var(--serif);color:var(--mute);margin:14px 2px 24px">{{ coach.first }} will meet you after you've picked your heroes. This takes about six minutes.</p>
+              <button sc-camel-on-click="{{ start }}" style="height:48px;border-radius:24px;background:var(--ink);color:var(--paper);border:0;font:500 14px var(--sans);cursor:pointer;width:100%">Start</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ sc.M1 }}">
+            <div data-screen-label="M1 Goal" style="position:absolute;top:{{ dvf.top }}px;left:0;right:0;bottom:0;width:100%;max-width:{{ dvf.ob }}px;margin:0 auto;padding:12px 22px 32px;display:flex;flex-direction:column;animation:cpUp 420ms var(--ease) both">
+              <div style="display:flex;align-items:center;justify-content:space-between"><button sc-camel-on-click="{{ back }}" aria-label="Back" style="width:44px;height:44px;margin-left:-12px;border:0;background:transparent;color:var(--ink);font-size:20px;cursor:pointer"><i class="ph ph-arrow-left"></i></button><span style="font:500 12px var(--sans);color:var(--faint);font-variant-numeric:tabular-nums">1 of 4</span></div>
+              <h1 style="font:400 30px/1.12 var(--serif);letter-spacing:-.03em;margin:8px 0 18px;text-wrap:balance">Where do you want to be a year from now?</h1>
+              <textarea rows="3" value="{{ goal }}" sc-camel-on-change="{{ setGoal }}" aria-label="Your goal" style="width:100%;border:1px solid var(--hair);border-radius:12px;background:var(--paper);color:var(--ink);font:400 18px/1.45 var(--serif);padding:14px;resize:none"></textarea>
+              <p style="font:400 14px/1.45 var(--sans);color:var(--faint);margin:8px 2px 18px">In your own words. {{ coach.first }} will read this before you meet.</p>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ goalChips }}" as="g" hint-placeholder-count="4">
+                  <button sc-camel-on-click="{{ g.pick }}" style="text-align:left;padding:11px 14px;min-height:44px;border:1px solid {{ g.bd }};border-radius:12px;background:transparent;color:var(--ink);font:400 15px/1.4 var(--serif);cursor:pointer">{{ g.t }}</button>
+                </sc-for>
+              </div>
+              <div style="flex:1"></div>
+              <button sc-camel-on-click="{{ m1Next }}" disabled="{{ m1Dis }}" style="height:48px;border-radius:24px;background:var(--ink);color:var(--paper);border:0;font:500 14px var(--sans);cursor:pointer;width:100%;opacity:{{ m1Op }}">Continue</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ sc.M1b }}">
+            <div data-screen-label="M1b Where you're coming from" style="position:absolute;top:{{ dvf.top }}px;left:0;right:0;bottom:0;width:100%;max-width:{{ dvf.ob }}px;margin:0 auto;padding:12px 22px 32px;display:flex;flex-direction:column;animation:cpUp 420ms var(--ease) both">
+              <div style="display:flex;align-items:center;justify-content:space-between;flex:none"><button sc-camel-on-click="{{ back }}" aria-label="Back" style="width:44px;height:44px;margin-left:-12px;border:0;background:transparent;color:var(--ink);font-size:20px;cursor:pointer"><i class="ph ph-arrow-left"></i></button><span style="font:500 12px var(--sans);color:var(--faint);font-variant-numeric:tabular-nums">2 of 4</span></div>
+              <div style="flex:1;min-height:0;overflow-y:auto;padding-bottom:12px">
+                <h1 style="font:400 30px/1.12 var(--serif);letter-spacing:-.03em;margin:8px 0 18px;text-wrap:balance">Where are you coming from?</h1>
+                <div style="font:400 17px/1.4 var(--serif)">What year were you born?</div>
+                <sc-if value="{{ yb.notSkipped }}" hint-placeholder-val="{{ true }}">
+                  <div style="position:relative;height:180px;margin-top:8px">
+                    <div style="position:absolute;left:0;right:0;top:72px;height:36px;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);pointer-events:none"></div>
+                    <div id="cp-wheel" ref="{{ yb.ref }}" sc-camel-on-scroll="{{ yb.onScroll }}" role="listbox" aria-label="Year of birth" style="height:180px;overflow-y:auto;scroll-snap-type:y mandatory;padding:72px 0;scrollbar-width:none">
+                      <sc-for list="{{ yb.years }}" as="y" hint-placeholder-count="5">
+                        <div role="option" aria-selected="{{ y.on }}" sc-camel-on-click="{{ y.pick }}" style="height:36px;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font:400 {{ y.size }}px var(--serif);color:{{ y.c }};font-variant-numeric:tabular-nums;cursor:pointer;transition:color 160ms,font-size 160ms">{{ y.y }}</div>
+                      </sc-for>
+                    </div>
+                    <div style="position:absolute;left:0;right:0;top:0;height:56px;background:linear-gradient(var(--paper),transparent);pointer-events:none"></div>
+                    <div style="position:absolute;left:0;right:0;bottom:0;height:56px;background:linear-gradient(transparent,var(--paper));pointer-events:none"></div>
+                  </div>
+                  <button sc-camel-on-click="{{ yb.skip }}" style="height:44px;padding:0;border:0;background:transparent;color:var(--pru);font:500 14px var(--sans);cursor:pointer">Prefer not to say</button>
+                </sc-if>
+                <sc-if value="{{ yb.skipped }}">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;padding:4px 4px 4px 16px;border:1px solid var(--hair);border-radius:12px"><span style="font:400 17px var(--serif);color:var(--mute)">Not given</span><button sc-camel-on-click="{{ yb.unskip }}" style="height:44px;padding:0 12px;border:0;background:transparent;color:var(--pru);font:500 14px var(--sans);cursor:pointer">Enter a year</button></div>
+                </sc-if>
+                <div style="display:flex;align-items:baseline;gap:8px;margin-top:22px"><span style="font:400 17px/1.4 var(--serif)">Where did you grow up?</span><span style="font:400 13px var(--sans);color:var(--faint)">Optional</span></div>
+                <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+                  <sc-for list="{{ yb.grew }}" as="g" hint-placeholder-count="3"><button sc-camel-on-click="{{ g.pick }}" aria-pressed="{{ g.on }}" style="height:44px;padding:0 16px;border-radius:22px;border:1px solid {{ g.bd }};background:{{ g.bg }};color:var(--ink);font:500 13px var(--sans);cursor:pointer">{{ g.label }}</button></sc-for>
+                </div>
+                <sc-if value="{{ yb.nonUS }}"><p style="font:400 14px/1.45 var(--sans);color:var(--faint);margin:10px 2px 0">Our polling is American for now. Your coach will adjust.</p></sc-if>
+                <sc-if value="{{ yb.tl.show }}" hint-placeholder-val="{{ true }}">
+                  <div style="margin-top:26px;animation:cpUp 420ms var(--ease) both">
+                    <div style="font:400 17px/1.4 var(--serif)">{{ yb.tl.caption }}</div>
+                    <div style="position:relative;height:56px;margin-top:14px"><div style="position:absolute;left:0;width:{{ yb.tl.b0 }}%;top:27px;border-top:1px dotted var(--mute)"></div><div style="position:absolute;left:{{ yb.tl.b1 }}%;right:0;top:27px;border-top:1px dotted var(--mute)"></div><div style="position:absolute;left:{{ yb.tl.b0 }}%;width:{{ yb.tl.bw }}%;top:21px;height:13px;background:var(--pru12);border-left:1px solid var(--pru);border-right:1px solid var(--pru);transition:left 280ms var(--ease),width 280ms var(--ease)"></div><div style="position:absolute;left:{{ yb.tl.b0 }}%;width:{{ yb.tl.bw }}%;top:27px;border-top:1px solid var(--ink);transition:left 280ms var(--ease),width 280ms var(--ease)"></div><div style="position:absolute;left:0;top:25px;width:5px;height:5px;border-radius:50%;background:var(--ink)"></div><div style="position:absolute;left:{{ yb.tl.b0 }}%;top:38px;display:{{ yb.tl.winDisp }};font:500 12px var(--sans);color:var(--mute);white-space:nowrap;font-variant-numeric:tabular-nums">{{ yb.tl.win }}</div><div style="position:absolute;right:0;top:19px;width:1px;height:8px;background:var(--mute)"></div><div style="position:absolute;right:0;top:4px;font:500 11px var(--sans);color:var(--faint)">Today</div><sc-for list="{{ yb.tl.ticks }}" as="e"><div style="position:absolute;left:{{ e.x }}%;top:0;bottom:0"><sc-if value="{{ e.up }}"><div style="position:absolute;left:0;top:19px;width:1px;height:8px;background:var(--mad)"></div><div style="position:absolute;left:4px;top:1px;white-space:nowrap;font:400 13px/16px var(--serif)"><span style="font:500 11px var(--sans);color:var(--mad);margin-right:5px">{{ e.year }}</span>{{ e.label }}</div></sc-if><sc-if value="{{ e.down }}"><div style="position:absolute;left:0;top:28px;width:1px;height:8px;background:var(--mad)"></div><div style="position:absolute;left:4px;bottom:0;white-space:nowrap;font:400 13px/16px var(--serif)"><span style="font:500 11px var(--sans);color:var(--mad);margin-right:5px">{{ e.year }}</span>{{ e.label }}</div></sc-if></div></sc-for></div>
+                  </div>
+                </sc-if>
+                <p style="font:400 14px/1.45 var(--sans);color:var(--faint);margin:20px 2px 0">Most of us look up to people we first noticed between ten and twenty-five. We start your bracket there. You can pick anyone.</p>
+              </div>
+              <button sc-camel-on-click="{{ yb.next }}" style="height:48px;flex:none;border-radius:24px;background:var(--ink);color:var(--paper);border:0;font:500 14px var(--sans);cursor:pointer;width:100%">Continue</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ sc.M2 }}">
+            <div data-screen-label="M2 Interests" style="position:absolute;top:{{ dvf.top }}px;left:0;right:0;bottom:0;width:100%;max-width:{{ dvf.ob }}px;margin:0 auto;padding:12px 22px 32px;display:flex;flex-direction:column;animation:cpUp 420ms var(--ease) both">
+              <div style="display:flex;align-items:center;justify-content:space-between"><button sc-camel-on-click="{{ back }}" aria-label="Back" style="width:44px;height:44px;margin-left:-12px;border:0;background:transparent;color:var(--ink);font-size:20px;cursor:pointer"><i class="ph ph-arrow-left"></i></button><span style="font:500 12px var(--sans);color:var(--faint);font-variant-numeric:tabular-nums">3 of 4</span></div>
+              <h1 style="font:400 30px/1.12 var(--serif);letter-spacing:-.03em;margin:8px 0 6px;text-wrap:balance">What are you into?</h1>
+              <p style="font:400 15px/1.4 var(--serif);color:var(--mute);margin:0 0 16px">Pick one to three things you love outside work.</p>
+              <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;animation:{{ m2Anim }}">
+                <sc-for list="{{ ints }}" as="c" hint-placeholder-count="13">
+                  <button sc-camel-on-click="{{ c.toggle }}" aria-pressed="{{ c.on }}" style="height:86px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border-radius:12px;border:1px solid {{ c.bd }};background:{{ c.bg }};color:var(--ink);font:500 12px/1.25 var(--sans);cursor:pointer;padding:6px;text-align:center"><i class="{{ c.icon }}" style="font-size:22px"></i><span>{{ c.label }}</span></button>
+                </sc-for>
+              </div>
+              <sc-if value="{{ tooMany }}"><p style="font:italic 400 16px var(--serif);color:var(--mad);margin:12px 2px 0">Three is plenty.</p></sc-if>
+              <div style="font:400 15px/1.4 var(--serif);margin:14px 2px 0">{{ m2Line }}</div>
+              <p style="font:400 14px/1.45 var(--sans);color:var(--faint);margin:8px 2px 0">We narrow everyone with a story worth telling to 128 for you: leaders admired across the years, people from your years, and people from what you love.</p>
+              <div style="flex:1"></div>
+              <button sc-camel-on-click="{{ m2Next }}" disabled="{{ m2Dis }}" style="height:48px;border-radius:24px;background:var(--ink);color:var(--paper);border:0;font:500 14px var(--sans);cursor:pointer;width:100%;opacity:{{ m2Op }}">Continue</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ sc.M3 }}">
+            <div data-screen-label="M3 Bracket" style="position:absolute;top:{{ dvf.top }}px;left:0;right:0;bottom:0;width:100%;max-width:{{ dvf.ob }}px;margin:0 auto;padding:16px 22px 28px;display:flex;flex-direction:column">
+              <div style="display:flex;justify-content:space-between;align-items:center;font:500 12px var(--sans);color:var(--faint);font-variant-numeric:tabular-nums">
+                <span>{{ br.roundLabel }}</span>
+                <button sc-camel-on-click="{{ br.undo }}" disabled="{{ br.noUndo }}" style="height:44px;padding:0 4px;border:0;background:transparent;color:var(--ink);font:500 13px var(--sans);cursor:pointer;opacity:{{ br.undoOp }};display:flex;align-items:center;gap:6px"><i class="ph ph-arrow-counter-clockwise"></i>Undo</button>
+              </div>
+              <div style="height:3px;background:var(--hair);border-radius:2px;margin-top:6px;overflow:hidden"><div style="height:100%;width:{{ br.pct }};background:var(--ink);transition:width 280ms var(--ease)"></div></div>
+              <div style="display:flex;justify-content:flex-end"><button sc-camel-on-click="{{ br.how }}" style="height:36px;padding:0;border:0;background:transparent;color:var(--pru);font:500 12px var(--sans);cursor:pointer;display:flex;align-items:center;gap:4px">How we built this <i class="ph ph-caret-right"></i></button></div>
+              <h1 style="font:400 30px/1.12 var(--serif);letter-spacing:-.03em;margin:8px 0 18px">Who would you rather learn from?</h1>
+              <sc-if value="{{ br.inter }}">
+                <div style="height:340px;display:flex;align-items:center;justify-content:center;font:400 30px/1.2 var(--serif);letter-spacing:-.02em;animation:cpUp 280ms var(--ease) both">{{ br.interText }}</div>
+              </sc-if>
+              <sc-if value="{{ br.live }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-direction:column;gap:12px;animation:{{ br.anim }}">
+                  <button sc-camel-on-click="{{ br.a.pick }}" aria-label="{{ br.a.aria }}" style="min-height:152px;width:100%;border-radius:12px;border:1px solid var(--hair);background:var(--paper);display:flex;align-items:center;gap:18px;padding:14px 20px;text-align:left;cursor:pointer;color:var(--ink)" style-hover="background:var(--well)" style-active="border-color:var(--ink)">
+                    <div style="width:72px;height:72px;border-radius:50%;background:var(--pru12);color:var(--pru);display:flex;align-items:center;justify-content:center;font:500 20px var(--sans);flex:none">{{ br.a.ini }}</div>
+                    <div style="min-width:0"><div style="font:400 24px/1.15 var(--serif);letter-spacing:-.02em">{{ br.a.name }}</div><div style="font:400 15px/1.4 var(--serif);color:var(--mute);margin-top:4px">{{ br.a.desc }}</div><div style="display:inline-flex;margin-top:10px;padding:3px 9px;border-radius:10px;border:1px solid var(--hair);font:500 11px var(--sans);color:var(--faint);letter-spacing:.06em;text-transform:uppercase">{{ br.a.area }}</div><div style="display:flex;align-items:center;gap:6px;margin-top:9px;font:500 11px var(--sans);color:var(--faint)"><sc-if value="{{ br.a.tag.band }}"><span style="width:12px;height:5px;border-radius:2px;background:var(--pru);opacity:.7;flex:none"></span></sc-if><sc-if value="{{ br.a.tag.hasIcon }}"><i class="{{ br.a.tag.icon }}" style="font-size:13px"></i></sc-if><span>{{ br.a.tag.text }}</span></div><sc-if value="{{ br.a.tag.hasBefore }}"><div style="font:500 11px var(--sans);color:var(--faint);opacity:.65;margin-top:3px">{{ br.a.tag.before }}</div></sc-if></div>
+                  </button>
+                  <button sc-camel-on-click="{{ br.b.pick }}" aria-label="{{ br.b.aria }}" style="min-height:152px;width:100%;border-radius:12px;border:1px solid var(--hair);background:var(--paper);display:flex;align-items:center;gap:18px;padding:14px 20px;text-align:left;cursor:pointer;color:var(--ink)" style-hover="background:var(--well)" style-active="border-color:var(--ink)">
+                    <div style="width:72px;height:72px;border-radius:50%;background:var(--pru12);color:var(--pru);display:flex;align-items:center;justify-content:center;font:500 20px var(--sans);flex:none">{{ br.b.ini }}</div>
+                    <div style="min-width:0"><div style="font:400 24px/1.15 var(--serif);letter-spacing:-.02em">{{ br.b.name }}</div><div style="font:400 15px/1.4 var(--serif);color:var(--mute);margin-top:4px">{{ br.b.desc }}</div><div style="display:inline-flex;margin-top:10px;padding:3px 9px;border-radius:10px;border:1px solid var(--hair);font:500 11px var(--sans);color:var(--faint);letter-spacing:.06em;text-transform:uppercase">{{ br.b.area }}</div><div style="display:flex;align-items:center;gap:6px;margin-top:9px;font:500 11px var(--sans);color:var(--faint)"><sc-if value="{{ br.b.tag.band }}"><span style="width:12px;height:5px;border-radius:2px;background:var(--pru);opacity:.7;flex:none"></span></sc-if><sc-if value="{{ br.b.tag.hasIcon }}"><i class="{{ br.b.tag.icon }}" style="font-size:13px"></i></sc-if><span>{{ br.b.tag.text }}</span></div><sc-if value="{{ br.b.tag.hasBefore }}"><div style="font:500 11px var(--sans);color:var(--faint);opacity:.65;margin-top:3px">{{ br.b.tag.before }}</div></sc-if></div>
+                  </button>
+                </div>
+              </sc-if>
+              <div style="flex:1"></div>
+              <button sc-camel-on-click="{{ br.skip }}" style="align-self:center;height:44px;padding:0 16px;border:1px dashed var(--hair);border-radius:22px;background:transparent;color:var(--mute);font:500 12px var(--sans);cursor:pointer">Demo: skip to final four</button>
+              <sc-if value="{{ m3a.open }}">
+                <div sc-camel-on-click="{{ m3a.close }}" style="position:absolute;inset:0;background:var(--scrim);z-index:30"></div>
+                <div data-screen-label="M3a How we built this" role="dialog" aria-label="How we built your bracket" style="position:absolute;left:0;right:0;bottom:0;background:var(--paper);border-radius:20px 20px 0 0;padding:12px 22px 34px;z-index:31;animation:cpUp 320ms var(--ease) both;box-shadow:0 -20px 50px rgba(0,0,0,.14);max-height:92%;overflow-y:auto">
+                  <div style="width:36px;height:4px;border-radius:2px;background:var(--hair);margin:0 auto 10px"></div>
+                  <div style="display:flex;align-items:center;justify-content:space-between"><h2 style="font:400 24px/1.15 var(--serif);letter-spacing:-.025em;margin:0">How we built your bracket</h2><button sc-camel-on-click="{{ m3a.close }}" aria-label="Close" style="width:44px;height:44px;margin-right:-12px;border:0;background:transparent;color:var(--ink);font-size:20px;cursor:pointer"><i class="ph ph-x"></i></button></div>
+                  <div style="display:flex;align-items:flex-start;margin-top:18px">
+                    <div style="flex:none"><div style="font:400 26px/1.1 var(--serif);letter-spacing:-.02em;font-variant-numeric:tabular-nums">237</div><div style="font:500 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-top:4px">Library · people</div></div>
+                    <div style="flex:1;height:1px;background:var(--hair);margin:14px 10px 0;min-width:12px"></div>
+                    <div style="flex:none"><div style="font:400 26px/1.1 var(--serif);letter-spacing:-.02em;font-variant-numeric:tabular-nums">175</div><div style="font:500 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-top:4px">With stories</div></div>
+                    <div style="flex:1;height:1px;background:var(--hair);margin:14px 10px 0;min-width:12px"></div>
+                    <div style="flex:none"><div style="font:400 26px/1.1 var(--serif);letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--pru)">128</div><div style="font:500 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-top:4px">Your bracket</div></div>
+                  </div>
+                  <div style="font:400 12px var(--sans);color:var(--faint);margin-top:8px">Prototype: 16.</div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px">
+                    <div style="padding:12px 14px;border:1px solid var(--hair);border-radius:12px"><div style="font:400 16px/1.3 var(--serif)">Leaders admired across the years</div><div style="font:400 13px/1.4 var(--sans);color:var(--mute);margin-top:4px">Half. Four are admired by every generation.</div></div>
+                    <div style="padding:12px 14px;border:1px solid var(--hair);border-radius:12px"><div style="font:400 16px/1.3 var(--serif)">From what you love</div><div style="font:400 13px/1.4 var(--sans);color:var(--mute);margin-top:4px">Half. {{ m3a.loveLine }}.</div></div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:10px;margin-top:18px;font:400 15px/1.45 var(--serif)">
+                    <div style="display:flex;gap:12px"><span style="font:500 11px var(--sans);color:var(--faint);width:14px;flex:none;padding-top:5px">1</span><span><span style="font-weight:500">Your years.</span> People whose defining moment fell between your tenth and twenty-fifth birthdays come first.</span></div>
+                    <div style="display:flex;gap:12px"><span style="font:500 11px var(--sans);color:var(--faint);width:14px;flex:none;padding-top:5px">2</span><span><span style="font-weight:500">Who people admire.</span> Then the people admired by every generation.</span></div>
+                    <div style="display:flex;gap:12px"><span style="font:500 11px var(--sans);color:var(--faint);width:14px;flex:none;padding-top:5px">3</span><span><span style="font-weight:500">What you love.</span> Then the rest, from your interests in the order you picked them.</span></div>
+                  </div>
+                  <p style="font:400 12px/1.5 var(--sans);color:var(--faint);margin:18px 0 0">Built from public polling of who Americans admire, by age (YouGov, 2026), and the events each generation remembers most (Pew Research Center). You can always add someone we missed.</p>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ sc.M4 }}">
+            <div data-screen-label="M4 Your three" style="position:absolute;top:{{ dvf.top }}px;left:0;right:0;bottom:0;width:100%;max-width:{{ dvf.ob }}px;margin:0 auto;display:flex;flex-direction:column;animation:cpUp 420ms var(--ease) both">
+              <div style="flex:1;overflow-y:auto;padding:16px 22px 12px">
+                <h1 style="font:400 30px/1.12 var(--serif);letter-spacing:-.03em;margin:8px 0 14px">Your final four. Keep three.</h1>
+                <sc-for list="{{ ff }}" as="h" hint-placeholder-count="4">
+                  <div style="display:flex;gap:14px;padding:16px 0;border-top:1px solid var(--hair);opacity:{{ h.op }};transition:opacity 280ms var(--ease)">
+                    <div style="width:44px;height:44px;border-radius:50%;background:var(--pru12);color:var(--pru);display:flex;align-items:center;justify-content:center;font:500 14px var(--sans);flex:none">{{ h.ini }}</div>
+                    <div style="flex:1;min-width:0">
+                      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+                        <div><div style="font:400 20px/1.2 var(--serif);letter-spacing:-.015em">{{ h.name }}</div><div style="font:400 14px/1.4 var(--serif);color:var(--mute)">{{ h.desc }}</div></div>
+                        <button role="switch" aria-checked="{{ h.keep }}" aria-label="{{ h.aria }}" sc-camel-on-click="{{ h.toggle }}" style="flex:none;min-width:72px;height:44px;border-radius:22px;border:1px solid {{ h.bd }};background:{{ h.bg }};color:{{ h.fg }};font:500 13px var(--sans);cursor:pointer">{{ h.keepLabel }}</button>
+                      </div>
+                      <div style="display:flex;flex-direction:column;gap:2px;margin-top:8px;font:400 15px/1.4 var(--serif)">
+                        <sc-for list="{{ h.q }}" as="q"><div>{{ q }}</div></sc-for>
+                      </div>
+                      <div style="font:400 13px/1.45 var(--sans);color:var(--faint);margin-top:8px">{{ h.libLine }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+                <p style="font:400 14px/1.45 var(--sans);color:var(--faint);margin:6px 0 0;padding-top:14px;border-top:1px solid var(--hair)">You can add someone later — a biography you're reading, someone in the news.</p>
+              </div>
+              <div style="padding:12px 22px 30px;border-top:1px solid var(--hair);display:flex;flex-direction:column;gap:8px">
+                <div style="font:500 12px var(--sans);color:var(--faint);text-align:center;font-variant-numeric:tabular-nums">{{ m4Count }}</div>
+                <button sc-camel-on-click="{{ m4Next }}" disabled="{{ m4Dis }}" style="height:48px;border-radius:24px;background:var(--ink);color:var(--paper);border:0;font:500 14px var(--sans);cursor:pointer;width:100%;opacity:{{ m4Op }}">These are my three</button>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ sc.M5 }}">
+            <div data-screen-label="M5 Fit check" style="position:absolute;top:{{ dvf.top }}px;left:0;right:0;bottom:0;width:100%;max-width:{{ dvf.ob }}px;margin:0 auto;padding:16px 22px 30px;display:flex;flex-direction:column;animation:cpUp 420ms var(--ease) both">
+              <sc-if value="{{ fitAsk }}" hint-placeholder-val="{{ true }}">
+                <div style="flex:1;display:flex;flex-direction:column;min-height:0">
+                  <h1 style="font:400 30px/1.12 var(--serif);letter-spacing:-.03em;margin:8px 0 14px;text-wrap:balance">How your three line up with where you're going.</h1>
+                  <p style="font:italic 300 18px/1.45 var(--serif);color:var(--mute);margin:0 0 14px">{{ goalQ }}</p>
+                  <sc-if value="{{ allUp }}"><p style="font:400 17px/1.45 var(--serif);margin:0 0 12px">All three line up with where you're going.</p></sc-if>
+                  <div style="flex:1;overflow-y:auto">
+                    <sc-for list="{{ fitRows }}" as="r" hint-placeholder-count="3">
+                      <div style="display:flex;gap:14px;padding:16px 0;border-top:1px solid var(--hair)">
+                        <div style="flex:none;width:10px;height:10px;margin-top:9px;border-radius:50%;background:{{ r.dotBg }};border:{{ r.dotBd }};box-sizing:border-box"></div>
+                        <div>
+                          <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap"><span style="font:400 19px/1.2 var(--serif)">{{ r.name }}</span><span style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ r.stateLabel }}</span></div>
+                          <p style="font:400 16px/1.5 var(--serif);margin:6px 0 0;text-wrap:pretty">{{ r.line }}</p>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <button sc-camel-on-click="{{ fitSend }}" style="height:48px;border-radius:24px;background:var(--ink);color:var(--paper);border:0;font:500 14px var(--sans);cursor:pointer;width:100%;margin-top:12px">Send to {{ coach.first }}</button>
+                  <button sc-camel-on-click="{{ changeOne }}" style="height:44px;border:0;background:transparent;color:var(--pru);font:500 14px var(--sans);cursor:pointer;margin-top:4px">Change one</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ fitDone }}">
+                <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px">
+                  <div style="width:56px;height:56px;border-radius:50%;background:var(--pru12);color:var(--pru);display:flex;align-items:center;justify-content:center;font:500 17px var(--sans)">{{ coach.ini }}</div>
+                  <h1 style="font:400 30px/1.15 var(--serif);letter-spacing:-.03em;margin:0;text-wrap:balance">{{ coach.first }} has your three. {{ coach.pro }}'ll be in touch before your first session.</h1>
+                </div>
+                <button sc-camel-on-click="{{ toApp }}" style="height:48px;border-radius:24px;background:var(--ink);color:var(--paper);border:0;font:500 14px var(--sans);cursor:pointer;width:100%">Continue</button>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ sc.app }}">
+            <div style="position:absolute;top:{{ dvf.top }}px;left:0;right:0;bottom:0;display:flex">
+              <sc-if value="{{ lg }}">
+                <nav data-screen-label="Sidebar" aria-label="Main" style="width:240px;flex:none;border-right:1px solid var(--hair);padding:22px 14px 24px;display:flex;flex-direction:column;gap:2px">
+                  <div style="font:400 22px var(--serif);letter-spacing:-.02em;padding:0 12px 22px">Constellation</div>
+                  <sc-for list="{{ tabs }}" as="x" hint-placeholder-count="4">
+                    <button sc-camel-on-click="{{ x.go }}" aria-current="{{ x.cur }}" style="height:44px;display:flex;align-items:center;gap:12px;padding:0 12px;border:0;border-radius:10px;background:{{ x.bg }};color:{{ x.c }};font:500 14px var(--sans);cursor:pointer;text-align:left" style-hover="background:var(--well)"><i class="{{ x.icon }}" style="font-size:20px"></i>{{ x.label }}</button>
+                  </sc-for>
+                  <div style="flex:1"></div>
+                  <button sc-camel-on-click="{{ openThread }}" aria-label="Messages with your coach, {{ coach.name }}" style="display:flex;align-items:center;gap:12px;min-height:56px;padding:8px 12px;border:0;border-radius:10px;background:{{ threadBg }};color:var(--ink);cursor:pointer;text-align:left" style-hover="background:var(--well)">
+                    <span style="position:relative;width:36px;height:36px;border-radius:50%;background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font:500 12px var(--sans);flex:none">{{ coach.ini }}<sc-if value="{{ unread }}"><span style="position:absolute;top:-2px;right:-2px;width:11px;height:11px;border-radius:50%;background:var(--mad);border:2px solid var(--paper)"></span></sc-if></span>
+                    <span style="min-width:0"><span style="display:block;font:400 16px/1.2 var(--serif)">{{ coach.name }}</span><span style="display:block;font:400 12px var(--sans);color:var(--faint);margin-top:2px">Your coach</span></span>
+                  </button>
+                  <div style="display:flex;align-items:center;gap:12px;padding:14px 12px 0;border-top:1px solid var(--hair);margin-top:10px">
+                    <span style="width:32px;height:32px;border-radius:50%;background:var(--pru12);color:var(--pru);display:flex;align-items:center;justify-content:center;font:500 11px var(--sans);flex:none">{{ member.ini }}</span>
+                    <span style="font:400 14px var(--serif)">{{ member.name }}</span>
+                  </div>
+                </nav>
+              </sc-if>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+              <sc-if value="{{ notLg }}" hint-placeholder-val="{{ true }}">
+              <div style="height:52px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 22px">
+                <span style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ tabTitle }}</span>
+                <button sc-camel-on-click="{{ openThread }}" aria-label="Messages with your coach, {{ coach.name }}" style="width:44px;height:44px;margin-right:-6px;border:0;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center">
+                  <span style="position:relative;width:32px;height:32px;border-radius:50%;background:var(--well);color:var(--ink);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font:500 11px var(--sans)">{{ coach.ini }}<sc-if value="{{ unread }}"><span style="position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:var(--mad);border:2px solid var(--paper)"></span></sc-if></span>
+                </button>
+              </div>
+              </sc-if>
+              <div style="flex:1;overflow-y:auto;padding:{{ col.pad }}">
+               <div style="max-width:{{ col.max }}px">
+
+                <sc-if value="{{ tb.week }}">
+                  <sc-if value="{{ wk.waiting }}">
+                    <div data-screen-label="M6 This week (waiting)" style="padding-top:8px;animation:cpUp 420ms var(--ease) both">
+                      <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ wk.dateLine }}</div>
+                      <h1 style="font:400 30px/1.12 var(--serif);letter-spacing:-.03em;margin:10px 0 12px;text-wrap:balance">{{ coach.first }} is putting your first week together.</h1>
+                      <p style="font:400 16px/1.55 var(--serif);color:var(--mute);margin:0">Your first move, line and story arrive on a Monday morning.</p>
+                      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:20px">
+                        <sc-for list="{{ heroChips }}" as="h" hint-placeholder-count="3">
+                          <span style="display:inline-flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;border:1px solid var(--hair);border-radius:20px;font:400 15px var(--serif)"><span style="width:26px;height:26px;border-radius:50%;background:var(--pru12);color:var(--pru);display:flex;align-items:center;justify-content:center;font:500 10px var(--sans)">{{ h.ini }}</span>{{ h.name }}</span>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ wk.live }}">
+                    <div data-screen-label="M6 This week" style="display:flex;flex-direction:column;gap:24px;padding-top:4px;animation:cpUp 420ms var(--ease) both">
+                      <h1 style="font:400 30px/1.12 var(--serif);letter-spacing:-.03em;margin:0">{{ wk.dateLine }}</h1>
+                      <div style="display:flex;gap:12px;align-items:center;padding:12px 14px;background:var(--well);border-radius:12px;margin-top:-8px">
+                        <i class="ph ph-calendar-blank" style="font-size:20px;color:var(--faint)"></i>
+                        <div><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Coming up</div><div style="font:400 16px/1.35 var(--serif);margin-top:2px">{{ wk.coming }}</div></div>
+                      </div>
+                      <div style="border-left:2px solid var(--pru);padding:2px 0 2px 16px">
+                        <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ wk.weekN }}</div>
+                        <div style="font:400 20px/1.3 var(--serif);margin-top:8px;letter-spacing:-.01em">{{ wk.micro }}</div>
+                        <div style="font:400 16px/1.55 var(--serif);color:var(--mute);margin-top:6px">{{ wk.parent }}</div>
+                        <button sc-camel-on-click="{{ wk.toggleWhy }}" style="height:44px;padding:0;border:0;background:transparent;color:var(--pru);font:500 13px var(--sans);cursor:pointer;display:flex;align-items:center;gap:4px;margin-top:4px">Why <i class="{{ wk.whyIcon }}"></i></button>
+                        <sc-if value="{{ wk.whyOpen }}"><p style="font:italic 400 16px/1.5 var(--serif);margin:0;padding:10px 12px;background:var(--well);border-radius:10px">{{ wk.failure }} <span style="font:500 12px var(--sans);font-style:normal;color:var(--faint)">— {{ coach.first }}</span></p></sc-if>
+                      </div>
+                      <sc-if value="{{ wk.hasStory }}" hint-placeholder-val="{{ true }}">
+                        <div sc-camel-on-click="{{ wk.open }}" role="button" tabindex="0" style="cursor:pointer;border-left:2px solid var(--mad);padding:2px 0 2px 16px">
+                          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+                            <div style="min-width:0"><div style="font:500 11px/1.4 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Inspired by</div><div style="font:500 11px/1.4 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:{{ wk.ins.c }};margin-top:3px">{{ wk.ins.eyebrow }}</div></div>
+                            <button sc-camel-on-click="{{ wk.toggleSave }}" aria-label="{{ wk.saveLabel }}" style="width:44px;height:44px;margin:-2px -12px 0 0;border:0;background:transparent;color:var(--ink);font-size:20px;cursor:pointer;flex:none"><i class="{{ wk.saveIcon }}"></i></button>
+                          </div>
+                          <div style="font:400 15px/1.35 var(--serif);margin-top:10px">{{ wk.story.eyebrow }}</div>
+                          <p style="font:400 17px/1.5 var(--serif);color:var(--mute);margin:6px 0 0;text-wrap:pretty">{{ wk.story.first }}</p>
+                          <sc-if value="{{ wk.hasNote }}">
+                            <div style="display:flex;gap:10px;align-items:flex-start;padding:12px 14px;background:var(--well);border-radius:12px;margin-top:16px">
+                              <div style="width:24px;height:24px;border-radius:50%;background:var(--paper);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font:500 9px var(--sans);flex:none">{{ coach.ini }}</div>
+                              <div style="font:italic 400 16px/1.45 var(--serif)">{{ wk.note }}</div>
+                            </div>
+                          </sc-if>
+                          <div style="display:flex;align-items:center;gap:4px;margin-top:14px;font:500 13px var(--sans);color:var(--pru)">Read the story <i class="ph ph-caret-right"></i></div>
+                        </div>
+                      </sc-if>
+                      <sc-if value="{{ wk.held }}"><p style="font:400 16px/1.5 var(--serif);color:var(--mute);margin:0">No story this week. {{ coach.first }} chose to wait.</p></sc-if>
+                      <sc-if value="{{ wk.nothing }}"><div style="border-left:2px solid var(--hair);padding:2px 0 2px 16px"><div style="font:500 11px/1.4 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Inspired by</div><p style="font:400 16px/1.5 var(--serif);color:var(--mute);margin:8px 0 0">{{ wk.nothingText }}</p></div></sc-if>
+                      <div style="border-left:2px solid var(--mad);padding:2px 0 2px 16px">
+                        <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Your line</div>
+                        <div style="font:400 20px/1.3 var(--serif);margin-top:8px;letter-spacing:-.01em">{{ wk.line }}</div>
+                        <div style="font:400 12px var(--sans);color:var(--faint);margin-top:8px">Developed with Jennifer</div>
+                      </div>
+                      <div style="display:flex;flex-direction:column;gap:6px">
+                        <button sc-camel-on-click="{{ wk.prep }}" disabled="{{ wk.prepDis }}" style="height:48px;border-radius:24px;background:var(--ink);color:var(--paper);border:0;font:500 14px var(--sans);cursor:pointer;width:100%;opacity:{{ wk.prepOp }}">Start the prep</button>
+                        <sc-if value="{{ wk.prepDis }}"><div style="font:400 12px var(--sans);color:var(--faint);text-align:center">{{ wk.prepHint }}</div></sc-if>
+                      </div>
+                    </div>
+                  </sc-if>
+                </sc-if>
+
+                <sc-if value="{{ tb.ask }}">
+                  <div data-screen-label="M8 Ask" style="padding-top:4px">
+                    <sc-if value="{{ ak.compose }}">
+                      <div style="display:flex;flex-direction:column;gap:14px;animation:cpUp 420ms var(--ease) both">
+                        <h1 style="font:400 30px/1.12 var(--serif);letter-spacing:-.03em;margin:0">What's coming up?</h1>
+                        <textarea rows="4" value="{{ ak.text }}" sc-camel-on-change="{{ ak.setText }}" aria-label="What's coming up?" placeholder="I'm presenting to the ELT in two weeks and the CFO hates the plan." style="width:100%;border:1px solid var(--hair);border-radius:12px;background:var(--paper);color:var(--ink);font:400 18px/1.45 var(--serif);padding:14px;resize:none"></textarea>
+                        <sc-if value="{{ ak.hasRecent }}">
+                          <div style="display:flex;flex-direction:column;gap:8px">
+                            <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Recent</div>
+                            <sc-for list="{{ ak.recent }}" as="r"><button sc-camel-on-click="{{ r.pick }}" style="text-align:left;padding:10px 14px;min-height:44px;border:1px solid var(--hair);border-radius:12px;background:transparent;color:var(--ink);font:400 15px/1.4 var(--serif);cursor:pointer">{{ r.t }}</button></sc-for>
+                          </div>
+                        </sc-if>
+                        <button sc-camel-on-click="{{ ak.submit }}" disabled="{{ ak.dis }}" style="height:48px;border-radius:24px;background:var(--ink);color:var(--paper);border:0;font:500 14px var(--sans);cursor:pointer;width:100%;opacity:{{ ak.op }}">Ask</button>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ ak.confirm }}">
+                      <div style="display:flex;flex-direction:column;gap:12px;animation:cpUp 420ms var(--ease) both">
+                        <p style="font:italic 300 17px/1.45 var(--serif);color:var(--mute);margin:0">{{ ak.quoted }}</p>
+                        <h1 style="font:400 30px/1.12 var(--serif);letter-spacing:-.03em;margin:6px 0 4px">Is this about…</h1>
+                        <sc-for list="{{ ak.chips }}" as="c" hint-placeholder-count="3">
+                          <button sc-camel-on-click="{{ c.pick }}" style="text-align:left;padding:14px 16px;min-height:52px;border:1px solid var(--hair);border-radius:12px;background:transparent;color:var(--ink);font:400 18px/1.35 var(--serif);cursor:pointer" style-hover="background:var(--well)" style-active="border-color:var(--ink)">{{ c.label }}</button>
+                        </sc-for>
+                        <p style="font:400 13px/1.45 var(--sans);color:var(--faint);margin:4px 2px 0">You choose the shape. The story follows from it.</p>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ ak.loading }}">
+                      <div style="display:flex;flex-direction:column;gap:14px;padding-top:8px" aria-busy="true">
+                        <div style="height:14px;width:60%;border-radius:7px;background:var(--well);animation:cpShim 1.2s ease-in-out infinite"></div>
+                        <div style="height:120px;border-radius:12px;background:var(--well);animation:cpShim 1.2s ease-in-out infinite"></div>
+                        <div style="height:56px;border-radius:12px;background:var(--well);animation:cpShim 1.2s ease-in-out .15s infinite"></div>
+                        <div style="height:56px;border-radius:12px;background:var(--well);animation:cpShim 1.2s ease-in-out .3s infinite"></div>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ ak.answer }}">
+                      <div style="display:flex;flex-direction:column;gap:22px;animation:cpUp 420ms var(--ease) both">
+                        <div>
+                          <p style="font:italic 300 16px/1.45 var(--serif);color:var(--mute);margin:0">{{ ak.quoted }}</p>
+                          <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:10px">About · {{ ak.chipLabel }}</div>
+                        </div>
+                        <div sc-camel-on-click="{{ ak.openStory }}" role="button" tabindex="0" style="cursor:pointer">
+                          <sc-if value="{{ ak.lib }}"><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--mad);margin-bottom:6px">From the library — not one of your three</div></sc-if>
+                          <div style="font:500 11px/1.4 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ ak.story.eyebrow }}</div>
+                          <p style="font:400 18px/1.55 var(--serif);margin:8px 0 0;text-wrap:pretty">{{ ak.story.moment }}</p>
+                          <sc-if value="{{ ak.storyHasPattern }}"><div style="border-top:1px solid var(--hair);padding-top:14px;margin-top:16px;font:italic 400 22px/1.35 var(--serif)">{{ ak.story.patternQ }}</div></sc-if>
+                          <div style="display:flex;align-items:center;gap:4px;margin-top:14px;font:500 13px var(--sans);color:var(--pru)">Read the story <i class="ph ph-caret-right"></i></div>
+                        </div>
+                        <div>
+                          <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:4px">How your three would walk in</div>
+                          <sc-for list="{{ ak.walk }}" as="w" hint-placeholder-count="3">
+                            <div style="padding:12px 0;border-top:1px solid var(--hair)">
+                              <sc-if value="{{ w.has }}"><p style="font:400 17px/1.45 var(--serif);margin:0"><button sc-camel-on-click="{{ w.open }}" style="border:0;background:transparent;padding:0;color:var(--pru);font:500 17px/1.45 var(--serif);cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">{{ w.lead }}</button>{{ w.text }}</p></sc-if>
+                              <sc-if value="{{ w.none }}"><p style="font:italic 400 16px/1.45 var(--serif);color:var(--mute);margin:0">{{ w.text }}</p></sc-if>
+                            </div>
+                          </sc-for>
+                          <div style="font:400 12px/1.4 var(--sans);color:var(--faint);padding-top:10px;border-top:1px solid var(--hair)">Interpretation, drawn from their stories. Not their words.</div>
+                        </div>
+                        <sc-if value="{{ ak.hasMove }}">
+                          <div style="border-left:2px solid var(--pru);padding:2px 0 2px 16px">
+                            <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Your move</div>
+                            <div style="font:400 20px/1.3 var(--serif);margin-top:8px">{{ ak.move }}</div>
+                          </div>
+                        </sc-if>
+                        <sc-if value="{{ ak.notSent }}">
+                          <div style="display:flex;flex-direction:column;gap:8px">
+                            <input value="{{ ak.note }}" sc-camel-on-change="{{ ak.setNote }}" placeholder="Add a note for {{ coach.first }} (optional)" aria-label="Note for {{ coach.first }}" style="height:44px;border:1px solid var(--hair);border-radius:12px;background:var(--paper);color:var(--ink);font:400 16px var(--serif);padding:0 14px">
+                            <button sc-camel-on-click="{{ ak.sendJim }}" style="height:48px;border-radius:24px;background:transparent;color:var(--ink);border:1px solid var(--ink);font:500 14px var(--sans);cursor:pointer;width:100%">Send to {{ coach.first }}</button>
+                          </div>
+                        </sc-if>
+                        <sc-if value="{{ ak.sent }}"><p style="font:400 16px/1.5 var(--serif);margin:0;display:flex;gap:8px;align-items:center"><i class="ph ph-check" style="color:var(--pru)"></i>Sent to {{ coach.first }}. He'll see it in your timeline.</p></sc-if>
+                        <button sc-camel-on-click="{{ ak.restart }}" style="height:44px;border:0;background:transparent;color:var(--pru);font:500 14px var(--sans);cursor:pointer">Ask something else</button>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ ak.elseSent }}">
+                      <div style="display:flex;flex-direction:column;gap:16px;padding-top:24px;animation:cpUp 420ms var(--ease) both">
+                        <p style="font:italic 300 17px/1.45 var(--serif);color:var(--mute);margin:0">{{ ak.quoted }}</p>
+                        <h1 style="font:400 30px/1.15 var(--serif);letter-spacing:-.03em;margin:0">{{ coach.first }} will see this and come back to you.</h1>
+                        <button sc-camel-on-click="{{ ak.restart }}" style="height:44px;border:0;background:transparent;color:var(--pru);font:500 14px var(--sans);cursor:pointer;align-self:flex-start;padding:0">Ask something else</button>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ tb.heroes }}">
+                  <div data-screen-label="M13 Heroes" style="animation:cpUp 420ms var(--ease) both">
+                    <h1 style="font:400 30px/1.12 var(--serif);letter-spacing:-.03em;margin:4px 0 14px">Your three</h1>
+                    <sc-for list="{{ hz.core }}" as="h" hint-placeholder-count="3">
+                      <button sc-camel-on-click="{{ h.open }}" aria-label="{{ h.aria }}" style="display:flex;gap:14px;width:100%;text-align:left;padding:18px 0;border:0;border-top:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer;align-items:flex-start" style-hover="color:var(--pru)">
+                        <div style="width:52px;height:52px;border-radius:50%;background:var(--pru12);color:var(--pru);display:flex;align-items:center;justify-content:center;font:500 15px var(--sans);flex:none">{{ h.ini }}</div>
+                        <div style="flex:1;min-width:0">
+                          <div style="font:400 22px/1.2 var(--serif);letter-spacing:-.015em">{{ h.name }}</div>
+                          <div style="font:400 14px/1.4 var(--serif);color:var(--mute)">{{ h.desc }}</div>
+                          <div style="display:flex;flex-direction:column;gap:2px;margin-top:10px;font:400 15px/1.4 var(--serif)"><sc-for list="{{ h.q }}" as="q"><div>{{ q }}</div></sc-for></div>
+                          <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:10px">{{ h.count }}</div>
+                          <div style="font:400 14px/1.45 var(--sans);color:{{ h.helps.c }};margin-top:8px">{{ h.helps.text }}</div>
+                          <div style="font:400 13px/1.45 var(--sans);color:var(--faint);margin-top:4px">{{ h.libLine }}</div>
+                          <sc-if value="{{ h.scoped }}"><p style="font:italic 400 15px/1.45 var(--serif);color:var(--pru);margin:8px 0 0">{{ h.scopeLine }}</p></sc-if>
+                        </div>
+                        <i class="ph ph-caret-right" style="color:var(--faint);flex:none;align-self:center;font-size:18px"></i>
+                      </button>
+                    </sc-for>
+                    <sc-if value="{{ hz.hasReserve }}">
+                      <button sc-camel-on-click="{{ hz.reserve.open }}" aria-label="{{ hz.reserve.aria }}" style="display:flex;gap:14px;width:100%;text-align:left;padding:16px 0;border:0;border-top:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer;opacity:.6;align-items:flex-start" style-hover="opacity:1">
+                        <div style="width:44px;height:44px;border-radius:50%;background:var(--mad12);color:var(--mad);display:flex;align-items:center;justify-content:center;font:500 13px var(--sans);flex:none">{{ hz.reserve.ini }}</div>
+                        <div style="flex:1;min-width:0"><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Reserve</div><div style="font:400 19px/1.25 var(--serif)">{{ hz.reserve.name }}</div><div style="font:400 14px/1.4 var(--serif);color:var(--mute)">{{ hz.reserve.desc }}</div></div>
+                        <i class="ph ph-caret-right" style="color:var(--faint);flex:none;align-self:center;font-size:18px"></i>
+                      </button>
+                    </sc-if>
+                    <sc-for list="{{ hz.ext }}" as="e">
+                      <button sc-camel-on-click="{{ e.open }}" aria-label="{{ e.aria }}" style="display:flex;gap:14px;width:100%;text-align:left;padding:16px 0;border:0;border-top:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer;align-items:flex-start" style-hover="color:var(--pru)">
+                        <div style="width:44px;height:44px;border-radius:50%;background:var(--well);color:var(--ink);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font:500 13px var(--sans);flex:none">{{ e.ini }}</div>
+                        <div style="flex:1;min-width:0"><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ e.status }}</div><div style="font:400 19px/1.25 var(--serif)">{{ e.name }}</div><div style="font:italic 400 14px/1.4 var(--serif);color:var(--mute)">{{ e.why }}</div></div>
+                        <sc-if value="{{ e.hasHero }}"><i class="ph ph-caret-right" style="color:var(--faint);flex:none;align-self:center;font-size:18px"></i></sc-if>
+                      </button>
+                    </sc-for>
+                    <div style="border-top:1px solid var(--hair);padding-top:16px">
+                      <sc-if value="{{ hz.addClosed }}" hint-placeholder-val="{{ true }}">
+                        <button sc-camel-on-click="{{ hz.openAdd }}" style="height:48px;border-radius:24px;background:transparent;color:var(--ink);border:1px solid var(--ink);font:500 14px var(--sans);cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:8px"><i class="ph ph-plus"></i>Add someone</button>
+                      </sc-if>
+                      <sc-if value="{{ hz.addOpen }}">
+                        <div style="display:flex;flex-direction:column;gap:10px">
+                          <label style="font:400 17px/1.35 var(--serif)">Who are you reading, watching or following?</label>
+                          <input value="{{ hz.name }}" sc-camel-on-change="{{ hz.setName }}" placeholder="Dawn Staley" aria-label="Name" style="height:44px;border:1px solid var(--hair);border-radius:12px;background:var(--paper);color:var(--ink);font:400 17px var(--serif);padding:0 14px">
+                          <input value="{{ hz.why }}" sc-camel-on-change="{{ hz.setWhy }}" placeholder="Why them? (optional)" aria-label="Why them?" style="height:44px;border:1px solid var(--hair);border-radius:12px;background:var(--paper);color:var(--ink);font:400 17px var(--serif);padding:0 14px">
+                          <div style="display:flex;gap:8px">
+                            <button sc-camel-on-click="{{ hz.cancelAdd }}" style="height:48px;flex:1;border-radius:24px;background:transparent;color:var(--ink);border:1px solid var(--hair);font:500 14px var(--sans);cursor:pointer">Cancel</button>
+                            <button sc-camel-on-click="{{ hz.submit }}" disabled="{{ hz.dis }}" style="height:48px;flex:2;border-radius:24px;background:var(--ink);color:var(--paper);border:0;font:500 14px var(--sans);cursor:pointer;opacity:{{ hz.op }}">Send to {{ coach.first }}</button>
+                          </div>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ tb.you }}">
+                  <div data-screen-label="M11 You" style="animation:cpUp 420ms var(--ease) both">
+                    <h1 style="font:400 30px/1.12 var(--serif);letter-spacing:-.03em;margin:4px 0 14px">Your shape</h1>
+                    <div style="display:flex;justify-content:flex-end"><div style="max-width:220px;text-align:right;font:italic 400 15px/1.35 var(--serif);color:var(--ink)">{{ yu.goal }}</div></div>
+                    <div style="margin:4px -6px 0;max-width:420px">{{ yu.chart }}</div>
+                    <div style="display:flex;gap:18px;font:500 12px var(--sans);color:var(--mute);margin-top:8px;font-variant-numeric:tabular-nums">
+                      <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--pru)"></span>{{ yu.acted }}</span>
+                      <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--mad)"></span>{{ yu.said }}</span>
+                    </div>
+                    <sc-if value="{{ yu.empty }}"><p style="font:italic 400 16px/1.45 var(--serif);color:var(--mute);margin:12px 0 0">Your first mark lands after Friday.</p></sc-if>
+                    <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:30px 0 4px">Saved stories</div>
+                    <sc-if value="{{ yu.noSaved }}"><p style="font:400 15px/1.5 var(--serif);color:var(--mute);margin:8px 0 0">Nothing saved yet.</p></sc-if>
+                    <sc-for list="{{ yu.saved }}" as="s">
+                      <button sc-camel-on-click="{{ s.open }}" style="display:block;width:100%;text-align:left;padding:12px 0;border:0;border-top:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer"><div style="font:500 11px/1.4 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ s.eyebrow }}</div><div style="font:400 16px/1.45 var(--serif);margin-top:4px">{{ s.first }}</div></button>
+                    </sc-for>
+                    <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:26px 0 4px">Your heroes</div>
+                    <button sc-camel-on-click="{{ yu.toHeroes }}" style="display:flex;justify-content:space-between;align-items:center;width:100%;min-height:44px;padding:0;border:0;border-top:1px solid var(--hair);background:transparent;color:var(--ink);font:400 16px var(--serif);cursor:pointer"><span>{{ yu.heroNames }}</span><i class="ph ph-caret-right" style="color:var(--faint)"></i></button>
+                    <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:26px 0 4px">Your moves</div>
+                    <div style="border-top:1px solid var(--hair);padding-top:12px;border-left:2px solid var(--pru);padding-left:14px">
+                      <div style="font:400 17px/1.4 var(--serif)">{{ yu.move }}</div>
+                      <div style="font:400 12px var(--sans);color:var(--faint);margin-top:6px">{{ yu.moveStatus }}</div>
+                    </div>
+                  </div>
+                </sc-if>
+               </div>
+              </div>
+              <sc-if value="{{ notLg }}" hint-placeholder-val="{{ true }}">
+              <div style="height:80px;flex:none;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--hair);padding-bottom:18px;background:var(--paper)">
+                <sc-for list="{{ tabs }}" as="x" hint-placeholder-count="4">
+                  <button sc-camel-on-click="{{ x.go }}" aria-current="{{ x.cur }}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:0;background:transparent;color:{{ x.c }};cursor:pointer;font:500 11px var(--sans)"><i class="{{ x.icon }}" style="font-size:22px"></i>{{ x.label }}</button>
+                </sc-for>
+              </div>
+              </sc-if>
+              </div>
+              <sc-if value="{{ pane.scrim }}"><div sc-camel-on-click="{{ closeOverlay }}" style="position:absolute;inset:0;background:var(--scrim);z-index:19"></div></sc-if>
+              <sc-if value="{{ ov.any }}">
+                <div data-screen-label="Detail pane" style="position:{{ pane.pos }};top:0;left:{{ pane.left }};right:0;bottom:0;width:{{ pane.w }};flex:none;z-index:20;border-left:{{ pane.bd }};box-shadow:{{ pane.shadow }};background:var(--paper)">
+          <sc-if value="{{ ov.story }}">
+            <div data-screen-label="M7 Story" style="position:absolute;top:0;left:0;right:0;bottom:0;background:var(--paper);z-index:20;display:flex;flex-direction:column;animation:cpUp 420ms var(--ease) both">
+              <div style="height:52px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 10px">
+                <button sc-camel-on-click="{{ sv.back }}" aria-label="{{ sv.backLabel }}" style="width:44px;height:44px;border:0;background:transparent;color:var(--ink);font-size:20px;cursor:pointer"><i class="{{ sv.backIcon }}"></i></button>
+              </div>
+              <div style="flex:1;overflow-y:auto;padding:4px 24px 24px">
+                <sc-if value="{{ sv.pinned }}"><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--pru);display:flex;align-items:center;gap:6px;margin-bottom:8px"><i class="ph-fill ph-push-pin"></i>Chosen by {{ coach.first }}</div></sc-if>
+                <sc-if value="{{ sv.lib }}"><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--mad);margin-bottom:8px">From the library — not one of your three</div></sc-if>
+                <h1 style="font:400 36px/1.06 var(--serif);letter-spacing:-.035em;margin:0"><button sc-camel-on-click="{{ sv.openHero }}" aria-label="{{ sv.heroAria }}" style="display:inline-flex;align-items:center;gap:8px;padding:0;border:0;background:transparent;color:inherit;font:inherit;letter-spacing:inherit;cursor:pointer;text-align:left;min-height:44px" style-hover="color:var(--pru)">{{ sv.hero }}<i class="ph ph-caret-right" style="font-size:18px;color:var(--faint);margin-top:6px"></i></button></h1>
+                <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:6px">{{ sv.place }}</div>
+                <p style="font:400 18px/1.55 var(--serif);margin:18px 0 0;text-wrap:pretty">{{ sv.moment }}</p>
+                <sc-if value="{{ sv.hasPattern }}">
+                  <div style="border-top:1px solid var(--hair);padding-top:16px;margin-top:20px">
+                    <div style="font:italic 400 22px/1.35 var(--serif);letter-spacing:-.01em">{{ sv.patternQ }}</div>
+                    <sc-if value="{{ sv.hasBy }}"><div style="font:400 13px var(--sans);color:var(--faint);margin-top:8px">{{ sv.by }}</div></sc-if>
+                  </div>
+                </sc-if>
+                <div style="font:400 12px/1.45 var(--sans);color:var(--faint);margin-top:18px">{{ sv.source }}</div>
+                <sc-if value="{{ sv.hasCaution }}"><div style="font:italic 400 14px/1.45 var(--serif);color:var(--mute);margin-top:6px">{{ sv.caution }}</div></sc-if>
+                <sc-if value="{{ sv.hasNote }}">
+                  <div style="display:flex;gap:10px;align-items:flex-start;padding:12px 14px;background:var(--well);border-radius:12px;margin-top:18px">
+                    <div style="width:24px;height:24px;border-radius:50%;background:var(--paper);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font:500 9px var(--sans);flex:none">{{ coach.ini }}</div>
+                    <div style="font:italic 400 16px/1.45 var(--serif)">{{ sv.note }}</div>
+                  </div>
+                </sc-if>
+                <div style="margin-top:22px;padding-top:14px;border-top:1px solid var(--hair)">
+                  <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Why this story</div>
+                  <p style="font:400 16px/1.5 var(--serif);margin:6px 0 0">{{ sv.why }}</p>
+                </div>
+                <sc-if value="{{ sv.hasDeeper }}">
+                  <div style="margin-top:22px;padding-top:14px;border-top:1px solid var(--hair)">
+                    <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Go deeper</div>
+                    <sc-for list="{{ sv.deeper }}" as="w" hint-placeholder-count="2">
+                      <a href="{{ w.url }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;min-height:56px;padding:10px 0;border-bottom:1px solid var(--hair);color:var(--ink);text-decoration:none" style-hover="color:var(--pru)">
+                        <i class="{{ w.icon }}" style="font-size:20px;color:var(--faint);flex:none"></i>
+                        <span style="flex:1;min-width:0"><span style="display:block;font:400 17px/1.3 var(--serif)">{{ w.title }}</span><span style="display:block;font:400 12px/1.4 var(--sans);color:var(--faint);margin-top:2px">{{ w.meta }}</span></span>
+                        <i class="ph ph-arrow-up-right" style="font-size:16px;color:var(--faint);flex:none"></i>
+                      </a>
+                    </sc-for>
+                    <button sc-camel-on-click="{{ sv.openHero }}" style="display:flex;align-items:center;justify-content:space-between;width:100%;min-height:48px;padding:0;border:0;background:transparent;color:var(--pru);font:500 14px var(--sans);cursor:pointer;text-align:left"><span>{{ sv.moreLabel }}</span><i class="ph ph-caret-right"></i></button>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ sv.declined }}"><p style="font:italic 400 15px/1.45 var(--serif);color:var(--mute);margin:18px 0 0">{{ coach.first }} will see that. You won't get this one again.</p></sc-if>
+              </div>
+              <div style="flex:none;display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:8px;padding:12px 16px 30px;border-top:1px solid var(--hair)">
+                <button sc-camel-on-click="{{ sv.toggleSave }}" style="height:44px;border-radius:22px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 13px var(--sans);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px"><i class="{{ sv.saveIcon }}"></i>{{ sv.saveLabel }}</button>
+                <button sc-camel-on-click="{{ sv.askJim }}" style="height:44px;border-radius:22px;border:1px solid var(--ink);background:transparent;color:var(--ink);font:500 13px var(--sans);cursor:pointer">Ask {{ coach.first }} about this</button>
+                <button sc-camel-on-click="{{ sv.notForMe }}" disabled="{{ sv.declined }}" style="height:44px;border-radius:22px;border:1px solid var(--hair);background:transparent;color:var(--mute);font:500 13px var(--sans);cursor:pointer">Not for me</button>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ ov.thread }}">
+            <div data-screen-label="M12 Coach thread" style="position:absolute;top:0;left:0;right:0;bottom:0;background:var(--paper);z-index:21;display:flex;flex-direction:column;animation:cpUp 420ms var(--ease) both">
+              <div style="height:60px;flex:none;display:flex;align-items:center;gap:10px;padding:0 10px;border-bottom:1px solid var(--hair)">
+                <button sc-camel-on-click="{{ th.back }}" aria-label="{{ th.backLabel }}" style="width:44px;height:44px;border:0;background:transparent;color:var(--ink);font-size:20px;cursor:pointer"><i class="{{ th.backIcon }}"></i></button>
+                <span style="width:32px;height:32px;border-radius:50%;background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font:500 11px var(--sans)">{{ coach.ini }}</span>
+                <div><div style="font:400 18px/1.2 var(--serif)">{{ coach.name }}</div><div style="font:400 12px var(--sans);color:var(--faint)">Your coach</div></div>
+              </div>
+              <div style="flex:1;overflow-y:auto;padding:16px 16px 12px;display:flex;flex-direction:column;gap:14px">
+                <sc-for list="{{ th.list }}" as="m" hint-placeholder-count="3">
+                  <div style="display:flex;flex-direction:column;align-items:{{ m.justify }}">
+                    <sc-if value="{{ m.isText }}"><div style="max-width:82%;padding:10px 14px;border-radius:16px;background:{{ m.bg }};font:400 16px/1.45 var(--serif)">{{ m.body }}</div></sc-if>
+                    <sc-if value="{{ m.isStory }}"><button sc-camel-on-click="{{ m.open }}" style="max-width:82%;text-align:left;padding:12px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--paper);color:var(--ink);cursor:pointer"><div style="font:500 10px/1.4 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Story · {{ m.s.eyebrow }}</div><div style="font:400 15px/1.45 var(--serif);margin-top:4px">{{ m.s.first }}</div></button></sc-if>
+                    <sc-if value="{{ m.isAsk }}"><div style="max-width:82%;padding:12px 14px;border-radius:14px;background:{{ m.bg }}"><div style="font:500 10px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Ask · {{ m.chip }}</div><div style="font:italic 400 15px/1.45 var(--serif);margin-top:4px">{{ m.body }}</div><sc-if value="{{ m.hasNote }}"><div style="font:400 15px/1.45 var(--serif);margin-top:6px">{{ m.note }}</div></sc-if></div></sc-if>
+                    <sc-if value="{{ m.isVoice }}">
+                      <div style="display:flex;align-items:center;gap:10px;padding:8px 14px 8px 8px;border-radius:24px;background:{{ m.bg }}">
+                        <button sc-camel-on-click="{{ m.toggle }}" aria-label="{{ m.playLabel }}" style="width:44px;height:44px;border-radius:50%;border:0;background:var(--ink);color:var(--paper);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px"><i class="{{ m.playIcon }}"></i></button>
+                        <div style="display:flex;align-items:center;gap:2px;height:24px">
+                          <sc-for list="{{ m.bars }}" as="b"><span style="display:block;width:3px;height:{{ b.h }}px;border-radius:2px;background:{{ b.c }};animation:{{ b.anim }}"></span></sc-for>
+                        </div>
+                        <span style="font:400 12px var(--sans);color:var(--faint);font-variant-numeric:tabular-nums">{{ m.dur }}</span>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ m.isCheckin }}">
+                      <div style="width:82%;padding:14px;border-radius:14px;border:1px solid var(--hair);background:var(--paper)">
+                        <div style="font:500 10px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Next check-in</div>
+                        <div style="font:400 17px/1.35 var(--serif);margin-top:4px">{{ m.slot }}</div>
+                        <button sc-camel-on-click="{{ m.toggleBook }}" style="height:44px;padding:0;border:0;background:transparent;color:var(--pru);font:500 13px var(--sans);cursor:pointer;margin-top:4px">Reschedule</button>
+                        <sc-if value="{{ m.bookOpen }}">
+                          <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+                            <sc-for list="{{ m.slots }}" as="sl"><button sc-camel-on-click="{{ sl.pick }}" style="height:44px;border-radius:10px;border:1px solid {{ sl.bd }};background:transparent;color:var(--ink);font:500 13px var(--sans);cursor:pointer">{{ sl.t }}</button></sc-for>
+                          </div>
+                        </sc-if>
+                      </div>
+                    </sc-if>
+                    <div style="font:400 11px var(--sans);color:var(--faint);margin-top:4px;font-variant-numeric:tabular-nums">{{ m.at }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              <sc-if value="{{ th.attachOpen }}">
+                <div style="flex:none;max-height:180px;overflow-y:auto;padding:8px 16px;border-top:1px solid var(--hair)">
+                  <sc-if value="{{ th.noSaved }}"><p style="font:400 14px var(--serif);color:var(--mute);margin:6px 0">Save a story first. It will show here.</p></sc-if>
+                  <sc-for list="{{ th.savedList }}" as="s"><button sc-camel-on-click="{{ s.pick }}" style="display:block;width:100%;text-align:left;min-height:44px;border:0;border-bottom:1px solid var(--hair);background:transparent;color:var(--ink);font:500 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;cursor:pointer">{{ s.eyebrow }}</button></sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ th.hasAttach }}">
+                <div style="flex:none;display:flex;align-items:center;gap:8px;margin:0 16px 8px;padding:8px 10px 8px 12px;border-radius:10px;background:var(--well)">
+                  <i class="ph ph-book-open-text" style="color:var(--faint)"></i>
+                  <span style="flex:1;font:500 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)">{{ th.attachS.eyebrow }}</span>
+                  <button sc-camel-on-click="{{ th.clearAttach }}" aria-label="Remove attachment" style="width:44px;height:44px;margin:-10px -10px -10px 0;border:0;background:transparent;color:var(--faint);cursor:pointer"><i class="ph ph-x"></i></button>
+                </div>
+              </sc-if>
+              <div style="flex:none;display:flex;gap:8px;align-items:center;padding:10px 12px 30px;border-top:1px solid var(--hair)">
+                <button sc-camel-on-click="{{ th.toggleAttach }}" aria-label="Attach a saved story" style="width:44px;height:44px;border-radius:22px;border:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer;font-size:18px"><i class="ph ph-paperclip"></i></button>
+                <input value="{{ th.compose }}" sc-camel-on-change="{{ th.setCompose }}" sc-camel-on-key-down="{{ th.onKey }}" placeholder="Message {{ coach.first }}" aria-label="Message {{ coach.first }}" style="flex:1;height:44px;border:1px solid var(--hair);border-radius:22px;background:var(--paper);color:var(--ink);font:400 16px var(--serif);padding:0 16px">
+                <button sc-camel-on-click="{{ th.send }}" aria-label="Send" style="width:44px;height:44px;border-radius:22px;border:0;background:var(--ink);color:var(--paper);cursor:pointer;font-size:18px"><i class="ph ph-arrow-up"></i></button>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ ov.prep }}">
+            <div data-screen-label="M9 Before the room" style="position:absolute;top:0;left:0;right:0;bottom:0;background:var(--paper);z-index:22;display:flex;flex-direction:column;padding:4px 24px 34px;animation:cpUp 420ms var(--ease) both">
+              <div style="height:52px;display:flex;align-items:center;justify-content:flex-end"><button sc-camel-on-click="{{ pr.close }}" aria-label="Close" style="width:44px;height:44px;margin-right:-12px;border:0;background:transparent;color:var(--ink);font-size:20px;cursor:pointer"><i class="ph ph-x"></i></button></div>
+              <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ pr.when }}</div>
+              <h1 style="font:400 32px/1.1 var(--serif);letter-spacing:-.03em;margin:8px 0 28px">{{ pr.sit }}</h1>
+              <div style="display:flex;flex-direction:column;gap:24px">
+                <div style="border-left:2px solid var(--pru);padding-left:16px"><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Your move</div><div style="font:400 21px/1.3 var(--serif);margin-top:6px">{{ pr.move }}</div></div>
+                <div style="border-left:2px solid var(--mad);padding-left:16px"><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Your line</div><div style="font:400 21px/1.3 var(--serif);margin-top:6px">{{ pr.line }}</div></div>
+                <sc-if value="{{ pr.hasPattern }}"><div style="padding-left:18px"><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ pr.heroLine }}</div><div style="font:italic 400 19px/1.4 var(--serif);margin-top:6px">{{ pr.pattern }}</div></div></sc-if>
+              </div>
+              <div style="flex:1"></div>
+              <button role="checkbox" aria-checked="{{ pr.ready }}" sc-camel-on-click="{{ pr.toggle }}" style="height:60px;border-radius:14px;border:1px solid var(--ink);background:transparent;color:var(--ink);display:flex;align-items:center;gap:14px;padding:0 18px;cursor:pointer;font:400 19px var(--serif)">
+                <span style="width:24px;height:24px;border-radius:6px;border:1.5px solid var(--ink);background:{{ pr.box }};color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:14px"><i class="{{ pr.boxIcon }}"></i></span>{{ pr.readyText }}
+              </button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ ov.debrief }}">
+            <div data-screen-label="M10 Debrief" style="position:absolute;top:0;left:0;right:0;bottom:0;background:var(--paper);z-index:22;display:flex;flex-direction:column;padding:4px 24px 34px;animation:cpUp 420ms var(--ease) both">
+              <div style="height:52px;display:flex;align-items:center;justify-content:flex-end"><button sc-camel-on-click="{{ db.close }}" aria-label="Close" style="width:44px;height:44px;margin-right:-12px;border:0;background:transparent;color:var(--ink);font-size:20px;cursor:pointer"><i class="ph ph-x"></i></button></div>
+              <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ db.sit }}</div>
+              <h1 style="font:400 32px/1.1 var(--serif);letter-spacing:-.03em;margin:8px 0 26px">How did it go?</h1>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <button role="switch" aria-checked="{{ db.acted.on }}" sc-camel-on-click="{{ db.acted.toggle }}" style="height:64px;border-radius:14px;border:1px solid {{ db.acted.bd }};background:{{ db.acted.bg }};color:var(--ink);display:flex;align-items:center;gap:14px;padding:0 18px;cursor:pointer;font:400 19px var(--serif);text-align:left">
+                  <span style="width:10px;height:10px;border-radius:50%;background:var(--pru);flex:none"></span><span style="flex:1">{{ db.acted.label }}</span>
+                  <span style="width:44px;height:24px;border-radius:12px;background:{{ db.acted.track }};position:relative;flex:none;transition:background 280ms var(--ease)"><span style="position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--paper);transform:{{ db.acted.knob }};transition:transform 280ms var(--ease)"></span></span>
+                </button>
+                <button role="switch" aria-checked="{{ db.said.on }}" sc-camel-on-click="{{ db.said.toggle }}" style="height:64px;border-radius:14px;border:1px solid {{ db.said.bd }};background:{{ db.said.bg }};color:var(--ink);display:flex;align-items:center;gap:14px;padding:0 18px;cursor:pointer;font:400 19px var(--serif);text-align:left">
+                  <span style="width:10px;height:10px;border-radius:50%;background:var(--mad);flex:none"></span><span style="flex:1">{{ db.said.label }}</span>
+                  <span style="width:44px;height:24px;border-radius:12px;background:{{ db.said.track }};position:relative;flex:none;transition:background 280ms var(--ease)"><span style="position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--paper);transform:{{ db.said.knob }};transition:transform 280ms var(--ease)"></span></span>
+                </button>
+                <input value="{{ db.note }}" sc-camel-on-change="{{ db.setNote }}" placeholder="One line, if you want" aria-label="Note" style="height:48px;border:1px solid var(--hair);border-radius:12px;background:var(--paper);color:var(--ink);font:400 17px var(--serif);padding:0 14px;margin-top:6px">
+              </div>
+              <div style="flex:1"></div>
+              <button sc-camel-on-click="{{ db.none }}" style="height:44px;border:0;background:transparent;color:var(--mute);font:500 13px var(--sans);cursor:pointer;margin-bottom:6px">It didn't happen this week</button>
+              <button sc-camel-on-click="{{ db.done }}" disabled="{{ db.dis }}" style="height:48px;border-radius:24px;background:var(--ink);color:var(--paper);border:0;font:500 14px var(--sans);cursor:pointer;width:100%;opacity:{{ db.op }}">Done</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ ov.hero }}">
+            <div data-screen-label="M14 Hero" style="position:absolute;top:0;left:0;right:0;bottom:0;background:var(--paper);z-index:20;display:flex;flex-direction:column;animation:cpUp 420ms var(--ease) both">
+              <div style="height:52px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 10px">
+                <button sc-camel-on-click="{{ hv.back }}" aria-label="{{ hv.backLabel }}" style="width:44px;height:44px;border:0;background:transparent;color:var(--ink);font-size:20px;cursor:pointer"><i class="{{ hv.backIcon }}"></i></button>
+                <span style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding-right:14px">{{ hv.tier }}</span>
+              </div>
+              <div style="flex:1;overflow-y:auto;padding:4px 24px 32px">
+                <div style="display:flex;align-items:center;gap:16px">
+                  <div style="width:64px;height:64px;border-radius:50%;background:var(--pru12);color:var(--pru);display:flex;align-items:center;justify-content:center;font:500 20px var(--sans);flex:none">{{ hv.ini }}</div>
+                  <div style="min-width:0"><h1 style="font:400 34px/1.06 var(--serif);letter-spacing:-.035em;margin:0">{{ hv.name }}</h1><div style="font:400 15px/1.4 var(--serif);color:var(--mute);margin-top:4px">{{ hv.desc }}</div></div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:4px;margin-top:18px;font:400 17px/1.4 var(--serif)"><sc-for list="{{ hv.q }}" as="q" hint-placeholder-count="3"><div>{{ q }}</div></sc-for></div>
+                <sc-if value="{{ hv.scoped }}"><p style="font:italic 400 15px/1.45 var(--serif);color:var(--pru);margin:14px 0 0">{{ hv.scopeLine }}</p></sc-if>
+                <div style="margin-top:28px;padding-top:14px;border-top:1px solid var(--hair)">
+                  <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ hv.storiesLabel }}</div>
+                  <sc-if value="{{ hv.noStories }}"><p style="font:400 16px/1.5 var(--serif);color:var(--mute);margin:8px 0 0">{{ hv.noStoriesText }}</p></sc-if>
+                  <sc-for list="{{ hv.stories }}" as="s">
+                    <button sc-camel-on-click="{{ s.open }}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;min-height:56px;padding:12px 0;border:0;border-bottom:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer" style-hover="color:var(--pru)">
+                      <span style="flex:1;min-width:0"><span style="display:block;font:500 11px/1.4 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ s.place }}</span><span style="display:block;font:400 16px/1.45 var(--serif);margin-top:4px">{{ s.first }}</span></span>
+                      <i class="ph ph-caret-right" style="color:var(--faint);flex:none;font-size:16px"></i>
+                    </button>
+                  </sc-for>
+                  <sc-if value="{{ hv.moreInLib }}"><p style="font:400 14px/1.5 var(--serif);color:var(--mute);margin:10px 0 0">{{ hv.moreText }}</p></sc-if>
+                </div>
+                <sc-if value="{{ hv.hasWorks }}">
+                  <div style="margin-top:28px;padding-top:14px;border-top:1px solid var(--hair)">
+                    <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Go deeper</div>
+                    <sc-for list="{{ hv.groups }}" as="g">
+                      <div style="font:500 12px var(--sans);color:var(--mute);margin-top:16px">{{ g.label }}</div>
+                      <sc-for list="{{ g.items }}" as="w">
+                        <a href="{{ w.url }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;min-height:56px;padding:10px 0;border-bottom:1px solid var(--hair);color:var(--ink);text-decoration:none" style-hover="color:var(--pru)">
+                          <i class="{{ w.icon }}" style="font-size:20px;color:var(--faint);flex:none"></i>
+                          <span style="flex:1;min-width:0"><span style="display:block;font:400 17px/1.3 var(--serif)">{{ w.title }}</span><span style="display:block;font:400 12px/1.4 var(--sans);color:var(--faint);margin-top:2px">{{ w.meta }}</span><sc-if value="{{ w.hasLine }}"><span style="display:block;font:400 14px/1.45 var(--serif);color:var(--mute);margin-top:4px">{{ w.line }}</span></sc-if></span>
+                          <i class="ph ph-arrow-up-right" style="font-size:16px;color:var(--faint);flex:none"></i>
+                        </a>
+                      </sc-for>
+                    </sc-for>
+                    <a href="{{ hv.wiki }}" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:space-between;min-height:48px;margin-top:8px;color:var(--pru);font:500 14px var(--sans);text-decoration:none"><span>{{ hv.wikiLabel }}</span><i class="ph ph-arrow-up-right"></i></a>
+                    <p style="font:400 12px/1.45 var(--sans);color:var(--faint);margin:12px 0 0">Opens outside Constellation. The stories above are the checked record; these are places to read and listen further.</p>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ hv.noWorks }}"><p style="font:400 14px/1.5 var(--serif);color:var(--mute);margin:28px 0 0;padding-top:14px;border-top:1px solid var(--hair)">Nothing to read or listen to yet.</p></sc-if>
+              </div>
+            </div>
+          </sc-if>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ nt.show }}">
+            <div sc-camel-on-click="{{ nt.open }}" role="button" tabindex="0" style="position:absolute;top:48px;left:10px;right:10px;max-width:420px;margin:0 auto;z-index:40;padding:12px 14px;border-radius:20px;background:var(--well);border:1px solid var(--hair);box-shadow:0 14px 34px rgba(0,0,0,.2);display:flex;gap:12px;align-items:flex-start;cursor:pointer;animation:cpDrop 420ms var(--ease) both">
+              <div style="width:36px;height:36px;border-radius:9px;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;font:400 20px var(--serif);flex:none">C</div>
+              <div style="flex:1;min-width:0">
+                <div style="display:flex;justify-content:space-between;font:500 11px var(--sans);letter-spacing:.08em;color:var(--faint)"><span>CONSTELLATION</span><span>now</span></div>
+                <div style="font:500 14px/1.35 var(--sans);margin-top:3px">{{ nt.text }}</div>
+              </div>
+              <button sc-camel-on-click="{{ nt.close }}" aria-label="Dismiss notification" style="width:44px;height:44px;margin:-8px -10px -8px -6px;border:0;background:transparent;color:var(--faint);cursor:pointer"><i class="ph ph-x"></i></button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ toast.show }}">
+            <div role="status" style="position:absolute;left:22px;right:22px;bottom:96px;max-width:380px;margin:0 auto;z-index:41;padding:12px 16px;border-radius:14px;background:var(--ink);color:var(--paper);font:500 13px/1.4 var(--sans);animation:cpUp 280ms var(--ease) both">{{ toast.text }}</div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isCoach }}">
+      <div style="width:{{ cf.w }}px;height:{{ cf.h }}px;position:relative;flex:none">
+        <div data-screen-label="Coach console" style="position:absolute;left:0;top:0;width:{{ cf.iw }}px;height:{{ cf.ih }}px;transform:scale({{ cf.s }});transform-origin:0 0;background:var(--paper);color:var(--ink);display:flex;overflow:hidden;border-radius:{{ cf.r }}px;box-shadow:{{ cf.shadow }}">
+          <div style="width:{{ cf.sbW }}px;flex:none;border-right:1px solid var(--hair);padding:20px 12px;display:flex;flex-direction:column;gap:2px">
+            <sc-if value="{{ cf.full }}" hint-placeholder-val="{{ true }}"><div style="font:400 21px var(--serif);letter-spacing:-.02em;padding:0 10px 18px">Constellation</div></sc-if>
+            <sc-if value="{{ cf.rail }}"><div aria-label="Constellation" style="font:400 24px var(--serif);letter-spacing:-.02em;text-align:center;padding:0 0 14px">C</div></sc-if>
+            <div style="display:flex;align-items:center;justify-content:{{ cf.navJ }};gap:10px;padding:0 {{ cf.navPx }}px 18px">
+              <span title="{{ coach.name }} · {{ coach.title }}" style="width:32px;height:32px;border-radius:50%;background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font:500 11px var(--sans);flex:none">{{ coach.ini }}</span>
+              <sc-if value="{{ cf.full }}" hint-placeholder-val="{{ true }}"><div><div style="font:500 13px var(--sans)">{{ coach.name }}</div><div style="font:400 12px var(--sans);color:var(--faint)">{{ coach.title }}</div></div></sc-if>
+            </div>
+            <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+              <button sc-camel-on-click="{{ n.go }}" title="{{ n.label }}" aria-label="{{ n.label }}" style="height:40px;display:flex;align-items:center;justify-content:{{ n.j }};gap:10px;padding:0 {{ n.px }}px;border:0;border-radius:8px;background:{{ n.bg }};color:{{ n.fg }};font:500 13px var(--sans);cursor:pointer;text-align:left" style-hover="background:var(--well)">
+                <i class="{{ n.icon }}" style="font-size:18px"></i><span style="flex:1;display:{{ n.disp }}">{{ n.label }}</span>
+                <sc-if value="{{ n.hasBadge }}"><span style="min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--ink);color:var(--paper);font:500 11px/20px var(--sans);text-align:center;font-variant-numeric:tabular-nums">{{ n.badge }}</span></sc-if>
+              </button>
+            </sc-for>
+            <div style="flex:1"></div>
+            <sc-if value="{{ coach.notJennifer }}"><sc-if value="{{ cf.full }}"><div style="padding:0 10px;font:400 12px/1.45 var(--sans);color:var(--faint)">Jennifer Talbott<br>Contributor · authentic self, lines</div></sc-if></sc-if>
+          </div>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;position:relative">
+            <div style="height:64px;flex:none;display:flex;align-items:center;gap:16px;padding:0 28px;border-bottom:1px solid var(--hair)">
+              <div style="font:400 26px var(--serif);letter-spacing:-.025em">{{ cTitle }}</div>
+              <sc-if value="{{ mtabsShow }}">
+                <div style="display:flex;gap:4px;margin-left:12px;align-self:stretch">
+                  <sc-for list="{{ mtabs }}" as="mt"><button sc-camel-on-click="{{ mt.go }}" style="height:100%;padding:0 12px;border:0;border-bottom:2px solid {{ mt.bd }};background:transparent;color:{{ mt.fg }};font:500 13px var(--sans);cursor:pointer">{{ mt.label }}</button></sc-for>
+                </div>
+              </sc-if>
+              <div style="flex:1"></div>
+              <span style="font:400 12px var(--sans);color:var(--faint);font-variant-numeric:tabular-nums">{{ cSub }}</span>
+              <span style="display:flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:15px;background:var(--well);font:500 12px var(--sans);font-variant-numeric:tabular-nums"><i class="ph ph-timer"></i>{{ countdown }}</span>
+            </div>
+            <div style="flex:1;min-height:0;overflow-y:auto">
+
+              <sc-if value="{{ cs.C1 }}">
+                <div data-screen-label="C1 Members" style="padding:22px 28px">
+                  <div style="font:500 13px var(--sans);color:var(--mute);margin-bottom:16px">{{ rosterSummary }}</div>
+                  <div style="display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) 150px 64px minmax(0,1fr) minmax(0,1.1fr) 78px 94px 112px;gap:12px;padding:0 0 10px;border-bottom:1px solid var(--hair);font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">
+                    <span>Member</span><span>Goal</span><span>Born</span><span>Coach</span><span>Heroes</span><span>Current move</span><span>Last mark</span><span>Status ↓</span><span>Next check-in</span>
+                  </div>
+                  <sc-for list="{{ ro }}" as="r" hint-placeholder-count="4">
+                    <div sc-camel-on-click="{{ r.open }}" role="button" tabindex="0" style="display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) 150px 64px minmax(0,1fr) minmax(0,1.1fr) 78px 94px 112px;gap:12px;padding:16px 0;border-bottom:1px solid var(--hair);align-items:center;cursor:pointer" style-hover="background:var(--well)">
+                      <div style="display:flex;align-items:center;gap:10px;min-width:0">
+                        <span style="width:32px;height:32px;border-radius:50%;background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font:500 11px var(--sans);flex:none">{{ r.ini }}</span>
+                        <div style="min-width:0"><div style="font:400 16px/1.25 var(--serif)">{{ r.name }}</div><div style="font:400 12px/1.35 var(--sans);color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.role }}</div></div>
+                      </div>
+                      <div style="font:italic 400 14px/1.4 var(--serif);color:var(--mute);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ r.goal }}</div>
+                      <div style="font:400 12px/1.45 var(--sans);color:var(--mute);font-variant-numeric:tabular-nums">{{ r.born }}</div>
+                      <div style="font:400 12px var(--sans);color:var(--mute)">{{ r.coach }}</div>
+                      <div style="display:flex;flex-wrap:wrap;gap:4px"><sc-for list="{{ r.heroes }}" as="h"><span style="padding:2px 8px;border-radius:10px;border:1px solid var(--hair);font:500 11px/1.5 var(--sans)">{{ h }}</span></sc-for></div>
+                      <div style="font:400 14px/1.4 var(--serif);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ r.move }}</div>
+                      <div style="font:400 12px var(--sans);color:var(--mute);font-variant-numeric:tabular-nums">{{ r.last }}</div>
+                      <div><span style="display:inline-block;padding:3px 10px;border-radius:12px;background:{{ r.pill.bg }};color:{{ r.pill.fg }};font:500 12px/1.4 var(--sans);white-space:nowrap">{{ r.pill.t }}</span></div>
+                      <div style="font:400 12px var(--sans);color:var(--mute);font-variant-numeric:tabular-nums">{{ r.next }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ cs.C2 }}">
+                <div data-screen-label="C2 Member overview" style="padding:20px 28px 28px">
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px">
+                    <button sc-camel-on-click="{{ o2.back }}" style="height:32px;padding:0 10px;border-radius:16px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer;display:flex;align-items:center;gap:6px"><i class="ph ph-arrow-left"></i>Members</button>
+                    <span style="font:400 13px var(--sans);color:var(--mute)">{{ o2.role }}</span>
+                    <div style="flex:1"></div>
+                    <button sc-camel-on-click="{{ o2.toggleHold }}" style="height:32px;padding:0 12px;border-radius:16px;border:1px solid var(--hair);background:{{ o2.holdBg }};color:{{ o2.holdFg }};font:500 12px var(--sans);cursor:pointer">{{ o2.holdLabel }}</button>
+                    <button sc-camel-on-click="{{ o2.message }}" style="height:32px;padding:0 12px;border-radius:16px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer">Message</button>
+                    <button sc-camel-on-click="{{ o2.book }}" style="height:32px;padding:0 12px;border-radius:16px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer">Book check-in</button>
+                    <sc-if value="{{ o2.canPrep }}"><button sc-camel-on-click="{{ o2.prep }}" style="height:32px;padding:0 14px;border-radius:16px;border:0;background:var(--ink);color:var(--paper);font:500 12px var(--sans);cursor:pointer">Prep check-in</button></sc-if>
+                  </div>
+                  <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) minmax(0,1fr);gap:36px">
+                    <div style="display:flex;flex-direction:column;gap:24px">
+                      <sc-if value="{{ o2.from.has }}">
+                        <div>
+                          <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Where they're coming from</div>
+                          <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 14px;margin-top:8px;font:400 14px/1.5 var(--serif)"><span style="color:var(--mute)">Born</span><span>{{ o2.from.born }}</span><span style="color:var(--mute)">Generation</span><span>{{ o2.from.gen }}</span><span style="color:var(--mute)">Grew up</span><span>{{ o2.from.grew }}</span><span style="color:var(--mute)">Interests</span><span>{{ o2.from.ints }}</span></div>
+                          <sc-if value="{{ o2.from.tl.show }}"><div style="width:280px;max-width:100%"><div style="position:relative;height:56px;margin-top:12px"><div style="position:absolute;left:0;width:{{ o2.from.tl.b0 }}%;top:27px;border-top:1px dotted var(--mute)"></div><div style="position:absolute;left:{{ o2.from.tl.b1 }}%;right:0;top:27px;border-top:1px dotted var(--mute)"></div><div style="position:absolute;left:{{ o2.from.tl.b0 }}%;width:{{ o2.from.tl.bw }}%;top:21px;height:13px;background:var(--pru12);border-left:1px solid var(--pru);border-right:1px solid var(--pru);transition:left 280ms var(--ease),width 280ms var(--ease)"></div><div style="position:absolute;left:{{ o2.from.tl.b0 }}%;width:{{ o2.from.tl.bw }}%;top:27px;border-top:1px solid var(--ink);transition:left 280ms var(--ease),width 280ms var(--ease)"></div><div style="position:absolute;left:0;top:25px;width:5px;height:5px;border-radius:50%;background:var(--ink)"></div><div style="position:absolute;left:{{ o2.from.tl.b0 }}%;top:38px;display:{{ o2.from.tl.winDisp }};font:500 12px var(--sans);color:var(--mute);white-space:nowrap;font-variant-numeric:tabular-nums">{{ o2.from.tl.win }}</div><div style="position:absolute;right:0;top:19px;width:1px;height:8px;background:var(--mute)"></div><div style="position:absolute;right:0;top:4px;font:500 11px var(--sans);color:var(--faint)">Today</div><sc-for list="{{ o2.from.tl.ticks }}" as="e"><div style="position:absolute;left:{{ e.x }}%;top:0;bottom:0"><sc-if value="{{ e.up }}"><div style="position:absolute;left:0;top:19px;width:1px;height:8px;background:var(--mad)"></div><div style="position:absolute;left:4px;top:1px;white-space:nowrap;font:400 13px/16px var(--serif)"><span style="font:500 11px var(--sans);color:var(--mad);margin-right:5px">{{ e.year }}</span>{{ e.label }}</div></sc-if><sc-if value="{{ e.down }}"><div style="position:absolute;left:0;top:28px;width:1px;height:8px;background:var(--mad)"></div><div style="position:absolute;left:4px;bottom:0;white-space:nowrap;font:400 13px/16px var(--serif)"><span style="font:500 11px var(--sans);color:var(--mad);margin-right:5px">{{ e.year }}</span>{{ e.label }}</div></sc-if></div></sc-for></div></div></sc-if>
+                          <div style="font:400 13px/1.45 var(--sans);color:var(--mute);margin-top:10px">{{ o2.from.makeup }}</div>
+                        </div>
+                      </sc-if>
+                      <div><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Goal</div><div style="font:italic 400 19px/1.4 var(--serif);margin-top:8px">{{ o2.goal }}</div></div>
+                      <div>
+                        <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Authentic self · Jennifer</div>
+                        <sc-if value="{{ o2.noSelf }}"><p style="font:400 14px/1.5 var(--serif);color:var(--mute);margin:8px 0 0">Jennifer hasn't written this yet.</p></sc-if>
+                        <sc-for list="{{ o2.self }}" as="x"><div style="padding:8px 0;border-bottom:1px solid var(--hair)"><div style="font:500 12px var(--sans);color:var(--mad)">{{ x.k }}</div><div style="font:400 15px/1.45 var(--serif);margin-top:2px">{{ x.v }}</div></div></sc-for>
+                      </div>
+                      <div>
+                        <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Heroes</div>
+                        <sc-for list="{{ o2.heroes }}" as="h">
+                          <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--hair)">
+                            <span style="width:10px;height:10px;border-radius:50%;background:{{ h.dotBg }};border:{{ h.dotBd }};margin-top:6px;flex:none;box-sizing:border-box"></span>
+                            <div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font:400 15px var(--serif)">{{ h.name }}</span><span style="font:500 11px var(--sans);color:var(--faint);letter-spacing:.06em;text-transform:uppercase">{{ h.tier }}</span></div>
+                              <div style="font:400 12px var(--sans);color:var(--mute)">{{ h.fit }}</div><sc-if value="{{ h.hasScope }}"><div style="font:400 12px var(--sans);color:var(--pru)">{{ h.scope }}</div></sc-if></div>
+                          </div>
+                        </sc-for>
+                      </div>
+                      <div>
+                        <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Situations</div>
+                        <sc-for list="{{ o2.sits }}" as="s"><div style="padding:9px 0;border-bottom:1px solid var(--hair)"><div style="font:400 15px/1.4 var(--serif)"><span style="font:500 12px var(--sans);color:var(--faint);margin-right:8px">{{ s.id }}</span>{{ s.line }}</div><div style="font:400 12px var(--sans);color:var(--faint);margin-top:2px">{{ s.key }}</div></div></sc-for>
+                      </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:24px">
+                      <div style="border-left:2px solid var(--pru);padding-left:16px">
+                        <div style="display:flex;justify-content:space-between"><span style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Move 1</span><span style="font:500 11px var(--sans);color:var(--faint)">{{ o2.moveStatus }}</span></div>
+                        <div style="font:400 18px/1.3 var(--serif);margin-top:8px">{{ o2.move }}</div>
+                        <sc-for list="{{ o2.mvRows }}" as="x"><div style="display:grid;grid-template-columns:104px 1fr;gap:10px;padding:7px 0;border-bottom:1px solid var(--hair)"><span style="font:500 12px var(--sans);color:var(--faint)">{{ x.k }}</span><span style="font:400 14px/1.45 var(--serif)">{{ x.v }}</span></div></sc-for>
+                        <div style="display:flex;flex-direction:column;gap:2px;margin-top:10px"><sc-for list="{{ o2.tests }}" as="x"><div style="font:400 12px var(--sans);color:{{ x.c }}">{{ x.mark }} {{ x.label }}</div></sc-for></div>
+                      </div>
+                      <sc-if value="{{ o2.isS }}">
+                        <div>
+                          <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Micro-moves</div>
+                          <sc-for list="{{ o2.micro }}" as="x"><div style="display:grid;grid-template-columns:48px 1fr 20px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--hair)"><span style="font:500 12px var(--sans);color:var(--faint)">{{ x.w }}</span><span style="font:400 15px/1.4 var(--serif)">{{ x.b }}</span><i class="{{ x.mark }}" style="color:{{ x.c }}"></i></div></sc-for>
+                        </div>
+                      </sc-if>
+                      <div>
+                        <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Lines · Jennifer</div>
+                        <sc-if value="{{ o2.noLine }}"><p style="font:400 14px/1.5 var(--serif);color:var(--mute);margin:8px 0 0">{{ o2.lineNote }}</p></sc-if>
+                        <sc-for list="{{ o2.lines }}" as="x"><div style="border-left:2px solid var(--mad);padding:4px 0 4px 14px;margin-top:10px"><div style="font:400 17px/1.35 var(--serif)">{{ x.text }}</div><div style="font:400 12px var(--sans);color:var(--faint);margin-top:6px">{{ x.found }} · {{ x.reh }}</div></div></sc-for>
+                      </div>
+                    </div>
+                    <div>
+                      <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Lately · last 14 days</div>
+                      <sc-if value="{{ o2.noEvents }}"><p style="font:400 14px/1.5 var(--serif);color:var(--mute);margin:8px 0 0">Nothing yet.</p></sc-if>
+                      <sc-for list="{{ o2.events }}" as="e">
+                        <div style="display:grid;grid-template-columns:20px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--hair)">
+                          <i class="{{ e.icon }}" style="color:{{ e.ic }};font-size:15px;margin-top:2px"></i>
+                          <div style="min-width:0">
+                            <div style="display:flex;justify-content:space-between;gap:8px"><span style="font:500 13px/1.35 var(--sans)">{{ e.title }}</span><span style="font:400 11px var(--sans);color:var(--faint);white-space:nowrap;font-variant-numeric:tabular-nums">{{ e.date }}</span></div>
+                            <div style="font:400 14px/1.45 var(--serif);color:var(--mute);margin-top:2px">{{ e.detail }}</div>
+                            <sc-if value="{{ e.hasAct }}"><button sc-camel-on-click="{{ e.go }}" style="height:28px;padding:0;border:0;background:transparent;color:var(--pru);font:500 12px var(--sans);cursor:pointer">{{ e.act }} →</button></sc-if>
+                          </div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ cs.C3 }}">
+                <div data-screen-label="C3 Review queue" style="padding:20px 28px">
+                  <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px">
+                    <div style="font:400 20px var(--serif)">{{ rq.week }}</div>
+                    <span style="font:400 13px var(--sans);color:var(--mute)">{{ rq.count }}</span>
+                    <div style="flex:1"></div>
+                    <button sc-camel-on-click="{{ rq.bulk }}" style="height:34px;padding:0 14px;border-radius:17px;border:1px solid var(--ink);background:transparent;color:var(--ink);font:500 13px var(--sans);cursor:pointer">Approve all remaining</button>
+                  </div>
+                  <div style="font:400 12px var(--sans);color:var(--faint);margin-bottom:10px">Rows you don't act on go out as proposed on Sunday at 18:00, member-local, unless the member is on Hold for me.</div>
+                  <sc-for list="{{ rq.rows }}" as="r" hint-placeholder-count="4">
+                    <div style="display:grid;grid-template-columns:210px minmax(0,1fr) 300px;gap:28px;padding:20px 0;border-top:1px solid var(--hair)">
+                      <div>
+                        <div style="display:flex;align-items:center;gap:10px"><span style="width:32px;height:32px;border-radius:50%;background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font:500 11px var(--sans)">{{ r.ini }}</span><span style="font:400 17px var(--serif)">{{ r.name }}</span></div>
+                        <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:14px">Upcoming</div>
+                        <div style="font:400 14px/1.4 var(--serif);margin-top:4px">{{ r.up }}</div>
+                        <div style="font:400 12px var(--sans);color:var(--faint);margin-top:2px">{{ r.key }}</div>
+                        <sc-if value="{{ r.holdMode }}"><span style="display:inline-block;margin-top:8px;padding:2px 8px;border-radius:10px;border:1px solid var(--ink);font:500 11px var(--sans)">Hold for me</span></sc-if>
+                      </div>
+                      <div style="min-width:0">
+                        <sc-if value="{{ r.has }}">
+                          <div style="display:flex;align-items:center;gap:10px"><span style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ r.s.eyebrow }}</span><span style="padding:1px 8px;border-radius:10px;border:1px solid {{ r.s.verC }};color:{{ r.s.verC }};font:500 11px/1.5 var(--sans)">{{ r.s.verLabel }}</span></div>
+                          <div style="font:400 17px/1.5 var(--serif);margin-top:6px">{{ r.s.first }}</div>
+                          <div style="font:400 12px var(--sans);color:var(--faint);margin-top:4px">{{ r.s.source }}</div>
+                          <sc-if value="{{ r.hasNote }}"><div style="display:flex;gap:8px;padding:8px 12px;background:var(--well);border-radius:10px;margin-top:10px"><span style="font:500 10px var(--sans);color:var(--faint);margin-top:3px">{{ coach.ini }}</span><span style="font:italic 400 15px/1.45 var(--serif)">{{ r.note }}</span></div></sc-if>
+                        </sc-if>
+                        <sc-if value="{{ r.none }}"><div style="font:400 17px/1.5 var(--serif);color:var(--mute)">No eligible story.</div></sc-if>
+                        <div style="font:500 12px var(--sans);margin-top:10px">{{ r.status }}</div>
+                        <div style="margin-top:8px;display:flex;flex-direction:column;gap:2px">
+                          <sc-for list="{{ r.trace }}" as="t"><div style="font:400 12px/1.45 var(--sans);color:var(--faint)">{{ t }}</div></sc-for>
+                        </div>
+                      </div>
+                      <div style="display:flex;flex-direction:column;gap:8px">
+                        <div style="display:flex;flex-wrap:wrap;gap:6px">
+                          <sc-for list="{{ r.btns }}" as="b"><button sc-camel-on-click="{{ b.go }}" disabled="{{ b.dis }}" title="{{ b.title }}" style="height:34px;padding:0 13px;border-radius:17px;border:1px solid {{ b.bd }};background:{{ b.bg }};color:{{ b.fg }};font:500 13px var(--sans);cursor:pointer;opacity:{{ b.op }}">{{ b.label }}</button></sc-for>
+                        </div>
+                        <sc-if value="{{ r.noteOpen }}">
+                          <div style="display:flex;flex-direction:column;gap:6px">
+                            <textarea rows="3" value="{{ r.noteDraft }}" sc-camel-on-change="{{ r.setNote }}" placeholder="Shows on the member's story card" aria-label="Coach note" style="border:1px solid var(--hair);border-radius:10px;background:var(--paper);color:var(--ink);font:italic 400 15px/1.45 var(--serif);padding:10px;resize:none"></textarea>
+                            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font:400 11px var(--sans);color:var(--faint);font-variant-numeric:tabular-nums">{{ r.noteCount }}</span><button sc-camel-on-click="{{ r.saveNote }}" style="height:30px;padding:0 12px;border-radius:15px;border:0;background:var(--ink);color:var(--paper);font:500 12px var(--sans);cursor:pointer">Save note</button></div>
+                          </div>
+                        </sc-if>
+                        <sc-if value="{{ r.isDavid }}"><button sc-camel-on-click="{{ r.toggleCorpus }}" style="display:flex;align-items:center;gap:8px;height:32px;padding:0;border:0;background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer"><i class="{{ r.corpusIcon }}" style="font-size:16px"></i>{{ r.corpusLabel }}</button></sc-if>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ cs.C4 }}">
+                <div data-screen-label="C4 Library" style="display:grid;grid-template-columns:250px minmax(0,1fr) 470px;min-height:100%">
+                  <div style="border-right:1px solid var(--hair);padding:18px 14px;display:flex;flex-direction:column;gap:16px">
+                    <div>
+                      <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:0 8px 6px">Situation</div>
+                      <button sc-camel-on-click="{{ lib.all }}" style="display:block;width:100%;text-align:left;height:30px;padding:0 8px;border:0;border-radius:6px;background:{{ lib.allBg }};color:var(--ink);font:500 12px var(--sans);cursor:pointer">All situations</button>
+                      <sc-for list="{{ lib.groups }}" as="g">
+                        <div style="font:500 10px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:10px 8px 2px">{{ g.fam }}</div>
+                        <sc-for list="{{ g.items }}" as="i"><button sc-camel-on-click="{{ i.go }}" style="display:flex;width:100%;justify-content:space-between;gap:6px;text-align:left;min-height:28px;padding:4px 8px;border:0;border-radius:6px;background:{{ i.bg }};color:{{ i.fg }};font:400 12px/1.35 var(--sans);cursor:pointer"><span>{{ i.label }}</span><span style="font-variant-numeric:tabular-nums">{{ i.n }}</span></button></sc-for>
+                      </sc-for>
+                    </div>
+                    <div><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:0 8px 6px">Hero</div><div style="display:flex;flex-wrap:wrap;gap:4px;padding:0 4px"><sc-for list="{{ lib.heroSegs }}" as="s"><button sc-camel-on-click="{{ s.go }}" style="height:26px;padding:0 9px;border-radius:13px;border:1px solid {{ s.bd }};background:{{ s.bg }};color:{{ s.fg }};font:500 11px var(--sans);cursor:pointer">{{ s.label }}</button></sc-for></div></div>
+                    <div><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:0 8px 6px">Reachability</div><div style="display:flex;flex-wrap:wrap;gap:4px;padding:0 4px"><sc-for list="{{ lib.reachSegs }}" as="s"><button sc-camel-on-click="{{ s.go }}" style="height:26px;padding:0 9px;border-radius:13px;border:1px solid {{ s.bd }};background:{{ s.bg }};color:{{ s.fg }};font:500 11px var(--sans);cursor:pointer">{{ s.label }}</button></sc-for></div></div>
+                    <div><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:0 8px 6px">Verification</div><div style="display:flex;flex-wrap:wrap;gap:4px;padding:0 4px"><sc-for list="{{ lib.verSegs }}" as="s"><button sc-camel-on-click="{{ s.go }}" style="height:26px;padding:0 9px;border-radius:13px;border:1px solid {{ s.bd }};background:{{ s.bg }};color:{{ s.fg }};font:500 11px var(--sans);cursor:pointer">{{ s.label }}</button></sc-for></div></div>
+                  </div>
+                  <div style="padding:18px 24px;border-right:1px solid var(--hair)">
+                    <div style="font:500 12px var(--sans);color:var(--mute);margin-bottom:8px">{{ lib.count }}</div>
+                    <sc-if value="{{ lib.none }}"><p style="font:400 15px var(--serif);color:var(--mute)">No stories match. The corpus covers eight of the twenty-two situations so far.</p></sc-if>
+                    <sc-for list="{{ lib.results }}" as="r">
+                      <button sc-camel-on-click="{{ r.go }}" style="display:block;width:100%;text-align:left;padding:14px 12px;border:0;border-bottom:1px solid var(--hair);background:{{ r.bg }};color:var(--ink);cursor:pointer;border-radius:6px">
+                        <div style="display:flex;gap:8px;align-items:center"><span style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);flex:1">{{ r.eyebrow }}</span><span style="font:500 11px var(--sans);color:var(--faint)">{{ r.reach }}</span><span style="padding:1px 8px;border-radius:10px;border:1px solid {{ r.verC }};color:{{ r.verC }};font:500 11px/1.5 var(--sans)">{{ r.ver }}</span></div>
+                        <div style="font:400 15px/1.45 var(--serif);margin-top:4px">{{ r.first }}</div>
+                      </button>
+                    </sc-for>
+                  </div>
+                  <div style="padding:20px 26px">
+                    <sc-if value="{{ lib.hasSel }}">
+                      <div style="display:flex;gap:8px;align-items:center"><span style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);flex:1">{{ lib.p.place }} · reach {{ lib.p.reach }}</span><span style="padding:1px 8px;border-radius:10px;border:1px solid {{ lib.p.verC }};color:{{ lib.p.verC }};font:500 11px/1.5 var(--sans)">{{ lib.p.verLabel }}</span></div>
+                      <div style="font:400 30px/1.12 var(--serif);letter-spacing:-.025em;margin-top:8px">{{ lib.p.hero }}</div>
+                      <p style="font:400 16px/1.55 var(--serif);margin:12px 0 0">{{ lib.p.moment }}</p>
+                      <sc-if value="{{ lib.p.hasPattern }}"><div style="border-top:1px solid var(--hair);padding-top:12px;margin-top:14px;font:italic 400 19px/1.35 var(--serif)">{{ lib.p.patternQ }}</div></sc-if>
+                      <div style="font:400 12px/1.45 var(--sans);color:var(--faint);margin-top:12px">{{ lib.p.source }}</div>
+                      <sc-if value="{{ lib.p.hasCaution }}"><div style="font:italic 400 14px/1.45 var(--serif);color:var(--mute);margin-top:4px">Caution: {{ lib.p.caution }}</div></sc-if>
+                      <div style="font:400 13px/1.45 var(--serif);color:var(--mute);margin-top:10px">Why line: {{ lib.p.why }}</div>
+                      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:10px"><sc-for list="{{ lib.pKeys }}" as="k"><span title="{{ k.label }}" style="padding:2px 8px;border-radius:10px;background:var(--well);font:400 11px var(--sans);color:var(--mute)">{{ k.k }}</span></sc-for></div>
+                      <div style="border-top:1px solid var(--hair);margin-top:18px;padding-top:14px;display:flex;flex-direction:column;gap:8px">
+                        <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Send to member</div>
+                        <div style="display:flex;gap:4px"><sc-for list="{{ lib.to }}" as="t"><button sc-camel-on-click="{{ t.go }}" style="height:28px;padding:0 11px;border-radius:14px;border:1px solid {{ t.bd }};background:{{ t.bg }};color:{{ t.fg }};font:500 12px var(--sans);cursor:pointer">{{ t.label }}</button></sc-for></div>
+                        <input value="{{ lib.note }}" sc-camel-on-change="{{ lib.setNote }}" placeholder="Optional note, up to 240 characters" aria-label="Note" style="height:36px;border:1px solid var(--hair);border-radius:8px;background:var(--paper);color:var(--ink);font:italic 400 14px var(--serif);padding:0 10px">
+                        <div style="display:flex;gap:6px">
+                          <button sc-camel-on-click="{{ lib.pinFor }}" disabled="{{ lib.dis }}" title="{{ lib.title }}" style="height:34px;padding:0 14px;border-radius:17px;border:1px solid var(--ink);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer;opacity:{{ lib.op }}">Pin for next week</button>
+                          <button sc-camel-on-click="{{ lib.sendNow }}" disabled="{{ lib.dis }}" title="{{ lib.title }}" style="height:34px;padding:0 14px;border-radius:17px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer;opacity:{{ lib.op }}">Send now</button>
+                        </div>
+                        <sc-if value="{{ lib.dis }}"><div style="font:400 12px var(--sans);color:var(--mad)">Verify the source before sending.</div></sc-if>
+                        <sc-if value="{{ lib.hasMsg }}"><div style="font:500 12px var(--sans);color:var(--pru)">{{ lib.msg }}</div></sc-if>
+                      </div>
+                    </sc-if>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ cs.C5 }}">
+                <div data-screen-label="C5 Hero fit review" style="padding:20px 28px 28px;display:flex;flex-direction:column;gap:26px">
+                  <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:36px">
+                    <div>
+                      <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:10px">Bracket path · 16 → 8 → 4</div>
+                      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:center">
+                        <div style="display:flex;flex-direction:column;gap:6px"><sc-for list="{{ fr.r1 }}" as="p"><div style="border-left:1px solid var(--hair);padding:2px 0 2px 10px;font:400 12px/1.5 var(--sans)"><div style="color:{{ p.aw }}">{{ p.a }}</div><div style="color:{{ p.bw }}">{{ p.b }}</div></div></sc-for></div>
+                        <div style="display:flex;flex-direction:column;gap:30px"><sc-for list="{{ fr.r2 }}" as="p"><div style="border-left:1px solid var(--hair);padding:2px 0 2px 10px;font:400 13px/1.6 var(--sans)"><div style="color:{{ p.aw }}">{{ p.a }}</div><div style="color:{{ p.bw }}">{{ p.b }}</div></div></sc-for></div>
+                        <div style="display:flex;flex-direction:column;gap:18px"><sc-for list="{{ fr.f4 }}" as="p"><div style="border-left:2px solid var(--ink);padding:2px 0 2px 10px"><div style="font:400 16px var(--serif);color:{{ p.c }}">{{ p.name }}</div><div style="font:500 10px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ p.tag }}</div></div></sc-for></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Keys inferred from {{ member.pos }} goal</div>
+                      <div style="font:400 13px/1.5 var(--sans);margin-top:6px">{{ fr.goalKeys }}</div>
+                      <sc-if value="{{ fr.hasReserve }}"><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:18px">Reserve</div><div style="font:400 17px var(--serif);margin-top:4px">{{ fr.reserve }}</div><div style="font:400 12px var(--sans);color:var(--mute);margin-top:2px">{{ fr.reserveFit }}</div></sc-if>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:4px">Core heroes</div>
+                    <sc-for list="{{ fr.heroes }}" as="h" hint-placeholder-count="3">
+                      <div style="display:grid;grid-template-columns:230px minmax(0,1fr) minmax(0,1fr) 290px;gap:24px;padding:18px 0;border-top:1px solid var(--hair)">
+                        <div>
+                          <div style="display:flex;align-items:center;gap:10px"><span style="width:10px;height:10px;border-radius:50%;background:{{ h.dotBg }};border:{{ h.dotBd }};box-sizing:border-box;flex:none"></span><span style="font:400 18px var(--serif)">{{ h.name }}</span></div>
+                          <div style="font:500 12px var(--sans);margin-top:6px">{{ h.state }}</div>
+                          <div style="font:400 12px var(--sans);color:var(--faint);margin-top:2px">{{ h.stance }}</div>
+                          <sc-if value="{{ h.hasResolved }}"><div style="font:500 12px var(--sans);color:{{ h.resC }};margin-top:6px">{{ h.resolved }}</div></sc-if>
+                        </div>
+                        <div><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Reason trace</div><div style="display:flex;flex-direction:column;gap:2px;margin-top:6px"><sc-for list="{{ h.covered }}" as="x"><div style="font:400 12px var(--sans);color:{{ x.c }}">{{ x.t }}</div></sc-for></div>
+                          <div style="font:italic 400 13px/1.45 var(--serif);color:var(--mute);margin-top:8px">{{ member.first }} sees: {{ h.memberLine }}</div></div>
+                        <div><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Stories by situation</div><div style="display:flex;flex-direction:column;gap:2px;margin-top:6px"><sc-for list="{{ h.counts }}" as="x"><div style="font:400 12px/1.45 var(--sans);color:var(--mute)">{{ x }}</div></sc-for></div>
+                          <sc-if value="{{ h.scoped }}"><div style="font:500 12px var(--sans);color:var(--pru);margin-top:8px">{{ h.scopeText }}</div></sc-if></div>
+                        <div style="display:flex;flex-direction:column;gap:8px">
+                          <div style="display:flex;flex-wrap:wrap;gap:6px">
+                            <button sc-camel-on-click="{{ h.keep }}" style="height:32px;padding:0 12px;border-radius:16px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer">Keep</button>
+                            <button sc-camel-on-click="{{ h.scope }}" style="height:32px;padding:0 12px;border-radius:16px;border:1px solid var(--ink);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer">Scope</button>
+                            <button sc-camel-on-click="{{ h.swap }}" style="height:32px;padding:0 12px;border-radius:16px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer">Swap with reserve</button>
+                          </div>
+                          <sc-if value="{{ h.editing }}">
+                            <div style="padding:10px 12px;border-radius:10px;background:var(--well)">
+                              <div style="font:500 12px var(--sans);margin-bottom:6px">Use only for:</div>
+                              <sc-for list="{{ h.opts }}" as="o"><button sc-camel-on-click="{{ o.go }}" style="display:flex;align-items:center;gap:8px;width:100%;height:28px;padding:0;border:0;background:transparent;color:var(--ink);font:400 12px var(--sans);cursor:pointer;text-align:left"><i class="{{ o.icon }}" style="font-size:15px"></i>{{ o.k }}</button></sc-for>
+                              <button sc-camel-on-click="{{ h.apply }}" style="margin-top:8px;height:30px;padding:0 12px;border-radius:15px;border:0;background:var(--ink);color:var(--paper);font:500 12px var(--sans);cursor:pointer">Apply scope</button>
+                            </div>
+                          </sc-if>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:36px;border-top:1px solid var(--hair);padding-top:18px">
+                    <div>
+                      <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Added by {{ member.first }} · pending</div>
+                      <sc-if value="{{ fr.noPending }}"><p style="font:400 14px var(--serif);color:var(--mute);margin:8px 0 0">Nothing waiting.</p></sc-if>
+                      <sc-for list="{{ fr.pending }}" as="p">
+                        <div style="padding:12px 0;border-bottom:1px solid var(--hair)">
+                          <div style="font:400 17px var(--serif)">{{ p.name }}</div>
+                          <div style="font:italic 400 14px var(--serif);color:var(--mute);margin-top:2px">{{ p.why }}</div>
+                          <sc-if value="{{ p.thin }}"><div style="font:500 12px var(--sans);color:var(--mad);margin-top:6px">{{ p.thinText }}</div></sc-if>
+                          <div style="display:flex;gap:6px;margin-top:8px"><button sc-camel-on-click="{{ p.approve }}" style="height:30px;padding:0 12px;border-radius:15px;border:1px solid var(--ink);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer">Approve</button><button sc-camel-on-click="{{ p.decline }}" style="height:30px;padding:0 12px;border-radius:15px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer">Decline with note</button></div>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <div>
+                      <button sc-camel-on-click="{{ fr.toggleSuggest }}" style="height:32px;padding:0 12px;border-radius:16px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer">Suggest a hero</button>
+                      <sc-if value="{{ fr.suggestOpen }}">
+                        <div style="margin-top:8px">
+                          <sc-for list="{{ fr.suggestList }}" as="s"><button sc-camel-on-click="{{ s.go }}" style="display:flex;justify-content:space-between;width:100%;height:36px;align-items:center;padding:0 4px;border:0;border-bottom:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer"><span style="font:400 15px var(--serif)">{{ s.name }}</span><span style="font:400 12px var(--sans);color:var(--faint)">{{ s.meta }}</span></button></sc-for>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ cs.C6 }}">
+                <div data-screen-label="C6 Moves" style="padding:20px 28px 28px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:36px">
+                  <div style="display:flex;flex-direction:column;gap:14px">
+                    <div style="display:flex;align-items:center;gap:10px"><span style="font:400 20px var(--serif);flex:1">Move 1</span><span style="font:500 12px var(--sans);color:var(--faint)">{{ mv.status }} · {{ coach.first }}</span></div>
+                    <div>
+                      <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Situation</div>
+                      <div style="display:flex;gap:4px;margin-top:6px"><sc-for list="{{ mv.sitOpts }}" as="s"><button sc-camel-on-click="{{ s.go }}" style="height:28px;padding:0 11px;border-radius:14px;border:1px solid {{ s.bd }};background:{{ s.bg }};color:{{ s.fg }};font:500 12px var(--sans);cursor:pointer">{{ s.label }}</button></sc-for></div>
+                      <div style="font:400 12px var(--sans);color:var(--faint);margin-top:4px">{{ mv.sitLabel }} · {{ mv.sitLine }}</div>
+                    </div>
+                    <label style="display:flex;flex-direction:column;gap:4px;font:500 12px var(--sans);color:var(--faint)">Trigger (the room)<input value="{{ mv.trigger }}" sc-camel-on-change="{{ mv.setTrigger }}" style="height:38px;border:1px solid var(--hair);border-radius:8px;background:var(--paper);color:var(--ink);font:400 15px var(--serif);padding:0 10px"></label>
+                    <label style="display:flex;flex-direction:column;gap:4px;font:500 12px var(--sans);color:var(--faint)"><span style="display:flex;justify-content:space-between">Behaviour<span style="color:{{ mv.bC }};font-variant-numeric:tabular-nums">{{ mv.bCount }}</span></span><textarea rows="2" value="{{ mv.behaviour }}" sc-camel-on-change="{{ mv.setBehaviour }}" style="border:1px solid var(--hair);border-radius:8px;background:var(--paper);color:var(--ink);font:400 18px/1.3 var(--serif);padding:8px 10px;resize:none"></textarea></label>
+                    <label style="display:flex;flex-direction:column;gap:4px;font:500 12px var(--sans);color:var(--faint)">Grain (stance)<input value="{{ mv.grain }}" sc-camel-on-change="{{ mv.setGrain }}" style="height:38px;border:1px solid var(--hair);border-radius:8px;background:var(--paper);color:var(--ink);font:400 15px var(--serif);padding:0 10px"></label>
+                    <label style="display:flex;flex-direction:column;gap:4px;font:500 12px var(--sans);color:var(--faint)">First failure<textarea rows="2" value="{{ mv.failure }}" sc-camel-on-change="{{ mv.setFailure }}" style="border:1px solid var(--hair);border-radius:8px;background:var(--paper);color:var(--ink);font:400 15px/1.45 var(--serif);padding:8px 10px;resize:none"></textarea></label>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                      <label style="display:flex;flex-direction:column;gap:4px;font:500 12px var(--sans);color:var(--faint)">Observable<input value="{{ mv.obs }}" sc-camel-on-change="{{ mv.setObs }}" style="height:38px;border:1px solid var(--hair);border-radius:8px;background:var(--paper);color:var(--ink);font:400 15px var(--serif);padding:0 10px"></label>
+                      <label style="display:flex;flex-direction:column;gap:4px;font:500 12px var(--sans);color:var(--faint)">Retire when<input value="{{ mv.retire }}" sc-camel-on-change="{{ mv.setRetire }}" style="height:38px;border:1px solid var(--hair);border-radius:8px;background:var(--paper);color:var(--ink);font:400 15px var(--serif);padding:0 10px"></label>
+                    </div>
+                    <div>
+                      <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:4px">The tests</div>
+                      <sc-for list="{{ mv.tests }}" as="x"><button sc-camel-on-click="{{ x.go }}" style="display:flex;align-items:center;gap:8px;width:100%;min-height:30px;padding:0;border:0;background:transparent;color:{{ x.c }};font:400 13px var(--sans);cursor:pointer;text-align:left"><i class="{{ x.icon }}" style="font-size:17px"></i>{{ x.label }}</button></sc-for>
+                      <div style="font:500 12px var(--sans);color:var(--mute);margin-top:4px">{{ mv.ticks }}</div>
+                    </div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:20px">
+                    <div>
+                      <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:6px">Micro-moves · 3 to 5</div>
+                      <sc-for list="{{ mv.micro }}" as="m">
+                        <div style="display:grid;grid-template-columns:44px minmax(0,1fr) 78px;gap:8px;align-items:start;padding:8px 0;border-bottom:1px solid var(--hair)">
+                          <input value="{{ m.w }}" sc-camel-on-change="{{ m.setW }}" aria-label="Week" style="height:32px;width:44px;border:1px solid var(--hair);border-radius:6px;background:var(--paper);color:var(--ink);font:500 12px var(--sans);text-align:center">
+                          <div style="display:flex;flex-direction:column;gap:4px">
+                            <div style="display:flex;gap:6px;align-items:center"><input value="{{ m.b }}" sc-camel-on-change="{{ m.setB }}" aria-label="Micro-move behaviour" style="flex:1;height:32px;border:1px solid var(--hair);border-radius:6px;background:var(--paper);color:var(--ink);font:400 15px var(--serif);padding:0 8px"><span style="font:400 11px var(--sans);color:{{ m.cc }};font-variant-numeric:tabular-nums">{{ m.count }}</span></div>
+                            <input value="{{ m.o }}" sc-camel-on-change="{{ m.setO }}" aria-label="Observable" placeholder="Observable" style="height:28px;border:1px solid var(--hair);border-radius:6px;background:var(--paper);color:var(--mute);font:400 12px var(--sans);padding:0 8px">
+                          </div>
+                          <div style="display:flex;gap:2px">
+                            <button sc-camel-on-click="{{ m.up }}" aria-label="Move up" style="width:26px;height:32px;border:0;background:transparent;color:var(--ink);cursor:pointer;opacity:{{ m.upOp }}"><i class="ph ph-arrow-up"></i></button>
+                            <button sc-camel-on-click="{{ m.down }}" aria-label="Move down" style="width:26px;height:32px;border:0;background:transparent;color:var(--ink);cursor:pointer;opacity:{{ m.downOp }}"><i class="ph ph-arrow-down"></i></button>
+                            <button sc-camel-on-click="{{ m.remove }}" aria-label="Remove" style="width:26px;height:32px;border:0;background:transparent;color:var(--ink);cursor:pointer;opacity:{{ m.rmOp }}"><i class="ph ph-x"></i></button>
+                          </div>
+                        </div>
+                      </sc-for>
+                      <button sc-camel-on-click="{{ mv.addMicro }}" style="margin-top:8px;height:30px;padding:0 12px;border-radius:15px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer;opacity:{{ mv.addOp }}">Add a week</button>
+                    </div>
+                    <div style="padding-top:14px;border-top:1px solid var(--hair)">
+                      <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:6px">Line · Jennifer</div>
+                      <textarea rows="2" value="{{ mv.line }}" sc-camel-on-change="{{ mv.setLine }}" aria-label="Line" style="width:100%;border:1px solid var(--hair);border-radius:8px;background:var(--paper);color:var(--ink);font:400 17px/1.35 var(--serif);padding:8px 10px;resize:none"></textarea>
+                      <input value="{{ mv.found }}" sc-camel-on-change="{{ mv.setFound }}" aria-label="Where it was found" style="width:100%;margin-top:6px;height:32px;border:1px solid var(--hair);border-radius:8px;background:var(--paper);color:var(--mute);font:400 13px var(--sans);padding:0 10px">
+                      <div style="display:flex;gap:4px;margin-top:8px"><sc-for list="{{ mv.reh }}" as="r"><button sc-camel-on-click="{{ r.go }}" style="height:28px;padding:0 11px;border-radius:14px;border:1px solid {{ r.bd }};background:{{ r.bg }};color:{{ r.fg }};font:500 12px var(--sans);cursor:pointer">{{ r.label }}</button></sc-for></div>
+                    </div>
+                    <div style="padding:16px;border-radius:12px;background:var(--well)">
+                      <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:10px">Preview · {{ member.first }}'s Monday card</div>
+                      <div style="border-left:2px solid var(--pru);padding-left:14px"><div style="font:500 10px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ mv.prevWeek }}</div><div style="font:400 18px/1.3 var(--serif);margin-top:6px">{{ mv.prevMicro }}</div><div style="font:400 14px/1.5 var(--serif);color:var(--mute);margin-top:4px">{{ mv.behaviour }}</div></div>
+                      <div style="border-left:2px solid var(--mad);padding-left:14px;margin-top:14px"><div style="font:500 10px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Your line</div><div style="font:400 18px/1.3 var(--serif);margin-top:6px">“{{ mv.line }}”</div></div>
+                    </div>
+                    <button sc-camel-on-click="{{ mv.publish }}" disabled="{{ mv.canPubNot }}" title="{{ mv.pubTitle }}" style="height:40px;border-radius:20px;border:0;background:var(--ink);color:var(--paper);font:500 13px var(--sans);cursor:pointer;opacity:{{ mv.pubOp }}">{{ mv.pubLabel }}</button>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ cs.C7 }}">
+                <div data-screen-label="C7 Check-in prep" style="padding:20px 28px 28px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.1fr);gap:36px">
+                  <div style="display:flex;flex-direction:column;gap:22px">
+                    <div style="font:400 20px var(--serif)">{{ ci.when }}</div>
+                    <div><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Marks since 6 Oct</div>
+                      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;min-height:10px"><sc-for list="{{ ci.dots }}" as="d"><span style="width:10px;height:10px;border-radius:50%;background:{{ d.c }}"></span></sc-for></div>
+                      <div style="font:500 13px var(--sans);margin-top:8px;font-variant-numeric:tabular-nums">{{ ci.markCount }}</div></div>
+                    <div><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Move 1 · micro-moves</div>
+                      <sc-for list="{{ ci.micro }}" as="m"><div style="display:grid;grid-template-columns:60px 1fr 60px;gap:8px;padding:7px 0;border-bottom:1px solid var(--hair)"><span style="font:500 12px var(--sans);color:var(--faint)">{{ m.w }}</span><span style="font:400 14px/1.4 var(--serif)">{{ m.b }}</span><span style="font:500 12px var(--sans);color:{{ m.c }};text-align:right">{{ m.state }}</span></div></sc-for></div>
+                    <div><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Heroes</div><sc-for list="{{ ci.heroes }}" as="h"><div style="font:400 13px/1.5 var(--sans);padding:3px 0">{{ h }}</div></sc-for></div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:22px">
+                    <div><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Stories</div>
+                      <sc-if value="{{ ci.noStories }}"><p style="font:400 14px var(--serif);color:var(--mute);margin:6px 0 0">None delivered yet.</p></sc-if>
+                      <sc-for list="{{ ci.stories }}" as="s"><div style="padding:8px 0;border-bottom:1px solid var(--hair)"><div style="font:500 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint)">{{ s.eyebrow }}</div><div style="font:400 14px var(--serif);margin-top:2px">{{ s.state }}</div></div></sc-for></div>
+                    <div><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Asks</div>
+                      <sc-if value="{{ ci.noAsks }}"><p style="font:400 14px var(--serif);color:var(--mute);margin:6px 0 0">No asks yet.</p></sc-if>
+                      <sc-for list="{{ ci.asks }}" as="a"><div style="padding:8px 0;border-bottom:1px solid var(--hair)"><div style="font:italic 400 14px/1.45 var(--serif)">{{ a.text }}</div><div style="font:400 12px/1.45 var(--sans);color:var(--faint);margin-top:2px">{{ a.meta }}</div></div></sc-for></div>
+                    <div><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Messages</div><div style="font:400 14px var(--serif);margin-top:6px">{{ ci.unanswered }}</div></div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:14px">
+                    <div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Talking points</div><span style="font:500 11px var(--sans);color:var(--mad)">Suggested — edit before the call</span></div>
+                    <sc-for list="{{ ci.talk }}" as="t"><div style="display:grid;grid-template-columns:18px 1fr;gap:8px;align-items:start"><span style="font:500 13px var(--sans);color:var(--faint);padding-top:8px">{{ t.n }}</span><textarea rows="2" value="{{ t.t }}" sc-camel-on-change="{{ t.set }}" aria-label="Talking point" style="border:1px solid var(--hair);border-radius:8px;background:var(--paper);color:var(--ink);font:400 15px/1.45 var(--serif);padding:8px 10px;resize:none"></textarea></div></sc-for>
+                    <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:8px">Notes · becomes the check-in record</div>
+                    <textarea rows="6" value="{{ ci.notes }}" sc-camel-on-change="{{ ci.setNotes }}" placeholder="What did you agree?" aria-label="Check-in notes" style="border:1px solid var(--hair);border-radius:8px;background:var(--paper);color:var(--ink);font:400 15px/1.5 var(--serif);padding:10px;resize:none"></textarea>
+                    <sc-if value="{{ ci.notSent }}"><button sc-camel-on-click="{{ ci.send }}" style="height:40px;border-radius:20px;border:0;background:var(--ink);color:var(--paper);font:500 13px var(--sans);cursor:pointer">Send summary to member</button></sc-if>
+                    <sc-if value="{{ ci.sent }}"><div style="font:500 13px var(--sans);color:var(--pru)">Summary sent to {{ member.first }}'s thread.</div></sc-if>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ cs.C8 }}">
+                <div data-screen-label="C8 Messages" style="display:grid;grid-template-columns:320px minmax(0,1fr);height:100%">
+                  <div style="border-right:1px solid var(--hair);padding:10px">
+                    <sc-for list="{{ msg.threads }}" as="t" hint-placeholder-count="4">
+                      <button sc-camel-on-click="{{ t.go }}" style="display:flex;gap:10px;width:100%;text-align:left;padding:12px 10px;border:0;border-radius:8px;background:{{ t.bg }};color:var(--ink);cursor:pointer">
+                        <span style="width:32px;height:32px;border-radius:50%;background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font:500 11px var(--sans);flex:none">{{ t.ini }}</span>
+                        <div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;gap:6px"><span style="font:400 15px var(--serif)">{{ t.name }}</span><sc-if value="{{ t.un }}"><span style="width:8px;height:8px;border-radius:50%;background:var(--ink);margin-top:6px"></span></sc-if></div><div style="font:400 12px/1.4 var(--sans);color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.prev }}</div></div>
+                      </button>
+                    </sc-for>
+                  </div>
+                  <div style="display:flex;flex-direction:column;min-height:0;position:relative">
+                    <div style="height:52px;flex:none;display:flex;align-items:center;padding:0 22px;border-bottom:1px solid var(--hair)"><span style="font:400 18px var(--serif);flex:1">{{ msg.name }}</span><button sc-camel-on-click="{{ msg.toggleDrawer }}" style="height:32px;padding:0 12px;border-radius:16px;border:1px solid var(--ink);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer">Send a story</button></div>
+                    <div style="flex:1;overflow-y:auto;padding:18px 22px;display:flex;flex-direction:column;gap:14px">
+                      <sc-for list="{{ msg.list }}" as="m">
+                        <div style="display:flex;flex-direction:column;align-items:{{ m.justify }}">
+                          <sc-if value="{{ m.isText }}"><div style="max-width:64%;padding:10px 14px;border-radius:14px;background:{{ m.bg }};font:400 15px/1.45 var(--serif)">{{ m.body }}</div></sc-if>
+                          <sc-if value="{{ m.isStory }}"><button sc-camel-on-click="{{ m.open }}" style="max-width:64%;text-align:left;padding:12px 14px;border-radius:12px;border:1px solid var(--hair);background:var(--paper);color:var(--ink);cursor:pointer"><div style="font:500 10px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Story · {{ m.s.eyebrow }}</div><div style="font:400 14px/1.45 var(--serif);margin-top:4px">{{ m.s.first }}</div></button></sc-if>
+                          <sc-if value="{{ m.isAsk }}"><div style="max-width:64%;padding:12px 14px;border-radius:12px;background:{{ m.bg }}"><div style="font:500 10px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Ask · {{ m.chip }}</div><div style="font:italic 400 15px/1.45 var(--serif);margin-top:4px">{{ m.body }}</div><sc-if value="{{ m.hasNote }}"><div style="font:400 14px var(--serif);margin-top:4px">{{ m.note }}</div></sc-if></div></sc-if>
+                          <sc-if value="{{ m.isVoice }}"><div style="display:flex;align-items:center;gap:10px;padding:8px 14px 8px 8px;border-radius:22px;background:{{ m.bg }}"><button sc-camel-on-click="{{ m.toggle }}" aria-label="{{ m.playLabel }}" style="width:32px;height:32px;border-radius:50%;border:0;background:var(--ink);color:var(--paper);cursor:pointer"><i class="{{ m.playIcon }}"></i></button><div style="display:flex;align-items:center;gap:2px;height:22px"><sc-for list="{{ m.bars }}" as="b"><span style="display:block;width:3px;height:{{ b.h }}px;border-radius:2px;background:{{ b.c }};animation:{{ b.anim }}"></span></sc-for></div><span style="font:400 12px var(--sans);color:var(--faint)">{{ m.dur }}</span></div></sc-if>
+                          <sc-if value="{{ m.isCheckin }}"><div style="padding:12px 14px;border-radius:12px;border:1px solid var(--hair)"><div style="font:500 10px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Next check-in</div><div style="font:400 16px var(--serif);margin-top:4px">{{ m.slot }}</div></div></sc-if>
+                          <div style="font:400 11px var(--sans);color:var(--faint);margin-top:4px">{{ m.at }}</div>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <div style="flex:none;display:flex;gap:8px;padding:12px 22px;border-top:1px solid var(--hair)">
+                      <input value="{{ msg.compose }}" sc-camel-on-change="{{ msg.setCompose }}" sc-camel-on-key-down="{{ msg.onKey }}" placeholder="Write to the member" aria-label="Message" style="flex:1;height:40px;border:1px solid var(--hair);border-radius:20px;background:var(--paper);color:var(--ink);font:400 15px var(--serif);padding:0 16px">
+                      <button sc-camel-on-click="{{ msg.send }}" style="height:40px;padding:0 18px;border-radius:20px;border:0;background:var(--ink);color:var(--paper);font:500 13px var(--sans);cursor:pointer">Send</button>
+                    </div>
+                    <sc-if value="{{ msg.drawer }}">
+                      <div style="position:absolute;top:52px;right:0;bottom:0;width:420px;background:var(--paper);border-left:1px solid var(--hair);box-shadow:-16px 0 40px rgba(0,0,0,.1);overflow-y:auto;padding:12px 18px;animation:cpUp 280ms var(--ease) both">
+                        <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:6px">Library</div>
+                        <sc-for list="{{ msg.drawerList }}" as="s"><button sc-camel-on-click="{{ s.go }}" disabled="{{ s.dis }}" title="{{ s.title }}" style="display:block;width:100%;text-align:left;padding:10px 0;border:0;border-bottom:1px solid var(--hair);background:transparent;color:var(--ink);cursor:pointer;opacity:{{ s.op }}"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font:500 10px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ s.eyebrow }}</span><span style="font:500 10px var(--sans);color:var(--faint)">{{ s.ver }}</span></div><div style="font:400 14px/1.4 var(--serif);margin-top:3px">{{ s.first }}</div></button></sc-for>
+                      </div>
+                    </sc-if>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ cs.CK }}">
+                <div data-screen-label="Check-ins" style="padding:22px 28px">
+                  <div style="display:grid;grid-template-columns:minmax(0,1fr) 220px 160px;gap:16px;padding-bottom:10px;border-bottom:1px solid var(--hair);font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)"><span>Member</span><span>Next check-in · 15 min</span><span></span></div>
+                  <sc-for list="{{ ck }}" as="r" hint-placeholder-count="4">
+                    <div style="display:grid;grid-template-columns:minmax(0,1fr) 220px 160px;gap:16px;padding:14px 0;border-bottom:1px solid var(--hair);align-items:center">
+                      <button sc-camel-on-click="{{ r.open }}" style="display:flex;align-items:center;gap:10px;border:0;background:transparent;color:var(--ink);cursor:pointer;padding:0;text-align:left"><span style="width:32px;height:32px;border-radius:50%;background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font:500 11px var(--sans)">{{ r.ini }}</span><span style="font:400 16px var(--serif)">{{ r.name }}</span></button>
+                      <span style="font:400 13px var(--sans);color:var(--mute);font-variant-numeric:tabular-nums">{{ r.when }}</span>
+                      <button sc-camel-on-click="{{ r.prep }}" disabled="{{ r.prepDis }}" title="{{ r.prepTitle }}" style="height:32px;padding:0 14px;border-radius:16px;border:1px solid var(--ink);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer;opacity:{{ r.prepOp }}">Prep check-in</button>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+            <div style="height:32px;flex:none;display:flex;align-items:center;padding:0 28px;border-top:1px solid var(--hair);font:400 11px var(--sans);color:var(--faint)">{{ footer }}</div>
+
+            <sc-if value="{{ sp.open }}">
+              <div sc-camel-on-click="{{ sp.close }}" style="position:absolute;inset:0;background:var(--scrim);z-index:30"></div>
+              <div data-screen-label="C3 Swap panel" style="position:absolute;top:0;right:0;bottom:0;width:500px;background:var(--paper);border-left:1px solid var(--hair);z-index:31;display:flex;flex-direction:column;box-shadow:-20px 0 50px rgba(0,0,0,.12);animation:cpUp 280ms var(--ease) both">
+                <div style="height:64px;flex:none;display:flex;align-items:center;padding:0 24px;border-bottom:1px solid var(--hair)"><div style="flex:1;font:400 22px var(--serif)">{{ sp.title }}</div><button sc-camel-on-click="{{ sp.close }}" aria-label="Close" style="width:36px;height:36px;border:0;background:transparent;color:var(--ink);font-size:18px;cursor:pointer"><i class="ph ph-x"></i></button></div>
+                <div style="flex:1;overflow-y:auto;padding:18px 24px">
+                  <div style="font:400 13px var(--sans);color:var(--mute)">{{ sp.sit }}</div>
+                  <div style="font:400 12px/1.45 var(--sans);color:var(--faint);margin-top:4px">{{ sp.heroesLine }}</div>
+                  <div style="display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 18px"><sc-for list="{{ sp.filters }}" as="f"><button sc-camel-on-click="{{ f.go }}" style="height:28px;padding:0 10px;border-radius:14px;border:1px solid {{ f.bd }};background:{{ f.bg }};color:{{ f.fg }};font:500 12px var(--sans);cursor:pointer">{{ f.label }}</button></sc-for></div>
+                  <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Eligible, in rule order</div>
+                  <sc-if value="{{ sp.noRanked }}"><p style="font:400 14px var(--serif);color:var(--mute)">Nothing eligible for this filter.</p></sc-if>
+                  <sc-for list="{{ sp.ranked }}" as="s">
+                    <div style="display:grid;grid-template-columns:24px 1fr;gap:10px;padding:14px 0;border-bottom:1px solid var(--hair)">
+                      <span style="font:500 13px var(--sans);color:var(--faint);font-variant-numeric:tabular-nums">{{ s.rank }}</span>
+                      <div>
+                        <div style="display:flex;gap:8px;align-items:center"><span style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ s.eyebrow }}</span><span style="font:500 11px var(--sans);color:var(--pru)">{{ s.cur }}</span></div>
+                        <div style="font:400 15px/1.45 var(--serif);margin-top:4px">{{ s.first }}</div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-top:8px"><span style="font:400 12px var(--sans);color:var(--faint);flex:1">{{ s.tier }} · Verified</span>
+                          <button sc-camel-on-click="{{ s.choose }}" style="height:30px;padding:0 12px;border-radius:15px;border:1px solid var(--ink);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer">Choose</button>
+                          <button sc-camel-on-click="{{ s.pin }}" style="height:30px;padding:0 12px;border-radius:15px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer">Pin</button></div>
+                      </div>
+                    </div>
+                  </sc-for>
+                  <sc-if value="{{ sp.hasExcluded }}">
+                    <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:22px">Not eligible</div>
+                    <sc-for list="{{ sp.excluded }}" as="x">
+                      <div style="padding:12px 0;border-bottom:1px solid var(--hair);opacity:.75">
+                        <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">{{ x.eyebrow }}</div>
+                        <div style="font:400 13px var(--sans);color:var(--mute);margin-top:4px">✗ {{ x.why }}</div>
+                        <sc-if value="{{ x.draft }}"><button disabled="{{ true }}" title="Verify the source before sending." style="margin-top:6px;height:28px;padding:0 10px;border-radius:14px;border:1px solid var(--mad);background:transparent;color:var(--mad);font:500 11px var(--sans);opacity:.6">Draft — must verify</button></sc-if>
+                      </div>
+                    </sc-for>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ cn.show }}">
+              <div sc-camel-on-click="{{ cn.open }}" role="button" tabindex="0" style="position:absolute;top:74px;right:24px;width:380px;z-index:40;padding:14px 16px;border-radius:12px;background:var(--well);border:1px solid var(--hair);box-shadow:0 14px 34px rgba(0,0,0,.18);display:flex;gap:12px;align-items:flex-start;cursor:pointer;animation:cpDrop 420ms var(--ease) both">
+                <i class="ph ph-bell" style="font-size:18px;margin-top:2px"></i>
+                <div style="flex:1;font:500 13px/1.4 var(--sans)">{{ cn.text }}</div>
+                <button sc-camel-on-click="{{ cn.close }}" aria-label="Dismiss" style="width:24px;height:24px;border:0;background:transparent;color:var(--faint);cursor:pointer"><i class="ph ph-x"></i></button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ ctoast.show }}">
+              <div role="status" style="position:absolute;left:28px;bottom:48px;z-index:41;padding:12px 16px;border-radius:10px;background:var(--ink);color:var(--paper);font:500 13px/1.4 var(--sans);animation:cpUp 280ms var(--ease) both">{{ ctoast.text }}</div>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script="">
+class Component extends DCLogic {
+  state = { booted: false };
+  componentDidMount() {
+    const go = () => {
+      if (window.CPD && window.CPE) {
+        window.CPE.R = React;
+        this.setState(Object.assign(window.CPE.init(), { booted: true }), () => window.CPE.mount(this));
+      } else this._b = setTimeout(go, 30);
+    };
+    go();
+  }
+  componentWillUnmount() { clearTimeout(this._b); if (window.CPE && this.state.booted) window.CPE.unmount(this); }
+  renderVals() {
+    if (!this.state.booted || !window.CPE) return { booted: false };
+    try { return Object.assign({ booted: true }, window.CPE.vals(this)); }
+    catch (e) { console.error(e); return { booted: false }; }
+  }
+}
+</script>
+
+
+</body></html>

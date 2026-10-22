@@ -139,3 +139,18 @@ Change the source or `next/app.js`, run `python3 next/build.py`. **Never hand-ed
 
 `noindex` on the page and `X-Robots-Tag` on the route. When it graduates, it replaces `index.html`
 and the redirects follow; until then the two sites share the endpoint and the fonts, nothing else.
+
+## Constellation (prototype) · /constellation
+
+`constellation/` is the Constellation prototype, exported from Claude Design ("Constellation Prototype")
+and served as static files: the page, the design runtime, its data and engine, React 18.3.1, the
+Newsreader and IBM Plex Sans fonts and the Phosphor icons, so it loads nothing from a CDN. It is
+`noindex, nofollow` (meta tag and an `X-Robots-Tag` header in `vercel.json`) and is in neither the
+sitemap nor the navigation. The data is sample data: members and companies are fictional.
+
+To refresh it from a new export, save the bundled export HTML and run
+
+    npm pack @phosphor-icons/web@2.1.1 && mkdir -p /tmp/ph && tar -xzf phosphor-icons-web-2.1.1.tgz -C /tmp/ph
+    python3 -I constellation/tools/unbundle.py <export.html> /tmp/ph/package
+
+`constellation/tools/` is in `.vercelignore`.
