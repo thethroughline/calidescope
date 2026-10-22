@@ -80,7 +80,7 @@ try {
   await p.evaluate(() => CLB.c.setState({ overlay: 'story', sid: 's-A1-beverley-mclachlin', sctx: {} })); await p.waitForTimeout(200);
   check((await p.locator('[data-screen-label="M7 Story"] p').first().innerText()).startsWith('Beverley McLachlin, 37'), 'a corpus story drops the dateline the eyebrow already shows');
   check(await p.locator('[data-bridge="story-library"]').count() === 0, 'a member’s story has one way into the library');
-  await p.locator('[data-bridge="story-related"] button', { hasText: 'Others who lived this week' }).click();
+  await p.locator('[data-bridge="story-related"] button', { hasText: 'All of this week, in the library' }).click();
   await p.frameLocator('iframe[title="The Constellation library"]').locator('#others').waitFor();
   check(true, 'Others who lived this week opens the Library at the others');
   // member-safe text: a draft is marked once, and no working note reaches the member
@@ -97,7 +97,8 @@ try {
   const first = 's-A1-beverley-mclachlin';
   await p.evaluate((s) => CLB.c.setState({ overlay: 'story', sid: s, sctx: {}, sstack: [] }), first); await p.waitForTimeout(250);
   const rel = p.locator('[data-bridge="story-related"] button');
-  check(await rel.count() >= 2 && /Next, when you want it/.test(await p.locator('[data-bridge="story-related"]').innerText()), 'a story offers one next story and more like it in the library');
+  const relT = await p.locator('[data-bridge="story-related"]').innerText(), whys = (await p.locator('[data-bridge="story-related"] button').allInnerTexts()).map((t) => t.split('\n').slice(1).join(' '));
+  check(await rel.count() >= 3 && /Next, when you want it/.test(relT) && /Others who lived this week/i.test(relT) && /All of this week, in the library/.test(relT) && new Set(whys).size === whys.length, 'a story ends with the next story, two others who lived the week, and the whole week in the library, no reason twice');
   await rel.first().click(); await p.waitForTimeout(250);
   const moved = await p.evaluate(() => [CLB.state().sid, (CLB.state().sstack || []).length]);
   check(moved[0] !== first && moved[1] === 1, 'a related story opens in place, keeping the first to go back to');
@@ -135,7 +136,7 @@ try {
   await p.frameLocator('iframe[title="The Constellation library"]').locator('#agestrip svg').waitFor();
   check(true, 'At your age opens inside the app');
   await p.evaluate(() => CLB.c.setState({ overlay: 'story', sid: 'st-bjk-1973-riggs', sctx: {}, sstack: [] })); await p.waitForTimeout(250);
-  await p.locator('[data-bridge="story-related"] button', { hasText: 'Others who lived this week' }).click();
+  await p.locator('[data-bridge="story-related"] button', { hasText: 'All of this week, in the library' }).click();
   const bf = p.frameLocator('iframe[title="The Constellation library"]');
   await bf.locator('#others a[href^="#/story/"]').first().waitFor(); await p.waitForTimeout(300);
   const barT = await p.locator('[data-bridge="library-overlay"] > div').first().innerText();

@@ -123,6 +123,15 @@
     return (s.move_examples || []).filter(function (m) { return R[2].test(m); })[0] || null;
   }
   var DIRECT = { direct: 'Direct', calibrated: 'Measured', indirect: 'Indirect' };
+  var DIR_RANK = { indirect: 0, calibrated: 1, direct: 2 };
+  // "Quieter than Obama": how directly the anchor acted in the situations asked about (else anywhere), at its most direct
+  function anchorRank(lib, q) {
+    var ic = lib.icon[q.than]; if (!ic) return null;
+    var ks = q.sit ? q.sit.split('+').map(function (id) { return lib.sit[id] && lib.sit[id].key; }) : null;
+    var r = ic.stories.map(function (id) { return lib.story[id]; }).filter(function (s) { return s && s.directness && (!ks || s.keys.some(function (k) { return ks.indexOf(k) >= 0; })); })
+      .map(function (s) { return DIR_RANK[s.directness]; });
+    return r.length ? Math.max.apply(null, r) : null;
+  }
   var REACH = { near: 'Close to an ordinary office', mid: 'Some way from an office', far: 'Far from an ordinary office' };
   var AREA_FIELD = { Sport: 'sport', Music: 'music', 'Film & TV': 'arts', Creators: 'media', Art: 'arts', 'Books & writing': 'arts', Business: 'business', 'Politics & public life': 'public' };
   var NUMERIC = /^(before|after|age|nocel|notus|ok|line|mine|nothero)$/;
@@ -190,7 +199,12 @@
     if (take(/\b(young|younger|twenties|in their 20s|under 30)\b/g)) q.age = 26;
     if (take(/\b(late career|older|fifties|sixties|over 55)\b/g)) q.age = 58;
     if (take(/\b(not (?:another )?american|outside the (?:us|united states)|non american|abroad)\b/g)) q.notus = 1;
-    if (take(/\b(quieter|quiet version|gentler|softer|indirect\w*|measured|calibrated|punishes the direct(?: move)?|political|careful)\b/g)) q.dir = 'quiet';
+    var than = rest.match(/\b(?:quieter|gentler|softer|calmer|less direct)\b(?:\s+(?:story|way|one|version))?\s+than\s+([a-z][a-z .'-]{1,40}?)(?=\s+(?:for|about|in|who|when|with)\b|\s*$)/);
+    if (than) {
+      var who = CLC.search(lib, than[1].trim(), 3).icons.map(function (i) { return lib.icon[i.id]; }).filter(function (i) { return i && i.stories.length; })[0];
+      if (who) { q.than = who.id; take(new RegExp(esc(than[0]), 'g')); }
+    }
+    if (!q.than && take(/\b(quieter|quiet version|gentler|softer|indirect\w*|measured|calibrated|punishes the direct(?: move)?|political|careful)\b/g)) q.dir = 'quiet';
     else if (take(/\b(more direct|blunt|out loud)\b/g)) q.dir = 'direct';
     if (take(/\b(ordinary|everyday|close to home|near)\b/g)) q.reach = 'near';
     else if (take(/\b(big story|grand|epic)\b/g)) q.reach = 'far';
@@ -237,7 +251,7 @@
     var M = memberOf(lib, mid); if (!M) return [];
     return (M.micro || []).map(function (x) { return x && x.ins && x.ins.story; }).filter(Boolean);
   }
-  function hasFacet(q) { return ['sex', 'field', 'nocel', 'before', 'after', 'age', 'notus', 'dir', 'reach', 'stance', 'ok', 'line', 'cue', 'to', 'room'].some(function (k) { return q[k] != null && q[k] !== ''; }); }
+  function hasFacet(q) { return ['sex', 'field', 'nocel', 'before', 'after', 'age', 'notus', 'dir', 'reach', 'stance', 'ok', 'line', 'cue', 'to', 'room', 'than'].some(function (k) { return q[k] != null && q[k] !== ''; }); }
 
   // The query as plain-word chips: what the Library understood. Each one can be taken away.
   function chips(lib, q) {
@@ -253,6 +267,7 @@
     if (q.age) c.push({ k: 'age', label: 'About ' + q.age + ' at the time' + (M && M.age === q.age ? ', as ' + M.first + ' is' : '') });
     if (q.notus) c.push({ k: 'notus', label: 'Outside the United States' });
     if (q.dir) c.push({ k: 'dir', label: q.dir === 'quiet' ? 'A quieter way: measured or indirect' : 'Direct' });
+    if (q.than && lib.icon[q.than]) c.push({ k: 'than', label: 'Quieter than ' + (lib.icon[q.than].short || lib.icon[q.than].name) });
     if (q.reach) c.push({ k: 'reach', label: REACH[q.reach] });
     if (q.stance) c.push({ k: 'stance', label: cap(STANCE_TRAIT.filter(function (t) { return t[1].join('+') === q.stance; }).map(function (t) { return t[3]; })[0] || q.stance) + ', as we read it' });
     if (q.ok) c.push({ k: 'ok', label: 'Checked against its source' });
@@ -279,6 +294,12 @@
     if (q.age) F.push({ k: 'age', t: function (s) { var a = ageAt(lib, s); return a != null && Math.abs(a - q.age) <= 4; } });
     if (q.notus) F.push({ k: 'notus', t: function (s) { return !/US/.test(I[s.icon].geo || 'US'); } });
     // a story with no rating is kept, and says so on its card: a facet never drops a story for a field it lacks
+    // quieter than a named life: the same situations, met less directly than that life met them, by someone else
+    if (q.than && lib.icon[q.than]) {
+      var ar = anchorRank(lib, q), aks = [];
+      lib.icon[q.than].stories.forEach(function (id) { (lib.story[id] || { keys: [] }).keys.forEach(function (k) { if (aks.indexOf(k) < 0) aks.push(k); }); });
+      F.push({ k: 'than', t: function (s) { return s.icon !== q.than && s.keys.some(function (k) { return aks.indexOf(k) >= 0; }) && (ar == null || (s.directness && DIR_RANK[s.directness] < ar)); } });
+    }
     if (q.dir) F.push({ k: 'dir', t: function (s) { return !s.directness || (q.dir === 'quiet' ? s.directness === 'calibrated' || s.directness === 'indirect' : s.directness === 'direct'); } });
     if (q.reach) F.push({ k: 'reach', t: function (s) { return s.reach === q.reach; } });
     if (q.stance) { var st = q.stance.split('+'); F.push({ k: 'stance', t: function (s) { return st.indexOf(I[s.icon].stance) >= 0; } }); }
@@ -308,6 +329,10 @@
     if (q.age && a != null) r.push({ type: 'age', text: 'About ' + a + ' at the time' });
     if (q.notus) r.push({ type: 'place', text: ic.place || 'Outside the United States' });
     if (q.dir) r.push({ type: 'dir', text: s.directness ? DIRECT[s.directness] : 'Not rated' });
+    if (q.than && lib.icon[q.than] && s.directness) {
+      var ar2 = anchorRank(lib, q), an = lib.icon[q.than].short || lib.icon[q.than].name;
+      r.push({ type: 'dir', text: DIRECT[s.directness] + (ar2 != null ? ', where ' + an + ' was ' + ['indirect', 'measured', 'direct'][ar2] : '') });
+    }
     if (q.reach) r.push({ type: 'reach', text: REACH[s.reach] });
     if (q.stance && ic.stance && CLC.STANCE_BY[ic.stance]) r.push({ type: 'stance', text: cap('Leads ' + CLC.STANCE_BY[ic.stance]) + ', as we read it' });
     var said = q.to && lineTo(s, q.to); if (said) r.push({ type: 'line', text: said.text });

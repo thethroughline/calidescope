@@ -602,7 +602,10 @@
       return '<div class="side"><p class="label">' + esc(cap(CLC.DIR_WORD[x.directness] || '')) + ' · ' + esc(yl(x.year)) + '</p><a class="who" href="' + H.story(x.id) + '" style="font:400 var(--t-title)/1.3 var(--serif);color:var(--ink);text-decoration:none">' + esc(I.name) + '</a>' +
         (c.pattern ? '<p class="pat" style="font:italic 400 var(--t-body)/1.5 var(--serif);color:var(--mute);margin:6px 0 0">“' + esc(c.pattern) + '”</p>' : '') + (mv ? '<p class="mv"><b>The move it suggests.</b> ' + esc(mv) + '</p>' : '') + '</div>'; };
     var A = lib.icon[s.icon], B = lib.icon[o.icon];
-    return sec('The other way', '<p class="note" style="margin:-6px 0 14px">' + esc(A.name) + ' made ' + (s.directness === 'indirect' ? 'an ' : 'a ') + esc(CLC.DIR_WORD[s.directness]) + ' move; ' + esc(B.name) + ' ' + (o.directness === 'indirect' ? 'an ' : 'a ') + esc(CLC.DIR_WORD[o.directness]) + ' one.</p><div class="pair">' + side(s) + side(o) + '</div>');
+    // and every quieter way through the same week, for a story met head on
+    var st0 = lib.sitByKey[s.keys[0]], qq = st0 && s.directness !== 'indirect' ? { than: s.icon, sit: st0.id } : null, nq = qq ? CLQ.answer(lib, qq).total : 0;
+    return sec('The other way', '<p class="note" style="margin:-6px 0 14px">' + esc(A.name) + ' made ' + (s.directness === 'indirect' ? 'an ' : 'a ') + esc(CLC.DIR_WORD[s.directness]) + ' move; ' + esc(B.name) + ' ' + (o.directness === 'indirect' ? 'an ' : 'a ') + esc(CLC.DIR_WORD[o.directness]) + ' one.</p><div class="pair">' + side(s) + side(o) + '</div>' +
+      (nq ? '<p style="margin-top:14px">' + tlink(askUrl(qq), 'Same week, a quieter way: ' + n(nq, 'story', 'stories')) + '</p>' : ''));
   }
   // Back into the app: a member sends a life to their coach as a hero; a coach suggests one to the member being prepped.
   function heroAction(ic) {

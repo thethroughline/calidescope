@@ -260,6 +260,11 @@ test('round three: member-safe text, questions read right, the lead pair, who th
   const top = [a.ready, a.oneCheck].concat(a.items).slice(0, 10);
   assert.ok(top.filter((x) => CLQ.moveIn(x.story, 'team')).length >= 8, 'the room ranks the stories whose move is set there');
   assert.ok(top.slice(0, 6).some((x) => x.story.id === 's-A2-elena-kagan'), 'a line said to the colleague who wanted the job ranks high');
+  // quieter than a named life: the same situations, met less directly, by someone else
+  const qt = read('a quieter story than Obama'), qa = CLQ.answer(lib, qt), qall = [qa.ready, qa.oneCheck].concat(qa.items).filter(Boolean);
+  assert.equal(qt.than, 'barack-obama');
+  assert.ok(qa.total > 20 && qall.every((x) => x.story.icon !== 'barack-obama' && ['calibrated', 'indirect'].includes(x.story.directness)));
+  assert.ok(qall[0].reasons.some((r) => /where Obama was direct/.test(r.text)));
   // facets keep a checked story whose field is empty
   assert.equal(CLQ.answer(lib, { sit: 'A2', line: 1 }).total, CLQ.answer(lib, { sit: 'A2' }).total);
 });

@@ -585,7 +585,21 @@
         var co = (lib.coaches[M.coach] || {}).first || 'your coach';
         groups.push({ label: 'Next, when you want it', items: [row(c, CLC.storyCard(lib, next.o), why + (next.o.verified ? '' : ' \u00b7 Recall draft'))] });
       }
-      groups.push({ label: '', items: [{ title: 'Others who lived this week', why: 'In the library, each with what sets it apart', open: function () { S_(c, { overlay: 'library', libRoute: '#/story/' + encodeURIComponent(s.id) + '?at=others', libBack: 'story', libDepth: 1, libPrev: '', libPrevTo: '' }); } }] });
+      // then two others who lived this week, the nearest the member's three first, each tie said in words
+      var taken = {}; if (next) taken[next.o.icon] = 1; taken[s.icon] = 1;
+      var L2 = CLC.likeThis(lib, s.id, 8, { role: 'member', three: core }).map(function (x, i) { return { x: x, i: i, o: lib.story[x.story.id] }; })
+        .filter(function (y) { return y.o && !taken[y.o.icon] && opened.indexOf(y.o.id) < 0; });
+      L2.forEach(function (y) { y.l = links(y.o); });
+      var said = {};
+      var two = L2.sort(function (a, b) { return a.l - b.l || a.i - b.i; }).slice(0, 2).map(function (y) {
+        var lt = window.CLN && y.l === 1 ? window.CLN.linksTo(lib, st.p, y.o.icon, s.keys[0], { three: core }) : null;
+        var why = y.l === 0 ? 'From ' + ((lib.icon[y.o.icon] || {}).short || '') + ', one of your three' : lt && lt.steps.length ? 'One step from ' + ((lib.icon[lt.hero] || {}).short || '') + ': ' + (window.CLN.why(lib, lt.steps[0].a, lt.steps[0].b, lt.steps[0].tie)[0] || '').replace(/^Both /, 'both ').replace(/\.$/, '') : y.x.reasons[0].text;
+        if (said[why]) why = y.x.reasons[0].text; said[why] = 1;   // no reason twice in one list
+        return row(c, y.x.story, why + (y.o.verified ? '' : ' \u00b7 Recall draft'));
+      });
+      if (two.length) groups.push({ label: 'Others who lived this week', items: two });
+      var nWeek = (lib.byKey[s.keys[0]] || []).length;
+      groups.push({ label: '', items: [{ title: 'All of this week, in the library', why: nWeek + ' stories, each with what sets it apart', open: function () { S_(c, { overlay: 'library', libRoute: '#/story/' + encodeURIComponent(s.id) + '?at=others', libBack: 'story', libDepth: 1, libPrev: '', libPrevTo: '' }); } }] });
     }
     out.sv.rel = groups; out.sv.hasRel = groups.length > 0;
     reachOf(c, out, st, lib, s);
