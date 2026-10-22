@@ -71,6 +71,9 @@ for m in re.finditer(r"/\* ([\w-]+) \*/\s*@font-face \{(.*?)\}", template, re.S)
 for u, p in paths.items():
     if p is None: raise SystemExit(f"font {u} is never used by an @font-face")
     f = OUT / p; f.parent.mkdir(parents=True, exist_ok=True); f.write_bytes(data(u))
+    if p == "js/constellation-proto-engine.js":   # the send guard and the other engine patches (tools/patches.py)
+        sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent)); from patches import apply_engine
+        f.write_text(apply_engine(f.read_text(encoding="utf-8"))[0], encoding="utf-8")
 
 page = template
 for u, p in paths.items():

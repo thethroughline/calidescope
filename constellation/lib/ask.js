@@ -246,6 +246,15 @@
     var sitOf = function (id) { return { id: id, label: id + ' · ' + cap(DID[id]), n: (lib.byKey[lib.sit[id].key] || []).length }; };
     return { q: q, chips: chips(lib, q), alts: alts.slice(0, 4).map(sitOf), closest: closest.map(sitOf), unused: unused };
   }
+  // The demo's week is the move's second (19 October): the first week's story went out on 12 October, inside the
+  // rule's fourteen days, so its life waits. recentTo names those lives, and when.
+  var CURRENT_W = 2;
+  function recentTo(lib, mid) {
+    var M = memberOf(lib, mid); if (!M) return [];
+    return (M.micro || []).filter(function (x) { return x && x.ins && x.ins.story && x.w < CURRENT_W; }).map(function (x) {
+      var s = lib.story[CLC.resolve(lib, x.ins.story)]; return s ? { icon: s.icon, story: s.id, day: 'Mon 12 Oct' } : null;
+    }).filter(Boolean);
+  }
   // the stories a member has already been given (each week's pairing in the demo), which an answer leaves out of its lead
   function sentTo(lib, mid) {
     var M = memberOf(lib, mid); if (!M) return [];
@@ -369,7 +378,8 @@
     // the answer leads with what a coach can do now: the best checked story, and the best draft one check from it,
     // leaving out what the member already has
     var ex = (o.exclude || (q.m ? sentTo(lib, q.m) : [])).map(function (id) { return CLC.resolve(lib, id); });
-    var fresh = hit.filter(function (s) { return ex.indexOf(s.id) < 0; });
+    var av = o.avoidIcons || (q.m ? recentTo(lib, q.m).map(function (r) { return r.icon; }) : []);
+    var fresh = hit.filter(function (s) { return ex.indexOf(s.id) < 0 && av.indexOf(s.icon) < 0; });
     var rd = fresh.filter(function (s) { return s.verified; })[0] || null, oc = fresh.filter(function (s) { return !s.verified && (s.reach === 'near' || s.reach === 'mid'); })[0] || null;
     var lead = function (s) { return s ? { story: s, card: CLC.storyCard(lib, s), reasons: reasons(lib, s, q), source: clause(String(CLC.sourceFor(s, 'coach') || '').split(/;\s*|(?<=[a-z]{2}\.)\s+(?=[A-Z])/)[0]) } : null; };
     function clause(t) { if (t.length <= 110) return t; var c = t.slice(0, 110).lastIndexOf(','); return t.slice(0, c > 40 ? c : 110) + '\u2026'; }
@@ -516,7 +526,7 @@
   }
   function isQuery(q) { return !!(q.sit || q.mine || hasFacet(q)); }
 
-  return { sentTo: sentTo, saidTo: saidTo, lineTo: lineTo, TO_LABEL: TO_LABEL, moveIn: moveIn, ROOM_LABEL: ROOM_LABEL, DID: DID, CUES: CUES, SCENE: SCENE, DIRECT: DIRECT, REACH: REACH, FIELD_LABEL: FIELD_LABEL, SHELF: SHELF,
+  return { sentTo: sentTo, recentTo: recentTo, saidTo: saidTo, lineTo: lineTo, TO_LABEL: TO_LABEL, moveIn: moveIn, ROOM_LABEL: ROOM_LABEL, DID: DID, CUES: CUES, SCENE: SCENE, DIRECT: DIRECT, REACH: REACH, FIELD_LABEL: FIELD_LABEL, SHELF: SHELF,
     read: read, chips: chips, answer: answer, reasons: reasons, drop: drop, shelf: shelf, compare: compare, gaps: gaps,
     toQS: toQS, fromQS: fromQS, isQuery: isQuery, ageAt: ageAt, heroesOf: heroesOf, situationScores: situationScores };
 }));

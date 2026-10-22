@@ -268,3 +268,19 @@ test('round three: member-safe text, questions read right, the lead pair, who th
   // facets keep a checked story whose field is empty
   assert.equal(CLQ.answer(lib, { sit: 'A2', line: 1 }).total, CLQ.answer(lib, { sit: 'A2' }).total);
 });
+
+test('round four: nothing the member has, and no life from last week, is offered as the next check or the lead', () => {
+  const CLQ = require('../lib/ask.js'), CLN = require('../lib/net.js');
+  const fill = (m, k) => CLN.fillSlot(lib, m, lib.sit[k].key, { exclude: CLQ.sentTo(lib, m), avoidIcons: CLQ.recentTo(lib, m).map((x) => x.icon) }).pick.story.id;
+  assert.equal(fill('sarah', 'E1'), 's-A3-jimmy-carter');
+  assert.equal(fill('michael', 'C2'), 's-B1-muriel-siebert');
+  for (const m of lib.order) {
+    const avoid = CLQ.recentTo(lib, m).map((x) => x.icon), M = lib.members[m];
+    for (const sid of M.sits) {
+      const f = CLN.fillSlot(lib, m, lib.sit[sid].key, { exclude: CLQ.sentTo(lib, m), avoidIcons: avoid });
+      if (f.pick) assert.ok(!avoid.includes(f.pick.story.icon) && !CLQ.sentTo(lib, m).includes(f.pick.story.id), m + ' ' + sid);
+    }
+  }
+  const a = CLQ.answer(lib, CLQ.read(lib, 'Sarah announces the reorg Thursday and Dan wanted her job', {}).q);
+  assert.ok(a.ready.story.icon !== 'barack-obama', 'the lead is not the life Sarah had last week');
+});

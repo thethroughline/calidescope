@@ -41,6 +41,8 @@ What each patch adds (the behaviour behind it is in js/constellation-bridge.js):
                    links, from one of their heroes to the story's life, each link said in words
   review-fill      on a Review row showing a recall draft, or with no story: why it cannot go, and the one
                    draft whose check fills the slot (one of the member's three first), checked in the row
+  ask-reply        under a member's Ask in the coach's thread: the story ready to send (nothing the member has, no
+                   life they had last week), a note, and Send, two taps; once sent, the Ask says it was answered
   ask-find         under a member's Ask in the coach's thread: Find a story for this, which opens the
                    Library's answer to the Ask, read for that member, with the situation they chose
   mute-token       the light theme's secondary grey one step darker (#5E626B, as the Library has it), so it
@@ -55,8 +57,13 @@ What each patch adds (the behaviour behind it is in js/constellation-bridge.js):
   ask-sent         the coach's pronoun is not assumed: "It shows in your timeline."
   ask-draft        on a member's Ask answer: a checked story they already hold is named, a draft is marked once
                    and can be sent to the coach to check, and how its life reaches the three is said in words
+  review-guard     on a Review row: the rule's fortnight said plainly ("Sarah had Obama on 12 Oct")
+  swap-pair        in Swap on a paired row: choosing another story unpairs it
+  week-held        a held week says why: the story waits for the coach's check, or the coach chose to wait
   swap-check       in the Swap panel, the recall drafts nearest the member, each with "Check the source" opening
                    the check in the panel (the export's disabled "Draft — must verify" buttons go)
+  (engine)         ENGINE_PATCHES, below, change js/constellation-proto-engine.js (unbundle.py applies them too):
+                   the send guard (send-guard-*) and the held week's words (held-text)
   type-floor       no text under 12px: the export's 10px and 11px labels become 12px, and the 9px
                    initials in the 24px avatars become 13px (a regex over the template's inline styles)
 """
@@ -185,6 +192,15 @@ PATCHES = [
      '<sc-if value="{{ bar.clockLine }}"><span data-bridge="demo-clock-line" title="{{ clockLabel }}"'),
     ("ask-find", '<div style="font:400 11px var(--sans);color:var(--faint);margin-top:4px">{{ m.at }}</div>', "before",
      '<sc-if value="{{ m.find }}"><button data-bridge="ask-find" sc-camel-on-click="{{ m.find }}" style="margin-top:8px;height:32px;padding:0 13px;border-radius:16px;border:1px solid var(--pru);background:transparent;color:var(--pru);font:500 12px var(--sans);cursor:pointer;display:flex;align-items:center;gap:6px"><i class="ph ph-books"></i>Find a story for this</button></sc-if>'),
+    ("ask-reply", '<div style="font:400 11px var(--sans);color:var(--faint);margin-top:4px">{{ m.at }}</div>', "before",
+     '<sc-if value="{{ m.reply }}"><div data-bridge="ask-reply" style="margin-top:10px;padding:12px 14px;border:1px solid var(--hair);border-radius:12px;background:var(--paper);text-align:left;max-width:440px">'
+     '<div style="font:500 12px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint)">Ready to send</div>'
+     '<div style="font:400 17px/1.3 var(--serif);color:var(--ink);margin-top:4px">{{ m.reply.title }}</div>'
+     '<div style="font:400 13px/1.45 var(--sans);color:var(--mute);margin-top:4px">{{ m.reply.why }}</div>'
+     '<input value="{{ m.reply.note }}" sc-camel-on-change="{{ m.reply.setNote }}" placeholder="{{ m.reply.ph }}" aria-label="{{ m.reply.ph }}" style="width:100%;box-sizing:border-box;min-height:36px;margin-top:10px;padding:0 10px;border:1px solid var(--hair);border-radius:10px;background:var(--well);color:var(--ink);font:400 13px var(--sans)">'
+     '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px"><button sc-camel-on-click="{{ m.reply.send }}" style="min-height:36px;padding:0 14px;border-radius:18px;border:0;background:var(--ink);color:var(--paper);font:500 13px var(--sans);cursor:pointer">{{ m.reply.sendLabel }}</button>'
+     '<button sc-camel-on-click="{{ m.reply.other }}" style="min-height:36px;padding:0 10px;border:0;background:transparent;color:var(--pru);font:500 13px var(--sans);cursor:pointer">Other stories for this</button></div></div></sc-if>'
+     '<sc-if value="{{ m.answered }}"><div data-bridge="ask-answered" style="margin-top:8px;font:500 12px var(--sans);color:var(--pru)"><i class="ph ph-check" style="margin-right:4px"></i>{{ m.answered }}</div></sc-if>'),
     ("story-reach", '<p style="font:400 16px/1.5 var(--serif);margin:6px 0 0">{{ sv.why }}</p>', "after",
      '<sc-if value="{{ sv.hasReach }}"><div data-bridge="story-reach" style="margin-top:16px;padding:14px 16px 12px;border-radius:16px;background:var(--well)">'
      '<div style="font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">How it reaches your three</div>'
@@ -215,7 +231,7 @@ PATCHES = [
      '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button sc-camel-on-click="{{ r.fill.check }}" style="height:34px;padding:0 14px;border-radius:17px;border:0;background:var(--ink);color:var(--paper);font:500 13px var(--sans);cursor:pointer">{{ r.fill.checkLabel }}</button>'
      '<button sc-camel-on-click="{{ r.fill.read }}" style="height:34px;padding:0 14px;border-radius:17px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 13px var(--sans);cursor:pointer">Read it in the library</button></div>'
      '<sc-if value="{{ r.fill.hasNext }}"><div style="font:400 13px/1.45 var(--sans);color:var(--mute);margin-top:10px">{{ r.fill.next }}</div></sc-if>'
-     '<sc-if value="{{ r.fill.open }}"><iframe sc-camel-src="{{ r.fill.src }}" title="Check the source" style="display:block;width:100%;height:560px;border:1px solid var(--hair);border-radius:10px;margin-top:12px;background:var(--paper)"></iframe></sc-if>'
+     '<sc-if value="{{ r.fill.card.show }}"><div data-bridge="check-card" style="margin-top:12px;padding:14px 16px;border:1px solid var(--hair);border-radius:12px;background:var(--paper)"><div style="font:400 18px/1.3 var(--serif);color:var(--ink)">{{ r.fill.card.title }}</div><p style="font:400 16px/1.55 var(--serif);color:var(--ink);margin:8px 0 0">{{ r.fill.card.moment }}</p><sc-if value="{{ r.fill.card.pattern }}"><p style="font:italic 400 16px/1.5 var(--serif);color:var(--mute);margin:8px 0 0">{{ r.fill.card.pattern }}</p></sc-if><p style="font:400 13px/1.5 var(--sans);color:var(--mute);margin:10px 0 0">Source: {{ r.fill.card.source }}</p><sc-if value="{{ r.fill.card.todo }}"><label style="display:block;font:500 12px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:12px 0 4px">What you checked it against</label><input value="{{ r.fill.card.note }}" sc-camel-on-change="{{ r.fill.card.setNote }}" placeholder="The edition, the page, the interview" aria-label="What you checked it against" style="width:100%;box-sizing:border-box;min-height:40px;padding:0 12px;border:1px solid var(--hair);border-radius:10px;background:var(--well);color:var(--ink);font:400 14px var(--sans)"><div style="font:400 12px var(--sans);color:var(--mute);margin-top:6px">Checked by {{ r.fill.card.by }}</div><div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px"><button sc-camel-on-click="{{ r.fill.card.send }}" disabled="{{ r.fill.card.dis }}" style="min-height:40px;padding:0 16px;border-radius:20px;border:0;background:var(--ink);color:var(--paper);font:500 13px var(--sans);cursor:pointer;opacity:{{ r.fill.card.op }}">{{ r.fill.card.sendLabel }}</button><button sc-camel-on-click="{{ r.fill.card.only }}" disabled="{{ r.fill.card.dis }}" style="min-height:40px;padding:0 10px;border:0;background:transparent;color:var(--pru);font:500 13px var(--sans);cursor:pointer;opacity:{{ r.fill.card.op }}">Checked only</button></div></sc-if><sc-if value="{{ r.fill.card.done }}"><p style="font:500 13px/1.45 var(--sans);color:var(--pru);margin:12px 0 0"><i class="ph ph-seal-check"></i> {{ r.fill.card.doneText }}</p></sc-if></div></sc-if>'
      '</div></sc-if>'),
     ("review-asked", '<sc-if value="{{ r.none }}"><div style="font:400 17px/1.5 var(--serif);color:var(--mute)">No eligible story.</div></sc-if>', "after",
      '<sc-if value="{{ r.asked }}"><div data-bridge="review-asked" style="margin-top:8px;font:500 13px/1.45 var(--sans);color:var(--pru)"><i class="ph ph-hand-waving" style="margin-right:6px"></i>{{ r.asked }}</div></sc-if>'),
@@ -244,9 +260,14 @@ PATCHES = [
     ("send-far", '<div style="font:500 12px var(--sans);color:var(--mute);margin-bottom:8px">{{ lib.count }}</div>', "after",
      '<sc-if value="{{ lib.farChip }}"><button data-bridge="send-far" sc-camel-on-click="{{ lib.farChip.go }}" style="margin:0 0 10px;min-height:32px;padding:0 12px;border-radius:16px;border:1px dashed var(--hair);background:transparent;color:var(--mute);font:500 12px var(--sans);cursor:pointer">{{ lib.farChip.label }}</button></sc-if>'),
     ("ask-shape", "You choose the shape. The story follows from it.", "replace", "Pick the closest, and a story follows."),
+    ("review-guard", '<sc-if value="{{ r.none }}"><div style="font:400 17px/1.5 var(--serif);color:var(--mute)">No eligible story.</div></sc-if>', "after",
+     '<sc-if value="{{ r.guard }}"><div data-bridge="review-guard" style="margin-top:8px;font:400 13px/1.45 var(--sans);color:var(--mute)"><i class="ph ph-clock-counter-clockwise" style="margin-right:6px"></i>{{ r.guard }}</div></sc-if>'),
+    ("swap-pair", '<div style="font:400 12px/1.45 var(--sans);color:var(--faint);margin-top:4px">{{ sp.heroesLine }}</div>', "after",
+     '<sc-if value="{{ sp.pairLine }}"><div data-bridge="swap-pair" style="margin-top:8px;padding:8px 10px;border-radius:8px;background:var(--well);font:400 13px/1.45 var(--sans);color:var(--ink)">{{ sp.pairLine }}</div></sc-if>'),
+    ("week-held", "No story this week. {{ coach.first }} chose to wait.", "replace", "{{ wk.heldText }}"),
     ("swap-check", '<sc-if value="{{ x.draft }}"><button disabled="{{ true }}" title="Verify the source before sending." style="margin-top:6px;height:28px;padding:0 10px;border-radius:14px;border:1px solid var(--mad);background:transparent;color:var(--mad);font:500 11px var(--sans);opacity:.6">Draft — must verify</button></sc-if>', "replace",
      '<sc-if value="{{ x.go }}"><button data-bridge="swap-check" sc-camel-on-click="{{ x.go }}" style="margin-top:8px;min-height:32px;padding:0 14px;border-radius:16px;border:1px solid var(--pru);background:transparent;color:var(--pru);font:500 12px var(--sans);cursor:pointer">{{ x.goLabel }}</button></sc-if>'
-     '<sc-if value="{{ x.open }}"><iframe sc-camel-src="{{ x.src }}" title="Check the source" style="display:block;width:100%;height:520px;margin-top:10px;border:1px solid var(--hair);border-radius:10px;background:var(--paper)"></iframe></sc-if>'),
+     '<sc-if value="{{ x.card.show }}"><div data-bridge="check-card" style="margin-top:12px;padding:14px 16px;border:1px solid var(--hair);border-radius:12px;background:var(--paper)"><div style="font:400 18px/1.3 var(--serif);color:var(--ink)">{{ x.card.title }}</div><p style="font:400 16px/1.55 var(--serif);color:var(--ink);margin:8px 0 0">{{ x.card.moment }}</p><sc-if value="{{ x.card.pattern }}"><p style="font:italic 400 16px/1.5 var(--serif);color:var(--mute);margin:8px 0 0">{{ x.card.pattern }}</p></sc-if><p style="font:400 13px/1.5 var(--sans);color:var(--mute);margin:10px 0 0">Source: {{ x.card.source }}</p><sc-if value="{{ x.card.todo }}"><label style="display:block;font:500 12px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:12px 0 4px">What you checked it against</label><input value="{{ x.card.note }}" sc-camel-on-change="{{ x.card.setNote }}" placeholder="The edition, the page, the interview" aria-label="What you checked it against" style="width:100%;box-sizing:border-box;min-height:40px;padding:0 12px;border:1px solid var(--hair);border-radius:10px;background:var(--well);color:var(--ink);font:400 14px var(--sans)"><div style="font:400 12px var(--sans);color:var(--mute);margin-top:6px">Checked by {{ x.card.by }}</div><div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px"><button sc-camel-on-click="{{ x.card.send }}" disabled="{{ x.card.dis }}" style="min-height:40px;padding:0 16px;border-radius:20px;border:0;background:var(--ink);color:var(--paper);font:500 13px var(--sans);cursor:pointer;opacity:{{ x.card.op }}">{{ x.card.sendLabel }}</button><button sc-camel-on-click="{{ x.card.only }}" disabled="{{ x.card.dis }}" style="min-height:40px;padding:0 10px;border:0;background:transparent;color:var(--pru);font:500 13px var(--sans);cursor:pointer;opacity:{{ x.card.op }}">Checked only</button></div></sc-if><sc-if value="{{ x.card.done }}"><p style="font:500 13px/1.45 var(--sans);color:var(--pru);margin:12px 0 0"><i class="ph ph-seal-check"></i> {{ x.card.doneText }}</p></sc-if></div></sc-if>'),
 ]
 
 # Sizes as the export writes them inside inline `font:` shorthands, and what they become.
@@ -260,6 +281,57 @@ def type_floor(html):
     start = html.index("<x-dc>")
     body = FONT_RE.sub(lambda m: m.group(1) + TYPE_FLOOR[m.group(2)] + m.group(3), html[start:])
     return html[:head_end] + mark + "\n" + html[head_end:start] + body, True
+
+# Patches to the export's engine (js/constellation-proto-engine.js), for behaviour the template cannot change.
+# Each block carries a /*bridge:<name>*/ mark, so a second pass skips it; a missing anchor refuses, as above.
+ENGINE_PATCHES = [
+    # The send guard: a coach's pin or swap wins over a pairing, and nothing unchecked goes out, whatever
+    # chose it. A paired or chosen recall draft is held until a coach has checked it.
+    ("send-guard-week",
+     "    var pd = function (day, note) { return { story: paired.story, source: paired.src === 'coach' ? 'coach' : 'paired', origin: paired.src, closeTo: paired.closeTo, note: note, day: day }; };\n",
+     "after",
+     "    /*bridge:send-guard-week*/ var checked = function (x) { return x && x.story && d.story[x.story] && !d.story[x.story].verified ? { held: true, why: 'check', waiting: x.story, day: x.day } : x; };\n"),
+    ("send-guard-w12", "      if (paired) return pd(12, m.note12 || '');", "replace",
+     "      if (paired) return checked(pd(12, m.note12 || ''));   /*bridge:send-guard-w12*/"),
+    ("send-guard-w19",
+     "    if (r.action === 'pin') return { story: r.story, source: 'pinned', note: r.note, day: 19 };\n"
+     "    if (paired) return pd(19, r.note);\n"
+     "    if (r.action === 'swap') return { story: r.story, source: 'coach', note: r.note, day: 19 };\n"
+     "    if (r.action === 'approve') return { story: sel.pick && sel.pick.id, source: 'coach', note: r.note, day: 19 };\n"
+     "    if (st.hold[P]) return { held: true };\n"
+     "    return { story: sel.pick && sel.pick.id, source: 'system', note: r.note, day: 19 };",
+     "replace",
+     "    /*bridge:send-guard-w19*/\n"
+     "    if (r.action === 'pin') return checked({ story: r.story, source: 'pinned', note: r.note, day: 19 });\n"
+     "    if (r.action === 'swap') return checked({ story: r.story, source: 'coach', note: r.note, day: 19 });\n"
+     "    if (paired) return checked(pd(19, r.note));\n"
+     "    if (r.action === 'approve') return checked({ story: sel.pick && sel.pick.id, source: 'coach', note: r.note, day: 19 });\n"
+     "    if (st.hold[P]) return { held: true };\n"
+     "    return checked({ story: sel.pick && sel.pick.id, source: 'system', note: r.note, day: 19 });"),
+    ("send-guard-rows",
+     "      var chosen = r.action === 'pin' ? r.story : pr ? pr.story : r.action === 'swap' ? r.story : (sel.pick && sel.pick.id);",
+     "replace",
+     "      var chosen = r.action === 'pin' ? r.story : r.action === 'swap' ? r.story : pr ? pr.story : (sel.pick && sel.pick.id);   /*bridge:send-guard-rows*/"),
+    ("send-guard-notice",
+     "      var n = rows.filter(function (r) { return r.chosen; }).length, w = rows.filter(function (r) { return !r.r.action; }).length;\n"
+     "      p.cnotif = { text: n + ' stories go out at 18:00. ' + w + ' are waiting for you.', go: 'C3' };",
+     "replace",
+     "      /*bridge:send-guard-notice*/ var ok = function (r) { return r.chosen && d.story[r.chosen] && d.story[r.chosen].verified; };\n"
+     "      var n = rows.filter(ok).length, hd = rows.filter(function (r) { return r.chosen && !ok(r); }), w = rows.filter(function (r) { return !r.r.action; }).length;\n"
+     "      p.cnotif = { text: n + (n === 1 ? ' story goes' : ' stories go') + ' out at 18:00.' + (hd.length ? ' ' + hd.map(function (r) { return r.m.first + '\\u2019s'; }).join(' and ') + (hd.length === 1 ? ' waits' : ' wait') + ' for one check.' : '') + (w ? ' ' + w + ' ' + (w === 1 ? 'is' : 'are') + ' waiting for you.' : ''), go: 'C3' };"),
+    ("held-text", "hasStory: !!sObj, held: !sObj,", "replace",
+     "hasStory: !!sObj, held: !sObj, /*bridge:held-text*/ heldText: del && del.why === 'check' ? 'Your story comes once ' + CO.first + ' has checked it.' : 'No story this week. ' + CO.first + ' chose to wait.',"),
+]
+
+def apply_engine(js):
+    done = []
+    for name, anchor, where, block in ENGINE_PATCHES:
+        if f"/*bridge:{name}*/" in js: continue
+        n = js.count(anchor)
+        if n != 1: raise SystemExit(f"engine patch {name}: its anchor appears {n} times in the export; update tools/patches.py")
+        js = js.replace(anchor, block + anchor if where == "before" else anchor + block if where == "after" else block)
+        done.append(name)
+    return js, done
 
 def apply(html):
     done = []
@@ -277,7 +349,11 @@ def apply(html):
     return html, done
 
 if __name__ == "__main__":
-    p = pathlib.Path(__file__).resolve().parent.parent / "index.html"
+    root = pathlib.Path(__file__).resolve().parent.parent
+    p = root / "index.html"
     html, done = apply(p.read_text(encoding="utf-8"))
     p.write_text(html, encoding="utf-8")
-    print("patched: " + (", ".join(done) if done else "nothing new"))
+    e = root / "js" / "constellation-proto-engine.js"
+    js, edone = apply_engine(e.read_text(encoding="utf-8"))
+    e.write_text(js, encoding="utf-8")
+    print("patched: " + (", ".join(done + edone) if done or edone else "nothing new"))

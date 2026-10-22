@@ -145,7 +145,8 @@
     var st = B.c && B.c.state, th = st && st.theme === 'dark' ? '&theme=dark' : '';
     var core = as === 'member' && st && st.core && st.core.length ? '&core=' + st.core.map(function (h) { return encodeURIComponent(iconOf[h] || h); }).join(',') : '';
     var ask = as === 'coach' && st ? asksOf(st).map(function (g) { return encodeURIComponent(st.p + ':' + g.sid); }).join(',') : '';
-    return BASE + 'library?embed=1&as=' + as + (mid ? '&m=' + encodeURIComponent(mid) : '') + core + th + (ask ? '&asked=' + ask : '') + (route || '#/');
+    var by = as === 'coach' && st ? '&by=' + encodeURIComponent(consoleCoach(st)) : '';
+    return BASE + 'library?embed=1&as=' + as + (mid ? '&m=' + encodeURIComponent(mid) : '') + core + th + by + (ask ? '&asked=' + ask : '') + (route || '#/');
   }
   // The trail last read in the Library, as You and This week say it: the last three names, how many stops,
   // how many of its stories are saved, and the page to pick up from
@@ -394,19 +395,30 @@
       out.rq.rows.forEach(function (r) {
         r.asked = r.mid === P && pendingAsks.length ? askedLine(lib.members[P], pendingAsks.length) : '';
         var sitId = String(r.key || '').split(' · ')[0], sit = lib.sit[sitId], M = lib.members[r.mid]; if (!sit || !M) return;
+        // the rule's fortnight, said on the row: a life the member had last week waits
+        // one phrase for when a story goes, on every row
+        var kd = (d.clock[st.clock] || d.clock[0]).day, at18 = 'at 18:00 ' + (kd === 18 ? 'today' : 'on Sunday'), okS = r.has && r.s && r.s.verified;
+        if (okS && /sends Monday|overrides the rule/.test(r.status)) r.status = 'Goes to ' + M.first + ' ' + at18;
+        else if (okS && r.status === 'Proposed by the rule') r.status = 'Goes to ' + M.first + ' ' + at18 + ', as the rule proposes';
+        else if (/auto-send/.test(r.status)) r.status = 'Sent to ' + M.first + ' at 18:00';
+        var recent = window.CLQ ? window.CLQ.recentTo(lib, r.mid) : [], avoid = recent.map(function (x) { return x.icon; });
+        var rowIc = r.s && r.s.id && lib.story[window.CLC.resolve(lib, r.s.id)] ? lib.story[window.CLC.resolve(lib, r.s.id)].icon : null;
+        r.guard = rowIc && avoid.indexOf(rowIc) >= 0 ? M.first + ' had ' + (lib.icon[rowIc].short || lib.icon[rowIc].name) + ' on 12 Oct' : '';
         var shownDraft = r.has && r.s && !r.s.verified, ap = r.btns && r.btns[0];
         if (shownDraft && ap && !ap.dis) {
           ap.dis = true; ap.op = 0.4; ap.title = 'The story shown is a recall draft. Check its source first.'; ap.go = function () {};
           r.pairNote = 'Paired with the move. Recall draft: check the source before it can go.'; flagged.push(r.mid);
+          r.status = 'Waiting for your check \u00b7 nothing goes to ' + M.first + ' until then';
         }
         if (!(r.none || shownDraft)) return;
-        var hs = r.mid === P ? (st.core || []).map(function (h) { return iconOf[h] || h; }) : null;
-        var f = window.CLN.fillSlot(lib, r.mid, sit.key, { three: hs, prefer: shownDraft ? window.CLC.resolve(lib, r.s.id) : null }); if (!f.pick) return;
+        var hs = r.mid === P && st.core && st.core.length ? st.core.map(function (h) { return iconOf[h] || h; }) : null;
+        var shownId = shownDraft ? window.CLC.resolve(lib, r.s.id) : null, shownIc = shownId && lib.story[shownId] ? lib.story[shownId].icon : null;
+        var f = window.CLN.fillSlot(lib, r.mid, sit.key, { three: hs, prefer: shownIc && avoid.indexOf(shownIc) < 0 ? shownId : null, exclude: window.CLQ.sentTo(lib, r.mid).map(function (x) { return window.CLC.resolve(lib, x); }), avoidIcons: avoid }); if (!f.pick) return;
         var x = f.pick, I = lib.icon[x.story.icon], first = M.first, poss = first + '’s';
         var why = x.links === 0 ? 'From one of ' + poss + ' three.' : x.links === 1 ? 'One link from ' + short(x.hero) + ': ' + window.CLN.why(lib, x.steps[0].a, x.steps[0].b, x.steps[0].tie)[0].replace(/^Both /, 'both ') : (x.links < 9 ? x.links + ' links from ' + poss + ' three.' : 'Not near ' + poss + ' three.');
         var open = st.fillOpen === r.mid;
         r.fill = { title: I.name + ' · ' + (x.story.place || x.story.year), why: why + ' Carries ' + sit.id + ' · ' + sit.chip + '. ' + (x.story.reach === 'near' ? 'Near' : 'Mid') + ' reach. Recall draft.',
-          checkLabel: open ? 'Close the check' : 'Check the source here', open: open, src: libSrc('#/story/' + encodeURIComponent(x.story.id), 'coach', r.mid),
+          checkLabel: open ? 'Close the check' : 'Check the source here', open: open, card: open ? checkCard(c, x.story.id, r.mid, 'row') : null,
           check: function () { S({ fillOpen: open ? null : r.mid }); }, read: function () { S({ c: 'CX', cm: r.mid, cxRoute: '#/story/' + encodeURIComponent(x.story.id) }); },
           hasNext: f.next.length > 0, next: f.next.length ? 'Also near: ' + f.next.map(function (y) { return lib.icon[y.story.icon].name + (y.links === 0 ? ' (one of the three)' : y.links === 1 ? ' (one link)' : y.links < 9 ? ' (' + y.links + ' links)' : ''); }).join(', ') + '.' : '' };
       });
@@ -430,6 +442,23 @@
         if (!m.isAsk) return;
         var chip = window.CLC.fold(m.chip || ''), sit = lib.situations.filter(function (x) { return window.CLC.fold(x.chip) === chip; })[0];
         m.find = function () { S({ c: 'CX', cm: tid, cxRoute: '#/ask?t=' + encodeURIComponent(m.body || '') + '&read=1&m=' + encodeURIComponent(tid) + (sit ? '&sit=' + sit.id : '') }); };
+        // answered in its own thread: the story ready to send, a note, and Send
+        var thr = (st.msgs[tid] || []), ans = thr.filter(function (x) { return x.replyTo === m.id && x.kind === 'story'; })[0], TM = lib.members[tid];
+        m.reply = null; m.answered = '';
+        if (ans) { var as2 = d.story[ans.story]; m.answered = 'Answered with ' + (as2 ? d.hero[as2.hero].name + ', ' + as2.place : 'a story'); m.find = null; return; }
+        if (!window.CLQ || !TM) return;
+        var rq = window.CLQ.read(lib, m.body || '', { m: tid }).q; if (sit) { rq.sit = sit.id; delete rq.mine; }
+        var lead = window.CLQ.answer(lib, rq).ready; if (!lead || !d.story[lead.story.id]) return;
+        var Ls = lead.story, LI = lib.icon[Ls.icon], noteK = 'reply:' + m.id, nt = (st.replyNote || {})[noteK] || '';
+        m.reply = { title: LI.name + ' \u00b7 ' + (Ls.place || window.CLC.yearLabel(Ls.year)), why: lead.reasons.filter(function (r) { return r.type !== 'line' && r.type !== 'move'; }).map(function (r) { return r.text; }).slice(0, 2).join(' \u00b7 '),
+          note: nt, ph: 'A note for ' + TM.first + ' (optional)', sendLabel: 'Send to ' + TM.first, other: m.find,
+          setNote: function (e) { var o = Object.assign({}, c.state.replyNote); o[noteK] = String(e.target.value).slice(0, 240); c.setState({ replyNote: o }); },
+          send: function () {
+            var s0 = c.state, k0 = d.clock[s0.clock] || d.clock[0], mm = Object.assign({}, s0.msgs), body = String((s0.replyNote || {})[noteK] || '').trim();
+            mm[tid] = (s0.msgs[tid] || []).concat([{ id: 'r' + Date.now(), from: 'coach', kind: 'story', story: Ls.id, body: body, day: k0.day, at: d.lab(k0.day) + ', ' + k0.hm, live: true, replyTo: m.id }]);
+            c.setState({ msgs: mm, ctoast: 'Sent to ' + TM.first + '.' }); setTimeout(function () { if (c.state.ctoast === 'Sent to ' + TM.first + '.') c.setState({ ctoast: null }); }, 2800);
+          } };
+        m.find = null;   // the card carries "Other stories for this"
       });
     }
     if (st.c === 'CX') out.cTitle = 'Library';
@@ -507,15 +536,17 @@
       var srow = (out.rq && out.rq.rows || []).filter(function (r) { return r.mid === st.swapFor; })[0];
       var ssit = srow && lib.sit[String(srow.key || '').split(' · ')[0]], smem = lib.members[st.swapFor];
       var rest = out.sp.excluded.filter(function (e) { return !e.draft; }), nDraft = out.sp.excluded.length - rest.length;
+      out.sp.pairLine = srow && st.swapFor === P && srow.pairNote ? 'Paired with week 2 of the move. Choosing another story unpairs it.' : '';
       if (ssit && smem && window.CLN) {
         var three = st.swapFor === P && st.core && st.core.length ? st.core.map(function (h) { return iconOf[h] || h; }) : smem.heroes_icons.core;
-        var F = window.CLN.fillSlot(lib, st.swapFor, ssit.key, { three: three }), picks = F.pick ? [F.pick].concat(F.next) : [];
+        var sAvoid = window.CLQ.recentTo(lib, st.swapFor).map(function (x) { return x.icon; }), sEx = window.CLQ.sentTo(lib, st.swapFor).map(function (x) { return window.CLC.resolve(lib, x); });
+        var F = window.CLN.fillSlot(lib, st.swapFor, ssit.key, { three: three, exclude: sEx, avoidIcons: sAvoid }), picks = F.pick ? [F.pick].concat(F.next) : [];
         var sfirst = smem.first, nm = function (id) { var I = lib.icon[id]; return I ? I.name : id; };
         var dr = picks.map(function (x) {
           var I = lib.icon[x.story.icon], key = 'swap:' + x.story.id, open = st.fillOpen === key;
           var near = x.links === 0 ? 'One of ' + sfirst + '\u2019s three.' : x.links === 1 ? 'One link from ' + nm(x.hero) + '.' : x.links < 9 ? x.links + ' links from ' + sfirst + '\u2019s three.' : 'Not near ' + sfirst + '\u2019s three.';
           return { eyebrow: I.name + ' \u00b7 ' + (x.story.place || x.story.year), why: 'Recall draft. ' + near, draft: true, goLabel: open ? 'Close the check' : 'Check the source',
-            go: function () { S({ fillOpen: open ? null : key }); }, open: open, src: libSrc('#/story/' + encodeURIComponent(x.story.id), 'coach', st.swapFor) };
+            go: function () { S({ fillOpen: open ? null : key }); }, open: open, card: open ? checkCard(c, x.story.id, st.swapFor, 'swap') : null };
         });
         var more = nDraft - dr.length;
         if (more > 0) dr.push({ eyebrow: more + ' more recall drafts carry ' + ssit.id + '.', why: 'Every story of this week, in the library.', draft: true, goLabel: 'Open them in the library',
@@ -704,6 +735,35 @@
       keep.push({ has: false, none: true, text: (names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1] + ' have' : names[0] + ' has') + ' no story for this yet.' });
     }
     out.ak.walk = keep;
+  }
+  // The coach whose console is open: a check is recorded in their name
+  function consoleCoach(st) { var lib = B.lib, m = lib && lib.members[st.p]; return (m && m.coach) || 'jim'; }
+  // A source check made in the coach's console: the ledger first, then the engine, then whatever comes next
+  function doCheck(c, sid, note, then) {
+    var by = consoleCoach(c.state), entry = { by: by, note: note, at: new Date().toISOString() };
+    fetch('/api/constellation/state/ledger', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ story: sid, by: by, note: note }) })
+      .catch(function () { return null; }).then(function () { markVerified(sid, entry); c.setState({ _ledger: Date.now() }); if (then) then(); });
+  }
+  // The check card: the scene, the quotation and the source, one required note, the coach's name, and the choice
+  // to send it to the member at 18:00 or to mark it checked only
+  function checkCard(c, sid, mid, where) {
+    var st = c.state, lib = B.lib, s = lib.story[sid], I = s && lib.icon[s.icon], M = lib.members[mid]; if (!s || !I || !M) return null;
+    var byId = consoleCoach(st), by = (lib.coaches[byId] || {}).name || byId, note = (st.checkNote || {})[sid] || '', entry = B.ledger[sid];
+    var noteNow = function () { return String((c.state.checkNote || {})[sid] || '').trim(); };
+    return { show: true, title: I.name + ' \u00b7 ' + (s.place || window.CLC.yearLabel(s.year)), moment: s.moment, pattern: s.pattern ? '\u201c' + s.pattern + '\u201d' : '',
+      source: window.CLC.sourceFor(s, 'coach') || 'not given', todo: !s.verified, done: !!s.verified,
+      doneText: 'Checked by ' + (((lib.coaches[(entry || {}).by] || {}).name) || by) + (entry && entry.note ? ' against ' + entry.note : '') + '.',
+      note: note, by: by, dis: !note.trim(), op: note.trim() ? 1 : 0.45,
+      setNote: function (e) { var m = Object.assign({}, c.state.checkNote); m[sid] = String(e.target.value).slice(0, 240); c.setState({ checkNote: m }); },
+      sendLabel: 'Checked. Send to ' + M.first + ' at 18:00',
+      send: function () { var n = noteNow(); if (!n) return; doCheck(c, sid, n, function () {
+        var rv = Object.assign({}, c.state.review); rv[mid] = { action: 'swap', story: sid };
+        var msg = 'Checked. ' + I.name + ' goes to ' + M.first + ' at 18:00.';
+        c.setState({ review: rv, fillOpen: null, swapFor: where === 'swap' ? null : c.state.swapFor, ctoast: msg });
+        setTimeout(function () { if (c.state.ctoast === msg) c.setState({ ctoast: null }); }, 3200);
+      }); },
+      only: function () { var n = noteNow(); if (n) doCheck(c, sid, n); }
+    };
   }
   // what a member already has: each week's pairing, the stories a coach sent them, and what they declined
   function hasAlready(st, lib) {

@@ -123,6 +123,11 @@
       if (e.target.id === 'litsel') { lit = e.target.value || null; paintMap(); }
       if (e.target.id === 'asksit' && e.target.value) { var base = e.target.dataset.q; location.hash = '#/ask?' + (base ? base + '&' : '') + 'sit=' + enc(e.target.value); }
     });
+    // a check needs its note: the button wakes when the note has words
+    main.addEventListener('input', function (e) {
+      if (e.target.name !== 'note') return; var b = e.target.form && e.target.form.querySelector('[data-act="verify"]');
+      if (b) { b.disabled = !e.target.value.trim(); b.title = b.disabled ? 'Say what you checked it against first' : ''; }
+    });
     main.addEventListener('keydown', function (e) { if (e.target.id === 'askq' && e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('askform').requestSubmit(); } });
     main.addEventListener('submit', function (e) {
       if (e.target.id === 'askform') {
@@ -272,7 +277,7 @@
     if (act === 'theme') { var th = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', th); try { localStorage.setItem('cl-theme', th); } catch (x) {} foot(); }
     if (act === 'verify') {
       var f = a.closest('form'), by = f.querySelector('[name=by]').value, note = f.querySelector('[name=note]').value.trim();
-      e.preventDefault(); verify(id, by, note);
+      e.preventDefault(); if (!note) return; verify(id, by, note);
     }
     if (act === 'unverify') { e.preventDefault(); unverify(id); }
   }
@@ -685,14 +690,15 @@
     }).join('') + '<span class="yl" style="left:2%">' + yl(lo) + '</span><span class="yl" style="left:98%">' + yl(hi) + '</span></div>';
   }
   function coachPanel(s) {
-    var coachId = me && me.coach ? me.coach.id : 'jim';
+    // the check is the checking coach's: the console that opened the frame says who, else the member's coach
+    var coachId = lib.coaches[Q.get('by')] ? Q.get('by') : me && me.coach ? me.coach.id : 'jim';
     var h = '<div class="panel coach" style="margin-top:16px" id="check"><h2 style="font-size:21px">For the coach</h2>';
     if (s.status === 'sample-verified') { /* the status panel above says it */ }
     else if (s.verified) h += '<p class="note">Checked. It can be sent to a member now.</p><button class="btn sm" type="button" data-act="unverify" data-id="' + esc(s.id) + '">Take the check back</button>';
     else h += '<form class="form" style="margin-top:6px"><p class="note" style="margin:0">Read the story and the quotation against the source above. When both hold, mark it checked: it becomes sendable for every member.</p>' +
       '<label class="meta" for="by">Checked by</label><select id="by" name="by">' + Object.keys(lib.coaches).map(function (c) { return '<option value="' + esc(c) + '"' + (c === coachId ? ' selected' : '') + '>' + esc(lib.coaches[c].name) + '</option>'; }).join('') + '</select>' +
       '<label class="meta" for="note">What you checked it against</label><textarea id="note" name="note" placeholder="The edition, the page, the interview"></textarea>' +
-      '<button class="btn pru" type="submit" data-act="verify" data-id="' + esc(s.id) + '"><i class="ph ph-seal-check"></i>Mark as checked against the source</button></form>';
+      '<button class="btn pru" type="submit" data-act="verify" data-id="' + esc(s.id) + '" disabled title="Say what you checked it against first"><i class="ph ph-seal-check"></i>Mark as checked against the source</button></form>';
     if (s.move_examples.length) h += '<h3 style="margin-top:20px">Move examples</h3><ul class="list">' + s.move_examples.map(function (m) { return '<li style="padding:10px 0;font:400 15px/1.5 var(--serif)">' + esc(m) + '</li>'; }).join('') + '</ul>';
     if (s.line_examples.length) h += '<h3 style="margin-top:20px">Line examples</h3><ul class="list">' + s.line_examples.map(function (m) { return '<li style="padding:10px 0;font:italic 400 15px/1.5 var(--serif)">' + esc(m) + '</li>'; }).join('') + '</ul>';
     var rv = s.review || {};

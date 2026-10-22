@@ -135,19 +135,21 @@
     var d = D(), m = d.members[P], r = st.review[P] || {};
     var paired = pairedFor(st, week === 12 ? 1 : 2);
     var pd = function (day, note) { return { story: paired.story, source: paired.src === 'coach' ? 'coach' : 'paired', origin: paired.src, closeTo: paired.closeTo, note: note, day: day }; };
+    /*bridge:send-guard-week*/ var checked = function (x) { return x && x.story && d.story[x.story] && !d.story[x.story].verified ? { held: true, why: 'check', waiting: x.story, day: x.day } : x; };
     if (week === 12) {
-      if (paired) return pd(12, m.note12 || '');
+      if (paired) return checked(pd(12, m.note12 || ''));   /*bridge:send-guard-w12*/
       var sel0 = select(st, P, d.sit[st.mv.sit].key, 'week', 12);
       return { story: sel0.pick && sel0.pick.id, source: 'system', note: '', day: 12 };
     }
     var sel = select(st, P, d.sit[m.up19.sit].key, 'week', 19);
     if (r.action === 'hold') return { held: true };
-    if (r.action === 'pin') return { story: r.story, source: 'pinned', note: r.note, day: 19 };
-    if (paired) return pd(19, r.note);
-    if (r.action === 'swap') return { story: r.story, source: 'coach', note: r.note, day: 19 };
-    if (r.action === 'approve') return { story: sel.pick && sel.pick.id, source: 'coach', note: r.note, day: 19 };
+    /*bridge:send-guard-w19*/
+    if (r.action === 'pin') return checked({ story: r.story, source: 'pinned', note: r.note, day: 19 });
+    if (r.action === 'swap') return checked({ story: r.story, source: 'coach', note: r.note, day: 19 });
+    if (paired) return checked(pd(19, r.note));
+    if (r.action === 'approve') return checked({ story: sel.pick && sel.pick.id, source: 'coach', note: r.note, day: 19 });
     if (st.hold[P]) return { held: true };
-    return { story: sel.pick && sel.pick.id, source: 'system', note: r.note, day: 19 };
+    return checked({ story: sel.pick && sel.pick.id, source: 'system', note: r.note, day: 19 });
   }
   function prevDeliveries(st, mid, before) {
     if (mid !== P) return [];
@@ -298,7 +300,7 @@
       var sel = select(st, mid, s.key, 'week', 19);
       var r = st.review[mid] || {};
       var pr = mid === P ? pairedFor(st, 2) : null;
-      var chosen = r.action === 'pin' ? r.story : pr ? pr.story : r.action === 'swap' ? r.story : (sel.pick && sel.pick.id);
+      var chosen = r.action === 'pin' ? r.story : r.action === 'swap' ? r.story : pr ? pr.story : (sel.pick && sel.pick.id);   /*bridge:send-guard-rows*/
       return { mid: mid, m: m, up: up, sit: s, sel: sel, r: r, chosen: chosen };
     });
   }
@@ -325,8 +327,9 @@
     if (k.n === 10) {
       p.c = 'C3';
       var rows = queueRows(Object.assign({}, st, p));
-      var n = rows.filter(function (r) { return r.chosen; }).length, w = rows.filter(function (r) { return !r.r.action; }).length;
-      p.cnotif = { text: n + ' stories go out at 18:00. ' + w + ' are waiting for you.', go: 'C3' };
+      /*bridge:send-guard-notice*/ var ok = function (r) { return r.chosen && d.story[r.chosen] && d.story[r.chosen].verified; };
+      var n = rows.filter(ok).length, hd = rows.filter(function (r) { return r.chosen && !ok(r); }), w = rows.filter(function (r) { return !r.r.action; }).length;
+      p.cnotif = { text: n + (n === 1 ? ' story goes' : ' stories go') + ' out at 18:00.' + (hd.length ? ' ' + hd.map(function (r) { return r.m.first + '\u2019s'; }).join(' and ') + (hd.length === 1 ? ' waits' : ' wait') + ' for one check.' : '') + (w ? ' ' + w + ' ' + (w === 1 ? 'is' : 'are') + ' waiting for you.' : ''), go: 'C3' };
     }
     if (k.n === 11) { p.c = 'C7'; p.cm = P; }
     c.setState(p);
@@ -517,7 +520,7 @@
       weekN: 'Your move · Week ' + ms.w + ' of 6', micro: ms.b, parent: st.mv.behaviour, whyOpen: st.whyOpen, whyIcon: st.whyOpen ? 'ph ph-caret-up' : 'ph ph-caret-down',
       toggleWhy: function () { S({ whyOpen: !st.whyOpen }); }, failure: st.mv.failure,
       line: '“' + st.line.text + '”',
-      hasStory: !!sObj, held: !sObj, story: fs(sObj), pinned: !!(del && del.source === 'pinned'), hasNote: !!(del && del.note), note: del ? del.note : '',
+      hasStory: !!sObj, held: !sObj, /*bridge:held-text*/ heldText: del && del.why === 'check' ? 'Your story comes once ' + CO.first + ' has checked it.' : 'No story this week. ' + CO.first + ' chose to wait.', story: fs(sObj), pinned: !!(del && del.source === 'pinned'), hasNote: !!(del && del.note), note: del ? del.note : '',
       open: function () { if (sObj) open(c, sObj.id, { note: del.note, pinned: del.source === 'pinned' }); },
       saveIcon: sObj && isSaved(sObj.id) ? 'ph-fill ph-bookmark-simple' : 'ph ph-bookmark-simple', saveLabel: sObj && isSaved(sObj.id) ? 'Saved' : 'Save story',
       toggleSave: sObj ? toggleSave(sObj.id) : function () {},
