@@ -107,6 +107,11 @@ const works = CPD.works.map((w) => ({ ...w, icon: idmap[w.hero] }));
 // The checked samples with no corpus twin carry no rating, no moves and no lines of their own, so a facet ("quieter",
 // "a line to borrow") would drop the only stories a coach can send. Rated here, the lines in our words,
 // as the corpus's lines are. A twin's own rating and lines win where a twin exists.
+// A week's move as the member's card says it: the person named, where the prototype's line says "him" with no
+// one on the card for it to point to (week number -> line)
+const NAMED = {
+  sarah: { 1: 'Give Dan the account, in front of the team.', 2: 'Ask Dan for the number, out loud.' },
+};
 const RATED = {
   'st-bjk-1973-riggs': { directness: 'direct', move_examples: [
     'This week, put the conversation you have been avoiding in the diary, and open it by naming what the two of you will decide. Ten minutes.',
@@ -135,7 +140,7 @@ const samples = CPD.stories.map((s) => ({ ...s, keys: s.keys.map(mapKey), icon: 
 const members = {};
 for (const id of CPD.order) {
   const m = CPD.members[id];
-  members[id] = { ...m, heroes_icons: { core: (m.core || []).map((h) => idmap[h]), reserve: m.reserve ? idmap[m.reserve] : null } };
+  members[id] = { ...m, heroes_icons: { core: (m.core || []).map((h) => idmap[h]), reserve: m.reserve ? idmap[m.reserve] : null }, ...(NAMED[id] ? { microNamed: NAMED[id] } : {}) };
 }
 
 const out = {

@@ -226,8 +226,8 @@
     if (!s) return {};
     var d = D(), h = d.hero[s.hero];
     return { id: s.id, hero: h.name, short: h.short, ini: h.ini, place: s.place, eyebrow: h.name + ' · ' + s.place, moment: s.moment, hasPattern: !!s.pattern, patternQ: s.pattern ? '“' + s.pattern + '”' : '', hasBy: !!s.by, by: '— ' + s.by,
-      source: 'Source: ' + s.source, hasCaution: !!s.caution, caution: s.caution, why: s.why, verified: s.verified, verLabel: s.verified ? 'Verified' : 'Draft — must verify', verC: s.verified ? 'var(--ink)' : 'var(--mad)',
-      first: s.moment.split(/\.\s/)[0] + '.', reach: s.reach, keys: s.keys.join(' · '), gist: s.pattern ? '“' + s.pattern + '”' : s.gist };
+      source: 'Source: ' + (window.CLC && window.CLC.sourceFor ? window.CLC.sourceFor(s, 'coach') : s.source), /*bridge:fs-source*/ hasCaution: !!s.caution, caution: s.caution, why: s.why, verified: s.verified, verLabel: s.verified ? 'Checked' : 'Recall draft', /*bridge:fs-words*/ verC: s.verified ? 'var(--ink)' : 'var(--mad)',
+      first: window.CLC && window.CLC.teaser ? window.CLC.teaser(s) : s.moment.split(/\.\s/)[0] + '.', /*bridge:fs-first*/ reach: s.reach, keys: s.keys.join(' · '), gist: s.pattern ? '“' + s.pattern + '”' : s.gist };
   }
 
   function msgView(c, m, viewer, mid) {

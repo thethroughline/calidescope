@@ -228,7 +228,7 @@ test('round two: others like this, the path in five, the other way, honest draft
     const H = CLN.hops(lib, mid);
     for (const s of lib.stories.slice(0, 120)) assert.equal(H[s.icon] ? H[s.icon].links : 9, CLN.linksTo(lib, mid, s.icon, s.keys[0]).links, mid + ' ' + s.id);
   }
-  assert.equal(CLN.linksTo(lib, 'sarah', 'jimmy-carter', lib.sit.E1.key).line, 'One link from Obama. Both had every act read as a signal.');
+  assert.equal(CLN.linksTo(lib, 'sarah', 'jimmy-carter', lib.sit.E1.key).line, 'One step from Obama. Both had every act read as a signal.');
 });
 
 test('round three: member-safe text, questions read right, the lead pair, who the line is said to, and the room', () => {
@@ -304,4 +304,158 @@ test('round four: the check plan gives every member four, Golda Meir first, and 
   // a coach's own members only
   const jim = lib.order.filter((m) => lib.members[m].coach === 'jim');
   assert.deepEqual(CLN.checkPlan(lib, { members: jim, sent, avoid }).members.map((m) => m.id), jim);
+});
+
+test('round five: one name for each thing, and no broken joins', () => {
+  const BAD = /a week where there|Leads by [A-Z]|\bslot\b|paired|Verified|\b[a-z]+(-[a-z]+){2,}\b/;
+  let n = 0;
+  for (const s of lib.stories) {
+    // a member's why: for a week they are in, and for one they are not, read with the index
+    for (const m of lib.order) {
+      const keys = (lib.members[m].sits || []).map((id) => lib.sit[id].key), mine = s.keys.find((k) => keys.includes(k)) || false;
+      const w = CLC.whyFor({ why: 'Chosen because there are weeks when you have to say where you stand.', keys: s.keys }, 'member', mine, lib);
+      assert.ok(!BAD.test(w) && /^It fits (your|this kind of) week: [a-z].+\.$/.test(w), w); n++;
+    }
+    const t = CLC.teaser(s);
+    assert.ok(t && !/^(?:[A-Z][a-z]+ )?\d{3,4}\.?$/.test(t), 'a teaser is never only a date: ' + s.id + ' ' + t);
+    assert.ok(!/\b[A-Z]\.$/.test(t) && t.length <= 161, 'a teaser never ends on an initial and stays short: ' + s.id);
+    assert.ok(!BAD.test(CLC.REACH_WORD[s.reach] || ''), s.reach);
+    assert.equal(CLC.storyCard(lib, s).statusLabel, s.verified ? 'Checked' : 'Recall draft');
+  }
+  assert.ok(n > 3000);
+  for (const i of lib.icons) if (i.stance) assert.ok(/^(By )?[A-Z][a-z]+ing\b/.test(CLC.stanceGerund(i.stance)) || CLC.stanceGerund(i.stance) === '', i.stance);
+  assert.equal(CLC.gapWords(-10), 'Ten years earlier'.replace('Ten', '10'));
+  assert.equal(CLC.gapWords(5), 'Five years later');
+  assert.equal(CLC.sourceFor({ source: 'Corpus draft. Remnick, The Bridge (2010); verify the appointments detail.' }, 'coach'), 'Remnick, The Bridge (2010). Check the appointments detail.');
+  assert.equal(CLC.sitLabel(lib, 'E1'), 'E1 · Everything you do gets read as a signal');
+  assert.equal(CLC.lifeName(lib, 'barack-obama'), 'Barack Obama', 'a shared surname keeps the whole name');
+});
+
+test('round five: families of moves', () => {
+  const CLN = require('../lib/net.js');
+  assert.equal(CLN.stem('repeat'), CLN.stem('repeated')); assert.equal(CLN.stem('repeating'), CLN.stem('repeats'));
+  // E1, frozen as measured: nine families, 26 of 41 stories in one, 15 with a move of their own
+  const E1 = CLN.moveFamilies(lib, lib.sit.E1.key);
+  assert.deepEqual(E1.fams.map((f) => f.members.length), [5, 4, 3, 3, 3, 2, 2, 2, 2]);
+  assert.equal(E1.alone.length, 15);
+  assert.equal(E1.fams[0].hub, 's-E1-john-foster-dulles');
+  assert.equal(E1.fams[0].move, 'Write the one sentence you want repeated in the corridor');
+  let ties = 0;
+  for (const st of lib.situations) {
+    const F = CLN.moveFamilies(lib, st.key), seen = new Set();
+    for (const f of F.fams) {
+      assert.ok(f.members.includes(f.hub) && f.members.length >= 2 && f.move, st.id + ': a family has a hub and a move');
+      for (const id of f.members) { assert.ok(lib.story[id].keys.includes(st.key), st.id + ': ' + id + ' carries the key'); assert.ok(!seen.has(id), id + ' in one family'); seen.add(id); }
+      for (const t of f.ties) {
+        ties++;
+        assert.ok(t.words.length >= 2 && t.w >= 0.1, st.id + ': ' + t.a + ' and ' + t.b + ' share two words at least');
+        assert.notEqual(lib.story[t.a].icon, lib.story[t.b].icon, 'a tie joins two lives');
+      }
+    }
+    F.alone.forEach((id) => { assert.ok(!seen.has(id)); seen.add(id); });
+    assert.equal(seen.size, (lib.byKey[st.key] || []).length, st.id + ': every story is in a family or alone');
+  }
+  assert.equal(ties, 276);
+  // the same move in another week: never a story of the same situation or the same life
+  let away = 0;
+  for (const s of lib.stories) {
+    const m = CLN.sameMoveElsewhere(lib, s.id); if (!m) continue; away++;
+    assert.ok(m.story.icon !== s.icon && !m.story.keys.some((k) => s.keys.includes(k)) && m.w >= 0.29 && m.words.length >= 2, s.id);
+  }
+  assert.equal(away, 94);
+  // Ogilvy's D3 story is nearest to Jobs's E3 story, at 0.24: under the bar, so it shows no line
+  const og = 's-D3-david-ogilvy', near = lib.stories.filter((o) => o.icon !== lib.story[og].icon && !o.keys.some((k) => lib.story[og].keys.includes(k)))
+    .map((o) => ({ id: o.id, w: (CLN.moveTie(lib, og, o.id) || { w: 0 }).w })).sort((a, b) => b.w - a.w)[0];
+  assert.equal(near.id, 's-E3-steve-jobs'); assert.ok(near.w > 0.23 && near.w < 0.25);
+  assert.equal(CLN.sameMoveElsewhere(lib, og), null);
+  assert.equal(CLN.moveWords(lib, 's-E1-thomas-lamont', 's-E1-john-foster-dulles'), 'The same move: write the one sentence you want repeated in the corridor');
+  assert.equal(CLN.moveWords(lib, 's-E1-george-washington', 's-E1-miles-davis'), '');
+});
+
+test('round five: the coach\'s twenty questions', () => {
+  const CLQ = require('../lib/ask.js');
+  const panel = J('./ask-panel.json').questions;
+  assert.equal(panel.length, 20);
+  // every facet a reading can set: the panel's q is exact, and a facet it does not list must be absent
+  const KEYS = ['m', 'sit', 'mine', 'to', 'room', 'cue', 'line', 'than', 'dir', 'sex', 'before', 'after', 'age', 'field', 'domain', 'nocel', 'notus', 'reach', 'stance', 'ok'];
+  const CHIP = { before: (q) => (q.after ? 'era' : 'before'), after: (q) => (q.before ? 'era' : 'after') };
+  for (const e of panel) {
+    const r = CLQ.read(lib, e.t, { m: e.m }), q = r.q, M = lib.members[e.m], id = '#' + e.n + ' ' + e.t;
+    for (const k of KEYS) {
+      if (k === 'sit' && e.sitFirst) { assert.equal((q.sit || '').split('+')[0], e.sitFirst, id + ' sit'); continue; }
+      assert.deepEqual(q[k], e.q[k], id + ' ' + k);
+    }
+    // each facet read shows as a chip the coach can take away
+    for (const k of Object.keys(e.q)) { const ck = CHIP[k] ? CHIP[k](q) : k; assert.ok(r.chips.some((c) => c.k === ck), id + ' chip ' + ck); }
+    for (const w of e.unread || []) assert.ok(r.unused.includes(w), id + ': "' + w + '" is said to be unread');
+    for (const w of e.read || []) assert.ok(!r.unused.map((x) => x.toLowerCase()).includes(w), id + ': "' + w + '" is read');
+    const a = CLQ.answer(lib, q), sent = CLQ.sentTo(lib, e.m).map((x) => CLC.resolve(lib, x)), recent = CLQ.recentTo(lib, e.m).map((x) => x.icon);
+    const asked = (q.sit ? q.sit.split('+') : M.sits).map((x) => lib.sit[x].key);
+    assert.ok(a.ready || a.oneCheck, id + ': a lead');
+    for (const L of [a.ready, a.oneCheck].filter(Boolean)) {
+      assert.ok(!sent.includes(L.story.id) && !recent.includes(L.story.icon), id + ': the lead is new to ' + M.first);
+      assert.ok(L.story.keys.some((k) => asked.includes(k)), id + ': the lead carries a situation asked about');
+      assert.ok(L.route === '' || L.route.startsWith('For ' + M.first + ': '), id + ': ' + L.route);
+      // one of the three needs no route; every other lead says how it reaches the member
+      assert.equal(L.route === '', CLQ.threeOf(M).includes(L.story.icon), id + ': ' + L.story.icon + ' route "' + L.route + '"');
+    }
+    // what the member already has sorts last, and says when
+    const had = a.items.map((x) => !!x.had); assert.ok(had.indexOf(true) < 0 || had.slice(had.indexOf(true)).every(Boolean), id + ': had sorts last');
+    const L = e.lead || {};
+    if (L.ready) assert.equal(a.ready && a.ready.story.id, L.ready, id + ' ready');
+    if (L.readyVerified) assert.ok(a.ready.story.verified, id);
+    if (L.readyReason) assert.ok(a.ready.reasons.some((x) => x.text === L.readyReason), id + ' ' + a.ready.reasons.map((x) => x.text).join(' / '));
+    if (L.readyRoute) assert.ok(a.ready.route.startsWith(L.readyRoute), id + ' ' + a.ready.route);
+    if (L.oneCheck) assert.equal(a.oneCheck && a.oneCheck.story.id, L.oneCheck, id + ' one check');
+    if (L.oneCheckYear) assert.equal(a.oneCheck.story.year, L.oneCheckYear);
+    if (L.oneCheckReason) assert.ok(a.oneCheck.reasons.some((x) => x.text === L.oneCheckReason), id + ' ' + a.oneCheck.reasons.map((x) => x.text).join(' / '));
+    if (L.oneCheckRoute != null) assert.equal(a.oneCheck.route, L.oneCheckRoute);
+    if (L.oneCheckSource) assert.equal(a.oneCheck.source, L.oneCheckSource);
+    if (L.cueN != null) assert.equal(a.cueN, L.cueN, id + ' scene count');
+    if (L.hadLast) assert.equal(a.items[a.items.length - 1].had, L.hadLast, id + ' had');
+  }
+  const read = (t, m) => CLQ.read(lib, t, { m }).q;
+  // #3: the room's words leave the reading, so "group meeting" is no longer C3's meeting
+  assert.ok(!/C3/.test(read(panel[2].t, 'sarah').sit || ''));
+  // #4: the person named first is the one spoken to, and a team reads as the member's team
+  assert.equal(read(panel[3].t, 'sarah').to, 'down');
+  assert.equal(read('Tom has to back his head of brand in front of the board', 'tom').to, 'down');
+  assert.equal(read('Michael has to tell the partners the merger is off', 'michael').to, 'up');
+  // the setback scene, from the meeting that went badly, the vote that was lost, or "a setback"
+  for (const t of ['something for Sarah after the meeting went badly', 'Sarah lost the vote on the new structure', 'it went badly for Sarah', 'Sarah had a setback at the offsite']) {
+    const q = read(t); assert.equal(q.cue, 'setback', t); assert.ok(!/C3/.test(q.sit || ''), t);
+  }
+  assert.equal(CLQ.answer(lib, read(panel[7].t, 'maya')).oneCheck.story.id, 's-B6-george-c-marshall');
+  // a line: "can say to", "what to say"
+  assert.equal(read('what to say to the VP after it went badly', 'maya').line, 1);
+  // a member's age by first name, and no age read for a member whose age is not on record
+  assert.equal(read('someone Sarah\'s age who led former peers').age, 41);
+  assert.ok(!read('someone David\'s age who won work on his own name').age);
+  // a word that names one domain reads as that domain: a creator is the creators, a small part of media
+  const cr = read('A story from a creator for Maya about speaking up');
+  assert.equal(cr.domain, 'influencer'); assert.ok(!cr.field);
+  assert.ok(CLQ.answer(lib, cr).items.concat([CLQ.answer(lib, cr).oneCheck]).filter(Boolean).every((x) => lib.icon[x.story.icon].domain === 'influencer'));
+  // interests by domain: a newspaper editor is no answer to "Maya follows creators"
+  const evans = CLQ.reasons(lib, lib.story['s-C3-harold-evans'], { m: 'maya', sit: 'C3' }).map((x) => x.text);
+  assert.ok(!evans.some((t) => /creators/.test(t)), evans.join(' / '));
+  // the three and the reserve, each said as it is
+  const tag = (s, m) => CLQ.reasons(lib, lib.story[s], { m, sit: 'E1' }).map((x) => x.text);
+  assert.ok(tag('st-michelle-obama-2016-go-high', 'sarah').includes('Sarah’s reserve hero'));
+  assert.ok(tag('st-obama-1990-law-review', 'sarah').includes('One of Sarah’s three'));
+  assert.ok(!tag('st-michelle-obama-2016-go-high', 'sarah').some((t) => /heroes/.test(t)));
+  // the lead's route, said as a sentence: one step from a hero, and the last link in the situation's words
+  const maya = CLQ.answer(lib, { m: 'maya', sit: 'E1' }).ready;
+  assert.match(maya.route, /^For Maya: (one|two|three) steps? from [A-Z]/);
+  // what a member already had: a date from the data, and Sarah's week-one story last
+  const sar = CLQ.answer(lib, { m: 'sarah', sit: 'A2' }, { limit: 99 }), last = sar.items.filter((x) => x.had);
+  assert.ok(last.some((x) => x.story.id === 'st-obama-2008-clinton' && x.had === 'Sarah had this on 12 Oct'));
+  assert.equal(CLQ.recentTo(lib, 'sarah')[0].day, 'Mon 12 Oct');
+  // one wording for a situation, a member's own line said back to them, the compare row and the source line
+  assert.equal(CLQ.sitLabel(lib, 'E1'), 'E1 · Everything you do gets read as a signal');
+  assert.equal(CLQ.about(lib, 'D3'), "About: you're still doing your old job as well as this one");
+  const c = CLQ.compare(lib, 'st-bjk-1973-riggs', 's-A2-barack-obama'), way = c.rows.find((x) => x[0] === 'Way of leading, as we read it');
+  assert.deepEqual(way, ['Way of leading, as we read it', 'Carrying the weight', 'Staying close']);
+  assert.ok(c.shared.includes('E1 · Everything you do gets read as a signal'));
+  for (const st of lib.situations) for (const m of lib.order) for (const L of ['ready', 'oneCheck']) assert.ok(!/^(Corpus draft|Verify against)/i.test((CLQ.answer(lib, { sit: st.id, m })[L] || {}).source || ''), st.id + ' ' + m);
+  assert.equal(CLQ.answer(lib, { sit: 'C2', sex: 'm', after: 1960, before: 1970, m: 'david' }).oneCheck.source, 'White, Catch a Fire (1983).');
 });

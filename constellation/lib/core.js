@@ -43,10 +43,10 @@
     IL: 'Israel', IN: 'India', IQ: 'Iraq', IT: 'Italy', JM: 'Jamaica', JP: 'Japan', KE: 'Kenya', LR: 'Liberia', MX: 'Mexico', NZ: 'New Zealand',
     PK: 'Pakistan', PL: 'Poland', PT: 'Portugal', RO: 'Romania', RU: 'Russia', SE: 'Sweden', UK: 'United Kingdom', US: 'United States', VN: 'Vietnam', ZA: 'South Africa' };
   var STATUS = {
-    'sample-verified': { label: 'Verified', tone: 'ok', note: 'A demo sample, checked for the prototype.' },
+    'sample-verified': { label: 'Checked', tone: 'ok', note: 'A demo sample, checked for the prototype.' },
     'sample-draft': { label: 'Recall draft', tone: 'draft', note: 'Written from recall. Read it against the named source before it is sent.' },
     recall: { label: 'Recall draft', tone: 'draft', note: 'Written from recall. Read it against the named source before it is sent.' },
-    verified: { label: 'Verified', tone: 'ok', note: 'Read against its source by a coach.' }
+    verified: { label: 'Checked', tone: 'ok', note: 'Read against its source by a coach.' }
   };
 
   // One name for a draft everywhere, and one line for a member, naming their coach
@@ -64,7 +64,11 @@
   var NOTE = /^corpus draft\b|\b(?:verify|verified|check|checked|confirm)\b/i;
   function sourceFor(s, as) {
     var src = String((s && s.source) || '');
-    if (as === 'coach') return src;
+    // a coach sees the note too, said once as what to do: "Remnick, The Bridge (2010). Check the appointments detail."
+    if (as === 'coach') return src.replace(/^corpus draft\.\s*/i, '').split(/;\s*/).map(function (x) {
+      x = x.trim().replace(/^(?:verify|confirm)\b/i, 'Check').replace(/\b[Vv]erify\b/g, function (w) { return w.charAt(0) === 'V' ? 'Check' : 'check'; });
+      return x.charAt(0).toUpperCase() + x.slice(1);
+    }).filter(Boolean).join('. ').replace(/\.\./g, '.');
     if (as === 'member' && !s.verified) return '';
     // clauses end at a full stop or a semicolon; a clause that tells a coach what to do is dropped
     var kept = src.split(/(?<=\.)\s+|;\s*/).filter(function (x) { return x && !NOTE.test(x); }).map(function (x) { return x.trim(); });
@@ -80,13 +84,18 @@
     var kept = c.replace(/\s*\(s-[A-E]\d-[a-z0-9-]+\)/g, '').split(/(?<=\.)\s+/).filter(function (x) { return x && !NOTE.test(x) && !ASIDE.test(x); });
     return kept.length ? kept[0].trim() : '';
   }
-  // Why a story fits, as a reader hears it: nobody "chose" a story in the library, so the line names the week
-  // ("It fits your week: …" when it carries one of the member's situations, else "It fits a week where …")
-  function whyFor(s, as, mine) {
+  // Why a story fits, as a reader hears it: nobody "chose" a story in the library, so the line names the week in
+  // the situation's own words ("It fits your week: everything you do gets read as a signal.", or for a week the
+  // member is not in, "It fits this kind of week: saying it in your own words."). mine: the situation key of the
+  // member's that the story carries, or true; lib, when given, supplies the words.
+  function whyFor(s, as, mine, lib) {
     var w = String((s && s.why) || ''), m = /^Chosen because (.+)$/.exec(w);
     if (as === 'coach' || !m) return w;
-    return (mine ? 'It fits your week: ' : 'It fits a week where ') + m[1];
+    var key = typeof mine === 'string' ? mine : s && s.keys && s.keys[0], st = lib && key && lib.sitByKey[key];
+    if (!st) return (mine ? 'It fits your week: ' : 'It fits this kind of week: ') + m[1];
+    return (mine ? 'It fits your week: ' : 'It fits this kind of week: ') + lowerFirst(st.chip) + '.';
   }
+  function lowerFirst(t) { t = String(t || ''); return /^[A-Z][a-z]/.test(t) ? t.charAt(0).toLowerCase() + t.slice(1) : t; }
   function fold(s) { return String(s == null ? '' : s).normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
   function slug(s) { return fold(s).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
   function initials(name) { var w = String(name).replace(/[^\p{L}\s'-]/gu, '').split(/\s+/).filter(Boolean); if (!w.length) return '?'; return (w.length === 1 ? w[0].slice(0, 2) : w[0][0] + w[w.length - 1][0]).toUpperCase(); }
@@ -118,6 +127,15 @@
     var ss = sentences(moment), i = 0;
     while (i < ss.length - 1 && (dateline(ss[i], place))) i++;
     return ss[i] || '';
+  }
+  // The teaser on a card: past a dateline and past an opening of four words or fewer ("September 2017."), cut at
+  // 160 characters on a word.
+  function teaser(s, max) {
+    max = max || 160; var ss = sentences(s && s.moment), i = 0;
+    while (i < ss.length - 1 && (dateline(ss[i], s.place) || ss[i].split(/\s+/).length <= 4)) i++;
+    var t = ss[i] || '';
+    if (t.length > max) { var cut = t.lastIndexOf(' ', max - 1); t = t.slice(0, cut > max / 2 ? cut : max - 1).replace(/[,;:\u2014-]+$/, '') + '\u2026'; }
+    return t;
   }
   function dateline(s, place) {
     var b = s.replace(/[.:]$/, '');
@@ -234,7 +252,7 @@
     var ic = lib.icon[s.icon] || { name: s.icon };
     var st = STATUS[s.status] || STATUS.recall;
     return { id: s.id, icon: s.icon, name: ic.name, place: s.place, year: s.year, era: s.era, reach: s.reach, keys: s.keys,
-      first: lead(s.moment, s.place), pattern: s.pattern_lang && s.pattern_lang !== 'en' && s.pattern_en ? s.pattern_en : s.pattern,
+      first: teaser(s), pattern: s.pattern_lang && s.pattern_lang !== 'en' && s.pattern_en ? s.pattern_en : s.pattern,
       status: s.status, statusLabel: st.label, verified: s.verified };
   }
   function iconCard(lib, i) {
@@ -379,9 +397,19 @@
   // heading does). ctx: { role, three: [icon ids], heroName: function } for "as Obama does".
   var STANCE_BY = { front: 'by going out front', earn: 'by earning it daily', weight: 'by carrying the weight', grow: 'by growing others', close: 'by staying close', ootw: 'by stepping out of the way' };
   var MOVE_WORD = { direct: 'a direct move', calibrated: 'a measured move', indirect: 'an indirect move' };
-  function likeThis(lib, id, k, ctx) {
+  // How often each life would be shown as another who lived the week, across every story: a life that answers far
+  // more weeks than most gives way a little, so the same few do not stand beside every story. Counted once per index.
+  function jit(a, b) { var h = 2166136261, t = a + '|' + b; for (var i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0) / 4294967296; }
+  function likeUse(lib) {
+    if (lib._likeUse) return lib._likeUse;
+    var use = lib._likeUse = {};   // set first: the counting pass reads an empty table, so it counts without damping
+    lib.stories.forEach(function (s) { likeThis(lib, s.id, 4, null, true).forEach(function (x) { use[x.icon] = (use[x.icon] || 0) + 1; }); });
+    return use;
+  }
+  function likeThis(lib, id, k, ctx, raw) {
     ctx = ctx || {}; k = k || 4;
     var s = lib.story[resolve(lib, id)]; if (!s) return [];
+    var use = raw ? {} : likeUse(lib);
     var tx = textIndex(lib), me = lib.icon[s.icon] || {}, best = {};
     lib.stories.forEach(function (o) {
       if (o.icon === s.icon || !o.keys.some(function (x) { return s.keys.indexOf(x) >= 0; })) return;
@@ -395,14 +423,17 @@
     while (picked.length < k && pool.length) {
       var at = -1, top = -Infinity;
       pool.forEach(function (x, i) {
-        var own = x.oi.field === me.field, v = x.score - (fields[x.oi.field] ? 0.8 : 0) - (cents[cent(x.o.year)] ? 0.4 : 0) - (own && fields.__own ? 10 : 0);
+        var own = x.oi.field === me.field, v = x.score - (fields[x.oi.field] ? 0.8 : 0) - (cents[cent(x.o.year)] ? 0.4 : 0) - (own && fields.__own ? 10 : 0) - 0.1 * Math.max(0, (use[x.o.icon] || 0) - 8) + (raw ? 0 : 0.5 * jit(s.id, x.o.icon));
         if (v > top) { top = v; at = i; }
       });
       var x = pool.splice(at, 1)[0]; picked.push(x); fields[x.oi.field] = 1; cents[cent(x.o.year)] = 1; if (x.oi.field === me.field) fields.__own = 1;
     }
     var isOwn = function (x) { return x.oi.field === me.field; }, isOld = function (x) { return x.o.year != null && x.o.year < 1900; };
     if (picked.length && !picked.some(isOld)) {
-      var old = pool.filter(function (x) { return isOld(x) && !isOwn(x); })[0] || pool.filter(isOld)[0];
+      // the older story turns among the best few, so a handful of old lives do not answer every week
+      var olds = pool.filter(function (x) { return isOld(x) && !isOwn(x); }); if (!olds.length) olds = pool.filter(isOld);
+      var spin = 0; for (var hi = 0; hi < s.id.length; hi++) spin = (spin * 31 + s.id.charCodeAt(hi)) >>> 0;
+      var old = olds[spin % Math.min(olds.length, 6)];
       if (old) { var drop = picked.map(isOwn).lastIndexOf(true); picked[drop >= 0 && picked.filter(isOwn).length > 1 ? drop : picked.length - 1] = old; pool.splice(pool.indexOf(old), 1); }
     }
     // never more than one from the story's own field while another field can stand in
@@ -412,21 +443,49 @@
       picked[j] = alt; pool.splice(pool.indexOf(alt), 1);
     }
     var used = {}, oldest = Math.min.apply(null, (lib.byKey[s.keys[0]] || []).map(function (sid) { var y = lib.story[sid].year; return y == null ? 1e9 : y; }));
+    if (raw) return picked.map(function (x) { return { icon: x.o.icon }; });
     return picked.map(function (x) { var r = reasonFor(lib, s, x.o, ctx, used, oldest); used[r.text] = 1; return { story: storyCard(lib, x.o), score: +x.score.toFixed(3), reasons: [r] }; });
+  }
+  // A reason says what the two share before it says when: the same move, the same way of leading as one of the
+  // member's three, another world, and only then the years.
+  function moveWordsOf(lib, a, b) {
+    var N = (typeof self !== 'undefined' && self.CLN) || (typeof global !== 'undefined' && global.CLN);
+    return N && N.moveWords ? N.moveWords(lib, a, b) : '';
   }
   function reasonFor(lib, here, o, ctx, used, oldest) {
     var oi = lib.icon[o.icon] || {}, me = lib.icon[here.icon] || {}, c = [];
+    var mw = moveWordsOf(lib, here.id, o.id); if (mw) c.push({ type: 'move', text: mw });
     (ctx.three || []).forEach(function (h) { var H = lib.icon[h]; if (ctx.role === 'member' && H && h !== o.icon && oi.stance && oi.stance === H.stance && STANCE_BY[oi.stance]) c.push({ type: 'fit', text: 'Leads ' + STANCE_BY[oi.stance] + ', as ' + (H.short || H.name) + ' does' }); });
-    if (o.year != null && o.year === oldest) c.push({ type: 'years', text: yearLabel(o.year) + ', the oldest of this week' });
-    else if (o.year != null && o.year < 1900) c.push({ type: 'years', text: 'The same week, in ' + yearLabel(o.year) });
-    if (o.year != null && here.year != null && Math.abs(o.year - here.year) <= 10) c.push({ type: 'years', text: o.year === here.year ? 'The same year: ' + yearLabel(o.year) : 'The same years: ' + yearLabel(o.year) });
     var dom = String(oi.domainLabel || oi.field || '').toLowerCase(), mv = MOVE_WORD[o.directness];
-    if (oi.field !== me.field) c.push({ type: 'field', text: 'From ' + dom + ', ' + yearLabel(o.year) + (mv ? ' · ' + mv : '') });
-    c.push({ type: 'field', text: (oi.field === me.field ? 'Also in ' : 'From ') + dom + ', ' + yearLabel(o.year) });
-    if (mv) c.push({ type: 'move', text: cap1(mv) + ', ' + yearLabel(o.year) });
+    var when = o.year == null ? '' : o.year === oldest ? yearLabel(o.year) + ', the oldest of this week'
+      : here.year != null && o.year !== here.year && Math.abs(o.year - here.year) <= 10 ? lowerFirst(gapWords(o.year - here.year)) + ', ' + yearLabel(o.year) : yearLabel(o.year);
+    if (oi.field !== me.field) c.push({ type: 'field', text: 'From ' + dom + ', ' + when });
+    if (mv && o.directness !== here.directness) c.push({ type: 'way', text: cap1(mv) + ', where ' + (me.short || me.name || 'this one') + '\u2019s was ' + (DIR_WORD[here.directness] || 'marked otherwise') });
+    c.push({ type: 'field', text: (oi.field === me.field ? 'Also in ' : 'From ') + dom + ', ' + when });
+    if (o.year != null && o.year < 1900) c.push({ type: 'years', text: 'The same kind of week, in ' + yearLabel(o.year) });
     return c.filter(function (r) { return !used[r.text]; })[0] || { type: 'field', text: (oi.name || '') + ', ' + yearLabel(o.year) };
   }
   function cap1(t) { return t.charAt(0).toUpperCase() + t.slice(1); }
+
+  // ---------- one name for each thing ----------
+  // Every surface says a thing the same way: a situation as its code and chip, reach and directness in words, a
+  // story's status as Checked or Recall draft, numbers one to nine as words, a gap in years as a person says it.
+  var NUM = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  function num(n) { return n >= 0 && n < 10 && n === Math.floor(n) ? NUM[n] : String(n); }
+  var REACH_WORD = { near: 'Close to an office', mid: 'Some way from an office', far: 'Far from an office' };
+  var REACH_SHORT = { near: 'Close', mid: 'Some way', far: 'Far' };
+  var DIRECT_WORD = { indirect: 'Indirect', calibrated: 'Measured', direct: 'Direct' };
+  function sitLabel(lib, id) { var x = lib.sit[id] || lib.sitByKey[id]; return x ? x.id + ' \u00b7 ' + x.chip : String(id || ''); }
+  function statusWord(s) { return s && s.verified ? 'Checked' : 'Recall draft'; }
+  function gapWords(dy) { var a = Math.abs(dy); return a === 0 ? 'The same year' : cap1(num(a)) + (a === 1 ? ' year ' : ' years ') + (dy < 0 ? 'earlier' : 'later'); }
+  function stanceGerund(stance) { var b = STANCE_BY[stance]; return b ? cap1(b.replace(/^by /, '')) : ''; }
+  // a life's name as a Back button or a short line says it: the surname when no other life shares it
+  function lifeName(lib, id) {
+    var I = lib.icon[id]; if (!I) return String(id || '');
+    var sur = String(I.name).replace(/,? (Jr\.?|Sr\.?|II|III|IV)$/, '').split(' ').pop();
+    if (!lib._surnames) { lib._surnames = {}; lib.icons.forEach(function (x) { var k = String(x.name).replace(/,? (Jr\.?|Sr\.?|II|III|IV)$/, '').split(' ').pop(); lib._surnames[k] = (lib._surnames[k] || 0) + 1; }); }
+    return lib._surnames[sur] > 1 ? I.name : sur;
+  }
   // sameField: the same domain (else the same field), nearest in time first, leaving out the lives in exclude
   function sameField(lib, id, k, exclude) {
     k = k || 3; var s = lib.story[resolve(lib, id)]; if (!s) return [];
@@ -499,7 +558,7 @@
       var r = [];
       x.shared.forEach(function (key) { r.push({ type: 'situation', key: key, text: 'Also filed under ' + sitName(lib, key) }); });
       if (x.c >= 0.06) r.push({ type: 'words', text: 'Shared words: ' + sharedWords(tx.vec[s.id], tx.vec[x.o.id], 3).join(', ') });
-      if (x.dy <= 10) r.push({ type: 'years', text: x.dy === 0 ? 'The same year, ' + yearLabel(x.o.year) : 'The same years: ' + yearLabel(x.o.year) });
+      if (x.dy <= 10) r.push({ type: 'years', text: x.dy === 0 ? 'The same year, ' + yearLabel(x.o.year) : gapWords(x.o.year - (s.year == null ? x.o.year : s.year)) + ', ' + yearLabel(x.o.year) });
       if (x.oi.stance && x.oi.stance === me.stance) r.push({ type: 'stance', text: 'Both lead by ' + (x.oi.stanceName || x.oi.stance) });
       if (x.oi.field === me.field && !r.length) r.push({ type: 'field', text: 'Both in ' + (x.oi.domainLabel || x.oi.field) });
       res.push({ story: storyCard(lib, x.o), score: +x.score.toFixed(3), reasons: r });
@@ -885,5 +944,6 @@
     member: member, readingFor: readingFor, matcherMember: matcherMember,
     matcher: matcher, pick: pick, replay: replay, season: season, stanceProfile: stanceProfile,
     similarStories: similarStories, kindred: kindred, ego: ego, situationWeb: situationWeb, path: path, words: words,
-    interpret: interpret, ask: ask, sitIndex: sitIndex, queryVec: queryVec, COPY: COPY, voice: voice, STANCE_BY: STANCE_BY, draftLine: draftLine, sourceFor: sourceFor, cautionFor: cautionFor, whyFor: whyFor, statusLine: statusLine, likeThis: likeThis, sameField: sameField, reasonFor: reasonFor, readingPath: readingPath, otherWay: otherWay, DIR_WORD: DIR_WORD };
+    interpret: interpret, ask: ask, sitIndex: sitIndex, queryVec: queryVec, COPY: COPY, voice: voice, STANCE_BY: STANCE_BY, draftLine: draftLine, sourceFor: sourceFor, cautionFor: cautionFor, whyFor: whyFor, statusLine: statusLine, teaser: teaser, lowerFirst: lowerFirst, cap1: cap1,
+    num: num, REACH_WORD: REACH_WORD, REACH_SHORT: REACH_SHORT, DIRECT_WORD: DIRECT_WORD, sitLabel: sitLabel, statusWord: statusWord, gapWords: gapWords, stanceGerund: stanceGerund, lifeName: lifeName, likeThis: likeThis, sameField: sameField, reasonFor: reasonFor, readingPath: readingPath, otherWay: otherWay, DIR_WORD: DIR_WORD };
 }));

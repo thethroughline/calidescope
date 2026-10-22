@@ -105,6 +105,8 @@
     // inside a member's app the app's bar is the only bar: the trail comes home to You, and search and the
     // links show on the library's front page, which the bar's Browse opens
     if (EMBED && AS === 'member') document.documentElement.classList.add('member-embed');
+    // a member reads situations in words; the codes (A1, E2) are the coach's shorthand
+    if (AS === 'member') document.documentElement.classList.add('as-member');
     document.getElementById('searchform').addEventListener('submit', function (e) {
       e.preventDefault(); var q = document.getElementById('q').value.trim(); if (!q) return;
       // three words or more read as a question and go to Ask; fewer are a name to search for
@@ -128,6 +130,11 @@
       if (e.target.name !== 'note') return; var b = e.target.form && e.target.form.querySelector('[data-act="verify"]');
       if (b) { b.disabled = !e.target.value.trim(); b.title = b.disabled ? 'Say what you checked it against first' : ''; }
     });
+    main.addEventListener('keydown', function (e) {
+      var li = (e.key === 'ArrowDown' || e.key === 'ArrowUp') && e.target.closest && e.target.closest('.mf-row'); if (!li) return;
+      var nx = e.key === 'ArrowDown' ? li.nextElementSibling : li.previousElementSibling, el = nx && nx.querySelector(e.target.classList.contains('mf-j') ? '.mf-j' : '.mf-a');
+      if (el) { e.preventDefault(); el.focus(); }
+    });
     main.addEventListener('keydown', function (e) { if (e.target.id === 'askq' && e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('askform').requestSubmit(); } });
     main.addEventListener('submit', function (e) {
       if (e.target.id === 'askform') {
@@ -142,6 +149,7 @@
     });
     var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () {
       if (document.getElementById('map')) paintMap();
+      main.querySelectorAll('.mfam[data-fam]').forEach(paintFam);
       document.querySelectorAll('.graphbox').forEach(function (g) { if (g._paint) g._paint(); });
     }, 150); });
   }
@@ -273,6 +281,12 @@
     if (act === 'open-trail') { var t = trails[+id]; if (t) { trail = t.nodes.slice(); SS.set(TRAIL_KEY, trail); location.hash = safe(t.nodes[t.nodes.length - 1].href); } }
     if (act === 'drop-trail') { trails.splice(+id, 1); LS.set('cl-trails', trails); syncUser(); route(true); }
     if (act === 'light') { var k = a.dataset.key; lit = lit === k ? null : k; paintMap(); }
+    if (act === 'mjoin') { var jp = document.getElementById(a.getAttribute('aria-controls')), jo = a.getAttribute('aria-expanded') !== 'true'; a.setAttribute('aria-expanded', jo); jp.hidden = !jo; paintFam(a.closest('.mfam')); }
+    if (act === 'livesmap') {
+      var lm = document.getElementById('livesmap'), lo = lm.hidden; lm.hidden = !lo; a.setAttribute('aria-expanded', lo);
+      // drawn on opening: a hidden map has no width to fit
+      if (lo) { delete document.getElementById('map').dataset.painted; paintMap(); }
+    }
     if (act === 'mode') { AS = a.dataset.mode; LS.set('cl-as', AS); TRAIL_KEY = 'cl-trail-now:' + AS + (MID ? ':' + MID : ''); trail = SS.get(TRAIL_KEY, []); foot(); route(true); }
     if (act === 'theme') { var th = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', th); try { localStorage.setItem('cl-theme', th); } catch (x) {} foot(); }
     if (act === 'verify') {
@@ -314,7 +328,7 @@
     return '<span class="badge ' + (ok ? 'ok' : 'draft') + '" title="' + esc(st.note) + '">' + (ok ? '<i class="ph-fill ph-seal-check"></i>' : '') + esc(st.label) + '</span>';
   }
   function cardBadge(c) {
-    if (c.verified) return '<span class="badge ok"><i class="ph-fill ph-seal-check" aria-hidden="true"></i>Verified</span>';
+    if (c.verified) return '<span class="badge ok"><i class="ph-fill ph-seal-check" aria-hidden="true"></i>Checked</span>';
     return AS === 'coach' ? '<span class="badge draft">Recall draft</span>' : '';
   }
   function storyCard(c, o) {
@@ -333,7 +347,10 @@
   // a trail's heading is one large target that opens the whole trail
   function tlink(href, html) { return '<a class="tlink" href="' + href + '">' + html + '<i class="ph ph-arrow-right" aria-hidden="true"></i></a>'; }
   function pchip(c) { return '<a class="pchip" href="' + H.icon(c.id) + '"><span class="d">' + esc(c.ini) + '</span>' + esc(c.name) + (c.year != null ? ' <span class="y">' + yl(c.year) + '</span>' : '') + '</a>'; }
-  function sitChip(s) { return '<a class="sit" href="' + H.sit(s.id) + '"><b>' + esc(s.id) + '</b>' + esc(s.chip) + '</a>'; }
+  function sitChip(s) {
+    if (AS === 'member') return '<a class="sit" href="' + H.sit(s.id) + '" title="' + esc(s.line) + '">' + esc(s.chip) + '</a>';
+    return '<a class="sit" href="' + H.sit(s.id) + '"><b>' + esc(s.id) + '<span class="sr"> · </span></b>' + esc(s.chip) + '</a>';
+  }
   function sec(title, body, aside) { return '<section><header><h2>' + title + '</h2>' + (aside || '') + '</header>' + body + '</section>'; }
   function draftsNote() {
     var c = lib.stories.filter(function (s) { return s.verified; }).length;
@@ -370,7 +387,7 @@
       var by = {}; lib.situations.forEach(function (s) { (by[s.fam] = by[s.fam] || []).push(s); });
       picker = '<div class="mapbar"><label class="picker"><span class="sr">Light up a situation</span><select id="litsel"><option value="">Light up a situation</option>' +
         Object.keys(by).sort().map(function (f) { return '<optgroup label="' + esc(f + ' · ' + (CLC.FAMILY[f] || '')) + '">' + by[f].map(function (s) {
-          return '<option value="' + esc(s.key) + '"' + (lit === s.key ? ' selected' : '') + '>' + esc(s.id + ' · ' + s.chip) + '</option>'; }).join('') + '</optgroup>'; }).join('') +
+          return '<option value="' + esc(s.key) + '"' + (lit === s.key ? ' selected' : '') + '>' + esc(sitWord(s)) + '</option>'; }).join('') + '</optgroup>'; }).join('') +
         '</select><i class="ph ph-caret-down" aria-hidden="true"></i></label></div>';
     }
     return picker + mapBox();
@@ -421,10 +438,10 @@
     if (cap) {
       if (key) {
         var st = lib.sitByKey[key], ys = Object.keys(on).map(function (id) { return lib.icon[id].year; }).filter(function (y) { return y != null; }).sort(function (a, b) { return a - b; });
-        cap.innerHTML = '<b style="color:var(--pru)">' + esc(st.id) + '</b> ' + esc(st.chip) + '. ' + n(Object.keys(on).length, 'life', 'lives') + ', ' + n(st.stories.length, 'story', 'stories') +
+        cap.innerHTML = (AS === 'member' ? '' : '<b style="color:var(--pru)">' + esc(st.id) + '</b> ') + esc(st.chip) + '. ' + n(Object.keys(on).length, 'life', 'lives') + ', ' + n(st.stories.length, 'story', 'stories') +
           (ys.length ? ', from ' + yl(ys[0]) + ' to ' + yl(ys[ys.length - 1]) : '') + '. <a href="' + H.sit(st.id) + '">Open the situation</a>';
       } else cap.textContent = 'Each star is a life, placed by field and by the year of its defining moment. Larger stars hold more stories.' +
-        (me && AS !== 'coach' ? ' Your three are ringed in red.' : '');
+        (me && AS === 'member' ? ' Your three are ringed in red.' : '');
     }
     var sc = host.querySelector('.map-scroll');
     if (cap && sc.scrollWidth > sc.clientWidth + 4 && !cap.querySelector('.swipe')) cap.insertAdjacentHTML('afterbegin', '<span class="swipe">Swipe the map sideways to move through time. </span>');
@@ -463,7 +480,7 @@
       tip.style.left = Math.max(70, Math.min(b.width - 70, cb.left + cb.width / 2 - b.left)) + 'px'; tip.style.top = (cb.top - b.top) + 'px'; tip.hidden = false;
     };
     var choose = function (id, how) {
-      mcur = id; var g = svg.querySelector('g.curg');
+      mcur = id; host._mcur = id; host._how = how; var g = svg.querySelector('g.curg');
       if (!id) { g.innerHTML = ''; tip.hidden = true; threads(null); if (kinBox) kinBox.innerHTML = ''; return; }
       var i = lib.icon[id], p = pos[id];
       threads(i.stories.length ? id : null); tip.hidden = true;
@@ -485,7 +502,7 @@
       tipAt(c.dataset.id);
     };
     svg.addEventListener('mousemove', show); svg.addEventListener('mouseleave', rest);
-    var armed = null;
+    var armed = host._how === 'tap' ? host._mcur : null;   // a repaint keeps "tap again to open" true
     svg.addEventListener('click', function (e) {
       var c = e.target.closest('.hit'), touch = matchMedia('(hover: none)').matches;
       if (!c) {
@@ -537,6 +554,8 @@
       var ys0 = key ? Object.keys(on).filter(function (id) { return pos[id]; }).map(function (id) { return pos[id].x; }) : [];
       sc.scrollLeft = ys0.length ? Math.max(0, Math.min.apply(null, ys0) * scale() - 150) : sc.scrollWidth;
     }
+    // a star chosen before a repaint (a resize, a situation lit) stays chosen
+    if (host._mcur && pos[host._mcur]) choose(host._mcur, host._how);
   }
 
   // ---------- pages ----------
@@ -565,8 +584,8 @@
   function fams() {
     var by = {}; lib.situations.forEach(function (s) { (by[s.fam] = by[s.fam] || []).push(s); });
     return '<div class="fams">' + Object.keys(by).sort().map(function (f) {
-      return '<div><h3><span class="code">' + esc(f) + '</span>' + esc(CLC.FAMILY[f] || '') + '</h3><ul class="list">' + by[f].map(function (s) {
-        return '<li><a class="rowlink" href="' + H.sit(s.id) + '"><span class="code">' + esc(s.id) + '</span><span><span class="t">' + esc(s.chip) + '</span><span class="s" style="display:block">' + esc(s.line) + '</span></span><span class="n">' + s.stories.length + '</span></a></li>';
+      return '<div><h3><span class="code">' + esc(f) + '<span class="sr"> · </span></span>' + esc(CLC.FAMILY[f] || '') + '</h3><ul class="list">' + by[f].map(function (s) {
+        return '<li><a class="rowlink" href="' + H.sit(s.id) + '"><span class="code">' + esc(s.id) + '<span class="sr"> · </span></span><span><span class="t">' + esc(s.chip) + '</span><span class="s" style="display:block">' + esc(s.line) + '</span></span><span class="n">' + s.stories.length + ' stories</span></a></li>';
       }).join('') + '</ul></div>';
     }).join('') + '</div>';
   }
@@ -587,12 +606,12 @@
     var ic = lib.icon[id] || lib.icon[lib.idmap[id]]; if (!ic) return missing();
     var t = CLC.iconTrails(lib, ic.id), mine = isMine(ic.id);
     // a way of leading is our reading: a coach sees it marked proposed, everyone else reads it as ours
-    var stance = ic.stance ? '<a href="' + H.stance(ic.stance) + '" title="' + esc(ic.stanceGloss) + '">' + esc(ic.stanceName) + '</a>' + (ic.stanceStatus === 'proposed' ? (AS === 'coach' ? ' <span class="meta">(proposed)</span>' : ' <span class="meta">as we read it</span>') : '') : '';
+    var stance = ic.stance && CLC.STANCE_BY[ic.stance] ? 'Leads <a href="' + H.stance(ic.stance) + '" title="' + esc(ic.stanceGloss) + '">' + esc(CLC.STANCE_BY[ic.stance]) + '</a>' + (ic.stanceStatus === 'proposed' ? (AS === 'coach' ? ' \u00b7 proposed' : ', as we read it.') : '.') : '';
     var facts = [ic.desc || ic.domainLabel, ic.place, ic.born != null ? 'born ' + yl(ic.born) : ''].filter(Boolean).join(' · ');
     var h = '<div class="person" style="gap:18px;align-items:flex-start"><span class="disc lg' + (ic.stories.length ? '' : ' thin') + (mine ? ' mine' : '') + '">' + esc(ic.ini) + '</span><div style="min-width:0">' +
       '<h1>' + esc(ic.name) + '</h1><p class="meta" style="font-size:15px;margin:8px 0 0">' + esc(cap(facts)) + '</p>' +
       '<div class="row" style="margin-top:12px">' + (mine ? '<span class="badge mine">One of your three</span>' : '') + heroAction(ic) +
-      (stance ? '<span class="meta">Leads by ' + stance + '</span>' : '') + '<a class="btn sm" href="' + esc(ic.wiki) + '" target="_blank" rel="noopener">Wikipedia <i class="ph ph-arrow-up-right"></i></a></div>' +
+      (stance ? '<span class="meta">' + stance + '</span>' : '') + '<a class="btn sm" href="' + esc(ic.wiki) + '" target="_blank" rel="noopener">Wikipedia <i class="ph ph-arrow-up-right"></i></a></div>' +
       (ic.q && ic.q.length ? '<p class="note i" style="margin-top:12px">' + ic.q.map(esc).join(' · ') + '</p>' : '') + '</div></div>';
     var stories = ic.stories.map(function (sid) { return CLC.storyCard(lib, lib.story[sid]); });
     var left = sec(n(stories.length, 'story', 'stories'), stories.length ? '<div class="stack">' + stories.map(function (c) { return storyCard(c, { noName: true }); }).join('') + '</div>'
@@ -675,7 +694,7 @@
       if (!c.n) return '<td class="none">None yet</td>';
       return '<td' + (mine ? ' class="here"' : '') + '><a href="' + esc(askUrl({ sit: st.id, dir: c.dir, reach: c.reach })) + '"><span class="n">' + n(c.n, 'story', 'stories') + '</span><span class="nm">' + names.join(', ') + '</span></a></td>';
     };
-    return '<table class="wgrid"><caption>' + esc(g.sentence) + '</caption><thead><tr><td></td>' + COLS.map(function (c) { return '<th scope="col">' + c[1] + '</th>'; }).join('') + '</tr></thead><tbody>' +
+    return '<table class="wgrid"><caption>' + esc(AS === 'member' ? g.sentence.replace(/^For [A-E]\d, /, 'For this kind of week, ') : g.sentence) + '</caption><thead><tr><td></td>' + COLS.map(function (c) { return '<th scope="col">' + c[1] + '</th>'; }).join('') + '</tr></thead><tbody>' +
       ROWS.map(function (r, ri) { return '<tr><th scope="row">' + r[1] + '</th>' + g.cells[ri].map(cell).join('') + '</tr>'; }).join('') + '</tbody></table>' +
       (g.unrated ? '<p class="note" style="margin-top:6px">' + n(g.unrated, 'story is', 'stories are') + ' not rated yet.</p>' : '');
   }
@@ -737,8 +756,8 @@
     var ic = lib.icon[s.icon], t = CLC.storyTrails(lib, s.id, 4), st = CLC.STATUS[s.status] || CLC.STATUS.recall;
     var foreign = s.pattern_lang && s.pattern_lang !== 'en' && s.pattern_en, isSaved = saved.indexOf(s.id) >= 0;
     // a member or a reader sees a draft marked once, under the title; a coach sees the working panel
-    var plain = AS !== 'coach', mineS = me && me.sits && s.keys.some(function (k) { return me.sits.some(function (x) { return lib.sit[x] && lib.sit[x].key === k; }); });
-    var src = CLC.sourceFor(s, AS), caution = CLC.cautionFor(s, AS), why = CLC.whyFor(s, AS, mineS);
+    var plain = AS !== 'coach', mineS = me && me.sits && s.keys.filter(function (k) { return me.sits.some(function (x) { return lib.sit[x] && lib.sit[x].key === k; }); })[0] || false;
+    var src = CLC.sourceFor(s, AS), caution = CLC.cautionFor(s, AS), why = CLC.whyFor(s, AS, mineS, lib);
     var h = '<div class="two"><article>' +
       '<div class="row"><span class="meta">' + esc(s.place || s.era) + '</span>' + (s.verified ? badge(s) : '') + '</div>' +
       '<h1 style="margin-top:8px"><a href="' + H.icon(ic.id) + '" style="color:inherit;text-decoration:none">' + esc(ic.name) + '</a></h1>' +
@@ -752,7 +771,7 @@
       '</article><aside style="padding-top:8px">';
     h += '<div class="panel">' + (plain && !s.verified ? '' : '<div class="row">' + badge(s) + '</div><p class="note" style="margin:10px 0 0">' + esc(CLC.statusLine(s, AS, coachFirst())) + '</p>') +
       (s.checked ? '<p class="note" style="margin:8px 0 0">Checked by ' + esc((lib.coaches[s.checked.by] || {}).name || s.checked.by) + ', ' + esc(when(s.checked.at)) + (s.checked.note ? ': ' + esc(s.checked.note) : '.') + '</p>' : '') +
-      '<h3' + (plain && !s.verified ? '' : ' style="margin-top:18px"') + '>Filed under</h3><div class="row">' + s.keys.map(function (k) { return lib.sitByKey[k] ? sitChip(lib.sitByKey[k]) : ''; }).join('') + '</div>' +
+      '<h3' + (plain && !s.verified ? '' : ' style="margin-top:18px"') + '>' + (AS === 'member' ? 'The kind of week' : 'Filed under') + '</h3><div class="row">' + s.keys.map(function (k) { return lib.sitByKey[k] ? sitChip(lib.sitByKey[k]) : ''; }).join('') + '</div>' +
       '<div class="row" style="margin-top:18px">' +
       '<button class="btn' + (isSaved ? ' on' : '') + '" type="button" data-act="save" data-id="' + esc(s.id) + '"><i class="' + (isSaved ? 'ph-fill' : 'ph') + ' ph-bookmark-simple"></i>' + (isSaved ? 'Saved' : 'Save') + '</button>' +
       (EMBED && me && AS === 'member' ? '<button class="btn" type="button" data-act="ask" data-id="' + esc(s.id) + '">Ask ' + esc(me.coach ? me.coach.first : 'your coach') + ' about this</button>' : '') +
@@ -766,7 +785,7 @@
     h += othersHTML(s);
     var stk = lib.sitByKey[s.keys[0]];
     h += sec('Every story of this week', '<div id="splot">' + gridHTML(s.keys[0], s.id) + '</div>' + (stk ? '<p class="note" style="margin-top:10px">' + tlink(H.sit(stk.id) + '?at=path', 'The situation’s path in five stories') + '</p>' : ''));
-    h += otherWayHTML(s);
+    h += otherWayHTML(s) + sameMoveHTML(s);
     if (t.moreFrom.length) h += sec('More from ' + esc(ic.name), '<div class="grid">' + t.moreFrom.map(function (c) { return storyCard(c, { noName: true }); }).join('') + '</div>');
     h += '<p style="margin-top:40px">' + tlink(H.era(t.era.id), 'Other stories from ' + esc(t.era.label.replace(/^The /, 'the '))) + '</p>';
     return { title: ic.name + ', ' + (s.place || s.era), html: h, node: { k: 'story:' + s.id, label: ic.name + ', ' + (s.year != null ? yl(s.year) : s.era), href: H.story(s.id) } };
@@ -793,10 +812,9 @@
     if (s.move_examples.length) h += '<h3 style="margin-top:20px">Move examples</h3><ul class="list">' + s.move_examples.map(function (m) { return '<li style="padding:10px 0;font:400 15px/1.5 var(--serif)">' + esc(m) + '</li>'; }).join('') + '</ul>';
     if (s.line_examples.length) h += '<h3 style="margin-top:20px">Line examples</h3><ul class="list">' + s.line_examples.map(function (m) { return '<li style="padding:10px 0;font:italic 400 15px/1.5 var(--serif)">' + esc(m) + '</li>'; }).join('') + '</ul>';
     var rv = s.review || {};
-    h += '<dl class="kv" style="margin-top:18px">' + (s.voice ? '<dt>Voice</dt><dd>' + esc(s.voice === 'both' ? 'Jim and Jennifer' : cap(s.voice)) + '</dd>' : '') + (s.directness ? '<dt>Directness</dt><dd>' + esc(cap(s.directness)) + '</dd>' : '') +
+    h += '<dl class="kv" style="margin-top:18px">' + (s.voice ? '<dt>Voice</dt><dd>' + esc(s.voice === 'both' ? 'Jim and Jennifer' : cap(s.voice)) + '</dd>' : '') + (s.directness ? '<dt>How directly</dt><dd>' + esc(CLC.DIRECT_WORD[s.directness] || cap(s.directness)) + '</dd>' : '') +
       (rv.fit ? '<dt>Fit</dt><dd>' + esc(cap(rv.fit)) + '</dd>' : '') + (rv.quote_risk ? '<dt>Quote risk</dt><dd>' + esc(cap(rv.quote_risk)) + '</dd>' : '') +
-      (s.rights && s.rights.quote ? '<dt>Rights</dt><dd>' + esc(cap(s.rights.quote)) + '</dd>' : '') + '<dt>Reach</dt><dd>' + esc(cap(s.reach)) + '</dd>' +
-      (s.corpus ? '<dt>Corpus record</dt><dd class="tabular">' + esc(s.corpus) + '</dd>' : '') + '</dl></div>';
+      (s.rights && s.rights.quote ? '<dt>Rights</dt><dd>' + esc(cap(s.rights.quote)) + '</dd>' : '') + '<dt>How close to an office</dt><dd>' + esc(CLC.REACH_SHORT[s.reach] || cap(s.reach)) + '</dd></dl></div>';
     return h;
   }
 
@@ -804,16 +822,19 @@
     var s = lib.sit[code] || lib.sitByKey[code]; if (!s) return missing();
     var f = qs.get('f') || 'all', stories = s.stories.map(function (x) { return lib.story[x]; })
       .filter(function (x) { return f === 'all' || (f === 'near' ? x.reach !== 'far' : x.verified); });
-    var seg = function (k, label) { return '<a class="btn sm' + (f === k ? ' on' : '') + '" href="' + H.sit(s.id) + (k === 'all' ? '' : '?f=' + k) + '">' + label + '</a>'; };
-    var h = '<p class="meta" style="margin:0">' + esc(s.id + ' · ' + s.family) + '</p><h1 style="margin-top:6px">' + esc(s.chip) + '</h1><p class="lede">' + esc(s.line) + '</p>' +
+    var seg = function (k, label) { return '<a class="btn sm' + (f === k ? ' on' : '') + '" href="' + H.sit(s.id) + (k === 'all' ? '?at=cards' : '?f=' + k + '&at=cards') + '">' + label + '</a>'; };
+    var h = '<p class="meta" style="margin:0">' + esc(AS === 'member' ? s.family : s.id + ' · ' + s.family) + '</p><h1 style="margin-top:6px">' + esc(s.chip) + '</h1><p class="lede">' + esc(s.line) + '</p>' +
       '<p class="note i" style="margin-top:10px">In a member’s words: “' + esc(s.member_line) + '”</p>';
     var splot = { P: CLC.readingPath(lib, s.key) };
     h += '<section id="path"><header><h2>A path in five stories</h2></header><p class="note" style="margin:-6px 0 14px">An order that teaches: start with the plainest case, go back in time, change worlds, see it handled the other way, then see the most at stake.</p>' + pathHTML(splot.P) + '</section>';
-    h += sec('Every story of this week', '<div id="sitplot">' + gridHTML(s.key, null) + '</div>');
-    h += sec('Who has lived it', mapBox() +
-      '<div class="people-row" style="margin-top:14px">' + s.icons.map(function (i) { return lib.icon[i]; }).sort(function (a, b) { return (a.year || 0) - (b.year || 0); }).map(function (i) { return pchip(CLC.iconCard(lib, i)); }).join('') + '</div>');
-    h += sec(n(stories.length, 'story', 'stories'), stories.length ? '<div class="grid">' + stories.map(function (x) { return storyCard(CLC.storyCard(lib, x)); }).join('') + '</div>' : '<p class="empty">Nothing matches that filter yet.</p>',
-      '<div class="row">' + seg('all', 'All') + seg('near', 'Near and mid') + seg('checked', 'Checked') + '</div>');
+    // the stories by the move each makes; the lives behind them wait behind a link, the map drawn when it opens
+    h += movesHTML(s);
+    // the grid of how directly and how near is the coach's tool, folded
+    if (AS === 'coach') h += '<section><details class="more"><summary>Every story of this week, quieter or closer</summary><div id="sitplot">' + gridHTML(s.key, null) + '</div></details></section>';
+    // every story as a card, folded: the families above already list each one
+    h += '<section id="cards"><details class="more"' + (f !== 'all' ? ' open' : '') + '><summary>' + esc('All ' + n(s.stories.length, 'story', 'stories') + ' as cards') + '</summary>' +
+      '<div class="row" style="margin-bottom:16px">' + seg('all', 'All') + seg('near', 'Near and mid') + seg('checked', 'Checked') + '</div>' +
+      (stories.length ? '<div class="grid">' + stories.map(function (x) { return storyCard(CLC.storyCard(lib, x)); }).join('') + '</div>' : '<p class="empty">Nothing matches that filter yet.</p>') + '</details></section>';
     if (AS === 'coach') {
       var o = s.outcome || {}, c = s.calibration || {};
       var mv = s.moves.map(function (m) {
@@ -835,8 +856,84 @@
     }
     var fam = lib.situations.filter(function (x) { return x.fam === s.fam && x.id !== s.id; });
     h += sec('The rest of ' + esc(s.fam + ' · ' + s.family), '<div class="row">' + fam.map(sitChip).join('') + '</div>');
-    return { title: s.id + ' ' + s.chip, html: h, node: { k: 'sit:' + s.id, label: s.id + ' ' + s.chip, href: H.sit(s.id) },
-      after: function () { mapOpts = { key: s.key, chips: false }; lit = s.key; paintMap(); } };
+    return { title: AS === 'member' ? s.chip : s.id + ' ' + s.chip, html: h, node: { k: 'sit:' + s.id, label: AS === 'member' ? s.chip : s.id + ' ' + s.chip, href: H.sit(s.id) },
+      after: function () { mapOpts = { key: s.key, chips: false }; lit = s.key; paintFams(); } };
+  }
+
+  // ---------- families of moves (CLN.moveFamilies) ----------
+  // A situation's stories, grouped by the move each one makes. Two stories are tied when their moves choose each
+  // other on shared words; a family is what the ties join, headed by its hub's move in the corpus's words. The arcs
+  // in the gutter draw the ties; the list beside them is the same thing in words, so the drawing is aria-hidden.
+  var NUMW = ['none', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  function numw(k) { return k >= 0 && k <= 9 ? NUMW[k] : String(k); }
+  function andList(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
+  // the year, then the town: "1956 · Montgomery", short enough for one line beside the gutter on a phone
+  function placeLine(s) { var y = yl(s.year), p = String(s.place || '').split(',')[0].trim(); return !p || /\d/.test(p) ? y || p : y ? y + ' · ' + p : p; }
+  function movesHead(N, F) {
+    var m = F.fams.reduce(function (a, f) { return a + f.members.length; }, 0), k = F.fams.length, j = F.alone.length;
+    var h = cap(numw(N)) + (N === 1 ? ' story.' : ' stories.');
+    if (!k) return h + (N === 1 ? ' Its move is its own.' : ' Each makes a move of its own.');
+    h += ' ' + (j ? cap(numw(m)) : 'All ' + numw(m)) + ' share a move with another story here, in ' + (k === 1 ? 'one family' : numw(k) + ' families');
+    return h + (j ? '; ' + numw(j) + (j === 1 ? ' makes a move of its own.' : ' make a move of their own.') : '.');
+  }
+  function famRow(id, f, i, r) {
+    var s = lib.story[id], I = lib.icon[s.icon], jid = 'mj' + i + '-' + r;
+    var joins = f.ties.filter(function (t) { return t.a === id || t.b === id; }).map(function (t) {
+      return 'Joined to ' + lib.icon[lib.story[t.a === id ? t.b : t.a].icon].name + ': both moves use ' + andList(t.words.slice(0, 3)) + '.';
+    });
+    return '<li class="mf-row' + (id === f.hub ? ' hub' : '') + '" data-id="' + esc(id) + '"><div class="mf-line"><a class="mf-a" href="' + H.story(id) + '"><span class="nm">' + esc(I.name) + '</span>' +
+      '<span class="pl">' + esc(placeLine(s)) + (s.verified ? '' : ' · <span class="dr">Recall draft</span>') + '</span></a>' +
+      '<button class="mf-j" type="button" data-act="mjoin" aria-expanded="false" aria-controls="' + jid + '">Joined<span class="sr"> · how ' + esc(I.name) + '’s move meets the others</span></button></div>' +
+      '<p class="mf-why" id="' + jid + '" hidden>' + esc(joins.join(' ')) + '</p></li>';
+  }
+  function famCard(f, i, key) {
+    var H0 = lib.icon[lib.story[f.hub].icon], ys = f.members.map(function (id) { return lib.story[id].year; }).filter(function (y) { return y != null; }), o = f.members.length - 1;
+    var span = !ys.length ? '' : ys[0] === ys[ys.length - 1] ? yl(ys[0]) : yl(ys[0]) + ' to ' + yl(ys[ys.length - 1]);
+    var c = H0.name + '’s move, and ' + (o === 1 ? 'one other' : numw(o) + ' others') + (span ? ' · ' + span : '') + (f.words.length ? ' · shared words: ' + f.words.join(', ') : '');
+    return '<article class="mfam" data-key="' + esc(key) + '" data-fam="' + i + '" aria-labelledby="mf' + i + '"><h3 class="mf-t" id="mf' + i + '">' + esc(f.move) + '</h3><p class="mf-c">' + esc(c) + '</p>' +
+      '<div class="mf-body"><svg class="mf-arcs" aria-hidden="true" focusable="false"></svg><ol class="mf-rows">' + f.members.map(function (id, r) { return famRow(id, f, i, r); }).join('') + '</ol></div></article>';
+  }
+  function aloneCard(ids) {
+    if (!ids.length) return '';
+    return '<details class="mfam alone"><summary><span class="mf-t">' + esc(cap(numw(ids.length)) + (ids.length === 1 ? ' move of its own' : ' moves of their own')) + '</span></summary><ol class="mf-rows">' + ids.map(function (id) {
+      var s = lib.story[id], mv = CLN.moveClause(lib, id);
+      return '<li class="mf-row"><a class="mf-a" href="' + H.story(id) + '"><span class="nm">' + esc(lib.icon[s.icon].name) + '</span><span class="pl">' + esc(placeLine(s)) + (s.verified ? '' : ' · <span class="dr">Recall draft</span>') + '</span>' +
+        (mv && mv.text ? '<span class="mv">' + esc(mv.text) + '</span>' : '') + '</a></li>';
+    }).join('') + '</ol></details>';
+  }
+  function movesHTML(s) {
+    var F = CLN.moveFamilies(lib, s.key), N = s.stories.length, L = s.icons.length;
+    var people = '<div class="people-row" style="margin-top:14px">' + s.icons.map(function (i) { return lib.icon[i]; }).sort(function (a, b) { return (a.year || 0) - (b.year || 0); }).map(function (i) { return pchip(CLC.iconCard(lib, i)); }).join('') + '</div>';
+    return '<section id="moves"><header><h2>' + esc(movesHead(N, F)) + '</h2></header>' +
+      '<div class="mfams">' + F.fams.map(function (f, i) { return famCard(f, i, s.key); }).join('') + aloneCard(F.alone) + '</div>' +
+      '<p class="mf-map"><button class="tlink" type="button" data-act="livesmap" aria-expanded="false" aria-controls="livesmap">' + esc('See the ' + numw(L) + (L === 1 ? ' life' : ' lives') + ' on the map') + '<i class="ph ph-arrow-right" aria-hidden="true"></i></button></p>' +
+      '<div id="livesmap" hidden>' + mapBox() + people + '</div></section>';
+  }
+  // the arcs: one dot per row on the name's line, and a curve in the gutter for each tie, deeper the further it reaches
+  function paintFam(card) {
+    var svg = card.querySelector('.mf-arcs'), ol = card.querySelector('.mf-rows'); if (!svg || !ol) return;
+    var f = CLN.moveFamilies(lib, card.dataset.key).fams[+card.dataset.fam]; if (!f) return;
+    var rows = [].slice.call(ol.children), at = {}, H1 = ol.offsetHeight, X = 42, s = '';
+    rows.forEach(function (li, r) { at[li.dataset.id] = { r: r, y: li.offsetTop + 24 }; });
+    var wmax = Math.max.apply(null, f.ties.map(function (t) { return t.w; }));
+    f.ties.forEach(function (t) {
+      var p = at[t.a], q = at[t.b]; if (!p || !q) return; if (p.r > q.r) { var x = p; p = q; q = x; }
+      var d = Math.min(38, 6 + 12 * (q.r - p.r));
+      s += '<path d="M' + X + ' ' + p.y.toFixed(1) + 'C' + (X - d) + ' ' + p.y.toFixed(1) + ' ' + (X - d) + ' ' + q.y.toFixed(1) + ' ' + X + ' ' + q.y.toFixed(1) + '" stroke-width="' + (1.25 + 2 * t.w / wmax).toFixed(2) + '"/>';
+    });
+    rows.forEach(function (li) { var p = at[li.dataset.id]; s += '<circle' + (li.dataset.id === f.hub ? ' class="hub" r="6.5"' : ' r="5"') + ' cx="' + X + '" cy="' + p.y.toFixed(1) + '"/>'; });
+    svg.setAttribute('viewBox', '0 0 52 ' + H1); svg.setAttribute('height', H1); svg.innerHTML = s;
+  }
+  function paintFams() {
+    var cards = main.querySelectorAll('.mfam[data-fam]'); cards.forEach(paintFam);
+    // the serif arrives after the first paint and moves the rows
+    if (cards.length && document.fonts && document.fonts.ready) document.fonts.ready.then(function () { main.querySelectorAll('.mfam[data-fam]').forEach(paintFam); });
+  }
+  // the same move, made by another life in another kind of week; a member reads no codes
+  function sameMoveHTML(s) {
+    var m = CLN.sameMoveElsewhere(lib, s.id); if (!m) return '';
+    var o = m.story, st = lib.sitByKey[o.keys[0]];
+    return '<p class="samemove">' + tlink(H.story(o.id), esc('The same move in another week: ' + lib.icon[o.icon].name + ', ' + yl(o.year) + (AS === 'member' ? '' : ' · ' + st.id) + ' · ' + st.chip)) + '</p>';
   }
   function sitsPage() {
     var pairs = CLN.web(lib), N = lib.situations.length, two = pairs.filter(function (p) { return p.lives.length >= 2; }).length;
@@ -852,15 +949,21 @@
   function askUrl(q) { return '#/ask?' + CLQ.toQS(q); }
   function forWhom(q) { return q.m || (AS === 'member' && me ? me.id : AS === 'coach' && MID ? MID : ''); }
   // a member reads "your" where a coach reads the member's name
+  // a situation as this reader says it: a member its words, everyone else its code and words
+  function sitWord(s) { return AS === 'member' ? s.chip : s.id + ' \u00b7 ' + s.chip; }
   function you(t) {
+    if (AS === 'member') t = String(t).replace(/\b[A-E]\d \u00b7 /g, '');
     if (!(AS === 'member' && me)) return t;
     var f = me.first;
-    return t.replace(new RegExp('One of ' + f + '’s heroes'), 'One of your heroes').replace(new RegExp('; ' + f + ' is (\\d+)'), '; you are $1')
+    return t.replace(new RegExp('One of ' + f + '’s (three|heroes)'), 'One of your $1').replace(new RegExp('^' + f + '’s reserve hero'), 'Your reserve hero')
+      .replace(new RegExp('^' + f + ' had this'), 'You had this').replace(new RegExp('; ' + f + ' is (\\d+)'), '; you are $1')
       .replace(new RegExp('which ' + f + ' follows'), 'which you follow').replace(new RegExp(f + '’s'), 'your');
   }
+  // a coach reads the situation with its code, as the reading above the cards gives it; a member reads the words
+  function rtext(r) { return (r.type === 'sit' && r.code && AS === 'coach' ? r.code + ' \u00b7 ' : '') + you(r.text); }
   function rsn(r) {
-    var cls = r.type === 'fit' ? ' fit' : r.type === 'scene' ? ' scene' : '';
-    return '<span class="rsn' + cls + '">' + esc(you(r.text)) + '</span>';
+    var cls = r.type === 'fit' ? ' fit' : r.type === 'scene' ? ' scene' : r.type === 'had' ? ' fit had' : '';
+    return '<span class="rsn' + cls + '">' + esc(rtext(r)) + '</span>';
   }
   // What a coach can do now: the best checked story, ready to send, and the best draft, one check from it
   function leadHTML(a, M) {
@@ -868,9 +971,10 @@
       var c = it.card, ready = kind === 'ready';
       var act = ready ? (EMBED ? '<button class="btn solid" type="button" data-act="send" data-id="' + esc(c.id) + '"' + (M ? ' data-member="' + esc(M.id) + '"' : '') + '>Send to ' + esc(who) + '</button>' : '<a class="btn" href="' + H.story(c.id) + '">Open it</a>')
         : '<a class="btn pru" href="' + H.story(c.id) + '?at=check">Check the source</a>';
-      return '<div class="leadcard ' + kind + '"><p class="label">' + (ready ? 'Ready to send' : 'One check sends it') + '</p>' +
+      return '<div class="leadcard ' + kind + '"><p class="label">' + (ready ? 'Ready to send' : 'One check from sending') + '</p>' +
         '<h3><a href="' + H.story(c.id) + '">' + esc(c.name + ' \u00b7 ' + (c.place || yl(c.year))) + '</a></h3>' +
-        '<p class="meta">' + esc(ready ? it.reasons.filter(function (r) { return r.type !== 'line' && r.type !== 'move'; }).map(function (r) { return r.text; }).slice(0, 2).join(' \u00b7 ') : 'Source: ' + (it.source || 'not given')) + '</p>' +
+        '<p class="meta">' + esc(ready ? it.reasons.filter(function (r) { return r.type !== 'line' && r.type !== 'move'; }).map(rtext).slice(0, 2).join(' \u00b7 ') : 'Source: ' + (it.source || 'not given')) + '</p>' +
+        (it.route ? '<p class="meta route">' + esc(it.route) + '</p>' : '') +
         (it.reasons.some(function (r) { return r.type === 'line'; }) ? '<p class="saidline">' + esc(it.reasons.filter(function (r) { return r.type === 'line'; })[0].text) + '</p>' : '') + act + '</div>';
     };
     return '<div class="lead2' + (a.ready && a.oneCheck ? '' : ' one') + '">' + (a.ready ? card(a.ready, 'ready') : '') + (a.oneCheck ? card(a.oneCheck, 'check') : '') + '</div>';
@@ -899,7 +1003,7 @@
     return '<label class="picker"><span class="sr">Change the situation</span><select id="asksit" data-q="' + esc(CLQ.toQS(CLQ.drop(q, 'sit'))) + '"><option value="">Change situation</option>' +
       Object.keys(by).sort().map(function (f) {
         return '<optgroup label="' + esc(CLC.FAMILY[f]) + '">' + by[f].map(function (s) {
-          return '<option value="' + esc(s.id) + '"' + (on.indexOf(s.id) >= 0 ? ' disabled' : '') + '>' + esc(s.id + ' · ' + cap(CLQ.DID[s.id])) + ' (' + (lib.byKey[s.key] || []).length + ')</option>';
+          return '<option value="' + esc(s.id) + '"' + (on.indexOf(s.id) >= 0 ? ' disabled' : '') + '>' + esc(CLQ.sitLabel(lib, s.id) + ' (' + n((lib.byKey[s.key] || []).length, 'story', 'stories') + ')') + '</option>';
         }).join('') + '</optgroup>';
       }).join('') + '</select><i class="ph ph-caret-down" aria-hidden="true"></i></label>';
   }
@@ -944,10 +1048,10 @@
       return '<a class="qchip' + (c.kind ? ' ' + c.kind : '') + '" href="' + esc(to) + '" title="Take this away">' + esc(you(c.label)) + '<i class="ph ph-x" aria-hidden="true"></i><span class="sr">, take this away</span></a>';
     }).join('');
     // what the words were read as, where the page now reads otherwise, comes first among the other readings
-    var readSits = (rd2.q && rd2.q.sit ? rd2.q.sit.split('+') : []).map(function (id) { return { id: id, label: id + ' · ' + cap(CLQ.DID[id]) }; });
+    var readSits = (rd2.q && rd2.q.sit ? rd2.q.sit.split('+') : []).map(function (id) { return { id: id, label: CLQ.sitLabel(lib, id) }; });
     var alts = readSits.concat(rd2.alts).filter(function (x, i, all) { return (q.sit || '').split('+').indexOf(x.id) < 0 && all.map(function (y) { return y.id; }).indexOf(x.id) === i; }).slice(0, 3);
     // the reading folds to one line on a phone ("Read as E1 + A2 · for Sarah · Change"); on a desktop it stays open
-    var sumLine = (q.sit ? q.sit.split('+').join(' + ') : q.mine && M ? (AS === 'member' ? 'your situations' : M.first + '’s situations') : a.chips.filter(function (c) { return c.k !== 'm'; }).map(function (c) { return c.label; }).slice(0, 1).join('')) +
+    var sumLine = (q.sit ? (AS === 'member' ? q.sit.split('+').map(function (x) { return lib.sit[x] ? lib.sit[x].chip : x; }).join(' and ') : q.sit.split('+').join(' + ')) : q.mine && M ? (AS === 'member' ? 'your situations' : M.first + '’s situations') : a.chips.filter(function (c) { return c.k !== 'm'; }).map(function (c) { return c.label; }).slice(0, 1).join('')) +
       (M && AS !== 'member' ? ' \u00b7 for ' + M.first : '');
     h += '<details class="readas" data-fold="1"><summary><span class="label">Read as</span> <span class="sumline">' + esc(sumLine) + '</span> <span class="change">Change</span></summary><div class="row">' + chipsH + sitSelect(q) + '</div>' +
       (alts.length ? '<p class="alts"><span class="meta">Or read it as</span>' + alts.map(function (x) { return '<a href="' + esc(askUrl(Object.assign({}, CLQ.drop(q, 'sit'), { sit: x.id }))) + '">' + esc(x.label) + '</a>'; }).join('') + '</p>' : '') +
@@ -957,6 +1061,8 @@
       h += '<h2 class="count">Nothing answers all of this</h2>';
     } else {
       h += '<h2 class="count">' + n(a.total, 'story', 'stories') + ' from ' + n(a.lives, 'life', 'lives') + '</h2><p class="lede" style="margin-top:6px">' + esc(a.line) + '</p>' +
+        // a scene asked for beside a situation ranks; when no story here has it, the page says so
+        (a.cueN === 0 && CLQ.SCENE[q.cue] ? '<p class="note">None of these is set ' + esc(CLQ.SCENE[q.cue].heading) + '.</p>' : '') +
         (coach ? '<p class="note">' + (a.checked ? a.checked + (a.checked === 1 ? ' is' : ' are') + ' checked against the source. The rest are' : 'None is checked against its source yet. All are') + ' recall drafts: each needs a check before it is sent.</p>' : '');
     }
     if (a.nearest.length) h += sec('Nearest answers', '<ul class="list">' + a.nearest.map(function (x) {
@@ -1110,7 +1216,7 @@
     if (outside.length) parts.push('<b class="mad">' + esc(list(outside.map(function (x) { return lib.icon[x].name; }))) + '</b> ' + (outside.length === 1 ? 'has' : 'have') + ' not stood in any of them yet.');
     var h = '<h1>Who stands near ' + (coach ? esc(first) + '’s' : 'your') + ' three</h1><p class="n-sent">' + parts.join(' ') + '</p>' +
       '<section><div class="n-fig graphbox" id="venn"></div><ul class="n-key"><li><span class="sw mad"></span>' + You + ' three</li><li><span class="sw pru"></span>Lives in more than one</li><li><span class="sw dot"></span>One life with a story here</li></ul></section>';
-    var chips = function (held) { return '<div class="chipline">' + held.map(function (k) { var st = lib.sitByKey[k]; return '<span class="sit"><b>' + esc(st.id) + '</b>' + esc(st.chip) + '</span>'; }).join('') + '</div>'; };
+    var chips = function (held) { return '<div class="chipline">' + held.map(function (k) { var st = lib.sitByKey[k]; return '<span class="sit">' + (AS === 'member' ? '' : '<b>' + esc(st.id) + '<span class="sr"> · </span></b>') + esc(st.chip) + '</span>'; }).join('') + '</div>'; };
     var closeTo = function (l) {
       if (!l.near || !l.near.h) return '';
       return '<div class="n-why">Close to ' + (coach ? '' : 'your ') + '<b>' + esc(lib.icon[l.near.h].name) + '</b>. ' + esc(CLN.nearWhy(lib, l.id, l.near.h, { w: l.near.w, t: l.near.t }).join(' ')) + '</div>';
@@ -1123,7 +1229,7 @@
       var x = held.length ? chips(held) : '<div class="n-why">' + (I.stories.length ? 'Not in ' + you + ' situations yet.' : 'Has no record in the library yet.') + '</div>';
       x += ins.map(function (si) {
         var st = lib.sitByKey[si.key];
-        var where = '<span class="standin-sit"><b>' + esc(st.id) + '</b> ' + esc(st.chip) + '</span>';
+        var where = '<span class="standin-sit">' + (AS === 'member' ? '' : '<b>' + esc(st.id) + '</b> ') + esc(st.chip) + '</span>';
         if (!si.id) return '<div class="standin">' + where + 'Nobody close to ' + esc(nm) + ' has a story here yet.</div>';
         return '<div class="standin">' + where + 'Nearest to ' + esc(nm) + ': <b>' + esc(lib.icon[si.id].name) + '</b>. ' + esc(CLN.nearWhy(lib, si.id, hid, si.a).join(' ')) + '</div>';
       }).join('');
@@ -1136,7 +1242,7 @@
       var none = !nb.covered.filter(function (c) { return c.key === k; })[0].by.length;
       var body = (coach ? '<p class="note" style="color:var(--pru)">' + canSend.length + ' of ' + inc.length + ' lives have a story near enough to send this season.' + (none ? ' None of the three has stood here, so these weeks come from beyond them.' : '') + '</p>' : '') +
         '<ul class="n-list">' + tops.map(function (l) { return row(l, closeTo(l)); }).join('') + '</ul>' + tlink(H.sit(st.id), 'Every life in ' + esc(st.id));
-      h += '<details class="more"' + (coach ? ' open' : '') + '><summary>Closest to ' + you + ' three in ' + esc(st.id) + ' · ' + esc(st.chip) + ' <span class="meta tabular">' + inK.length + '</span></summary>' + body + '</details>';
+      h += '<details class="more"' + (coach ? ' open' : '') + '><summary>Closest to ' + you + ' three in ' + esc(sitWord(st)) + ' <span class="meta tabular">' + inK.length + '</span></summary>' + body + '</details>';
     });
     h += '<p class="n-note" style="margin-top:28px">A life counts here when it has a story filed under one of ' + you + ' situations. Ways of leading are proposed readings. Most stories are recall drafts, checked against their source before they are sent.</p>';
     return { title: 'Who stands near ' + (coach ? first + '’s' : 'your') + ' three', html: h, node: { k: 'near:' + mid, label: coach ? 'Near ' + first + '’s three' : 'Near your three', href: '#/near' + (coach ? '?m=' + enc(mid) : '') },
@@ -1230,13 +1336,13 @@
       h += '<div style="margin-top:6px">' + tlink('#/near?m=' + enc(id), 'Who stands near ' + esc(m.first) + '’s three') + (lib.members[id].age ? tlink('#/age?m=' + enc(id), 'Who stood here at ' + esc(m.first) + '’s age') : '') + '</div>';
     }
     h += r.bySituation.map(function (b) {
-      return sec('<a href="' + H.sit(b.sit.id) + '" style="color:inherit;text-decoration:none">' + esc(b.sit.id + ' · ' + b.sit.chip) + '</a>',
+      return sec('<a href="' + H.sit(b.sit.id) + '" style="color:inherit;text-decoration:none">' + esc(sitWord(b.sit)) + '</a>',
         '<p class="note" style="margin:-6px 0 14px">' + esc(b.sit.line) + ' ' + n(b.total, 'story', 'stories') + ' in the library.</p>' +
         (b.fromHeroes.length ? '<h3>From ' + (mine ? 'your' : 'their') + ' heroes</h3><div class="grid" style="margin-bottom:18px">' + b.fromHeroes.map(function (c) { return storyCard(c); }).join('') + '</div>' : '<p class="note">None of ' + (mine ? 'your' : 'their') + ' heroes has a story here yet. These come from further out.</p>') +
         '<h3>Further out</h3><div class="grid">' + b.beyond.map(function (c) { return storyCard(c); }).join('') + '</div>');
     }).join('');
     h += sec(mine ? 'Your heroes in the library' : 'Their heroes in the library', '<div class="grid people">' + r.heroes.map(function (x) {
-      return '<div>' + personCard(x.icon) + '<p class="meta" style="margin:8px 4px 0">' + (x.covers.length ? 'Covers ' + esc(x.covers.join(', ')) : 'Covers none of ' + (mine ? 'your' : 'their') + ' situations yet') + '</p></div>';
+      return '<div>' + personCard(x.icon) + '<p class="meta" style="margin:8px 4px 0">' + (x.covers.length ? (AS === 'member' ? 'Has stood in ' + CLC.num(x.covers.length) + ' of your situations' : 'Covers ' + esc(x.covers.join(', '))) : 'Covers none of ' + (mine ? 'your' : 'their') + ' situations yet') + '</p></div>';
     }).join('') + '</div>');
     if (AS === 'coach') h += sec('The season ahead', '<p class="note" style="margin:-6px 0 14px">The first eight weeks as the corpus matcher would serve them: the week’s situation, the move, the line and the story. Every story here is a recall draft until it is checked, and the app sends checked stories only.</p><div class="tablewrap" id="season"><p class="empty">Working it out…</p></div>');
     return { title: m.name, html: h, node: { k: 'member:' + id, label: mine ? 'For you' : m.name, href: H.member(id) },
@@ -1294,7 +1400,7 @@
     });
     var done = Object.keys(ledger).filter(function (id) { return lib.story[id]; }).sort(function (a, b) { return ledger[b].at < ledger[a].at ? -1 : 1; });
     var h = '<h1>Source checks</h1><p class="lede">A story reaches a member once a coach has read it against its source. These are the drafts each member’s next situation needs first.</p>' +
-      '<p class="note" style="margin-top:10px">' + (storeKind === 'kv' ? 'Checks are shared: every coach on this deployment sees them.' : 'Checks are kept in this browser' + (storeKind === 'memory' ? ' and, for a while, on the server' : '') + '. Connect a Redis store to the deployment to share them between coaches.') + '</p>';
+      '<p class="note" style="margin-top:10px">' + (storeKind === 'kv' ? 'Checks are shared: every coach on this deployment sees them.' : 'Checks made here are kept on this device for now. Other coaches will see them once the record is shared.') + '</p>';
     h += askedHTML();
     h += need.map(function (x) {
       return sec(esc(x.m.first + ' · ' + x.m.up19.label), '<p class="note" style="margin:-6px 0 14px"><a href="' + H.sit(x.up.id) + '">' + esc(x.up.id) + '</a> ' + esc(x.up.chip) + '</p>' +

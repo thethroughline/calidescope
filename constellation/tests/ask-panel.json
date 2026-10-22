@@ -1,0 +1,123 @@
+{
+  "about": "Round five: twenty questions a coach brings, written against each member's week in data/demo.json (goal, up19, situations and heroes). Each holds the reading a coach means: the facets in q are exact, and any facet not listed must be absent. 'sitFirst' asks only for the situation read first. 'unread' lists words the reading still leaves, said honestly; 'read' lists words it must use. Lead checks name the story, or a property of it.",
+  "questions": [
+    {
+      "n": 1, "m": "sarah", "shape": "a scene: the rival in the room, at the up19 event (reorg, Thu 22 Oct)",
+      "t": "Sarah announces the reorg to the whole group on Thursday, and Dan, who wanted her job, will be in the front row.",
+      "q": { "m": "sarah", "sit": "E1+A2", "to": "rival", "room": "team", "cue": "rival" },
+      "lead": { "ready": "st-michelle-obama-2016-go-high", "readyReason": "Sarah’s reserve hero", "readyRoute": "For Sarah: one step from Barack Obama." },
+      "unread": ["Dan"]
+    },
+    {
+      "n": 2, "m": "sarah", "shape": "a person spoken to, the morning after: a line, in a one-to-one",
+      "t": "Something Sarah can say to Dan the morning after the announcement.",
+      "q": { "m": "sarah", "sit": "E1", "line": 1, "room": "one" },
+      "read": ["say", "morning", "after"], "unread": ["Dan"]
+    },
+    {
+      "n": 3, "m": "sarah", "shape": "a quieter story than a hero, in a room",
+      "t": "A quieter story than Obama for Sarah's group meeting",
+      "q": { "m": "sarah", "mine": 1, "than": "barack-obama", "room": "team" },
+      "lead": { "ready": "st-michelle-obama-2016-go-high", "readyVerified": true }
+    },
+    {
+      "n": 4, "m": "sarah", "shape": "a person spoken to: her own team, named before the client",
+      "t": "Sarah still rewrites every deck her team sends to the client.",
+      "q": { "m": "sarah", "sit": "D3", "to": "down", "room": "writing" }
+    },
+    {
+      "n": 5, "m": "maya", "shape": "a person spoken to: the VP who decides (up19, roadmap decision)",
+      "t": "Maya presents the roadmap on Thursday, then the VP and two directors decide without her in the room.",
+      "q": { "m": "maya", "sit": "B6+C3", "to": "up" },
+      "lead": { "ready": "st-obama-2008-clinton", "readyRoute": "For Maya: one step from Simone Biles." }
+    },
+    {
+      "n": 6, "m": "maya", "shape": "someone like a hero, in business (the anchor is deferred: judge, 'Someone like X', later)",
+      "t": "Someone like MrBeast but in business, for Maya",
+      "q": { "m": "maya", "mine": 1, "field": "business" },
+      "unread": ["MrBeast"]
+    },
+    {
+      "n": 7, "m": "maya", "shape": "a woman who did this before 1950",
+      "t": "A woman who got herself heard in a room that decides, before 1950",
+      "q": { "m": "maya", "sit": "B6", "sex": "f", "before": 1950 }
+    },
+    {
+      "n": 8, "m": "maya", "shape": "something for after the meeting went badly",
+      "t": "Maya's roadmap review went badly and the directors talked over her. Something for Friday.",
+      "q": { "m": "maya", "sit": "B6", "to": "up", "cue": "setback" },
+      "lead": { "oneCheck": "s-B6-george-c-marshall", "oneCheckYear": 1917, "hadLast": "Maya had this on 12 Oct" },
+      "read": ["went", "badly", "directors"]
+    },
+    {
+      "n": 9, "m": "michael", "shape": "a person spoken to: the client's general counsel, at the up19 pitch",
+      "t": "Michael pitches Calder Foods on Thursday and their general counsel knows the firm, not him.",
+      "q": { "m": "michael", "sit": "C2+C1", "to": "out", "room": "pitch" }
+    },
+    {
+      "n": 10, "m": "michael", "shape": "<first>'s age",
+      "t": "Someone Michael's age who had to sell for the first time after decades of doing the work",
+      "q": { "m": "michael", "age": 58 }, "sitFirst": "C1",
+      "read": ["age"]
+    },
+    {
+      "n": 11, "m": "michael", "shape": "a field, and the goal in the coach's words (asked for by name)",
+      "t": "A lawyer who made clients ask for them by name",
+      "q": { "m": "michael", "sit": "C2", "field": "law", "to": "out" }
+    },
+    {
+      "n": 12, "m": "michael", "shape": "a setback: the pitch was lost",
+      "t": "Michael lost the Ardent pitch. Something for the week after.",
+      "q": { "m": "michael", "sit": "C1", "room": "pitch", "cue": "setback" },
+      "lead": { "cueN": 0 },
+      "read": ["lost", "pitch"]
+    },
+    {
+      "n": 13, "m": "david", "shape": "the move itself, out loud, at the up19 pitch (Tue 20 Oct)",
+      "t": "David has to ask the client for a next step and a date, out loud, at the end of Tuesday's pitch.",
+      "q": { "m": "david", "sit": "C1", "dir": "direct", "to": "out", "room": "pitch" },
+      "lead": { "oneCheck": "s-C1-billie-jean-king", "oneCheckReason": "One of David’s three", "oneCheckRoute": "" }
+    },
+    {
+      "n": 14, "m": "david", "shape": "someone like a hero, in business (the anchor is deferred)",
+      "t": "Someone like Billie Jean King but in business, for David",
+      "q": { "m": "david", "mine": 1, "field": "business" },
+      "unread": ["Billie", "Jean", "King"]
+    },
+    {
+      "n": 15, "m": "david", "shape": "a man, a decade, the goal's situation",
+      "t": "A man from the 1960s who won work on his own name",
+      "q": { "m": "david", "sit": "C2", "sex": "m", "after": 1960, "before": 1970 },
+      "lead": { "oneCheck": "st-marley-1960s-kingston", "oneCheckSource": "White, Catch a Fire (1983)." }
+    },
+    {
+      "n": 16, "m": "priya", "shape": "a room: the steering committee (up19, Mon 19 Oct)",
+      "t": "Priya has the steering committee on Monday and none of them report to her.",
+      "q": { "m": "priya", "sit": "C3", "room": "board" },
+      "read": ["none", "report"]
+    },
+    {
+      "n": 17, "m": "priya", "shape": "a quieter story than one of her three, in her room",
+      "t": "A quieter story than Golda Meir for Priya's steering committee",
+      "q": { "m": "priya", "sit": "C3", "than": "golda-meir", "room": "board" },
+      "lead": { "ready": "st-obama-2008-clinton", "readyReason": "Measured, where Golda Meir was direct" }
+    },
+    {
+      "n": 18, "m": "priya", "shape": "the meeting after the meeting",
+      "t": "Priya keeps being left out of the meeting after the strategy meeting, where it is decided.",
+      "q": { "m": "priya", "sit": "B6+C3" },
+      "read": ["left", "out"]
+    },
+    {
+      "n": 19, "m": "tom", "shape": "a room: the offsite, carrying a decision he argued against (up19, Wed 21 Oct)",
+      "t": "Tom has to sell the head office's layoffs at Wednesday's offsite, and he argued against them.",
+      "q": { "m": "tom", "sit": "D4", "room": "team" }
+    },
+    {
+      "n": 20, "m": "tom", "shape": "a person spoken to: his own head of brand",
+      "t": "Tom keeps putting off the hard conversation with his head of brand. Who finally had it?",
+      "q": { "m": "tom", "sit": "E2", "to": "down" },
+      "read": ["putting", "off", "head"]
+    }
+  ]
+}

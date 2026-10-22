@@ -160,7 +160,8 @@ test('asking and networks', async () => {
   // the answer leads with what a coach can do now, leaving out what Sarah already has
   assert.ok(a.body.ready && a.body.ready.verified && a.body.ready.id !== 'st-obama-2008-clinton', 'a checked story Sarah does not have leads');
   assert.ok(a.body.oneCheck && !a.body.oneCheck.verified && a.body.oneCheck.source, 'then the draft one check from sending, with its source');
-  assert.ok(a.body.items.slice(0, 3).some((it) => it.name === 'Barack Obama' && it.reasons.some((r) => r.type === 'scene')), 'the rival scene is quoted');
+  assert.ok(a.body.items.slice(0, 3).some((it) => it.reasons.some((r) => r.type === 'scene')), 'a scene that fits is quoted near the top');
+  assert.ok(!a.body.items.slice(0, 3).some((it) => it.id === 'st-obama-2008-clinton'), 'the story Sarah had last week sorts last');
   assert.ok(a.body.chips.some((c) => /^Said to: the colleague who wanted the job/.test(c.label)) && a.body.chips.some((c) => /^In the room: a team meeting/.test(c.label)), 'who the line is said to, and the room');
   const thin = await get('/ask?sit=C2&field=law');
   assert.ok(thin.body.total < 4 && thin.body.nearest.length >= 2);

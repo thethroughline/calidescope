@@ -59,7 +59,7 @@ try {
 
   await p.click('button[title^="6 ·"]'); await p.waitForTimeout(500);
   const mon = await p.locator('body').innerText();
-  check(/From Obama, one of your three/i.test(mon) && /Chicago, December 2008/.test(mon), 'the scripted Monday card still serves the Obama sample, naming the hero once');
+  check(/From Barack Obama, one of your three/i.test(mon) && /Chicago, December 2008/.test(mon), 'the scripted Monday card still serves the Obama sample, naming the hero once');
   await p.locator('button', { hasText: 'Heroes' }).last().click(); await p.waitForTimeout(300);
   check(/531 stories/.test(await p.locator('[data-bridge="heroes-library"]').innerText()), 'Heroes shows the Library card');
   await p.click('[data-bridge="heroes-library"]');
@@ -81,8 +81,8 @@ try {
   check((await p.locator('[data-screen-label="M7 Story"] p').first().innerText()).startsWith('Beverley McLachlin, 37'), 'a corpus story drops the dateline the eyebrow already shows');
   check(await p.locator('[data-bridge="story-library"]').count() === 0, 'a member’s story has one way into the library');
   await p.locator('[data-bridge="story-related"] button', { hasText: 'All of this week, in the library' }).click();
-  await p.frameLocator('iframe[title="The Constellation library"]').locator('#others').waitFor();
-  check(true, 'Others who lived this week opens the Library at the others');
+  await p.frameLocator('iframe[title="The Constellation library"]').locator('main h1').waitFor(); await p.waitForTimeout(200);
+  check(/^#\/situation\/[A-E]\d$/.test(await p.evaluate(() => CLB.state().libRoute)), 'All of this week opens the week’s situation in the Library, with no second copy of the story');
   // member-safe text: a draft is marked once, and no working note reaches the member
   await p.evaluate(() => CLB.c.setState({ overlay: 'story', sid: 's-A2-elena-kagan', sctx: {}, sstack: [] })); await p.waitForTimeout(250);
   const kag = (await p.locator('[data-screen-label="M7 Story"]').innerText()).split(/\nIN THE LIBRARY\n|\nIn the library\n/i)[0];
@@ -138,10 +138,10 @@ try {
   await p.evaluate(() => CLB.c.setState({ overlay: 'story', sid: 'st-bjk-1973-riggs', sctx: {}, sstack: [] })); await p.waitForTimeout(250);
   await p.locator('[data-bridge="story-related"] button', { hasText: 'All of this week, in the library' }).click();
   const bf = p.frameLocator('iframe[title="The Constellation library"]');
-  await bf.locator('#others a[href^="#/story/"]').first().waitFor(); await p.waitForTimeout(300);
-  const barT = await p.locator('[data-bridge="library-overlay"] > div').first().innerText();
-  check(/^King/.test(barT.trim()) && /Others who lived King’s week/.test(barT) && !(await bf.locator('header.top').isVisible()) && !(await bf.locator('#trail').isVisible()), 'one bar: Back names the story, the title names the page, and the frame adds no bars');
-  await bf.locator('#others a[href^="#/story/"]').first().click(); await p.waitForTimeout(400);
+  await bf.locator('main a[href^="#/story/"]').first().waitFor(); await p.waitForTimeout(300);
+  const barT = await p.locator('[data-bridge="library-overlay"] > div').first().innerText(), wkChip = await p.evaluate(() => { const s = CLB.lib.story['st-bjk-1973-riggs']; return CLB.lib.sitByKey[s.keys[0]].chip; });
+  check(/^King/.test(barT.trim()) && barT.indexOf(wkChip) >= 0 && !(await bf.locator('header.top').isVisible()) && !(await bf.locator('#trail').isVisible()), 'one bar: Back names the story, the title names the page, and the frame adds no bars');
+  await bf.locator('main a[href^="#/story/"]').first().click(); await p.waitForTimeout(400);
   await bf.locator('main a[href^="#/icon/"]').first().click(); await p.waitForTimeout(400);
   const walk = [];
   for (let i = 0; i < 3; i++) { await p.locator('[data-bridge="library-overlay"] button').first().click(); await p.waitForTimeout(450); walk.push(await p.evaluate(() => CLB.state().overlay)); }
@@ -155,7 +155,7 @@ try {
   await p.evaluate(() => CLB.c.setState({ tab: 'week', clock: 5, published: true })); await p.waitForTimeout(300);
   const wk3 = await p.locator('[data-screen-label="M6 This week"]').innerText();
   const wkOrder = await p.evaluate(() => { const t = document.querySelector('[data-bridge="week-trail"]'), l = [...document.querySelectorAll('[data-screen-label="M6 This week"] div')].find((e) => e.textContent === 'Developed with Jennifer'); return !!(t && l && (l.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING)); });
-  check(/Prep opens Wednesday\./.test(wk3) && !/Start the prep/.test(wk3) && /From Obama, one of your three/i.test(wk3) && wkOrder, 'This week holds the story, the line and where you were, with no dead button');
+  check(/Prep opens Wednesday\./.test(wk3) && !/Start the prep/.test(wk3) && /From Barack Obama, one of your three/i.test(wk3) && wkOrder, 'This week holds the story, the line and where you were, with no dead button');
   await p.evaluate(() => CLB.c.setState({ overlay: 'story', sid: 's-E3-serena-williams', sctx: {}, sstack: [] })); await p.waitForTimeout(250);
   await p.click('[data-bridge="story-check"]'); await p.waitForTimeout(250);
   const asked = await p.evaluate(() => { const st = CLB.state(), last = st.msgs[st.p].slice(-1)[0]; return [st.signals.some((g) => g.kind === 'check' && g.sid === 's-E3-serena-williams'), last.kind, last.story].join(); });
@@ -171,7 +171,7 @@ try {
   await p.evaluate(() => CLB.c.setState({ c: 'C3' })); await p.waitForTimeout(300);
   const review = await p.evaluate(() => CPE.vals(CLB.c).rq.rows.map((r) => r.trace.join(' ')).join(' '));
   check(/recall drafts? also carr/.test(review) && !/tie-break|precedence|every-act-is-a-message/.test(review), 'Review collapses the recall drafts into one line per member, in plain words');
-  check(/Sarah asked for 1 check/.test(await p.locator('[data-bridge="review-line"]').first().innerText().catch(() => '')), 'Review says Sarah asked for a check, on her line');
+  check(/Sarah asked you to check Serena Williams, \d{4}\. It is first on Source checks/.test(await p.locator('[data-bridge="review-line"]', { hasText: 'Sarah Kessler' }).innerText().catch(() => '')), 'Review says what Sarah asked Jim to check, on her line');
   await p.evaluate(() => CLB.c.setState({ swapFor: 'michael', swapHero: 'all' })); await p.waitForTimeout(300);
   const sw = p.locator('[data-screen-label="C3 Swap panel"]');
   check(await sw.locator('button[disabled]').count() === 0 && await sw.locator('[data-bridge="swap-check"]').count() >= 3 && /Muriel Siebert/i.test(await sw.innerText()) && !/Muhammad Ali · Miami/i.test(await sw.innerText()), 'Swap offers Check the source on the drafts nearest the member, leaving out the life Michael had last week');
@@ -205,22 +205,29 @@ try {
   check(c4.key === c4.want && c4.n < 531 && c4.far, 'Find and send opens on the member’s week, with far stories set aside');
   // the send guard: nothing unchecked or repeated goes out, and the coach's choice wins
   await p.click('button[title^="10 ·"]'); await p.waitForTimeout(400);
-  const notice = await p.evaluate(() => CLB.c.state.cnotif && CLB.c.state.cnotif.text), row = async () => p.evaluate(() => { const r = CPE.vals(CLB.c).rq.rows.find((x) => x.mid === 'sarah'); return { status: r.status, guard: r.guard, s: r.s && r.s.eyebrow, fill: r.fill && r.fill.title }; });
+  const notice = await p.evaluate(() => CPE.vals(CLB.c).cn.text), row = async () => p.evaluate(() => { const r = CPE.vals(CLB.c).rq.rows.find((x) => x.mid === 'sarah'); return { status: r.status, guard: r.guard, s: r.s && r.s.eyebrow, fill: r.fill && r.fill.title }; });
   const r0 = await row();
-  check(/Sarah’s waits for one check/.test(notice) && /^Waiting for your check/.test(r0.status) && /had Obama on 12 Oct/.test(r0.guard) && /Jimmy Carter/.test(r0.fill), 'nothing unchecked goes out: Sarah’s paired draft waits, the row names the life she had last week, and the check offered is a new one');
+  check(/^Two stories go out at 18:00\. Sarah’s and David’s wait for your check\.$/.test(notice) && /^Waiting for your check/.test(r0.status) && /had Obama on 12 Oct/.test(r0.guard) && /Jimmy Carter/.test(r0.fill), 'nothing unchecked goes out: Sarah’s paired draft waits, the row names the life she had last week, and the check offered is a new one');
   await p.evaluate(() => CLB.c.setState({ review: Object.assign({}, CLB.c.state.review, { sarah: { action: 'swap', story: 'st-bjk-1973-riggs' } }) })); await p.waitForTimeout(200);
   const r1 = await row();
   check(/^Billie Jean King/.test(r1.s) && /^Goes to Sarah at 18:00/.test(r1.status), 'a swap wins over the pairing, and the row says when it goes');
   await p.evaluate(() => CLB.c.setState({ review: Object.assign({}, CLB.c.state.review, { sarah: {} }), c: 'C3', cnotif: null, rvAll: false })); await p.waitForTimeout(300);
   // "Your week, Jim": one line per member of this coach, each with one action, and the checks to make first
   const wk = await p.evaluate(() => { const root = document.querySelector('[data-screen-label="C3 Review queue"]'), ls = [...root.querySelectorAll('[data-bridge="review-line"]')];
-    return { title: CPE.vals(CLB.c).cTitle, names: ls.map((x) => x.innerText.split('\n')[1] || x.innerText), acts: ls.map((x) => [...x.querySelectorAll('button')].map((b) => b.innerText.trim()).filter((t) => /^(Approve|Check|Answer|Prep)$/.test(t)).slice(-1)[0] || ''),
-      sarah: ls[0] ? ls[0].innerText.replace(/\s+/g, ' ') : '', plan: (root.querySelector('[data-bridge="review-plan"]') || {}).innerText || '', bulk: root.firstElementChild.innerText, details: root.querySelectorAll('[data-bridge="review-why"]').length }; });
-  check(wk.title === 'Your week, Jim' && wk.names.join() === 'Sarah Kessler,David Okafor,Priya Raman,Tom Whitfield' && wk.acts.join() === 'Check,Check,Approve,Approve' && !wk.details &&
-    /Thu 22 Oct · Reorg announcement · E1 · Everything you do gets read as a signal/.test(wk.sarah) && /One check · Jimmy Carter/.test(wk.sarah) && /Tue 10:00 · Prep/.test(wk.sarah),
-    `Review reads "Your week, Jim": a line for each of Jim's four members, each with one action (${wk.acts.join(', ')})`);
-  check(/Nine checks give each of Jim’s members four/.test(wk.plan) && /Golda Meir[^\n]*\nFills David and Priya; one of Priya’s three/.test(wk.plan) && /Approve the two ready/.test(wk.bulk), 'below the lines, the checks to make first: Golda Meir fills David and Priya; and the bulk approve counts only what can go');
-  await p.locator('[data-bridge="review-line"]').first().locator('button', { hasText: 'Check' }).click(); await p.waitForTimeout(300);
+    return { title: CPE.vals(CLB.c).cTitle, names: ls.map((x) => x.innerText.split('\n')[1] || x.innerText), acts: ls.map((x) => [...x.querySelectorAll('button')].map((b) => b.innerText.trim()).filter((t) => /^(Approve|Check|Answer|Prep|Swap in)$/.test(t)).slice(-1)[0] || ''),
+      sarah: (ls.find((x) => /Sarah Kessler/.test(x.innerText)) || { innerText: '' }).innerText.replace(/\s+/g, ' '), counts: [CPE.vals(CLB.c).rosterSummary, CPE.vals(CLB.c).rq.count, (CPE.vals(CLB.c).nav.find((n) => n.label === 'Review') || {}).badge], plan: (root.querySelector('[data-bridge="review-plan"]') || {}).innerText || '', bulk: root.firstElementChild.innerText, details: root.querySelectorAll('[data-bridge="review-why"]').length }; });
+  check(wk.title === 'Your week, Jim' && wk.names.join() === 'David Okafor,Sarah Kessler,Priya Raman,Tom Whitfield' && wk.acts.join() === 'Check,Swap in,Approve,Approve' && !wk.details &&
+    /Thu 22 Oct · Reorg announcement · E1 · Everything you do gets read as a signal/.test(wk.sarah) && /Ready now · Billie Jean King, Houston/.test(wk.sarah) && /Or one check · Jimmy Carter/.test(wk.sarah) && /You meet Tue 10:00 · Prep/.test(wk.sarah),
+    `Review reads "Your week, Jim": a line for each of Jim's four members, those waiting for a check first, each with one action (${wk.acts.join(', ')})`);
+  check(/2 wait for your check/.test(wk.counts[0]) && /2 wait for your check/.test(wk.counts[1]) && wk.counts[2] === 2, `the 18:00 notice, Members, Review and the badge give one count (${wk.counts.join(' | ')})`);
+  check(/For the weeks ahead/i.test(wk.plan) && /After the check above, eight more give each of your members four/.test(wk.plan) && /Golda Meir[^\n]*\nGives David and Priya a story\. Golda Meir is one of Priya’s three\./.test(wk.plan) && /Approve the two ready/.test(wk.bulk), 'below the lines, the checks for the weeks ahead after this week’s; and the bulk approve counts only what can go');
+  // Swap in: a checked story that carries the week goes at once, with no check
+  await p.locator('[data-bridge="review-line"]', { hasText: 'Sarah Kessler' }).locator('button', { hasText: 'Swap in' }).click(); await p.waitForTimeout(300);
+  const rs = await row();
+  check(/^Billie Jean King/.test(rs.s) && /^Goes to Sarah at 18:00/.test(rs.status), 'Swap in sends the checked Billie Jean King story to Sarah at 18:00, with no check needed');
+  await p.evaluate(() => CLB.c.setState({ review: Object.assign({}, CLB.c.state.review, { sarah: {} }) })); await p.waitForTimeout(200);
+  await p.locator('[data-bridge="review-line"]', { hasText: 'Sarah Kessler' }).locator('button', { hasText: 'Details' }).click(); await p.waitForTimeout(250);
+  await p.locator('[data-bridge="review-fill"] button', { hasText: 'Check the source here' }).first().click(); await p.waitForTimeout(300);
   const posted = []; await p.route('**/api/constellation/state/ledger', (rt) => { if (rt.request().method() === 'POST') { posted.push(JSON.parse(rt.request().postData())); return rt.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); } return rt.continue(); });
   const cc = p.locator('[data-bridge="check-card"]').first(), ccSend = cc.locator('button').first();
   const ccDis = await ccSend.isDisabled();
@@ -233,6 +240,23 @@ try {
   await p.click('button[title^="11 ·"]'); await p.waitForTimeout(300);
   await p.locator('button[aria-label="Member"]').click(); await p.evaluate(() => CLB.c.setState({ m: 'app', tab: 'week', overlay: null })); await p.waitForTimeout(400);
   check(/Your story comes once Jim has checked it/.test(await p.locator('[data-screen-label="M6 This week"]').innerText()), 'a held week tells the member why');
+  const wait = await p.evaluate(() => (CPE.vals(CLB.c).wk.wait || {}).text || '');
+  check(/^While you wait: /.test(wait), `a held week still opens the corpus (${wait})`);
+  await p.evaluate(() => CPE.vals(CLB.c).wk.wait.go()); await p.waitForTimeout(400);
+  check(await p.evaluate(() => CLB.state().overlay) === 'story', 'While you wait opens its story in the app');
+  // the reader keeps their place: a story opened from another starts at its top, and Back returns to where they were
+  const FIND = `(() => { const pane = document.querySelector('[data-screen-label="M7 Story"]'); return pane && [pane, ...pane.querySelectorAll('div')].find((e) => { const oy = getComputedStyle(e).overflowY; return (oy === 'auto' || oy === 'scroll') && e.scrollHeight > e.clientHeight; }); })()`;
+  await p.evaluate(() => CLB.c.setState({ overlay: 'story', sid: 'st-obama-2008-clinton', sctx: {}, sstack: [] })); await p.waitForTimeout(400);
+  const top0 = await p.evaluate((F) => { const b = eval(F); b.scrollTop = 400; return b.scrollTop; }, FIND);
+  await p.evaluate(() => { const b = [...document.querySelectorAll('[data-bridge="story-related"] button')][0]; b.click(); }); await p.waitForTimeout(500);
+  const topNew = await p.evaluate((F) => eval(F).scrollTop, FIND);
+  await p.evaluate(() => CPE.vals(CLB.c).sv.back()); await p.waitForTimeout(500);
+  const topBack = await p.evaluate((F) => eval(F).scrollTop, FIND);
+  check(top0 > 100 && topNew === 0 && Math.abs(topBack - top0) <= 10, `the next story opens at its top, and Back returns to where the reader was (${top0} → ${topNew} → ${topBack})`);
+  await p.evaluate(() => CLB.c.setState({ overlay: null, tab: 'ask', ask: Object.assign({}, CLB.c.state.ask, { stage: 'confirm', text: 'I still answer every client email myself at midnight.', key: null, story: null, sent: false }) })); await p.waitForTimeout(300);
+  await p.locator('[data-screen-label="M8 Ask"] button').first().click(); await p.waitForTimeout(1600);
+  const about = await p.locator('[data-bridge="ask-about"]').first().innerText().catch(() => '');
+  check(/^About: you/.test(about), `a member's answer is about the week in their own words (${about})`);
   await p.locator('button[aria-label="Coach"]').click(); await p.waitForTimeout(200);
   // prep for every member of the console's coach; another coach's member stays theirs
   await p.evaluate(() => CLB.c.setState({ c: 'CK' })); await p.waitForTimeout(200);
@@ -356,6 +380,10 @@ try {
       check(await q.locator('#map .thread').count() >= 8 && /threads from/.test(await q.locator('#mapcap').innerText()), 'a star on the map draws threads to its kin');
       const sweep = await q.evaluate(() => { let ok = 0, none = 0, n = 0; document.querySelectorAll('#map svg .hit').forEach((c) => { n++; c.dispatchEvent(new MouseEvent('mousemove', { bubbles: true })); const k = document.querySelectorAll('#map .thread').length; const has = window.CLL && true; if (k) ok++; else none++; }); return { n, ok, none }; });
       check(sweep.n > 400 && sweep.ok > 300 && sweep.none > 0, `every star can be hovered: ${sweep.ok} draw threads, ${sweep.none} have no story and draw none`);
+      await q.evaluate(() => { location.hash = '#/situation/E1'; }); await q.waitForSelector('.mfam[data-fam]');
+      const fam = await q.evaluate(() => ({ cards: document.querySelectorAll('.mfam[data-fam]').length, lede: (document.querySelector('.mfams') || { previousElementSibling: null }).previousElementSibling ? document.querySelector('.mfams').previousElementSibling.innerText : '', rows: document.querySelectorAll('.mfam[data-fam] .mf-row').length }));
+      check(fam.cards === 9 && fam.rows === 26, `a situation's stories draw as families of moves: nine families holding 26 of E1's stories (${fam.cards}, ${fam.rows})`);
+      await q.evaluate(() => { location.hash = '#/'; }); await q.waitForSelector('#map svg .hit');
       const top = await q.evaluate(() => { const st = document.querySelector('#map svg').getBoundingClientRect().top; let worst = 1e9; document.querySelectorAll('#map svg .hit').forEach((c) => { c.dispatchEvent(new MouseEvent('mousemove', { bubbles: true })); document.querySelectorAll('#map .thread').forEach((t) => { worst = Math.min(worst, t.getBoundingClientRect().top - st); }); }); return worst; });
       check(top > 0, `no thread leaves the top of the map (highest ${top.toFixed(1)}px below it)`);
       if (as === 'reader') {
@@ -391,6 +419,17 @@ try {
       check(await q.locator('table.cmp tbody tr').count() >= 3 && await q.locator('.cmpcol').count() === 2, 'two stories compare side by side, facts only');
     }
     if (as === 'reader' && w < 500) {
+      const mctx = await browser.newContext({ viewport: { width: w, height: h }, colorScheme: scheme });
+      const mm = await mctx.newPage(); watch(mm, 'library member words');
+      await mm.goto(`${BASE}/constellation/library?as=member&m=sarah#/`); await mm.waitForSelector('main h1');
+      const codes = [];
+      for (const r of ['#/', '#/situations', '#/situation/E1', '#/story/st-bjk-1973-riggs', '#/icon/billie-jean-king', '#/near', '#/member/sarah', '#/ask?t=' + encodeURIComponent('I am announcing the reorg on Thursday and Dan wanted my job') + '&read=1&m=sarah']) {
+        await mm.evaluate((r) => { location.hash = r; }, r); await mm.waitForTimeout(300);
+        const m = (await mm.evaluate(() => document.querySelector('main').innerText)).match(/\b[A-E][1-6]\b/g); if (m) codes.push(r + ': ' + m.slice(0, 3).join(' '));
+      }
+      const h390 = await mm.evaluate(async () => { location.hash = '#/situation/E1'; await new Promise((ok) => setTimeout(ok, 400)); return document.documentElement.scrollHeight; });
+      check(!codes.length && h390 < 7000, `a member reads situations in words, with no codes, and a situation page stays short on a phone (${h390}px${codes.length ? '; ' + codes.join('; ') : ''})`);
+      await mctx.close();
       const tctx = await browser.newContext({ viewport: { width: w, height: h }, hasTouch: true, isMobile: true, colorScheme: scheme });
       const t = await tctx.newPage(); watch(t, 'library map touch');
       await t.goto(`${BASE}/constellation/library?as=member&m=sarah#/`); await t.waitForSelector('#map svg .hit');

@@ -21,6 +21,8 @@
    o.fs is the font size in drawing units that renders at 13px on screen (the caller measures). */
 (function () {
   'use strict';
+  // a member reads situations in words; the codes are the coach's shorthand (the Library sets the class)
+  function asMember() { return typeof document !== 'undefined' && document.documentElement.classList.contains('as-member'); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function rad(d) { return d * Math.PI / 180; }
   function pt(cx, cy, r, a) { return [cx + r * Math.cos(rad(a)), cy + r * Math.sin(rad(a))]; }
@@ -175,7 +177,7 @@
       var px = 14, lh = 19, narrow = W < 520;
       var R = k === 3 ? Math.min(165, (W - 24) / 3.14) : k === 2 ? Math.min(170, (W - 24) / 3.3) : Math.min(170, W / 2 - 20), d = R * (k === 3 ? 1.14 : 1.2);
       var half = W / 2 - 18, labW = keys.map(function (key, i) { return k === 3 ? (i === 0 ? Math.min(320, W - 24) : Math.min(half, 260)) : k === 2 ? Math.min(half, 260) : Math.min(320, W - 24); });
-      var labs = keys.map(function (key, i) { var st = lib.sitByKey[key]; return wrap(st.id + ' ' + st.chip, px, labW[i]); });
+      var labs = keys.map(function (key, i) { var st = lib.sitByKey[key]; return wrap(asMember() ? st.chip : st.id + ' ' + st.chip, px, labW[i]); });
       var topPad = (k === 3 ? labs[0].length : Math.max.apply(null, labs.map(function (l) { return l.length; }))) * lh + 30, C;
       if (k === 3) C = [{ x: W / 2, y: topPad + R }, { x: W / 2 - d / 2, y: topPad + R + d * 0.866 }, { x: W / 2 + d / 2, y: topPad + R + d * 0.866 }];
       else if (k === 2) C = [{ x: W / 2 - d / 2, y: topPad + R }, { x: W / 2 + d / 2, y: topPad + R }];
@@ -199,7 +201,7 @@
         var y0 = below ? c.y + R + 24 : c.y - R - 14 - (lines.length - 1) * lh;
         if (k === 2) y0 = topPad - 14 - (lines.length - 1) * lh;
         lines.forEach(function (ln, j) {
-          s += '<text x="' + f1(x0) + '" y="' + f1(y0 + j * lh) + '" text-anchor="' + an + '" font-size="' + px + '" font-weight="500">' + (j === 0 ? '<tspan class="t-pru">' + esc(st.id) + ' </tspan>' + esc(ln.slice(st.id.length + 1)) : esc(ln)) + '</text>';
+          s += '<text x="' + f1(x0) + '" y="' + f1(y0 + j * lh) + '" text-anchor="' + an + '" font-size="' + px + '" font-weight="500">' + (j === 0 && !asMember() ? '<tspan class="t-pru">' + esc(st.id) + ' </tspan>' + esc(ln.slice(st.id.length + 1)) : esc(ln)) + '</text>';
         });
         s += '<text class="t-mute" x="' + f1(x0) + '" y="' + f1(below ? y0 + lines.length * lh : y0 - lh) + '" text-anchor="' + an + '" font-size="13">' + n + ' lives</text>';
       });
@@ -286,7 +288,7 @@
         if (yy < y0 - 30 || yy > y1 + 10) return; var x = X(yy); if (x - last < 56 || x > W - 30) return; last = x;
         s += '<line class="ktick" x1="' + f1(x) + '" x2="' + f1(x) + '" y1="' + TOP + '" y2="' + (Hh - 26) + '"/><text class="t-mute" x="' + f1(x) + '" y="' + (Hh - 8) + '" text-anchor="middle" font-size="' + fs + '">' + yearLabel(yy) + '</text>';
       });
-      var labelsTxt = bands.map(function (key, b) { var st = lib.sitByKey[key]; return '<text class="kbandlabel" x="' + L + '" y="' + (bandTop[b] + 21) + '" font-size="' + fs + '"><tspan class="t-pru">' + esc(st.id) + ' </tspan>' + esc(st.chip) + '</text>'; }).join('');
+      var labelsTxt = bands.map(function (key, b) { var st = lib.sitByKey[key]; return '<text class="kbandlabel" x="' + L + '" y="' + (bandTop[b] + 21) + '" font-size="' + fs + '">' + (asMember() ? '' : '<tspan class="t-pru">' + esc(st.id) + ' </tspan>') + esc(st.chip) + '</text>'; }).join('');
       var mx = X(me.year);
       s += '<line class="kme" x1="' + f1(mx) + '" x2="' + f1(mx) + '" y1="' + (TOP - 12) + '" y2="' + (Hh - 26) + '"/><text x="' + f1(Math.max(90, Math.min(W - 90, mx))) + '" y="' + (TOP - 20) + '" text-anchor="middle" font-size="14" font-weight="500">' + esc(me.name) + ', ' + yearLabel(me.year) + '</text>';
       var nodes = '', joins = '';
@@ -328,7 +330,7 @@
       if (s.fam !== fam) { fam = s.fam; h += '<li class="fam">' + esc(s.fam + ' · ' + (o.family ? o.family[s.fam] : '')) + '</li>'; }
       var top = its(s.id).slice(0, 2).map(function (p) { return (p.a === s.id ? p.b : p.a) + ' (' + p.lives.length + ')'; });
       h += '<li data-id="' + esc(s.id) + '" class="' + (mine.indexOf(s.id) >= 0 ? 'mine' : '') + '"><button type="button" aria-expanded="false" aria-controls="lp-' + esc(s.id) + '"><span class="c">' + esc(s.id) + '<span class="sr"> · </span></span><span class="t"><span class="l">' + esc(s.chip) + '</span>' +
-        '<span class="w"> · <span class="nw">' + n(s.icons.length) + '</span>' + (top.length ? ' · most often with ' + esc(list(top)) : '') + '</span></span></button><div class="pane" id="lp-' + esc(s.id) + '" hidden></div></li>';
+        '<span class="w"> · <span class="nw">' + n(s.icons.length) + '</span>' + (top.length && !asMember() ? ' · most often with ' + esc(list(top)) : '') + '</span></span></button><div class="pane" id="lp-' + esc(s.id) + '" hidden></div></li>';
     });
     function n(k) { return k + (k === 1 ? ' life' : ' lives'); }
     host.innerHTML = h + '</ul>';
@@ -341,7 +343,7 @@
       var mine2 = its(id), pane = li.querySelector('.pane');
       pane.innerHTML = mine2.length ? mine2.slice(0, 6).map(function (p) {
         var other = lib.sit[p.a === id ? p.b : p.a];
-        return '<p><a href="#/situation/' + esc(other.id) + '">' + esc(other.id + ' · ' + other.chip) + '</a> · ' + n(p.lives.length) + ': ' + list(p.lives.map(function (x) { return '<a href="#/icon/' + esc(x) + '">' + esc(lib.icon[x].name) + '</a>'; })) + '</p>';
+        return '<p><a href="#/situation/' + esc(other.id) + '">' + esc(asMember() ? other.chip : other.id + ' · ' + other.chip) + '</a> · ' + n(p.lives.length) + ': ' + list(p.lives.map(function (x) { return '<a href="#/icon/' + esc(x) + '">' + esc(lib.icon[x].name) + '</a>'; })) + '</p>';
       }).join('') + (mine2.length > 6 ? '<p>And ' + (mine2.length - 6) + ' more situations.</p>' : '') + '<p><a href="#/situation/' + esc(id) + '">Open ' + esc(id) + '</a></p>' : '<p>No life in the library has a story here and in another situation yet.</p>';
       pane.hidden = false;
     });
