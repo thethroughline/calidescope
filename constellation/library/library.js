@@ -132,14 +132,6 @@
       if (e.target.name !== 'note') return; var b = e.target.form && e.target.form.querySelector('[data-act="verify"]');
       if (b) { b.disabled = !e.target.value.trim(); b.title = b.disabled ? 'Say what you checked it against first' : ''; }
     });
-    main.addEventListener('keydown', function (e) {
-      var li = (e.key === 'ArrowDown' || e.key === 'ArrowUp') && e.target.closest && e.target.closest('.mf-row'); if (!li) return;
-      var nx = e.key === 'ArrowDown' ? li.nextElementSibling : li.previousElementSibling, el = nx && nx.querySelector(e.target.classList.contains('mf-j') ? '.mf-j' : '.mf-a');
-      if (!el) return;
-      // one tab stop per card: the row the reader is on takes Tab, the others wait for the arrow keys
-      e.preventDefault(); li.querySelectorAll('.mf-a, .mf-j').forEach(function (x) { x.setAttribute('tabindex', '-1'); });
-      nx.querySelectorAll('.mf-a, .mf-j').forEach(function (x) { x.removeAttribute('tabindex'); }); el.focus();
-    });
     main.addEventListener('keydown', function (e) { if (e.target.id === 'askq' && e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('askform').requestSubmit(); } });
     main.addEventListener('submit', function (e) {
       if (e.target.id === 'askform') {
@@ -286,7 +278,6 @@
     if (act === 'open-trail') { var t = trails[+id]; if (t) { trail = t.nodes.slice(); SS.set(TRAIL_KEY, trail); location.hash = safe(t.nodes[t.nodes.length - 1].href); } }
     if (act === 'drop-trail') { trails.splice(+id, 1); LS.set('cl-trails', trails); syncUser(); route(true); }
     if (act === 'light') { var k = a.dataset.key; lit = lit === k ? null : k; paintMap(); }
-    if (act === 'mjoin') { var jp = document.getElementById(a.getAttribute('aria-controls')), jo = a.getAttribute('aria-expanded') !== 'true'; a.setAttribute('aria-expanded', jo); jp.hidden = !jo; paintFam(a.closest('.mfam')); }
     if (act === 'livesmap') {
       var lm = document.getElementById('livesmap'), lo = lm.hidden; lm.hidden = !lo; a.setAttribute('aria-expanded', lo);
       // drawn on opening: a hidden map has no width to fit
@@ -866,80 +857,83 @@
   }
 
   // ---------- families of moves (CLN.moveFamilies) ----------
-  // A situation's stories, grouped by the move each one makes. Two stories are tied when their moves choose each
-  // other on shared words; a family is what the ties join, headed by its hub's move in the corpus's words. The arcs
-  // in the gutter draw the ties; the list beside them is the same thing in words, so the drawing is aria-hidden.
+  // A situation's stories, grouped by the move each one makes. A family is a move several stories make in one clause
+  // each: the card is headed by that clause, and each row says its own, the words it shares with another row marked.
+  // The arcs in the gutter draw the ties; the rows are the same thing in words, so the drawing is aria-hidden. The three
+  // largest families stand open; the rest, and the moves of their own, fold under one disclosure.
   var NUMW = ['none', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
   function numw(k) { return k >= 0 && k <= 9 ? NUMW[k] : String(k); }
-  function andList(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
-  // the year, then the town: "1956 · Montgomery", short enough for one line beside the gutter on a phone
-  function placeLine(s) { var y = yl(s.year), p = String(s.place || '').split(',')[0].trim(); return !p || /\d/.test(p) ? y || p : y ? y + ' · ' + p : p; }
+  // the head says how many share a move; the fold below says how many make a move of their own
   function movesHead(N, F) {
-    var m = F.fams.reduce(function (a, f) { return a + f.members.length; }, 0), k = F.fams.length, j = F.alone.length;
-    var h = cap(numw(N)) + (N === 1 ? ' story.' : ' stories.');
-    if (!k) return h + (N === 1 ? ' Its move is its own.' : ' Each makes a move of its own.');
-    h += ' ' + (j ? cap(numw(m)) : 'All ' + numw(m)) + ' share a move with another story here, in ' + (k === 1 ? 'one family' : numw(k) + ' families');
-    return h + (j ? '; ' + numw(j) + (j === 1 ? ' makes a move of its own.' : ' make a move of their own.') : '.');
+    var m = F.fams.reduce(function (a, f) { return a + f.members.length; }, 0), k = F.fams.length;
+    if (!k) return cap(numw(N)) + (N === 1 ? ' story. Its move is its own.' : ' stories. Each makes a move of its own.');
+    return (m === N ? 'All ' + numw(N) + ' stories' : cap(numw(m)) + ' of ' + numw(N) + ' stories') + ' share a move, in ' + (k === 1 ? 'one family.' : numw(k) + ' families.');
   }
-  function famRow(id, f, i, r) {
-    var s = lib.story[id], I = lib.icon[s.icon], jid = 'mj' + i + '-' + r;
-    var joins = f.ties.filter(function (t) { return t.a === id || t.b === id; }).map(function (t) {
-      return 'Joined to ' + lib.icon[lib.story[t.a === id ? t.b : t.a].icon].name + ': both use ' + andList(t.words.slice(0, 3)) + '.';
-    });
-    var ti = r === 0 ? '' : ' tabindex="-1"';
-    return '<li class="mf-row' + (id === f.hub ? ' hub' : '') + '" data-id="' + esc(id) + '"><div class="mf-line"><a class="mf-a" href="' + H.story(id) + '"' + ti + '><span class="nm">' + esc(I.name) + '</span>' +
-      '<span class="pl">' + esc(placeLine(s)) + (s.verified ? '' : ' · <span class="dr">Recall draft</span>') + '</span></a>' +
-      '<button class="mf-j" type="button" data-act="mjoin" aria-expanded="false" aria-controls="' + jid + '"' + ti + '>Joined<span class="sr"> · how ' + esc(I.name) + '’s move meets the others</span></button></div>' +
-      '<p class="mf-why" id="' + jid + '" hidden>' + esc(joins.join(' ')) + '</p></li>';
+  // a clause with the words in marks (forms, lower case) wrapped in <mark>
+  function marked(text, marks) {
+    var on = {}; (marks || []).forEach(function (w) { on[w] = 1; });
+    return String(text).split(/([A-Za-zÀ-ɏ]+)/).map(function (x, i) { return i % 2 && on[CLC.fold(x)] ? '<mark>' + esc(x) + '</mark>' : esc(x); }).join('');
+  }
+  function famRow(id, f) {
+    var s = lib.story[id], r = f.rows[id] || { text: '', marks: [] };
+    return '<li class="mf-row' + (id === f.hub ? ' hub' : '') + '" data-id="' + esc(id) + '"><a class="mf-a" href="' + H.story(id) + '"><span class="nm">' + esc(CLC.lifeName(lib, s.icon)) + '</span>' +
+      (s.year != null ? ' <span class="yr">' + esc(yl(s.year)) + '</span>' : '') + ' <span class="mv">' + marked(r.text, r.marks) + '</span></a></li>';
   }
   function famCard(f, i, key) {
-    var H0 = lib.icon[lib.story[f.hub].icon], ys = f.members.map(function (id) { return lib.story[id].year; }).filter(function (y) { return y != null; }), o = f.members.length - 1;
-    var span = !ys.length ? '' : ys[0] === ys[ys.length - 1] ? yl(ys[0]) : yl(ys[0]) + ' to ' + yl(ys[ys.length - 1]);
-    var c = H0.name + '’s move, and ' + (o === 1 ? 'one other' : numw(o) + ' others') + (span ? ' · ' + span : '') + (f.words.length ? ' · shared words: ' + f.words.join(', ') : '');
+    var n0 = f.members.length, d = f.members.filter(function (id) { return !lib.story[id].verified; }).length;
+    var c = cap(numw(n0)) + ' stories, ' + (!d ? 'all checked' : d === n0 ? 'all recall drafts' : numw(d) + (d === 1 ? ' recall draft' : ' recall drafts'));
     return '<article class="mfam" data-key="' + esc(key) + '" data-fam="' + i + '" aria-labelledby="mf' + i + '"><h3 class="mf-t" id="mf' + i + '">' + esc(f.move) + '</h3><p class="mf-c">' + esc(c) + '</p>' +
-      '<div class="mf-body"><svg class="mf-arcs" aria-hidden="true" focusable="false"></svg><ol class="mf-rows">' + f.members.map(function (id, r) { return famRow(id, f, i, r); }).join('') + '</ol></div></article>';
+      '<div class="mf-body"><svg class="mf-arcs" aria-hidden="true" focusable="false"></svg><ol class="mf-rows">' + f.members.map(function (id) { return famRow(id, f); }).join('') + '</ol></div></article>';
   }
   function aloneCard(ids) {
     if (!ids.length) return '';
-    return '<details class="mfam alone"><summary><span class="mf-t">' + esc(cap(numw(ids.length)) + (ids.length === 1 ? ' move of its own' : ' moves of their own')) + '</span></summary><ol class="mf-rows">' + ids.map(function (id) {
+    return '<article class="mfam alone"><h3 class="mf-t">' + esc(cap(numw(ids.length)) + (ids.length === 1 ? ' move of its own' : ' moves of their own')) + '</h3><ol class="mf-rows">' + ids.map(function (id) {
       var s = lib.story[id], mv = CLN.moveClause(lib, id);
-      return '<li class="mf-row"><a class="mf-a" href="' + H.story(id) + '"><span class="nm">' + esc(lib.icon[s.icon].name) + '</span><span class="pl">' + esc(placeLine(s)) + (s.verified ? '' : ' · <span class="dr">Recall draft</span>') + '</span>' +
-        (mv && mv.text ? '<span class="mv">' + esc(mv.text) + '</span>' : '') + '</a></li>';
-    }).join('') + '</ol></details>';
+      return '<li class="mf-row"><a class="mf-a" href="' + H.story(id) + '"><span class="nm">' + esc(CLC.lifeName(lib, s.icon)) + '</span>' + (s.year != null ? ' <span class="yr">' + esc(yl(s.year)) + '</span>' : '') +
+        (mv && mv.text ? ' <span class="mv">' + esc(mv.text) + '</span>' : '') + '</a></li>';
+    }).join('') + '</ol></article>';
   }
   function movesHTML(s) {
-    var F = CLN.moveFamilies(lib, s.key), N = s.stories.length, L = s.icons.length;
+    var F = CLN.moveFamilies(lib, s.key), N = s.stories.length, L = s.icons.length, open = F.fams.slice(0, 3), rest = F.fams.slice(3), j = F.alone.length;
     var people = '<div class="people-row" style="margin-top:14px">' + s.icons.map(function (i) { return lib.icon[i]; }).sort(function (a, b) { return (a.year || 0) - (b.year || 0); }).map(function (i) { return pchip(CLC.iconCard(lib, i)); }).join('') + '</div>';
+    var more = [rest.length ? cap(numw(rest.length)) + ' more ' + (rest.length === 1 ? 'family' : 'families') : '', j ? numw(j) + (j === 1 ? ' move of its own' : ' moves of their own') : ''].filter(Boolean);
     return '<section id="moves"><header><h2>' + esc(movesHead(N, F)) + '</h2></header>' +
-      '<div class="mfams">' + F.fams.map(function (f, i) { return famCard(f, i, s.key); }).join('') + aloneCard(F.alone) + '</div>' +
+      '<div class="mfams">' + open.map(function (f, i) { return famCard(f, i, s.key); }).join('') + '</div>' +
+      (more.length ? '<details class="more mf-more"><summary>' + esc(cap(more.join(', and '))) + '</summary><div class="mfams">' + rest.map(function (f, i) { return famCard(f, i + 3, s.key); }).join('') + aloneCard(F.alone) + '</div></details>' : '') +
       '<p class="mf-map"><button class="tlink" type="button" data-act="livesmap" aria-expanded="false" aria-controls="livesmap">' + esc('See the ' + numw(L) + (L === 1 ? ' life' : ' lives') + ' on the map') + '<i class="ph ph-arrow-right" aria-hidden="true"></i></button></p>' +
       '<div id="livesmap" hidden>' + mapBox() + people + '</div></section>';
   }
-  // the arcs: one dot per row on the name's line, and a curve in the gutter for each tie, deeper the further it reaches
+  // the arcs: one dot per row beside the name, and a curve in the gutter for each tie, deeper the further it reaches
   function paintFam(card) {
     var svg = card.querySelector('.mf-arcs'), ol = card.querySelector('.mf-rows'); if (!svg || !ol) return;
     var f = CLN.moveFamilies(lib, card.dataset.key).fams[+card.dataset.fam]; if (!f) return;
-    var rows = [].slice.call(ol.children), at = {}, H1 = ol.offsetHeight, X = 42, s = '';
-    rows.forEach(function (li, r) { at[li.dataset.id] = { r: r, y: li.offsetTop + 24 }; });
-    var wmax = Math.max.apply(null, f.ties.map(function (t) { return t.w; }));
-    f.ties.forEach(function (t) {
+    var rows = [].slice.call(ol.children), at = {}, H1 = ol.offsetHeight, X = 26, s = '';
+    rows.forEach(function (li, r) { at[li.dataset.id] = { r: r, y: li.offsetTop + 15 }; });
+    // the ties that hold the family: each row's to the hub, else its ties to the rows it makes the move with
+    var toHub = {}; f.ties.forEach(function (t) { if (t.a === f.hub) toHub[t.b] = 1; if (t.b === f.hub) toHub[t.a] = 1; });
+    var held = f.ties.filter(function (t) { return t.a === f.hub || t.b === f.hub || !toHub[t.a] || !toHub[t.b]; });
+    var wmax = Math.max.apply(null, held.map(function (t) { return t.w; }));
+    held.forEach(function (t) {
       var p = at[t.a], q = at[t.b]; if (!p || !q) return; if (p.r > q.r) { var x = p; p = q; q = x; }
-      var d = Math.min(38, 6 + 12 * (q.r - p.r));
+      var d = Math.min(22, 6 + 6 * (q.r - p.r));
       s += '<path d="M' + X + ' ' + p.y.toFixed(1) + 'C' + (X - d) + ' ' + p.y.toFixed(1) + ' ' + (X - d) + ' ' + q.y.toFixed(1) + ' ' + X + ' ' + q.y.toFixed(1) + '" stroke-width="' + (1.25 + 2 * t.w / wmax).toFixed(2) + '"/>';
     });
     rows.forEach(function (li) { var p = at[li.dataset.id]; s += '<circle' + (li.dataset.id === f.hub ? ' class="hub" r="6.5"' : ' r="5"') + ' cx="' + X + '" cy="' + p.y.toFixed(1) + '"/>'; });
-    svg.setAttribute('viewBox', '0 0 52 ' + H1); svg.setAttribute('height', H1); svg.innerHTML = s;
+    svg.setAttribute('viewBox', '0 0 34 ' + H1); svg.setAttribute('height', H1); svg.innerHTML = s;
   }
   function paintFams() {
     var cards = main.querySelectorAll('.mfam[data-fam]'); cards.forEach(paintFam);
+    // a folded card has no height to draw in: it draws when its disclosure opens
+    main.querySelectorAll('#moves details').forEach(function (d) { d.addEventListener('toggle', function () { if (d.open) d.querySelectorAll('.mfam[data-fam]').forEach(paintFam); }); });
     // the serif arrives after the first paint and moves the rows
     if (cards.length && document.fonts && document.fonts.ready) document.fonts.ready.then(function () { main.querySelectorAll('.mfam[data-fam]').forEach(paintFam); });
   }
-  // the same move, made by another life in another kind of week; a member reads no codes
+  // the same move, made by another life in another kind of week, and the clause each makes it in; a member reads no codes
   function sameMoveHTML(s) {
     var m = CLN.sameMoveElsewhere(lib, s.id); if (!m) return '';
-    var o = m.story, st = lib.sitByKey[o.keys[0]];
-    return '<p class="samemove">' + tlink(H.story(o.id), esc('The same move in another week: ' + lib.icon[o.icon].name + ', ' + yl(o.year) + (AS === 'member' ? '' : ' · ' + st.id) + ' · ' + st.chip)) + '</p>';
+    var o = m.story, st = lib.sitByKey[o.keys[0]], line = function (icon, c) { return '<span>' + esc(CLC.lifeName(lib, icon) + ': ' + CLC.lowerFirst(c) + '.') + '</span>'; };
+    return '<div class="samemove"><p>' + tlink(H.story(o.id), esc('The same move in another week: ' + lib.icon[o.icon].name + (o.year != null ? ', ' + yl(o.year) : '') + ', ' + sitWord(st))) + '</p>' +
+      '<p class="sm-pair">' + line(s.icon, m.pair.a) + line(o.icon, m.pair.b) + '</p></div>';
   }
   function sitsPage() {
     var pairs = CLN.web(lib), N = lib.situations.length, two = pairs.filter(function (p) { return p.lives.length >= 2; }).length;
@@ -1223,9 +1217,12 @@
     var h = '<h1>Who stands near ' + (coach ? esc(first) + '’s' : 'your') + ' three</h1><p class="n-sent">' + parts.join(' ') + '</p>' +
       '<section><div class="n-fig graphbox" id="venn"></div><ul class="n-key"><li><span class="sw mad"></span>' + You + ' three</li><li><span class="sw pru"></span>Lives in more than one</li><li><span class="sw dot"></span>One life with a story here</li></ul></section>';
     var chips = function (held) { return '<div class="chipline">' + held.map(function (k) { var st = lib.sitByKey[k]; return '<span class="sit">' + (AS === 'member' ? '' : '<b>' + esc(st.id) + '<span class="sr"> · </span></b>') + esc(st.chip) + '</span>'; }).join('') + '</div>'; };
+    // a tie between two lives is said once on the page; where it comes again, the line points back to it
+    var told = {}, once = function (x, h, why) { var k = [x, h].sort().join('|'); if (told[k] === why) return null; told[k] = why; return why; };
     var closeTo = function (l) {
       if (!l.near || !l.near.h) return '';
-      return '<div class="n-why">Close to ' + (coach ? '' : 'your ') + '<b>' + esc(lib.icon[l.near.h].name) + '</b>. ' + esc(CLN.nearWhy(lib, l.id, l.near.h, { w: l.near.w, t: l.near.t }).join(' ')) + '</div>';
+      var w = once(l.id, l.near.h, CLN.nearWhy(lib, l.id, l.near.h, { w: l.near.w, t: l.near.t }).join(' '));
+      return '<div class="n-why">Close to ' + (coach ? '' : 'your ') + '<b>' + esc(lib.icon[l.near.h].name) + '</b>' + (w == null ? ', for the reasons given above.' : '. ' + esc(w)) + '</div>';
     };
     var row = function (l, extra) { var i = lib.icon[l.id]; return '<li><a class="n-row" href="' + H.icon(l.id) + '"><span class="disc' + (l.hero ? ' mine' : '') + '">' + esc(i.ini) + '</span><span><span class="nm">' + esc(i.name) + '</span><span class="yr">' + esc(yl(i.year)) + '</span>' + (extra || '') + '</span></a></li>'; };
     var many = nb.lives.filter(function (l) { return !l.hero && l.held.length >= 2; });
@@ -1237,7 +1234,8 @@
         var st = lib.sitByKey[si.key];
         var where = '<span class="standin-sit">' + (AS === 'member' ? '' : '<b>' + esc(st.id) + '</b> ') + esc(st.chip) + '</span>';
         if (!si.id) return '<div class="standin">' + where + 'Nobody close to ' + esc(nm) + ' has a story here yet.</div>';
-        return '<div class="standin">' + where + 'Nearest to ' + esc(nm) + ': <b>' + esc(lib.icon[si.id].name) + '</b>. ' + esc(CLN.nearWhy(lib, si.id, hid, si.a).join(' ')) + '</div>';
+        var w = once(si.id, hid, CLN.nearWhy(lib, si.id, hid, si.a).join(' '));
+        return '<div class="standin">' + where + 'Nearest to ' + esc(nm) + ': <b>' + esc(lib.icon[si.id].name) + '</b>' + (w == null ? ', for the reasons given above.' : '. ' + esc(w)) + '</div>';
       }).join('');
       return row(l || { id: hid, hero: true }, x);
     }).join('') + '</ul>');
@@ -1393,13 +1391,14 @@
         esc(e.who.join(' and ') + ' asked' + (e.fits ? '. It fits ' + (e.who.length > 1 ? 'a' : e.who[0] + '’s') + ' next situation.' : '.')) + '</span></span></a></li>';
     }).join('') + '</ul>');
   }
+  function sourced(s) { return !CLN || !CLN.sourceOk || CLN.sourceOk(s); }
   function checksPage() {
     if (AS !== 'coach') return missing();
     var seen = {}, need = [];
     lib.order.forEach(function (mid) {
       var m = lib.members[mid], up = m.up19 && lib.sit[m.up19.sit]; if (!up) return;
       var mine = (m.heroes_icons.core || []).concat(m.heroes_icons.reserve ? [m.heroes_icons.reserve] : []);
-      var list = (lib.byKey[up.key] || []).map(function (x) { return lib.story[x]; }).filter(function (s) { return !s.verified && s.reach !== 'far' && !seen[s.id]; })
+      var list = (lib.byKey[up.key] || []).map(function (x) { return lib.story[x]; }).filter(function (s) { return !s.verified && s.reach !== 'far' && !seen[s.id] && sourced(s); })
         .sort(function (a, b) { return (mine.indexOf(b.icon) >= 0) - (mine.indexOf(a.icon) >= 0) || (a.reach === 'near' ? 0 : 1) - (b.reach === 'near' ? 0 : 1) || (a.id < b.id ? -1 : 1); }).slice(0, 3);
       list.forEach(function (s) { seen[s.id] = 1; });
       need.push({ m: m, up: up, list: list });
@@ -1412,6 +1411,11 @@
       return sec(esc(x.m.first + ' · ' + x.m.up19.label), '<p class="note" style="margin:-6px 0 14px"><a href="' + H.sit(x.up.id) + '">' + esc(x.up.id) + '</a> ' + esc(x.up.chip) + '</p>' +
         (x.list.length ? '<div class="grid">' + x.list.map(function (s) { return storyCard(CLC.storyCard(lib, s)); }).join('') + '</div>' : '<p class="empty">Nothing waiting here.</p>'));
     }).join('');
+    // a draft whose source names no work cannot be checked: no line or plan offers it until a source is added (CLN.sourceOk)
+    var unsourced = lib.stories.filter(function (s) { return !s.verified && !sourced(s); });
+    if (unsourced.length) h += sec('Needs a source', '<p class="note" style="margin:-6px 0 14px">These drafts name nothing to check them against, so no line and no plan offers them until a source is added.</p><ul class="list">' + unsourced.map(function (s) {
+      return '<li><a class="rowlink" href="' + H.story(s.id) + '"><span><span class="t">' + esc(CLC.storyTitle(lib, s)) + '</span><span class="s" style="display:block">' + esc(CLC.sourceFor(s, 'coach') || 'No source given.') + '</span></span></a></li>';
+    }).join('') + '</ul>');
     h += sec('Checked', done.length ? '<ul class="list">' + done.map(function (id) {
       var s = lib.story[id], e = ledger[id];
       return '<li><a class="rowlink" href="' + H.story(id) + '"><span><span class="t">' + esc(lib.icon[s.icon].name + ', ' + (s.place || s.era)) + '</span><span class="s" style="display:block">' + esc(((lib.coaches[e.by] || {}).name || e.by) + ', ' + when(e.at) + (e.note ? ': ' + e.note : '')) + '</span></span></a></li>';

@@ -477,6 +477,36 @@
   var DIRECT_WORD = { indirect: 'Indirect', calibrated: 'Measured', direct: 'Direct' };
   function sitLabel(lib, id) { var x = lib.sit[id] || lib.sitByKey[id]; return x ? x.id + ' \u00b7 ' + x.chip : String(id || ''); }
   function statusWord(s) { return s && s.verified ? 'Checked' : 'Recall draft'; }
+  // A story by its life, its place and its year, the one name the coach's lines, toasts and plan give it: "Billie Jean
+  // King, Houston 1973". The place is the dateline's first part when that is a place; the year is the record's, or
+  // the dateline's own words when they give a span or a decade the year cannot ("Katherine Johnson, Langley, late
+  // 1950s"). Two stories of one life that would read the same keep their whole datelines, or else add their week.
+  var DATEISH = /\d|^(?:early|late|mid|c\.|circa|spring|summer|autumn|fall|winter|january|february|march|april|may|june|july|august|september|october|november|december)\b/i;
+  function titleOf(lib, s, whole) {
+    var name = (lib.icon[s.icon] || {}).name || s.icon, parts = String(s.place || '').split(/,\s*/).map(function (x) { return x.trim(); }).filter(Boolean);
+    var where = parts.length && !DATEISH.test(parts[0]) ? parts[0] : '', y = yearLabel(s.year), date = parts.filter(function (x) { return /\d/.test(x); }).pop() || '';
+    if (whole && s.place) return name + ', ' + s.place;
+    // a dateline that is a day, a month or a year, ending on the record's own year, says no more than the year
+    var plain = !date || (y && new RegExp('^(?:\\d{1,2} )?(?:[A-Z][a-z]+ )?' + y.replace(/ BC$/, '') + '(?: BC)?$').test(date));
+    var when = plain ? y : date;
+    return name + (where || when ? ', ' : '') + where + (where && when ? (plain ? ' ' : ', ') : '') + when;
+  }
+  function storyTitle(lib, s) {
+    if (typeof s === 'string') s = lib.story[resolve(lib, s)]; if (!s) return '';
+    if (!lib._titles) {
+      var by = {}, out = lib._titles = {};
+      lib.stories.forEach(function (x) { var t = titleOf(lib, x); (by[t] = by[t] || []).push(x); });
+      Object.keys(by).forEach(function (t) {
+        var xs = by[t]; if (xs.length === 1) { out[xs[0].id] = t; return; }
+        var whole = xs.map(function (x) { return titleOf(lib, x, true); });
+        xs.forEach(function (x, i) {
+          var w = whole[i], st = lib.sitByKey[x.keys[0]];
+          out[x.id] = whole.filter(function (v) { return v === w; }).length === 1 ? w : w + (st ? ' · ' + st.chip : '');
+        });
+      });
+    }
+    return lib._titles[s.id] || titleOf(lib, s);
+  }
   function gapWords(dy) { var a = Math.abs(dy); return a === 0 ? 'The same year' : cap1(num(a)) + (a === 1 ? ' year ' : ' years ') + (dy < 0 ? 'earlier' : 'later'); }
   function stanceGerund(stance) { var b = STANCE_BY[stance]; return b ? cap1(b.replace(/^by /, '')) : ''; }
   // a life's name as a Back button or a short line says it: the surname when no other life shares it
@@ -945,5 +975,5 @@
     matcher: matcher, pick: pick, replay: replay, season: season, stanceProfile: stanceProfile,
     similarStories: similarStories, kindred: kindred, ego: ego, situationWeb: situationWeb, path: path, words: words,
     interpret: interpret, ask: ask, sitIndex: sitIndex, queryVec: queryVec, COPY: COPY, voice: voice, STANCE_BY: STANCE_BY, draftLine: draftLine, sourceFor: sourceFor, cautionFor: cautionFor, whyFor: whyFor, statusLine: statusLine, teaser: teaser, lowerFirst: lowerFirst, cap1: cap1,
-    num: num, REACH_WORD: REACH_WORD, REACH_SHORT: REACH_SHORT, DIRECT_WORD: DIRECT_WORD, sitLabel: sitLabel, statusWord: statusWord, gapWords: gapWords, stanceGerund: stanceGerund, lifeName: lifeName, likeThis: likeThis, sameField: sameField, reasonFor: reasonFor, readingPath: readingPath, otherWay: otherWay, DIR_WORD: DIR_WORD };
+    num: num, REACH_WORD: REACH_WORD, REACH_SHORT: REACH_SHORT, DIRECT_WORD: DIRECT_WORD, sitLabel: sitLabel, statusWord: statusWord, storyTitle: storyTitle, gapWords: gapWords, stanceGerund: stanceGerund, lifeName: lifeName, likeThis: likeThis, sameField: sameField, reasonFor: reasonFor, readingPath: readingPath, otherWay: otherWay, DIR_WORD: DIR_WORD };
 }));

@@ -219,7 +219,7 @@ test('round two: others like this, the path in five, the other way, honest draft
   }
   assert.match(CLC.statusLine({ status: 'sample-draft', verified: false }, 'member', 'Jim'), /Jim/);
   const fill = (m, k) => CLN.fillSlot(lib, m, lib.sit[k].key).pick;
-  assert.equal(fill('michael', 'C2').story.id, 'st-ali-1964-miami');
+  assert.equal(fill('michael', 'C2').story.id, 's-B1-muriel-siebert', 'Ali in Miami Beach names no work to check against (sourceOk), so it is no check');
   assert.equal(fill('david', 'C1').story.id, 's-C1-billie-jean-king');
   assert.equal(fill('sarah', 'E1').story.id, 'st-obama-1990-law-review');
   assert.equal(fill('maya', 'B6').links, 2);
@@ -290,7 +290,7 @@ test('round four: the check plan gives every member four, Golda Meir first, and 
   const sent = {}, avoid = {};
   for (const m of lib.order) { sent[m] = CLQ.sentTo(lib, m).map((x) => CLC.resolve(lib, x)); avoid[m] = CLQ.recentTo(lib, m).map((x) => x.icon); }
   const plan = CLN.checkPlan(lib, { sent, avoid });
-  assert.equal(plan.picks.length, 9);
+  assert.equal(plan.picks.length, 10, 'nine, and one more for the drafts whose sources name no work (the Gloucester Hotel among them)');
   assert.equal(plan.members.find((m) => m.id === 'david').have, 0);
   assert.ok(plan.members.every((m) => m.left === 0), 'every gap closes, David’s included');
   assert.equal(plan.picks[0].story.icon, 'golda-meir');
@@ -300,7 +300,7 @@ test('round four: the check plan gives every member four, Golda Meir first, and 
   // check the first and plan again: one fewer
   const s0 = lib.story[plan.picks[0].story.id];
   s0.verified = true;
-  try { assert.equal(CLN.checkPlan(lib, { sent, avoid }).picks.length, 8); } finally { s0.verified = false; }
+  try { assert.equal(CLN.checkPlan(lib, { sent, avoid }).picks.length, 9); } finally { s0.verified = false; }
   // a coach's own members only
   const jim = lib.order.filter((m) => lib.members[m].coach === 'jim');
   assert.deepEqual(CLN.checkPlan(lib, { members: jim, sent, avoid }).members.map((m) => m.id), jim);
@@ -334,14 +334,14 @@ test('round five: one name for each thing, and no broken joins', () => {
 test('round five: families of moves', () => {
   const CLN = require('../lib/net.js');
   assert.equal(CLN.stem('repeat'), CLN.stem('repeated')); assert.equal(CLN.stem('repeating'), CLN.stem('repeats'));
-  // E1, frozen as measured: nine families, 26 of 41 stories in one, 15 with a move of their own
+  // E1, frozen as measured: seven families, 27 of 41 stories in one, 14 with a move of their own
   const E1 = CLN.moveFamilies(lib, lib.sit.E1.key);
-  assert.deepEqual(E1.fams.map((f) => f.members.length), [5, 4, 3, 3, 2, 2, 2, 2, 2]);
-  assert.equal(E1.alone.length, 16);
+  assert.deepEqual(E1.fams.map((f) => f.members.length), [8, 6, 4, 3, 2, 2, 2]);
+  assert.equal(E1.alone.length, 14);
   assert.equal(CLN.moveFamilies(lib, 'E1'), E1, 'a code reads as its situation');
   assert.equal(CLN.stem('need'), CLN.stem('needed')); assert.notEqual(CLN.stem('feed'), CLN.stem('fee'));
-  assert.equal(E1.fams[0].hub, 's-E1-john-foster-dulles');
-  assert.equal(E1.fams[0].move, 'Write the one sentence you want repeated in the corridor');
+  assert.equal(E1.fams[0].hub, 's-E1-martin-luther-king-jr');
+  assert.equal(E1.fams[0].move, 'Write the one sentence you expect people to repeat about your reaction');
   let ties = 0;
   for (const st of lib.situations) {
     const F = CLN.moveFamilies(lib, st.key), seen = new Set();
@@ -350,21 +350,21 @@ test('round five: families of moves', () => {
       for (const id of f.members) { assert.ok(lib.story[id].keys.includes(st.key), st.id + ': ' + id + ' carries the key'); assert.ok(!seen.has(id), id + ' in one family'); seen.add(id); }
       for (const t of f.ties) {
         ties++;
-        assert.ok(t.words.length >= 2 && t.w >= 0.1, st.id + ': ' + t.a + ' and ' + t.b + ' share two words at least');
+        assert.ok(t.stems.length >= 2 && t.w >= 0.1 && (t.pair || t.w >= 0.25), st.id + ': ' + t.a + ' and ' + t.b + ' share two words at least, in one clause each or at a cosine of 0.25');
         assert.notEqual(lib.story[t.a].icon, lib.story[t.b].icon, 'a tie joins two lives');
       }
     }
     F.alone.forEach((id) => { assert.ok(!seen.has(id)); seen.add(id); });
     assert.equal(seen.size, (lib.byKey[st.key] || []).length, st.id + ': every story is in a family or alone');
   }
-  assert.equal(ties, 273);
+  assert.equal(ties, 494);
   // the same move in another week: never a story of the same situation or the same life
   let away = 0;
   for (const s of lib.stories) {
     const m = CLN.sameMoveElsewhere(lib, s.id); if (!m) continue; away++;
-    assert.ok(m.story.icon !== s.icon && !m.story.keys.some((k) => s.keys.includes(k)) && m.w >= 0.35 && m.words.length >= 2, s.id);
+    assert.ok(m.story.icon !== s.icon && !m.story.keys.some((k) => s.keys.includes(k)) && m.w >= 0.35 && m.pair.a && m.pair.b, s.id);
   }
-  assert.equal(away, 112);
+  assert.equal(away, 31);
   // judged on the moves alone, Ogilvy's D3 story makes Jobs's E3 move: block, slot, craft, hand
   const og = CLN.sameMoveElsewhere(lib, 's-D3-david-ogilvy');
   assert.equal(og.story.id, 's-E3-steve-jobs'); assert.ok(og.words.includes('craft') && og.words.includes('block'));
@@ -373,6 +373,55 @@ test('round five: families of moves', () => {
   for (const st of lib.situations) for (const f of CLN.moveFamilies(lib, st.key).fams) assert.ok(!FR.test(f.move), st.id + ': ' + f.move);
   assert.equal(CLN.moveWords(lib, 's-E1-thomas-lamont', 's-E1-john-foster-dulles'), 'The same move: write the one sentence you want repeated in the corridor');
   assert.equal(CLN.moveWords(lib, 's-E1-george-washington', 's-E1-miles-davis'), '');
+});
+
+test('round six: families and the same move joined on a shared clause', () => {
+  const CLN = require('../lib/net.js');
+  const fold = (t) => String(t || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const wrote = (id, w) => { const t = ' ' + fold((lib.story[id].move_examples || []).join(' ')).replace(/[^a-z]+/g, ' ') + ' '; return w.split(' ').every((x) => t.includes(' ' + x + ' ')); };
+  // weighed within the situation: a word in more than half of E1 ("sentence") still counts, and a stop word that carries
+  // the move reads with the word beside it ("one sentence")
+  const S = CLN.sitVectors(lib, 'E1');
+  assert.ok(S.df.sentenc > S.n / 2 && S.vec['s-E1-thomas-lamont'].sentenc > 0 && S.vec['s-E1-thomas-lamont']['one sentenc'] > 0);
+  // the corridor family: the stories that write down the sentence they want carried
+  const corridor = CLN.moveFamilies(lib, 'E1').fams.find((f) => f.members.includes('s-E1-thomas-lamont'));
+  for (const id of ['s-E1-john-foster-dulles', 's-E1-warren-buffett', 's-E1-lloyd-blankfein']) assert.ok(corridor.members.includes(id), id + ' is in the corridor family');
+  let ties = 0, rows = 0, big = 0;
+  for (const st of lib.situations) for (const f of CLN.moveFamilies(lib, st.key).fams) {
+    // no tie shows a word missing from either move, and a row marks only words another row of its family wrote the same way
+    for (const t of f.ties) { ties++; for (const w of t.words) assert.ok(wrote(t.a, w) && wrote(t.b, w), st.id + ': ' + w + ' in both ' + t.a + ' and ' + t.b); }
+    for (const id of f.members) {
+      const r = f.rows[id]; rows++;
+      assert.ok(r.text && fold(lib.story[id].move_examples.join(' ')).includes(fold(r.text)), id + ' says its own clause');
+      for (const w of r.marks) assert.ok(wrote(id, w) && f.members.some((m) => m !== id && fold(f.rows[m].text).split(/[^a-z]+/).includes(w)), id + ' marks ' + w);
+    }
+    // a family of four or more is no chain: each row is tied to the hub, or to two rows
+    if (f.members.length >= 4) { big++; for (const id of f.members) if (id !== f.hub) {
+      const mine = f.ties.filter((t) => t.a === id || t.b === id);
+      assert.ok(mine.some((t) => t.a === f.hub || t.b === f.hub) || mine.length >= 2, st.id + ': ' + id + ' is tied to the hub or to two');
+    } }
+  }
+  assert.ok(ties > 400 && rows > 350 && big >= 30, ties + ' ties, ' + rows + ' rows, ' + big + ' families of four or more');
+  // a same-move link comes with the clause each story makes it in; a chance pair of words makes none
+  assert.equal(CLN.sameMoveElsewhere(lib, 'st-bjk-1973-riggs'), null, 'King to Eisenhower, on "conversation" and "turned", is no link');
+  const mb = CLN.sameMoveElsewhere(lib, 's-B4-constance-baker-motley');
+  assert.equal(mb.story.id, 's-C1-charlotte-beers');
+  assert.deepEqual([mb.pair.a, mb.pair.b], ['Tell the partner leading it which part you will present', 'Ask the partner leading it for one section you will present alone, and present it']);
+  for (const s of lib.stories) { const m = CLN.sameMoveElsewhere(lib, s.id); if (m) for (const w of m.words) assert.ok(wrote(s.id, w) && wrote(m.story.id, w), s.id + ' ' + w); }
+  // "direct" and "directly" weigh together and are never said as one word
+  assert.ok(!CLN.moveTie(lib, 's-E1-john-foster-dulles', 's-E1-emma-watson').words.some((w) => /^direct/.test(w)));
+});
+
+test('round six: a way of leading is a reading until a coach rules on it', () => {
+  const CLN = require('../lib/net.js');
+  const k = CLN.kindred(lib, 'barack-obama').find((x) => x.id === 'elizabeth-dole');
+  assert.equal(k.tie.w, 5.5, 'one situation (3), the way of leading unruled (1), the same domain (1.5)');
+  assert.deepEqual(k.why, ['Both had every act read as a signal.', 'Both in politics.', '21 years apart.', 'Both may stay close to their people. A coach has yet to rule on this.']);
+  for (const x of CLN.kindred(lib, 'barack-obama')) for (const w of x.why) assert.ok(!/^Both (lead out front|earn it daily|carry the weight|grow their people|stay close to their people|keep out of the way)\./.test(w), w);
+  // ruled for both, it weighs 2 and says what it is
+  const A = lib.icon['barack-obama'], B = lib.icon['elizabeth-dole'], was = [A.stanceStatus, B.stanceStatus];
+  A.stanceStatus = B.stanceStatus = 'ruled';
+  try { const t = CLN.tie(lib, A, B); assert.equal(t.w, 6.5); assert.equal(CLN.why(lib, A, B, t)[1], 'Both stay close to their people.'); } finally { [A.stanceStatus, B.stanceStatus] = was; }
 });
 
 test('round five: the coach\'s twenty questions', () => {
@@ -544,4 +593,51 @@ test('round six: the Ask reads what the coach wrote, again', () => {
   const sb = CLQ.answer(lib, read('Sarah lost the vote on the new structure'), { limit: 99 });
   const quoted = [sb.ready, sb.oneCheck].concat(sb.items).filter(Boolean).map((x) => (x.reasons.find((r) => r.type === 'scene') || {}).text).filter(Boolean);
   assert.match(quoted[0], /\b(lost|defeat\w*|failed|went badly)\b/i);
+});
+
+test('round six: one ranker for what next, one answer per member and week, and a plan for later weeks only', () => {
+  const CLQ = require('../lib/ask.js'), CLN = require('../lib/net.js');
+  const had = (m) => CLQ.sentTo(lib, m).map((x) => CLC.resolve(lib, x)), recent = (m) => CLQ.recentTo(lib, m).map((x) => x.icon);
+  // #1 While you wait and the story's Next rank with CLN.fitFor: Maya's first is checked, and no longer Hamilton
+  const maya = CLN.fitFor(lib, 'maya', { exclude: had('maya'), avoidIcons: recent('maya') });
+  assert.ok(maya[0].story.verified && maya[0].story.icon !== 'alexander-hamilton');
+  assert.deepEqual(maya.slice(0, 2).map((x) => x.story.id), ['st-michelle-obama-2016-go-high', 'st-bjk-1973-riggs']);
+  assert.equal(maya[0].why, 'From your fourth hero, for a week when everything you do gets read as a signal.');
+  for (const m of lib.order) {
+    const keys = lib.members[m].sits.map((id) => lib.sit[id].key), top = CLN.fitFor(lib, m, { exclude: had(m), avoidIcons: recent(m), n: 1 })[0];
+    assert.ok(top && top.story.keys.some((k) => keys.includes(k)), m + ': the top pick carries one of their situations');
+    assert.ok(!had(m).includes(top.story.id) && !recent(m).includes(top.story.icon), m + ': nothing they have had, no life from the last fortnight');
+  }
+  // an age counts only where the year holds: Johnson's 1950 against "late 1950s" does not
+  assert.ok(!CLN.yearAgrees(lib.story['st-kjohnson-1958-langley']) && CLN.yearAgrees(lib.story['st-bjk-1973-riggs']));
+  assert.ok(!CLN.fitFor(lib, 'maya', {}).some((x) => x.story.id === 'st-kjohnson-1958-langley' && x.terms.some((t) => t.k === 'age')));
+  // #4 one answer per member and week: it carries the week, could be sent, and never offers what already goes
+  for (const m of lib.order) {
+    const key = lib.sit[lib.members[m].up19.sit].key, n0 = CLN.nextFor(lib, m, { key, exclude: had(m), avoid: recent(m) });
+    for (const x of [n0.ready, n0.pick].concat(n0.next).filter(Boolean)) assert.ok(x.story.keys.includes(key) && ['near', 'mid'].includes(x.story.reach) && !had(m).includes(x.story.id) && CLN.sourceOk(x.story), m + ' ' + x.story.id);
+    if (n0.ready) assert.notEqual((CLN.nextFor(lib, m, { key, exclude: had(m), avoid: recent(m), going: [n0.ready.story.id] }).ready || { story: {} }).story.id, n0.ready.story.id, m + ': what goes is never offered again');
+  }
+  assert.equal(CLN.nextFor(lib, 'sarah', { key: lib.sit.E1.key, exclude: had('sarah'), avoid: recent('sarah') }).ready.story.id, 'st-michelle-obama-2016-go-high');
+  // one title per story: life, short place and year, the dateline's own words where the year cannot say it
+  assert.equal(CLC.storyTitle(lib, 'st-bjk-1973-riggs'), 'Billie Jean King, Houston 1973');
+  assert.equal(CLC.storyTitle(lib, 's-C3-golda-meir'), 'Golda Meir, Chicago 1948');
+  assert.equal(CLC.storyTitle(lib, 'st-kjohnson-1958-langley'), 'Katherine Johnson, Langley, late 1950s');
+  assert.equal(new Set(lib.stories.map((s) => CLC.storyTitle(lib, s))).size, lib.stories.length, 'no two stories share a title');
+  // #6 a source a coach can check names a work: Gloucester names none, Johnson's NASA oral-history interviews do,
+  // and "Verify against" keeps its book
+  assert.ok(!CLN.sourceOk(lib.story['st-bjk-1973-gloucester']) && !CLN.sourceOk(lib.story['st-ali-1964-miami']));
+  assert.ok(CLN.sourceOk(lib.story['st-kjohnson-1958-langley']) && CLN.sourceOk(lib.story['st-schultz-1987-seattle']));
+  for (const m of lib.order) for (const sid of lib.members[m].sits) {
+    const f = CLN.fillSlot(lib, m, lib.sit[sid].key, { exclude: had(m), avoidIcons: recent(m) });
+    for (const x of [f.pick].concat(f.next).filter(Boolean)) assert.ok(CLN.sourceOk(x.story), m + ' ' + sid + ' ' + x.story.id);
+  }
+  // the plan is for the weeks after this one: no pick carries a waiting member's week, and Golda Meir, who carries
+  // David's, is his line's other check
+  const jim = lib.order.filter((m) => lib.members[m].coach === 'jim'), sent = {}, avoid = {};
+  for (const m of jim) { sent[m] = had(m); avoid[m] = recent(m); }
+  const first = CLN.nextFor(lib, 'david', { key: lib.sit.C1.key, exclude: sent.david, avoid: avoid.david }).pick.story.id;
+  const plan = CLN.checkPlan(lib, { members: jim, sent, avoid, first: [first], thisWeek: { david: 'C1' } });
+  assert.ok(plan.picks.length > 1 && plan.picks.every((pk) => CLN.sourceOk(pk.story) && (pk.given || !pk.story.keys.includes(lib.sit.C1.key))));
+  assert.equal(plan.alts.david.story.id, 's-C3-golda-meir');
+  assert.ok(!plan.picks.some((pk) => pk.story.id === 's-C3-golda-meir'));
 });

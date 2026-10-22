@@ -17,6 +17,8 @@
 //                  Ask reads a question into chips and answers; the shelf counts; kindred across time, the
 //                  situation ladder, routes between two lives and the circles of a member's three all draw
 //   phone          the demo bar fits, the member app fills the screen, the Demo sheet and stepper work
+//   while you wait Maya's held first week shows the story that fits her best; a tap opens it, Back returns in place
+//   one answer     the line, Details and the Ask reply offer one story per member and week; the plan sends nothing
 import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { execSync } from 'node:child_process';
@@ -174,7 +176,7 @@ try {
   check(/Sarah asked you to check Serena Williams, \d{4}\. It is first on Source checks/.test(await p.locator('[data-bridge="review-line"]', { hasText: 'Sarah Kessler' }).innerText().catch(() => '')), 'Review says what Sarah asked Jim to check, on her line');
   await p.evaluate(() => CLB.c.setState({ swapFor: 'michael', swapHero: 'all' })); await p.waitForTimeout(300);
   const sw = p.locator('[data-screen-label="C3 Swap panel"]');
-  check(await sw.locator('button[disabled]').count() === 0 && await sw.locator('[data-bridge="swap-check"]').count() >= 3 && /Muriel Siebert/i.test(await sw.innerText()) && !/Muhammad Ali · Miami/i.test(await sw.innerText()), 'Swap offers Check the source on the drafts nearest the member, leaving out the life Michael had last week');
+  check(await sw.locator('button[disabled]').count() === 0 && await sw.locator('[data-bridge="swap-check"]').count() >= 3 && /John Coltrane, New York 1957/i.test(await sw.innerText()) && !/Muhammad Ali, /i.test(await sw.innerText()), 'Swap offers Check the source on the week’s drafts as the line ranks them (CLN.nextFor), leaving out the life Michael had last week');
   await p.evaluate(() => CLB.c.setState({ swapFor: null })); await p.waitForTimeout(150);
   await p.locator('button[aria-label="Library"]').click();
   const cf = p.frameLocator('iframe[title="The Constellation library"]');
@@ -207,43 +209,44 @@ try {
   await p.click('button[title^="10 ·"]'); await p.waitForTimeout(400);
   const notice = await p.evaluate(() => CPE.vals(CLB.c).cn.text), row = async () => p.evaluate(() => { const r = CPE.vals(CLB.c).rq.rows.find((x) => x.mid === 'sarah'); return { status: r.status, guard: r.guard, s: r.s && r.s.eyebrow, fill: r.fill && r.fill.title }; });
   const r0 = await row();
-  check(/^Two stories go out at 18:00\. Sarah’s and David’s wait for your check\.$/.test(notice) && /^Waiting for your check/.test(r0.status) && /had Obama on 12 Oct/.test(r0.guard) && /Jimmy Carter/.test(r0.fill), 'nothing unchecked goes out: Sarah’s paired draft waits, the row names the life she had last week, and the check offered is a new one');
+  check(/^Two stories go out at 18:00\. Sarah’s and David’s wait for your check\.$/.test(notice) && /^Waiting for your check/.test(r0.status) && /had Obama on 12 Oct/.test(r0.guard) && r0.fill === 'Michelle Obama, Milwaukee 2008', 'nothing unchecked goes out: Sarah’s paired draft waits, the row names the life she had last week, and the check offered is a new one');
   await p.evaluate(() => CLB.c.setState({ review: Object.assign({}, CLB.c.state.review, { sarah: { action: 'swap', story: 'st-bjk-1973-riggs' } }) })); await p.waitForTimeout(200);
   const r1 = await row();
   check(/^Billie Jean King/.test(r1.s) && /^Goes to Sarah at 18:00/.test(r1.status), 'a swap wins over the pairing, and the row says when it goes');
   await p.evaluate(() => CLB.c.setState({ review: Object.assign({}, CLB.c.state.review, { sarah: {} }), c: 'C3', cnotif: null, rvAll: false })); await p.waitForTimeout(300);
   // "Your week, Jim": one line per member of this coach, each with one action, and the checks to make first
   const wk = await p.evaluate(() => { const root = document.querySelector('[data-screen-label="C3 Review queue"]'), ls = [...root.querySelectorAll('[data-bridge="review-line"]')];
-    return { title: CPE.vals(CLB.c).cTitle, names: ls.map((x) => x.innerText.split('\n')[1] || x.innerText), acts: ls.map((x) => [...x.querySelectorAll('button')].map((b) => b.innerText.trim()).filter((t) => /^(Approve|Check|Answer|Prep|Swap in)$/.test(t)).slice(-1)[0] || ''),
-      sarah: (ls.find((x) => /Sarah Kessler/.test(x.innerText)) || { innerText: '' }).innerText.replace(/\s+/g, ' '), counts: [CPE.vals(CLB.c).rosterSummary, CPE.vals(CLB.c).rq.count, (CPE.vals(CLB.c).nav.find((n) => n.label === 'Review') || {}).badge], plan: (root.querySelector('[data-bridge="review-plan"]') || {}).innerText || '', bulk: root.firstElementChild.innerText, details: root.querySelectorAll('[data-bridge="review-why"]').length }; });
-  check(wk.title === 'Your week, Jim' && wk.names.join() === 'David Okafor,Sarah Kessler,Priya Raman,Tom Whitfield' && wk.acts.join() === 'Check,Swap in,Approve,Approve' && !wk.details &&
-    /Thu 22 Oct · Reorg announcement · E1 · Everything you do gets read as a signal/.test(wk.sarah) && /Ready now · Billie Jean King, Houston/.test(wk.sarah) && /Or one check · Jimmy Carter/.test(wk.sarah) && /You meet Tue 10:00 · Prep/.test(wk.sarah),
+    return { title: CPE.vals(CLB.c).cTitle, names: ls.map((x) => x.innerText.split('\n')[1] || x.innerText), acts: ls.map((x) => [...x.querySelectorAll('button')].map((b) => b.innerText.trim()).filter((t) => /^(Approve|Check|Answer|Prep|Send .+)$/.test(t)).slice(-1)[0] || ''),
+      sarah: (ls.find((x) => /Sarah Kessler/.test(x.innerText)) || { innerText: '' }).innerText.replace(/\s+/g, ' '), david: (ls.find((x) => /David Okafor/.test(x.innerText)) || { innerText: '' }).innerText.replace(/\s+/g, ' '), counts: [CPE.vals(CLB.c).rosterSummary, CPE.vals(CLB.c).rq.count, (CPE.vals(CLB.c).nav.find((n) => n.label === 'Review') || {}).badge], plan: (root.querySelector('[data-bridge="review-plan"]') || {}).innerText || '', bulk: root.firstElementChild.innerText, details: root.querySelectorAll('[data-bridge="review-why"]').length }; });
+  check(wk.title === 'Your week, Jim' && wk.names.join() === 'David Okafor,Sarah Kessler,Priya Raman,Tom Whitfield' && wk.acts.join() === 'Check,Send Michelle Obama,Approve,Approve' && !wk.details &&
+    /Thu 22 Oct · Reorg announcement · E1 · Everything you do gets read as a signal/.test(wk.sarah) && /Ready now · Michelle Obama, Philadelphia 2016/.test(wk.sarah) && /Or one check · Michelle Obama, Milwaukee 2008/.test(wk.sarah) && /You meet Tue 10:00 · Prep/.test(wk.sarah),
     `Review reads "Your week, Jim": a line for each of Jim's four members, those waiting for a check first, each with one action (${wk.acts.join(', ')})`);
   check(/2 wait for your check/.test(wk.counts[0]) && /2 wait for your check/.test(wk.counts[1]) && wk.counts[2] === 2, `the 18:00 notice, Members, Review and the badge give one count (${wk.counts.join(' | ')})`);
-  check(/For the weeks ahead/i.test(wk.plan) && /After the check above, eight more give each of your members four/.test(wk.plan) && /Golda Meir[^\n]*\nGives David and Priya a story\. Golda Meir is one of Priya’s three\./.test(wk.plan) && /Approve the two ready/.test(wk.bulk), 'below the lines, the checks for the weeks ahead after this week’s; and the bulk approve counts only what can go');
-  // Swap in: a checked story that carries the week goes at once, with no check
-  await p.locator('[data-bridge="review-line"]', { hasText: 'Sarah Kessler' }).locator('button', { hasText: 'Swap in' }).click(); await p.waitForTimeout(300);
+  check(/For the weeks ahead/i.test(wk.plan) && /After David’s check, \S+ more give each of your members four checked stories\./.test(wk.plan) && /\nFor (Sarah|David|Priya|Tom), week of \d+ (Oct|Nov)/.test(wk.plan) && !/Golda Meir/.test(wk.plan) && /One check · Billie Jean King, United States, 1970 and 1971 Or one check · Golda Meir, Chicago 1948/.test(wk.david) && /Approve the two ready/.test(wk.bulk), 'below the lines, the checks for the weeks after this one; Golda Meir, who carries David’s week, is his line’s other check; and the bulk approve counts only what can go');
+  // Send: a checked story that carries the week goes at once, with no check, and the button names it
+  await p.locator('[data-bridge="review-line"]', { hasText: 'Sarah Kessler' }).locator('button', { hasText: 'Send Michelle Obama' }).click(); await p.waitForTimeout(300);
   const rs = await row();
-  check(/^Billie Jean King/.test(rs.s) && /^Goes to Sarah at 18:00/.test(rs.status), 'Swap in sends the checked Billie Jean King story to Sarah at 18:00, with no check needed');
+  check(/^Michelle Obama/.test(rs.s) && /^Goes to Sarah at 18:00/.test(rs.status) && await p.evaluate(() => CLB.c.state.ctoast) === 'Michelle Obama, Philadelphia 2016 goes to Sarah at 18:00.', 'Send Michelle Obama sends the checked story to Sarah at 18:00, with no check needed, and the toast names it by its title');
   await p.evaluate(() => CLB.c.setState({ review: Object.assign({}, CLB.c.state.review, { sarah: {} }) })); await p.waitForTimeout(200);
   await p.locator('[data-bridge="review-line"]', { hasText: 'Sarah Kessler' }).locator('button', { hasText: 'Details' }).click(); await p.waitForTimeout(250);
   await p.locator('[data-bridge="review-fill"] button', { hasText: 'Check the source here' }).first().click(); await p.waitForTimeout(300);
   const posted = []; await p.route('**/api/constellation/state/ledger', (rt) => { if (rt.request().method() === 'POST') { posted.push(JSON.parse(rt.request().postData())); return rt.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); } return rt.continue(); });
   const cc = p.locator('[data-bridge="check-card"]').first(), ccSend = cc.locator('button').first();
   const ccDis = await ccSend.isDisabled();
-  await cc.locator('input').fill('Carter, inaugural address, Georgia State Archives'); await p.waitForTimeout(150);
+  await cc.locator('input').fill('Campaign remarks, Milwaukee, video transcript'); await p.waitForTimeout(150);
   await ccSend.click(); await p.waitForTimeout(600);
   const r2 = await row();
-  check(ccDis && posted.length === 1 && posted[0].by === 'jim' && posted[0].note && /^Jimmy Carter/.test(r2.s) && /^Goes to Sarah/.test(r2.status), 'the check card needs a note, records the console’s coach, and fills the slot');
+  check(ccDis && posted.length === 1 && posted[0].by === 'jim' && posted[0].note && posted[0].story === 's-E1-michelle-obama' && /^Michelle Obama/.test(r2.s) && /^Goes to Sarah/.test(r2.status), 'the check card needs a note, records the console’s coach, and fills the slot');
   await p.unroute('**/api/constellation/state/ledger');
-  await p.evaluate(() => { window.postMessage({ type: 'cl:unverified', story: 's-A3-jimmy-carter' }, location.origin); CLB.c.setState({ review: Object.assign({}, CLB.c.state.review, { sarah: {} }), fillOpen: null }); }); await p.waitForTimeout(300);
+  await p.evaluate(() => { window.postMessage({ type: 'cl:unverified', story: 's-E1-michelle-obama' }, location.origin); CLB.c.setState({ review: Object.assign({}, CLB.c.state.review, { sarah: {} }), fillOpen: null }); }); await p.waitForTimeout(300);
   await p.click('button[title^="11 ·"]'); await p.waitForTimeout(300);
   await p.locator('button[aria-label="Member"]').click(); await p.evaluate(() => CLB.c.setState({ m: 'app', tab: 'week', overlay: null })); await p.waitForTimeout(400);
-  check(/Your story comes once Jim has checked it/.test(await p.locator('[data-screen-label="M6 This week"]').innerText()), 'a held week tells the member why');
-  const wait = await p.evaluate(() => (CPE.vals(CLB.c).wk.wait || {}).text || '');
-  check(/^While you wait: /.test(wait), `a held week still opens the corpus (${wait})`);
-  await p.evaluate(() => CPE.vals(CLB.c).wk.wait.go()); await p.waitForTimeout(400);
-  check(await p.evaluate(() => CLB.state().overlay) === 'story', 'While you wait opens its story in the app');
+  const held = await p.locator('[data-screen-label="M6 This week"]').innerText(), waitT = await p.locator('[data-bridge="week-wait"]').innerText().catch(() => '');
+  check(/Your story comes once Jim has checked it/.test(held), 'a held week tells the member why');
+  const waitL = waitT.split('\n');
+  check(/While you wait/i.test(held) && /^While you wait$/i.test(waitL[0]) && / · /.test(waitL[1] || '') && /^(Checked\. |Recall draft\. Jim checks it before it is sent\. )/.test(waitL[2] || ''), `a held week still opens the corpus, on screen (${waitL.join(' / ')})`);
+  await p.locator('[data-bridge="week-wait"]').click(); await p.waitForTimeout(400);
+  check(await p.evaluate(() => CLB.state().overlay) === 'story' && (await p.locator('[data-screen-label="M7 Story"]').innerText()).startsWith((waitL[1] || '?').split(' · ')[0]), 'While you wait opens its story in the app');
   // the reader keeps their place: a story opened from another starts at its top, and Back returns to where they were
   const FIND = `(() => { const pane = document.querySelector('[data-screen-label="M7 Story"]'); return pane && [pane, ...pane.querySelectorAll('div')].find((e) => { const oy = getComputedStyle(e).overflowY; return (oy === 'auto' || oy === 'scroll') && e.scrollHeight > e.clientHeight; }); })()`;
   await p.evaluate(() => CLB.c.setState({ overlay: 'story', sid: 'st-obama-2008-clinton', sctx: {}, sstack: [] })); await p.waitForTimeout(400);
@@ -327,6 +330,74 @@ try {
   check(await ph.evaluate(() => CLB.state().clock) === 1, 'the stepper moves the demo clock');
   await ph.close();
 
+  console.log('while you wait, on a phone');
+  // Maya's first week waits for Bret's check: This week shows the story that fits her best, a tap opens it, and Back
+  // returns to the week where she left it
+  const mw = await browser.newPage({ viewport: { width: 390, height: 640 }, hasTouch: true, isMobile: true });
+  watch(mw, 'while you wait');
+  await mw.goto(BASE + '/constellation'); await mw.waitForFunction(() => window.CLB && CLB.ready && CLB.c, null, { timeout: 20000 });
+  await mw.evaluate(() => CPE.vals(CLB.c).personas.find((x) => /^Maya/.test(x.label)).go()); await mw.waitForTimeout(300);
+  const WBOX = `(() => { let b = document.querySelector('[data-screen-label="M6 This week"]'); while (b && !/(auto|scroll)/.test(getComputedStyle(b).overflowY)) b = b.parentElement; return b; })()`;
+  for (const step of [6, 7, 8]) {
+    await mw.evaluate((i) => CPE.vals(CLB.c).steps[i - 1].go(), step); await mw.waitForTimeout(500);
+    const wkT = await mw.locator('[data-screen-label="M6 This week"]').innerText(), wrow = mw.locator('[data-bridge="week-wait"]'), wl = (await wrow.innerText()).split('\n');
+    const top0 = await mw.evaluate((F) => { const b = eval(F); b.scrollTop = b.scrollHeight; return b.scrollTop; }, WBOX);
+    await wrow.tap(); await mw.waitForTimeout(500);
+    const opened = await mw.locator('[data-screen-label="M7 Story"]').innerText().catch(() => '');
+    await mw.locator('[data-screen-label="M7 Story"] button').first().tap(); await mw.waitForTimeout(500);
+    const back = await mw.evaluate((F) => ({ overlay: CLB.state().overlay, top: eval(F) ? eval(F).scrollTop : -1 }), WBOX);
+    check(/While you wait/i.test(wkT) && !/Hamilton/.test(wkT) && wl[1] === 'Michelle Obama · Philadelphia, July 2016' && wl[2] === 'Checked. From your fourth hero, for a week when everything you do gets read as a signal.' &&
+      /^Michelle Obama\nPHILADELPHIA, JULY 2016/i.test(opened) && back.overlay === null && top0 > 0 && back.top === top0,
+      `Maya, step ${step}: This week shows While you wait, a tap opens the story, and Back returns to the week at the same scroll (${top0} → ${back.top})`);
+  }
+  await mw.close();
+
+  console.log('one answer per member and week');
+  // the line, its Details and the Ask reply give one story ready now; no two buttons in a row name different stories
+  // alike; every title on Review is one story's; and the plan's checks send nothing
+  const q4 = await browser.newPage({ viewport: { width: 1920, height: 1000 } });
+  watch(q4, 'one answer');
+  await q4.goto(BASE + '/constellation'); await q4.waitForFunction(() => window.CLB && CLB.ready && CLB.c, null, { timeout: 20000 });
+  const one = [];
+  for (const persona of ['Sarah', 'Maya', 'Michael']) {
+    await q4.locator('button', { hasText: persona + ',' }).first().click(); await q4.waitForTimeout(300);
+    await q4.click('button[title^="10 ·"]'); await q4.waitForTimeout(400);
+    one.push(...await q4.evaluate(async () => {
+      const tick = () => new Promise((ok) => setTimeout(ok, 40)), out = [];
+      CLB.c.setState({ role: 'coach', c: 'C3', cnotif: null, rvAll: false }); await tick();
+      const mids = CPE.vals(CLB.c).rq.rows.map((r) => r.mid), mm = Object.assign({}, CLB.c.state.msgs), q = (mid) => CLB.lib.members[mid].ask1 || CLB.lib.members[mid].up19.label;
+      mids.forEach((mid) => { const sit = CLB.lib.sit[CLB.lib.members[mid].up19.sit]; mm[mid] = (mm[mid] || []).concat([{ id: 'one-' + mid, from: 'member', kind: 'ask', body: q(mid), chip: sit.chip, day: 18, at: 'Sun 18 Oct, 11:40', live: true }]); });
+      CLB.c.setState({ msgs: mm }); await tick();
+      for (const mid of mids) {
+        const asked = {}; asked[mid] = q(mid);
+        CLB.c.setState({ c: 'C3', rvOpen: mid, rvAsked: asked }); await tick();
+        const r = CPE.vals(CLB.c).rq.rows.find((x) => x.mid === mid), cards = (r.q && r.q.res && r.q.res.cards) || [];
+        CLB.c.setState({ c: 'C8', thread: mid }); await tick();
+        const m = ((CPE.vals(CLB.c).msg || {}).list || []).find((x) => x.id === 'one-' + mid);
+        out.push({ mid, line: r.ready ? r.ready.id : null, details: cards[0] && cards[0].label === 'Ready now' ? cards[0].id : null, reply: m && m.reply ? m.reply.id : null,
+          sends: (r.act && /^Send /.test(r.act.label) ? [[r.act.label, r.ready.id]] : []).concat(cards.filter((k) => k.swap).map((k) => [k.sendLabel, k.id])),
+          titles: [r.ready && [r.ready.title, r.ready.id], r.fill && [r.fill.title, r.fill.id]].filter(Boolean).concat(cards.map((k) => [k.title, k.id])) });
+      }
+      CLB.c.setState({ c: 'C3', rvOpen: null, planAll: true }); await tick();
+      const plan = CPE.vals(CLB.c).rq.plan, cardsP = [];
+      for (const it of (plan && plan.items) || []) { CLB.c.setState({ planOpen: it.id }); await tick(); const c0 = CPE.vals(CLB.c).rq.plan.items.find((x) => x.id === it.id).card; cardsP.push(c0 ? c0.sendLabel + (c0.both ? '+only' : '') : 'none'); }
+      const planBtns = [...document.querySelectorAll('[data-bridge="review-plan"] button')].map((b) => b.innerText.trim());
+      CLB.c.setState({ planOpen: null, planAll: false });
+      if (plan) out.push({ mid: 'plan', titles: plan.items.map((it) => [it.title, it.id]), cardsP, planBtns });
+      return out;
+    }));
+  }
+  const rows4 = one.filter((x) => x.mid !== 'plan'), agree = rows4.filter((x) => x.line === x.details && x.details === x.reply);
+  check(rows4.length === 6 && agree.length === 6 && rows4.some((x) => x.line), `the line, Details and the Ask reply offer the same story ready now, for all six members (${rows4.map((x) => x.mid + ':' + [x.line, x.details, x.reply].join('/')).join('; ')})`);
+  const clashes = rows4.filter((x) => { const by = {}; x.sends.forEach(([l, id]) => { (by[l] = by[l] || new Set()).add(id); }); return Object.values(by).some((v) => v.size > 1); });
+  check(!clashes.length && rows4.some((x) => x.sends.length), `no two buttons in a row share a label while naming different stories${clashes.length ? ' (' + clashes.map((x) => x.mid).join(', ') + ')' : ''}`);
+  const byTitle = {}; one.forEach((x) => x.titles.forEach(([t, id]) => { (byTitle[t] = byTitle[t] || new Set()).add(id); }));
+  const twice = Object.keys(byTitle).filter((t) => byTitle[t].size > 1);
+  check(Object.keys(byTitle).length > 5 && !twice.length, `every story title on Review names one story${twice.length ? ' (' + twice.join('; ') + ')' : ''}`);
+  const planP = one.filter((x) => x.mid === 'plan');
+  check(planP.length && planP.every((x) => x.cardsP.length && x.cardsP.every((l) => l === 'Mark it checked') && !x.planBtns.some((b) => /Send|Checked only/.test(b))), `no plan card offers a send (${planP.map((x) => x.cardsP.length).join(', ')} cards)`);
+  await q4.close();
+
   console.log('library');
   const routes = ['#/', '#/situations', '#/situation/A2', '#/situation/E4?f=near', '#/people', '#/people?field=sport&sort=year', '#/eras', '#/era/1970s', '#/era/before-1800',
     '#/field/law', '#/stance/weight', '#/search?q=wimbledon', '#/search?q=1963', '#/icon/sun-tzu', '#/icon/reshma-saujani', '#/icon/obama', '#/story/st-bjk-1973-riggs',
@@ -374,6 +445,8 @@ try {
         check(await q.locator('.list.shelf li').count() > 20 && /For Sarah this week/.test(await q.locator('main').innerText()), 'the shelf of coach questions counts every answer, Sarah’s week first');
         await q.evaluate(() => { location.hash = '#/near?m=sarah'; }); await q.waitForSelector('#venn svg circle.n-set');
         check(await q.locator('#venn circle.n-set').count() === 3 && /Billie Jean King/.test(await q.locator('.n-sent').innerText()), 'Sarah’s three situations draw as circles, and the bridge across all three is named');
+        const near = await q.evaluate(() => { const ws = [...document.querySelectorAll('.n-why, .standin')].map((e) => e.innerText.split('\n').pop()); return { back: ws.filter((w) => /for the reasons given above\.$/.test(w)).length, twice: ws.filter((w, i) => /^(Close to|Nearest to)/.test(w) && /\. Both/.test(w) && ws.indexOf(w) !== i).length, king: ws.filter((w) => /Billie Jean King/.test(w) && /\. Both had every act/.test(w)).length + ws.filter((w) => /^Close to Barack Obama\. Both had every act read as a signal\. Both became the boss/.test(w)).length }; });
+        check(near.back >= 1 && !near.twice && near.king === 1, `a tie two lives share is said once on the near page, and pointed back to after (${near.back} pointers)`);
       }
       await q.evaluate(() => { location.hash = '#/'; }); await q.waitForSelector('#map svg .hit');
       await q.locator('#map svg .hit[data-id="billie-jean-king"]').dispatchEvent('mousemove');
@@ -382,7 +455,7 @@ try {
       check(sweep.n > 400 && sweep.ok > 300 && sweep.none > 0, `every star can be hovered: ${sweep.ok} draw threads, ${sweep.none} have no story and draw none`);
       await q.evaluate(() => { location.hash = '#/situation/E1'; }); await q.waitForSelector('.mfam[data-fam]');
       const fam = await q.evaluate(() => ({ cards: document.querySelectorAll('.mfam[data-fam]').length, lede: (document.querySelector('.mfams') || { previousElementSibling: null }).previousElementSibling ? document.querySelector('.mfams').previousElementSibling.innerText : '', rows: document.querySelectorAll('.mfam[data-fam] .mf-row').length }));
-      check(fam.cards === 9 && fam.rows === 25, `a situation's stories draw as families of moves: nine families holding 25 of E1's stories (${fam.cards}, ${fam.rows})`);
+      check(fam.cards === 7 && fam.rows === 27, `a situation's stories draw as families of moves: seven families holding 27 of E1's stories (${fam.cards}, ${fam.rows})`);
       await q.evaluate(() => { location.hash = '#/'; }); await q.waitForSelector('#map svg .hit');
       const top = await q.evaluate(() => { const st = document.querySelector('#map svg').getBoundingClientRect().top; let worst = 1e9; document.querySelectorAll('#map svg .hit').forEach((c) => { c.dispatchEvent(new MouseEvent('mousemove', { bubbles: true })); document.querySelectorAll('#map .thread').forEach((t) => { worst = Math.min(worst, t.getBoundingClientRect().top - st); }); }); return worst; });
       check(top > 0, `no thread leaves the top of the map (highest ${top.toFixed(1)}px below it)`);
@@ -418,6 +491,22 @@ try {
       await q.evaluate(() => { location.hash = '#/cmp?a=st-bjk-1973-riggs&b=s-A2-barack-obama'; }); await q.waitForSelector('table.cmp');
       check(await q.locator('table.cmp tbody tr').count() >= 3 && await q.locator('.cmpcol').count() === 2, 'two stories compare side by side, facts only');
     }
+    if (w < 500) {
+      await q.evaluate(() => { location.hash = '#/situation/E1'; }); await q.waitForSelector('.mfam[data-fam]'); await q.evaluate(() => document.fonts.ready);
+      const mv = await q.evaluate(() => { const m = document.querySelector('#moves'), d = m.querySelector('details.mf-more');
+        return { h: Math.round(m.getBoundingClientRect().height), joined: m.querySelectorAll('.mf-j, button[data-act="mjoin"]').length, drafts: [...m.querySelectorAll('.mf-row')].filter((r) => /Recall draft/.test(r.innerText)).length,
+          rows: m.querySelectorAll('.mf-row').length, mv: m.querySelectorAll('.mf-row .mv').length, open: m.querySelectorAll(':scope > .mfams > .mfam[data-fam]').length, folded: d ? d.querySelectorAll('.mfam[data-fam]').length : 0,
+          summary: d ? d.querySelector('summary').innerText : '', cap: m.querySelector('.mf-c').innerText, onlyLinks: [...m.querySelectorAll('.mf-rows')].every((ol) => !ol.querySelector('button') && [...ol.children].every((li) => li.querySelector(':scope > a.mf-a'))) }; });
+      check(mv.h < 1500 && !mv.joined && !mv.drafts && mv.rows === mv.mv && mv.open === 3 && mv.folded === 4 && mv.onlyLinks && /^Four more families, and 14 moves of their own$/.test(mv.summary) && /^Eight stories, all recall drafts$/.test(mv.cap),
+        `${as} 390px: E1's families are lists of links, each row saying its own move, three open and the rest folded, in ${mv.h}px (${mv.summary}; ${mv.cap})`);
+      const arcs = await q.evaluate(async () => { const d = document.querySelector('#moves details.mf-more'), svgs = [...d.querySelectorAll('.mf-arcs')];
+        svgs.forEach((sv) => { sv.innerHTML = ''; sv.setAttribute('height', '0'); }); d.open = true; await new Promise((r) => setTimeout(r, 300));
+        return svgs.every((sv) => { const ol = sv.parentNode.querySelector('.mf-rows'); return +sv.getAttribute('height') === ol.offsetHeight && ol.offsetHeight > 0 && sv.querySelectorAll('circle').length === ol.children.length && sv.querySelectorAll('path').length >= 1; }); });
+      check(arcs, `${as} 390px: the folded families draw their arcs when they open`);
+      await q.evaluate(() => { location.hash = '#/story/s-B4-constance-baker-motley'; }); await q.waitForSelector('.samemove');
+      const sm = await q.locator('.samemove').innerText();
+      check(/^The same move in another week: Charlotte Beers, 1970, C1 · Selling what you used to make\s+Motley: tell the partner leading it which part you will present\.\s+Beers: ask the partner leading it for one section you will present alone, and present it\.$/.test(sm.trim()), 'the same move in another week says the clause each story makes it in (' + sm.replace(/\n+/g, ' / ') + ')');
+    }
     if (as === 'reader' && w < 500) {
       const mctx = await browser.newContext({ viewport: { width: w, height: h }, colorScheme: scheme });
       const mm = await mctx.newPage(); watch(mm, 'library member words');
@@ -429,6 +518,12 @@ try {
       }
       const h390 = await mm.evaluate(async () => { location.hash = '#/situation/E1'; await new Promise((ok) => setTimeout(ok, 400)); return document.documentElement.scrollHeight; });
       check(!codes.length && h390 < 7000, `a member reads situations in words, with no codes, and a situation page stays short on a phone (${h390}px${codes.length ? '; ' + codes.join('; ') : ''})`);
+      await mm.evaluate(() => { location.hash = '#/situations'; }); await mm.waitForSelector('.ladder .rows li[data-id]');
+      await mm.locator('.ladder .rows li[data-id="A1"] button').click();
+      const lad = await mm.locator('.ladder li.on .pane').innerText();
+      check(/Open: Nobody told you what the job asks/.test(lad) && !/\b[A-E][1-6]\b/.test(lad), 'a member opens a situation from the ladder by its words (' + lad.split('\n').pop() + ')');
+      await mm.evaluate(() => { location.hash = '#/story/s-B4-constance-baker-motley'; }); await mm.waitForSelector('.samemove');
+      check(/^The same move in another week: Charlotte Beers, 1970, Selling what you used to make\n/.test(await mm.locator('.samemove').innerText()), 'a member reads the same move in another week with no code');
       await mctx.close();
       const tctx = await browser.newContext({ viewport: { width: w, height: h }, hasTouch: true, isMobile: true, colorScheme: scheme });
       const t = await tctx.newPage(); watch(t, 'library map touch');

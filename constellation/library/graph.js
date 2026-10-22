@@ -344,7 +344,7 @@
       pane.innerHTML = mine2.length ? mine2.slice(0, 6).map(function (p) {
         var other = lib.sit[p.a === id ? p.b : p.a];
         return '<p><a href="#/situation/' + esc(other.id) + '">' + esc(asMember() ? other.chip : other.id + ' · ' + other.chip) + '</a> · ' + n(p.lives.length) + ': ' + list(p.lives.map(function (x) { return '<a href="#/icon/' + esc(x) + '">' + esc(lib.icon[x].name) + '</a>'; })) + '</p>';
-      }).join('') + (mine2.length > 6 ? '<p>And ' + (mine2.length - 6) + ' more situations.</p>' : '') + '<p><a href="#/situation/' + esc(id) + '">Open ' + esc(id) + '</a></p>' : '<p>No life in the library has a story here and in another situation yet.</p>';
+      }).join('') + (mine2.length > 6 ? '<p>And ' + (mine2.length - 6) + ' more situations.</p>' : '') + '<p><a href="#/situation/' + esc(id) + '">' + esc(asMember() ? 'Open: ' + lib.sit[id].chip : 'Open ' + id) + '</a></p>' : '<p>No life in the library has a story here and in another situation yet.</p>';
       pane.hidden = false;
     });
     if (o.open) { var ob = rows.querySelector('li[data-id="' + o.open + '"] button'); if (ob) ob.click(); }

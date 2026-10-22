@@ -31,6 +31,12 @@ for (const f of ['../js/constellation-proto-data.js']) {
   const src = fs.readFileSync(path.join(HERE, f), 'utf8');
   for (const m of src.matchAll(/'((?:[^'\\]|\\.){12,})'|"((?:[^"\\]|\\.){12,})"/g)) own.add((m[1] || m[2]).replace(/\\'/g, "'").replace(/\\"/g, '"'));
 }
+// the clauses the Library quotes from a story's moves (a family's rows, the same move in another week) are the story's
+// words as well, with a capital or without one
+{
+  const req = createRequire(import.meta.url), CLC = req('../lib/core.js'), CLN = req('../lib/net.js');
+  for (const cs of Object.values(CLN.moveVectors(CLC.merge(corpus, demo)).clauses)) for (const c of cs) if (c.text.length >= 12) [c.text, CLC.cap1(c.text), CLC.lowerFirst(c.text)].forEach((t) => own.add(t));
+}
 const ownList = [...own].sort((a, b) => b.length - a.length);
 const KEYS = corpus.situations.map((s) => s.match_key).filter(Boolean);
 function residue(text) {
@@ -52,6 +58,8 @@ const RULES = [
   ['engine words', /\bpaired\b|\bslot\b|\bReachability\b|\bKeys inferred\b|\bthe rule proposes\b|\bauto-send\b/i],
   ['a broken join', /a week where there|Leads by [A-Z]|\bLeads by \(proposed\)/],
 ];
+// what only a member must not read: a situation's code where its words belong
+const MEMBER_RULES = [['a situation code where a member reads words', /\bOpen [A-E][1-6]\b/]];
 
 const port = await new Promise((r) => { const s = net.createServer(); s.listen(0, () => { const p = s.address().port; s.close(() => r(p)); }); });
 const server = spawn(process.execPath, [path.join(HERE, '../tools/dev-server.mjs'), String(port)], { stdio: 'ignore' });
@@ -102,6 +110,11 @@ try {
     await page.goto(`${BASE}/constellation/library?as=${as}&m=sarah#/`); await page.waitForSelector('main h1');
     const all = routes.concat(as === 'coach' ? ['#/checks', '#/member/sarah', '#/gaps', '#/near?m=sarah', '#/age?m=sarah'] : as === 'member' ? ['#/near', '#/age', '#/member/sarah'] : []);
     for (const r of all) { await page.evaluate((r) => { location.hash = r; }, r); await page.waitForTimeout(250); screens.push({ label: `library ${as} ${r}`, text: await page.evaluate(() => document.body.innerText) }); }
+    // a situation opened in the ladder, and E1's folded families
+    await page.evaluate(() => { location.hash = '#/situations'; }); await page.waitForTimeout(250); await page.locator('.ladder .rows li[data-id] button').first().click(); await page.waitForTimeout(150);
+    screens.push({ label: `library ${as} #/situations, a row open`, text: await page.evaluate(() => document.body.innerText) });
+    await page.evaluate(() => { location.hash = '#/situation/E1'; }); await page.waitForTimeout(250); await page.evaluate(() => { const d = document.querySelector('#moves details'); if (d) d.open = true; });
+    screens.push({ label: `library ${as} #/situation/E1, every family open`, text: await page.evaluate(() => document.body.innerText) });
     await page.close();
   }
 } finally {
@@ -112,7 +125,7 @@ let bad = 0;
 const seen = new Set();
 for (const s of screens) {
   const r = residue(s.text);
-  for (const [name, re] of RULES) {
+  for (const [name, re] of RULES.concat(s.label.startsWith('library member') ? MEMBER_RULES : [])) {
     const g = new RegExp(re.source, re.flags.includes('g') ? re.flags : re.flags + 'g');
     for (const m of r.matchAll(g)) {
       const at = r.slice(Math.max(0, m.index - 50), m.index + m[0].length + 50).replace(/\s+/g, ' ').trim(), key = name + '|' + at;
