@@ -84,6 +84,10 @@ page = page.replace('<meta charset="utf-8">\n<meta name="viewport" content="widt
 # the export's "Made with Claude Design" badge is the design tool's, not the product's
 page, n = re.subn(r'<div id="__claude_design_branding".*?</div>(?=</body>)', '', page, flags=re.S)
 if not n: raise SystemExit("design-tool badge not found; check the export")
+# the corpus connection and the Library: re-applied to every export (see tools/patches.py)
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from patches import apply as apply_patches
+page, patched = apply_patches(page)
 (OUT / "index.html").write_text(page, encoding="utf-8")
 
 # icons: vendor the Phosphor weights the design uses and point its loader at them

@@ -1,0 +1,3919 @@
+{
+ "meta": {
+  "built_from": [
+   "js/constellation-proto-data.js",
+   "data/corpus.json"
+  ],
+  "corpus_commit": "971a206",
+  "note": "Sample data. Members and companies are fictional. Heroes are real people."
+ },
+ "coaches": {
+  "jim": {
+   "id": "jim",
+   "name": "Jim Elms",
+   "first": "Jim",
+   "ini": "JE",
+   "title": "Lead coach",
+   "spec": "General leadership",
+   "pro": "He"
+  },
+  "bret": {
+   "id": "bret",
+   "name": "Bret Leece",
+   "first": "Bret",
+   "ini": "BL",
+   "title": "Coach",
+   "spec": "Analytics, research and product leaders, and the politics around them",
+   "pro": "He"
+  },
+  "jennifer": {
+   "id": "jennifer",
+   "name": "Jennifer Talbott",
+   "first": "Jennifer",
+   "ini": "JT",
+   "title": "Coach",
+   "spec": "Personal brand and voice",
+   "pro": "She"
+  }
+ },
+ "members": {
+  "sarah": {
+   "id": "sarah",
+   "name": "Sarah Kessler",
+   "first": "Sarah",
+   "ini": "SK",
+   "sex": "f",
+   "age": 41,
+   "born": 1985,
+   "gen": "Millennial, older",
+   "grew": "United States",
+   "coach": "jim",
+   "status": "oc",
+   "last": "2 days ago",
+   "move": "Give the person who wanted your job the best work, in front of the room.",
+   "events": [],
+   "role": "Group account director, newly promoted",
+   "co": "Northlight",
+   "goal": "Running the group a year from now, and the obvious choice for the next one.",
+   "sits": [
+    "A2",
+    "E1",
+    "D3"
+   ],
+   "ints": [
+    "Sport",
+    "Music"
+   ],
+   "core": [
+    "obama",
+    "serena",
+    "rihanna"
+   ],
+   "reserve": "michelle",
+   "finalists": [
+    "obama",
+    "serena",
+    "rihanna",
+    "michelle"
+   ],
+   "keep3": [
+    "obama",
+    "serena",
+    "rihanna"
+   ],
+   "next": "Tue 20 Oct, 10:00",
+   "up19": {
+    "label": "Thu 22 Oct · Reorg announcement",
+    "sit": "E1"
+   },
+   "fit": {
+    "obama": [
+     "up",
+     "His record is full of rivals kept close. That's the room you're walking into."
+    ],
+    "serena": [
+     "partly",
+     "Her stories are mostly about owning the stage. Useful for some of your weeks, not all."
+    ],
+    "rihanna": [
+     "partly",
+     "Mostly about building something of your own. Useful for the weeks you're making the group yours."
+    ]
+   },
+   "mv": {
+    "sit": "A2",
+    "trigger": "Your first full group meeting, week one.",
+    "behaviour": "Give the person who wanted your job the best work, in front of the room.",
+    "grain": "Out of the way (giving credit)",
+    "failure": "You'll do it privately, to spare his feelings. Privately it reads as a consolation prize. It only works where it's witnessed.",
+    "obs": "The handover happened where others saw it.",
+    "retire": "He raises things with you unprompted."
+   },
+   "micro": [
+    {
+     "w": 1,
+     "b": "Give him the account, in the room.",
+     "o": "The room saw the handover.",
+     "ins": {
+      "story": "st-obama-2008-clinton",
+      "src": "core"
+     }
+    },
+    {
+     "w": 2,
+     "b": "Ask him for the number, out loud.",
+     "o": "He answered in front of the group.",
+     "ins": {
+      "story": "st-obama-1990-law-review",
+      "src": "core"
+     }
+    },
+    {
+     "w": 4,
+     "b": "Let his call stand when you'd have changed it.",
+     "o": "You did not reverse it.",
+     "ins": {
+      "story": "st-schultz-1987-seattle",
+      "src": "coach"
+     }
+    },
+    {
+     "w": 6,
+     "b": "Say his name to the client, first.",
+     "o": "The client heard his name from you.",
+     "ins": null
+    }
+   ],
+   "line": {
+    "text": "You know this one better than I do. Run it, and tell me what you need.",
+    "found": "Session 1, said about the Halverson account",
+    "reh": "practising"
+   },
+   "note12": "Read this before Thursday. Notice that he didn't explain himself.",
+   "ask1": "I'm announcing the reorg to the whole group on Thursday and Dan wanted my job.",
+   "askLabel": "Ask: the reorg",
+   "rooms": [
+    [
+     "First group meeting with the full team",
+     "First group meeting"
+    ],
+    [
+     "Reorganisation announcement to the group",
+     "Reorganisation announcement"
+    ]
+   ],
+   "pend": {
+    "name": "Dawn Staley",
+    "hero": "staley",
+    "why": "Watching her coach this season"
+   },
+   "self": [
+    [
+     "Lean into",
+     "Generosity with credit. You give it easily and people notice."
+    ],
+    [
+     "Watch for",
+     "Explaining yourself after a decision should stand."
+    ],
+    [
+     "Off the table",
+     "Performing a toughness you don't feel."
+    ]
+   ],
+   "heroes_icons": {
+    "core": [
+     "barack-obama",
+     "serena-williams",
+     "rihanna"
+    ],
+    "reserve": "michelle-obama"
+   }
+  },
+  "maya": {
+   "id": "maya",
+   "name": "Maya Okonkwo",
+   "first": "Maya",
+   "ini": "MO",
+   "sex": "f",
+   "age": 32,
+   "born": 1994,
+   "gen": "Millennial, younger",
+   "grew": "United States",
+   "coach": "bret",
+   "role": "Product lead, newly promoted",
+   "co": "Fernhill Labs",
+   "goal": "Be the person they call before the decision, not after it.",
+   "sits": [
+    "B6",
+    "C3",
+    "E1"
+   ],
+   "ints": [
+    "Creators",
+    "Sport",
+    "Film & TV"
+   ],
+   "core": [
+    "mrbeast",
+    "biles",
+    "saujani"
+   ],
+   "reserve": "michelle",
+   "finalists": [
+    "mrbeast",
+    "biles",
+    "saujani",
+    "michelle"
+   ],
+   "keep3": [
+    "mrbeast",
+    "biles",
+    "saujani"
+   ],
+   "status": "oc",
+   "last": "1 day ago",
+   "next": "Tue 20 Oct, 11:00",
+   "up19": {
+    "label": "Thu 22 Oct · Roadmap decision",
+    "sit": "B6"
+   },
+   "fit": {
+    "saujani": [
+     "up",
+     "Built a room for people who weren't being called. That's the room you want."
+    ],
+    "biles": [
+     "partly",
+     "Her record is about calling what you see, even when it's unwelcome. Useful for some of your weeks."
+    ],
+    "mrbeast": [
+     "partly",
+     "Mostly about building an audience. Useful for the weeks you need to be seen."
+    ]
+   },
+   "mv": {
+    "sit": "B6",
+    "trigger": "The product review, the week before the roadmap decision.",
+    "behaviour": "Send one paragraph with a position in it to one person, the day before the meeting.",
+    "grain": "On paper first (you think in writing)",
+    "failure": "You'll send analysis, not a position.",
+    "obs": "Someone replies to the position, not the data.",
+    "retire": "You are asked for your view before the meeting."
+   },
+   "move": "Send one paragraph with a position in it to one person, the day before the meeting.",
+   "micro": [
+    {
+     "w": 1,
+     "b": "Send it to one person.",
+     "o": "One person had your position before the meeting.",
+     "ins": {
+      "story": "st-kjohnson-1958-langley",
+      "src": "close",
+      "closeTo": "saujani"
+     }
+    },
+    {
+     "w": 2,
+     "b": "Say the number that would change your mind, out loud.",
+     "o": "The room heard the number.",
+     "ins": null
+    },
+    {
+     "w": 4,
+     "b": "Ask to be in the decision meeting itself.",
+     "o": "You asked, in writing.",
+     "ins": null
+    },
+    {
+     "w": 6,
+     "b": "Open the meeting with your position.",
+     "o": "Your position was the first thing said.",
+     "ins": null
+    }
+   ],
+   "line": {
+    "text": "Here's where I land, and the one number that would change my mind.",
+    "found": "Session 1, said about the roadmap review",
+    "reh": "practising"
+   },
+   "note12": "Read this before Thursday. She asked whether any rule barred her. Ask the same question.",
+   "ask1": "The roadmap review is Thursday and the VP will decide with the two directors after I've presented.",
+   "askLabel": "Ask: the roadmap review",
+   "rooms": [
+    [
+     "Product review with the directors",
+     "Product review"
+    ],
+    [
+     "Roadmap decision meeting",
+     "Roadmap decision"
+    ]
+   ],
+   "pend": {
+    "name": "Shonda Rhimes",
+    "hero": "shonda",
+    "why": "Finished Year of Yes last month"
+   },
+   "talk": [
+    "The product review: did anyone reply to the position, or to the data?",
+    "Her three have no stories in the record yet. Suggest Ardern or Gauff?",
+    "Which meeting is the one she should ask to be in?"
+   ],
+   "self": [
+    [
+     "Lean into",
+     "Precision. When you commit to a number, people trust it."
+    ],
+    [
+     "Watch for",
+     "Answering a question nobody asked, with data."
+    ],
+    [
+     "Off the table",
+     "Pretending to be certain when you are not."
+    ]
+   ],
+   "events": [],
+   "heroes_icons": {
+    "core": [
+     "mrbeast",
+     "simone-biles",
+     "reshma-saujani"
+    ],
+    "reserve": "michelle-obama"
+   }
+  },
+  "michael": {
+   "id": "michael",
+   "name": "Michael Brandt",
+   "first": "Michael",
+   "ini": "MB",
+   "sex": "m",
+   "age": 58,
+   "born": 1968,
+   "gen": "Gen X",
+   "grew": "United States",
+   "coach": "jennifer",
+   "role": "Managing partner, newly elected",
+   "co": "Hale & Carver LLP",
+   "goal": "The partner clients ask for by name, not the firm's name on the door.",
+   "sits": [
+    "C2",
+    "C1",
+    "E1"
+   ],
+   "ints": [
+    "Music",
+    "Sport"
+   ],
+   "core": [
+    "ali",
+    "jordan",
+    "obama"
+   ],
+   "reserve": "prince",
+   "finalists": [
+    "ali",
+    "jordan",
+    "obama",
+    "prince"
+   ],
+   "keep3": [
+    "ali",
+    "jordan",
+    "obama"
+   ],
+   "status": "quiet",
+   "last": "9 days ago",
+   "next": "Tue 20 Oct, 15:00",
+   "up19": {
+    "label": "Thu 22 Oct · Calder Foods pitch",
+    "sit": "C2"
+   },
+   "fit": {
+    "obama": [
+     "up",
+     "His record is full of moments he spoke in his own words before anyone else framed him."
+    ],
+    "jordan": [
+     "partly",
+     "Jordan's stories are mostly about asking more of the people around you. Useful for the weeks you lead the team, less for the client's room."
+    ],
+    "ali": [
+     "pulls",
+     "Ali won by saying it first and loudest. Your goal needs clients to choose you, quietly. Jennifer will talk to you about how to use him."
+    ]
+   },
+   "mv": {
+    "sit": "C2",
+    "trigger": "Every pitch, starting with Ardent Health this month.",
+    "behaviour": "In every pitch, say one thing only you would say, before the firm's credentials.",
+    "grain": "Out front (you like the opening)",
+    "failure": "Your first version will still be the firm's line, shortened.",
+    "obs": "A client repeats your point back to you, not the firm's.",
+    "retire": "A client asks for you by name."
+   },
+   "move": "In every pitch, say one thing only you would say, before the firm's credentials.",
+   "micro": [
+    {
+     "w": 1,
+     "b": "Say your one thing in the first two minutes.",
+     "o": "It came before the credentials.",
+     "ins": {
+      "story": "st-ali-1964-miami",
+      "src": "core"
+     }
+    },
+    {
+     "w": 2,
+     "b": "Take the client's first question yourself.",
+     "o": "You answered it, not the senior associate.",
+     "ins": null
+    },
+    {
+     "w": 4,
+     "b": "Leave the credentials slide out, once.",
+     "o": "The deck had no credentials slide.",
+     "ins": {
+      "story": "st-marley-1960s-kingston",
+      "src": "coach"
+     }
+    },
+    {
+     "w": 6,
+     "b": "Ask the client what they'd call you for.",
+     "o": "They named something.",
+     "ins": null
+    }
+   ],
+   "line": {
+    "text": "I'll tell you what I'd do, and why I'm the one to do it.",
+    "found": "Session 1, said about the Ardent pitch",
+    "reh": "practising"
+   },
+   "note12": "Read this before Thursday. He changed his name the morning after. Notice how little he explained.",
+   "ask1": "The Ardent pitch is Thursday and their general counsel knows the firm, not me.",
+   "askLabel": "Ask: the Ardent pitch",
+   "rooms": [
+    [
+     "Pitch to Ardent Health",
+     "Ardent pitch"
+    ],
+    [
+     "Pitch to Calder Foods",
+     "Calder pitch"
+    ]
+   ],
+   "pend": {
+    "name": "Bruce Springsteen",
+    "hero": "springsteen",
+    "why": "Reading Born to Run again"
+   },
+   "talk": [
+    "The Ardent pitch: what did he say before the credentials?",
+    "Ali is scoped to C2. Does Miami Beach land, or does it read as bravado?",
+    "Who at Ardent should hear his name first?"
+   ],
+   "self": [
+    [
+     "Lean into",
+     "Judgement. Clients repeat your calls back to you."
+    ],
+    [
+     "Watch for",
+     "Reaching for the firm's credentials when you are nervous."
+    ],
+    [
+     "Off the table",
+     "Talking down the people who built the firm's name."
+    ]
+   ],
+   "events": [],
+   "heroes_icons": {
+    "core": [
+     "muhammad-ali",
+     "michael-jordan",
+     "barack-obama"
+    ],
+    "reserve": "prince"
+   }
+  },
+  "david": {
+   "id": "david",
+   "name": "David Okafor",
+   "first": "David",
+   "ini": "DO",
+   "role": "Partner, newly made",
+   "co": "Hale & Carver LLP",
+   "goal": "The partner clients ask for by name.",
+   "sits": [
+    "C1",
+    "C2"
+   ],
+   "core": [
+    "michelle",
+    "bjk",
+    "jfk"
+   ],
+   "reserve": "mlk",
+   "status": "oc",
+   "last": "2 days ago",
+   "next": "Thu 22 Oct, 16:30",
+   "move": "End every client conversation with a specific next step and a date, out loud.",
+   "line": "Here's what I'd do next, and when.",
+   "up19": {
+    "label": "Tue 20 Oct · Pitch to Ardent Health",
+    "sit": "C1"
+   },
+   "events": [
+    {
+     "day": 16,
+     "icon": "ph-circles-two",
+     "title": "Marks · ran the move, said the line",
+     "detail": "After the Ardent prep call"
+    },
+    {
+     "day": 12,
+     "icon": "ph-chat-circle",
+     "title": "Message",
+     "detail": "Ardent moved the pitch to Tuesday."
+    }
+   ],
+   "coach": "jim",
+   "heroes_icons": {
+    "core": [
+     "michelle-obama",
+     "billie-jean-king",
+     "john-f-kennedy"
+    ],
+    "reserve": "martin-luther-king-jr"
+   }
+  },
+  "priya": {
+   "id": "priya",
+   "name": "Priya Raman",
+   "first": "Priya",
+   "ini": "PR",
+   "role": "VP Strategy",
+   "co": "Fernhill Group",
+   "goal": "In the room where the decision gets made.",
+   "sits": [
+    "B6",
+    "C3"
+   ],
+   "core": [
+    "golda",
+    "yoyoma",
+    "oprah"
+   ],
+   "reserve": "aretha",
+   "status": "one",
+   "last": "1 day ago",
+   "next": "Mon 19 Oct, 09:00",
+   "move": "Send one paragraph with a position in it to one person before the meeting.",
+   "line": "I'll say where I land, then I want to hear where you do.",
+   "up19": {
+    "label": "Mon 19 Oct · Steering committee",
+    "sit": "C3"
+   },
+   "events": [
+    {
+     "day": 16,
+     "icon": "ph-circle",
+     "title": "Mark · ran the move",
+     "detail": "9 marks since onboarding, all acted"
+    }
+   ],
+   "coach": "jim",
+   "heroes_icons": {
+    "core": [
+     "golda-meir",
+     "yo-yo-ma",
+     "oprah-winfrey"
+    ],
+    "reserve": "aretha-franklin"
+   }
+  },
+  "tom": {
+   "id": "tom",
+   "name": "Tom Whitfield",
+   "first": "Tom",
+   "ini": "TW",
+   "role": "CMO, six weeks in",
+   "co": "Calder Foods",
+   "goal": "Leading the change, not being changed by it.",
+   "sits": [
+    "D4",
+    "E2"
+   ],
+   "core": [
+    "jackie",
+    "biles",
+    "obama"
+   ],
+   "reserve": "churchill",
+   "status": "quiet",
+   "last": "16 days ago",
+   "next": "Not booked",
+   "move": "Run the smallest version of the conversation that would still count, once.",
+   "line": "",
+   "lineNote": "None yet. Jennifer's first session is booked.",
+   "up19": {
+    "label": "Wed 21 Oct · Leadership offsite",
+    "sit": "E2"
+   },
+   "events": [
+    {
+     "day": 14,
+     "icon": "ph-chat-circle",
+     "title": "You wrote",
+     "detail": "I haven't heard from you in a while. Fifteen minutes this week?"
+    }
+   ],
+   "coach": "jim",
+   "heroes_icons": {
+    "core": [
+     "jackie-robinson",
+     "simone-biles",
+     "barack-obama"
+    ],
+    "reserve": "winston-churchill"
+   }
+  }
+ },
+ "order": [
+  "sarah",
+  "maya",
+  "michael",
+  "david",
+  "priya",
+  "tom"
+ ],
+ "personas": [
+  "maya",
+  "sarah",
+  "michael"
+ ],
+ "msgs": {
+  "sarah": [
+   {
+    "id": "s1",
+    "from": "coach",
+    "kind": "text",
+    "body": "Thanks for your three, Sarah. I've read your goal. Obama's record is full of rivals kept close; we'll start there.",
+    "day": 7,
+    "at": "Wed 7 Oct, 11:20"
+   },
+   {
+    "id": "s2",
+    "from": "coach",
+    "kind": "voice",
+    "dur": "0:42",
+    "day": 8,
+    "at": "Thu 8 Oct, 08:05"
+   },
+   {
+    "id": "s3",
+    "from": "coach",
+    "kind": "checkin",
+    "day": 8,
+    "at": "Thu 8 Oct, 08:06"
+   }
+  ],
+  "david": [
+   {
+    "id": "d1",
+    "from": "member",
+    "kind": "text",
+    "body": "Ardent moved the pitch to Tuesday.",
+    "day": 12,
+    "at": "Mon 12 Oct, 18:02"
+   }
+  ],
+  "priya": [
+   {
+    "id": "p1",
+    "from": "coach",
+    "kind": "text",
+    "body": "Nine marks, all acted. This week, try saying the line out loud once.",
+    "day": 16,
+    "at": "Fri 16 Oct, 17:30"
+   }
+  ],
+  "tom": [
+   {
+    "id": "t1",
+    "from": "coach",
+    "kind": "text",
+    "body": "I haven't heard from you in a while. Fifteen minutes this week?",
+    "day": 14,
+    "at": "Wed 14 Oct, 09:10"
+   }
+  ],
+  "maya": [
+   {
+    "id": "ma1",
+    "from": "coach",
+    "kind": "text",
+    "body": "Thanks for your three, Maya. None of them has a story in the record yet, so your first weeks will come from people close to them. We'll fix that together.",
+    "day": 7,
+    "at": "Wed 7 Oct, 11:20"
+   },
+   {
+    "id": "ma2",
+    "from": "coach",
+    "kind": "checkin",
+    "day": 8,
+    "at": "Thu 8 Oct, 08:06"
+   }
+  ],
+  "michael": [
+   {
+    "id": "mi1",
+    "from": "coach",
+    "kind": "text",
+    "body": "Thanks for your three, Michael. We'll talk about how to use Ali when we meet. He's for the weeks you stand on your own name, not for the pitch itself.",
+    "day": 7,
+    "at": "Wed 7 Oct, 11:20"
+   },
+   {
+    "id": "mi2",
+    "from": "coach",
+    "kind": "checkin",
+    "day": 8,
+    "at": "Thu 8 Oct, 08:06"
+   }
+  ]
+ },
+ "heroes": [
+  {
+   "id": "obama",
+   "icon": "barack-obama",
+   "name": "Barack Obama",
+   "short": "Obama",
+   "ini": "BO",
+   "area": "Leader",
+   "sex": "m",
+   "stance": "stay close",
+   "desc": "44th US President",
+   "q": [
+    "Kept rivals close",
+    "Calm under attack",
+    "Spoke to the whole room"
+   ],
+   "wiki": "Barack_Obama",
+   "year": 2008,
+   "cross": true
+  },
+  {
+   "id": "aretha",
+   "icon": "aretha-franklin",
+   "name": "Aretha Franklin",
+   "short": "Aretha Franklin",
+   "ini": "AF",
+   "area": "Music",
+   "sex": "f",
+   "stance": "earn it daily",
+   "desc": "Singer, Detroit",
+   "q": [
+    "Asked for respect by name",
+    "Ran her own career",
+    "Kept the standard high"
+   ],
+   "wiki": "Aretha_Franklin",
+   "year": 1967,
+   "cross": false
+  },
+  {
+   "id": "churchill",
+   "icon": "winston-churchill",
+   "name": "Winston Churchill",
+   "short": "Churchill",
+   "ini": "WC",
+   "area": "Leader",
+   "sex": "m",
+   "stance": "carry the weight",
+   "desc": "Wartime Prime Minister, UK",
+   "q": [
+    "Told people the hard truth",
+    "Held the line under pressure",
+    "Wrote the story as he went"
+   ],
+   "wiki": "Winston_Churchill",
+   "year": 1940,
+   "cross": false
+  },
+  {
+   "id": "jackie",
+   "icon": "jackie-robinson",
+   "name": "Jackie Robinson",
+   "short": "Jackie Robinson",
+   "ini": "JR",
+   "area": "Sport",
+   "sex": "m",
+   "stance": "carry the weight",
+   "desc": "Ballplayer, Brooklyn Dodgers",
+   "q": [
+    "Restraint as strength",
+    "Let the work answer",
+    "Spoke out when it was time"
+   ],
+   "wiki": "Jackie_Robinson",
+   "year": 1947,
+   "cross": false
+  },
+  {
+   "id": "oprah",
+   "icon": "oprah-winfrey",
+   "name": "Oprah Winfrey",
+   "short": "Oprah",
+   "ini": "OW",
+   "area": "Leader",
+   "sex": "f",
+   "stance": "grow them",
+   "desc": "Broadcaster and founder",
+   "q": [
+    "Built the platform herself",
+    "Made the room feel heard",
+    "Turned trust into a business"
+   ],
+   "wiki": "Oprah_Winfrey",
+   "year": 1986,
+   "cross": false
+  },
+  {
+   "id": "ali",
+   "icon": "muhammad-ali",
+   "name": "Muhammad Ali",
+   "short": "Ali",
+   "ini": "MA",
+   "area": "Sport",
+   "sex": "m",
+   "stance": "out front",
+   "desc": "Heavyweight champion",
+   "q": [
+    "Said it first, out loud",
+    "Took the cost of conviction",
+    "Made himself the story"
+   ],
+   "wiki": "Muhammad_Ali",
+   "year": 1964,
+   "cross": true
+  },
+  {
+   "id": "golda",
+   "icon": "golda-meir",
+   "name": "Golda Meir",
+   "short": "Golda Meir",
+   "ini": "GM",
+   "area": "Leader",
+   "sex": "f",
+   "stance": "carry the weight",
+   "desc": "Prime Minister of Israel",
+   "q": [
+    "Direct with everyone",
+    "Carried the hardest calls",
+    "Built support person by person"
+   ],
+   "wiki": "Golda_Meir",
+   "year": 1969,
+   "cross": false
+  },
+  {
+   "id": "yoyoma",
+   "icon": "yo-yo-ma",
+   "name": "Yo-Yo Ma",
+   "short": "Yo-Yo Ma",
+   "ini": "YM",
+   "area": "Music",
+   "sex": "m",
+   "stance": "grow them",
+   "desc": "Cellist",
+   "q": [
+    "Played in service of others",
+    "Crossed every boundary",
+    "Curious first"
+   ],
+   "wiki": "Yo-Yo_Ma",
+   "year": 1998,
+   "cross": false
+  },
+  {
+   "id": "jfk",
+   "icon": "john-f-kennedy",
+   "name": "John F. Kennedy",
+   "short": "Kennedy",
+   "ini": "JK",
+   "area": "Leader",
+   "sex": "m",
+   "stance": "out front",
+   "desc": "35th US President",
+   "q": [
+    "Set the goal out loud",
+    "Took the blame in public",
+    "Gathered strong people around him"
+   ],
+   "wiki": "John_F._Kennedy",
+   "year": 1961,
+   "cross": true
+  },
+  {
+   "id": "stevie",
+   "icon": "stevie-wonder",
+   "name": "Stevie Wonder",
+   "short": "Stevie Wonder",
+   "ini": "SW",
+   "area": "Music",
+   "sex": "m",
+   "stance": "earn it daily",
+   "desc": "Singer and songwriter, Motown",
+   "q": [
+    "Owned his own work",
+    "Built in his own voice",
+    "Patient, then decisive"
+   ],
+   "wiki": "Stevie_Wonder",
+   "year": 1971,
+   "cross": true
+  },
+  {
+   "id": "huffington",
+   "icon": "arianna-huffington",
+   "name": "Arianna Huffington",
+   "short": "Arianna Huffington",
+   "ini": "AH",
+   "area": "Leader",
+   "sex": "f",
+   "stance": "grow them",
+   "desc": "Founder, editor",
+   "q": [
+    "Started again in public",
+    "Built from her own network",
+    "Changed her own rules"
+   ],
+   "wiki": "Arianna_Huffington",
+   "year": 2005,
+   "cross": false
+  },
+  {
+   "id": "biles",
+   "icon": "simone-biles",
+   "name": "Simone Biles",
+   "short": "Simone Biles",
+   "ini": "SB",
+   "area": "Sport",
+   "sex": "f",
+   "stance": "earn it daily",
+   "desc": "Gymnast",
+   "q": [
+    "Raised the bar for everyone",
+    "Knew her limits and said so",
+    "Came back on her terms"
+   ],
+   "wiki": "Simone_Biles",
+   "year": 2016,
+   "cross": false
+  },
+  {
+   "id": "michelle",
+   "icon": "michelle-obama",
+   "name": "Michelle Obama",
+   "short": "Michelle Obama",
+   "ini": "MO",
+   "area": "Leader",
+   "sex": "f",
+   "stance": "stay close",
+   "desc": "Lawyer, author, First Lady",
+   "q": [
+    "Rose above the fight",
+    "Herself in public",
+    "Turned scrutiny into a platform"
+   ],
+   "wiki": "Michelle_Obama",
+   "year": 2009,
+   "cross": true
+  },
+  {
+   "id": "bjk",
+   "icon": "billie-jean-king",
+   "name": "Billie Jean King",
+   "short": "Billie Jean King",
+   "ini": "BK",
+   "area": "Sport",
+   "sex": "f",
+   "stance": "carry the weight",
+   "desc": "Tennis champion, founder of the WTA",
+   "q": [
+    "Took the match that mattered",
+    "Built the institution",
+    "Made it about everyone"
+   ],
+   "wiki": "Billie_Jean_King",
+   "year": 1973,
+   "cross": false
+  },
+  {
+   "id": "mlk",
+   "icon": "martin-luther-king-jr",
+   "name": "Martin Luther King Jr.",
+   "short": "Dr King",
+   "ini": "MK",
+   "area": "Leader",
+   "sex": "m",
+   "stance": "carry the weight",
+   "desc": "Civil rights leader",
+   "q": [
+    "Named the problem plainly",
+    "Held a coalition together",
+    "Chose the moment"
+   ],
+   "wiki": "Martin_Luther_King_Jr.",
+   "year": 1963,
+   "cross": true
+  },
+  {
+   "id": "nina",
+   "icon": "nina-simone",
+   "name": "Nina Simone",
+   "short": "Nina Simone",
+   "ini": "NS",
+   "area": "Music",
+   "sex": "f",
+   "stance": "out front",
+   "desc": "Singer, pianist, activist",
+   "q": [
+    "Said it in her own words",
+    "Refused to soften the work",
+    "Paid the price for it"
+   ],
+   "wiki": "Nina_Simone",
+   "year": 1964,
+   "cross": false
+  },
+  {
+   "id": "staley",
+   "icon": "dawn-staley",
+   "name": "Dawn Staley",
+   "short": "Dawn Staley",
+   "ini": "DS",
+   "area": "Sport",
+   "sex": "f",
+   "stance": "grow them",
+   "desc": "Basketball coach, South Carolina",
+   "q": [
+    "Coached the way she played",
+    "Spoke up for her players",
+    "Built a program from the ground"
+   ],
+   "wiki": "Dawn_Staley",
+   "year": 2017,
+   "cross": false
+  },
+  {
+   "id": "mandela",
+   "icon": "nelson-mandela",
+   "name": "Nelson Mandela",
+   "short": "Mandela",
+   "ini": "NM",
+   "area": "Leader",
+   "sex": "m",
+   "stance": "",
+   "desc": "President of South Africa",
+   "q": [],
+   "wiki": "Nelson_Mandela",
+   "year": 1990,
+   "cross": false
+  },
+  {
+   "id": "jobs",
+   "icon": "steve-jobs",
+   "name": "Steve Jobs",
+   "short": "Jobs",
+   "ini": "SJ",
+   "area": "Leader",
+   "sex": "m",
+   "stance": "",
+   "desc": "Co-founder, Apple",
+   "q": [],
+   "wiki": "Steve_Jobs",
+   "year": 1984,
+   "cross": false
+  },
+  {
+   "id": "rbg",
+   "icon": "ruth-bader-ginsburg",
+   "name": "Ruth Bader Ginsburg",
+   "short": "Ginsburg",
+   "ini": "RG",
+   "area": "Leader",
+   "sex": "f",
+   "stance": "",
+   "desc": "Supreme Court Justice",
+   "q": [],
+   "wiki": "Ruth_Bader_Ginsburg",
+   "year": 1993,
+   "cross": false
+  },
+  {
+   "id": "carter",
+   "icon": "jimmy-carter",
+   "name": "Jimmy Carter",
+   "short": "Carter",
+   "ini": "JC",
+   "area": "Leader",
+   "sex": "m",
+   "stance": "",
+   "desc": "39th US President",
+   "q": [],
+   "wiki": "Jimmy_Carter",
+   "year": 1978,
+   "cross": false
+  },
+  {
+   "id": "ride",
+   "icon": "sally-ride",
+   "name": "Sally Ride",
+   "short": "Sally Ride",
+   "ini": "SR",
+   "area": "Leader",
+   "sex": "f",
+   "stance": "",
+   "desc": "Astronaut, physicist",
+   "q": [],
+   "wiki": "Sally_Ride",
+   "year": 1983,
+   "cross": false
+  },
+  {
+   "id": "malala",
+   "icon": "malala-yousafzai",
+   "name": "Malala Yousafzai",
+   "short": "Malala",
+   "ini": "MY",
+   "area": "Leader",
+   "sex": "f",
+   "stance": "",
+   "desc": "Education activist, Nobel laureate",
+   "q": [],
+   "wiki": "Malala_Yousafzai",
+   "year": 2014,
+   "cross": false
+  },
+  {
+   "id": "ardern",
+   "icon": "jacinda-ardern",
+   "name": "Jacinda Ardern",
+   "short": "Ardern",
+   "ini": "JA",
+   "area": "Leader",
+   "sex": "f",
+   "stance": "",
+   "desc": "Former Prime Minister of New Zealand",
+   "q": [],
+   "wiki": "Jacinda_Ardern",
+   "year": 2017,
+   "cross": false
+  },
+  {
+   "id": "saujani",
+   "icon": "reshma-saujani",
+   "name": "Reshma Saujani",
+   "short": "Saujani",
+   "ini": "RS",
+   "area": "Leader",
+   "sex": "f",
+   "stance": "",
+   "desc": "Founder, Girls Who Code",
+   "q": [
+    "Built a room for people who weren't being called",
+    "Asked in public",
+    "Kept going after losing"
+   ],
+   "wiki": "Reshma_Saujani",
+   "year": 2012,
+   "cross": false
+  },
+  {
+   "id": "nadella",
+   "icon": "satya-nadella",
+   "name": "Satya Nadella",
+   "short": "Nadella",
+   "ini": "SN",
+   "area": "Leader",
+   "sex": "m",
+   "stance": "",
+   "desc": "CEO, Microsoft",
+   "q": [],
+   "wiki": "Satya_Nadella",
+   "year": 2014,
+   "cross": false
+  },
+  {
+   "id": "kjohnson",
+   "icon": "katherine-johnson",
+   "name": "Katherine Johnson",
+   "short": "Katherine Johnson",
+   "ini": "KJ",
+   "area": "Leader",
+   "sex": "f",
+   "stance": "",
+   "desc": "NASA mathematician",
+   "q": [],
+   "wiki": "Katherine_Johnson",
+   "year": 1962,
+   "cross": false
+  },
+  {
+   "id": "nooyi",
+   "icon": "indra-nooyi",
+   "name": "Indra Nooyi",
+   "short": "Nooyi",
+   "ini": "IN",
+   "area": "Leader",
+   "sex": "f",
+   "stance": "",
+   "desc": "Former CEO, PepsiCo",
+   "q": [],
+   "wiki": "Indra_Nooyi",
+   "year": 2006,
+   "cross": false
+  },
+  {
+   "id": "merkel",
+   "icon": "angela-merkel",
+   "name": "Angela Merkel",
+   "short": "Merkel",
+   "ini": "AM",
+   "area": "Leader",
+   "sex": "f",
+   "stance": "",
+   "desc": "Former Chancellor of Germany",
+   "q": [],
+   "wiki": "Angela_Merkel",
+   "year": 2005,
+   "cross": false
+  },
+  {
+   "id": "eleanor",
+   "icon": "eleanor-roosevelt",
+   "name": "Eleanor Roosevelt",
+   "short": "Eleanor Roosevelt",
+   "ini": "ER",
+   "area": "Leader",
+   "sex": "f",
+   "stance": "",
+   "desc": "Diplomat, First Lady",
+   "q": [],
+   "wiki": "Eleanor_Roosevelt",
+   "year": 1948,
+   "cross": false
+  },
+  {
+   "id": "powell",
+   "icon": "colin-powell",
+   "name": "Colin Powell",
+   "short": "Powell",
+   "ini": "CP",
+   "area": "Leader",
+   "sex": "m",
+   "stance": "",
+   "desc": "General, Secretary of State",
+   "q": [],
+   "wiki": "Colin_Powell",
+   "year": 1989,
+   "cross": false
+  },
+  {
+   "id": "marley",
+   "icon": "bob-marley",
+   "name": "Bob Marley",
+   "short": "Marley",
+   "ini": "BM",
+   "area": "Music",
+   "sex": "m",
+   "stance": "",
+   "desc": "Singer, songwriter, label founder",
+   "q": [],
+   "wiki": "Bob_Marley",
+   "year": 1978,
+   "cross": false
+  },
+  {
+   "id": "prince",
+   "icon": "prince",
+   "name": "Prince",
+   "short": "Prince",
+   "ini": "P",
+   "area": "Music",
+   "sex": "m",
+   "stance": "",
+   "desc": "Musician, producer",
+   "q": [],
+   "wiki": "Prince_(musician)",
+   "year": 1984,
+   "cross": false
+  },
+  {
+   "id": "tina",
+   "icon": "tina-turner",
+   "name": "Tina Turner",
+   "short": "Tina Turner",
+   "ini": "TT",
+   "area": "Music",
+   "sex": "f",
+   "stance": "",
+   "desc": "Singer",
+   "q": [],
+   "wiki": "Tina_Turner",
+   "year": 1984,
+   "cross": true
+  },
+  {
+   "id": "springsteen",
+   "icon": "bruce-springsteen",
+   "name": "Bruce Springsteen",
+   "short": "Springsteen",
+   "ini": "BS",
+   "area": "Music",
+   "sex": "m",
+   "stance": "",
+   "desc": "Singer and songwriter",
+   "q": [],
+   "wiki": "Bruce_Springsteen",
+   "year": 1984,
+   "cross": false
+  },
+  {
+   "id": "beyonce",
+   "icon": "beyonce-knowles",
+   "name": "Beyoncé",
+   "short": "Beyoncé",
+   "ini": "B",
+   "area": "Music",
+   "sex": "f",
+   "stance": "",
+   "desc": "Singer, producer",
+   "q": [],
+   "wiki": "Beyoncé",
+   "year": 2003,
+   "cross": false
+  },
+  {
+   "id": "rihanna",
+   "icon": "rihanna",
+   "name": "Rihanna",
+   "short": "Rihanna",
+   "ini": "R",
+   "area": "Music",
+   "sex": "f",
+   "stance": "",
+   "desc": "Singer, founder of Fenty",
+   "q": [
+    "Built something of her own",
+    "Made room for people the industry missed",
+    "Kept her name on it"
+   ],
+   "wiki": "Rihanna",
+   "year": 2007,
+   "cross": false
+  },
+  {
+   "id": "swift",
+   "icon": "taylor-swift",
+   "name": "Taylor Swift",
+   "short": "Taylor Swift",
+   "ini": "TS",
+   "area": "Music",
+   "sex": "f",
+   "stance": "",
+   "desc": "Songwriter",
+   "q": [],
+   "wiki": "Taylor_Swift",
+   "year": 2008,
+   "cross": false
+  },
+  {
+   "id": "badbunny",
+   "icon": "bad-bunny",
+   "name": "Bad Bunny",
+   "short": "Bad Bunny",
+   "ini": "BB",
+   "area": "Music",
+   "sex": "m",
+   "stance": "",
+   "desc": "Musician",
+   "q": [],
+   "wiki": "Bad_Bunny",
+   "year": 2020,
+   "cross": false
+  },
+  {
+   "id": "dolly",
+   "icon": "dolly-parton",
+   "name": "Dolly Parton",
+   "short": "Dolly Parton",
+   "ini": "DP",
+   "area": "Music",
+   "sex": "f",
+   "stance": "",
+   "desc": "Singer, songwriter, founder",
+   "q": [],
+   "wiki": "Dolly_Parton",
+   "year": 1974,
+   "cross": true
+  },
+  {
+   "id": "jordan",
+   "icon": "michael-jordan",
+   "name": "Michael Jordan",
+   "short": "Jordan",
+   "ini": "MJ",
+   "area": "Sport",
+   "sex": "m",
+   "stance": "",
+   "desc": "Basketball player, owner",
+   "q": [
+    "Asked more of everyone",
+    "Wanted the last shot",
+    "Turned a name into a business"
+   ],
+   "wiki": "Michael_Jordan",
+   "year": 1991,
+   "cross": true
+  },
+  {
+   "id": "serena",
+   "icon": "serena-williams",
+   "name": "Serena Williams",
+   "short": "Serena",
+   "ini": "SW",
+   "area": "Sport",
+   "sex": "f",
+   "stance": "",
+   "desc": "Tennis champion, investor",
+   "q": [
+    "Owned the stage",
+    "Answered pressure with play",
+    "Built beyond the game"
+   ],
+   "wiki": "Serena_Williams",
+   "year": 1999,
+   "cross": false
+  },
+  {
+   "id": "lebron",
+   "icon": "lebron-james",
+   "name": "LeBron James",
+   "short": "LeBron",
+   "ini": "LJ",
+   "area": "Sport",
+   "sex": "m",
+   "stance": "",
+   "desc": "Basketball player, founder",
+   "q": [],
+   "wiki": "LeBron_James",
+   "year": 2016,
+   "cross": false
+  },
+  {
+   "id": "magic",
+   "icon": "magic-johnson",
+   "name": "Magic Johnson",
+   "short": "Magic Johnson",
+   "ini": "EJ",
+   "area": "Sport",
+   "sex": "m",
+   "stance": "",
+   "desc": "Basketball player, businessman",
+   "q": [],
+   "wiki": "Magic_Johnson",
+   "year": 1980,
+   "cross": false
+  },
+  {
+   "id": "rapinoe",
+   "icon": "megan-rapinoe",
+   "name": "Megan Rapinoe",
+   "short": "Rapinoe",
+   "ini": "MR",
+   "area": "Sport",
+   "sex": "f",
+   "stance": "",
+   "desc": "Footballer and advocate",
+   "q": [],
+   "wiki": "Megan_Rapinoe",
+   "year": 2019,
+   "cross": false
+  },
+  {
+   "id": "gauff",
+   "icon": "coco-gauff",
+   "name": "Coco Gauff",
+   "short": "Coco Gauff",
+   "ini": "CG",
+   "area": "Sport",
+   "sex": "f",
+   "stance": "",
+   "desc": "Tennis champion",
+   "q": [],
+   "wiki": "Coco_Gauff",
+   "year": 2023,
+   "cross": false
+  },
+  {
+   "id": "clark",
+   "icon": "caitlin-clark",
+   "name": "Caitlin Clark",
+   "short": "Caitlin Clark",
+   "ini": "CC",
+   "area": "Sport",
+   "sex": "f",
+   "stance": "",
+   "desc": "Basketball player",
+   "q": [],
+   "wiki": "Caitlin_Clark",
+   "year": 2024,
+   "cross": false
+  },
+  {
+   "id": "spielberg",
+   "icon": "steven-spielberg",
+   "name": "Steven Spielberg",
+   "short": "Spielberg",
+   "ini": "SS",
+   "area": "Film & TV",
+   "sex": "m",
+   "stance": "",
+   "desc": "Director",
+   "q": [],
+   "wiki": "Steven_Spielberg",
+   "year": 1975,
+   "cross": false
+  },
+  {
+   "id": "zendaya",
+   "icon": "zendaya",
+   "name": "Zendaya",
+   "short": "Zendaya",
+   "ini": "Z",
+   "area": "Film & TV",
+   "sex": "f",
+   "stance": "",
+   "desc": "Actor, producer",
+   "q": [],
+   "wiki": "Zendaya",
+   "year": 2019,
+   "cross": false
+  },
+  {
+   "id": "lucille",
+   "icon": "lucille-ball",
+   "name": "Lucille Ball",
+   "short": "Lucille Ball",
+   "ini": "LB",
+   "area": "Film & TV",
+   "sex": "f",
+   "stance": "",
+   "desc": "Actor, studio head",
+   "q": [],
+   "wiki": "Lucille_Ball",
+   "year": 1951,
+   "cross": false
+  },
+  {
+   "id": "spikelee",
+   "icon": "spike-lee",
+   "name": "Spike Lee",
+   "short": "Spike Lee",
+   "ini": "SL",
+   "area": "Film & TV",
+   "sex": "m",
+   "stance": "",
+   "desc": "Director",
+   "q": [],
+   "wiki": "Spike_Lee",
+   "year": 1989,
+   "cross": false
+  },
+  {
+   "id": "shonda",
+   "icon": "shonda-rhimes",
+   "name": "Shonda Rhimes",
+   "short": "Shonda Rhimes",
+   "ini": "SR",
+   "area": "Film & TV",
+   "sex": "f",
+   "stance": "",
+   "desc": "Producer, writer",
+   "q": [],
+   "wiki": "Shonda_Rhimes",
+   "year": 2005,
+   "cross": false
+  },
+  {
+   "id": "duvernay",
+   "icon": "ava-duvernay",
+   "name": "Ava DuVernay",
+   "short": "DuVernay",
+   "ini": "AD",
+   "area": "Film & TV",
+   "sex": "f",
+   "stance": "",
+   "desc": "Director",
+   "q": [],
+   "wiki": "Ava_DuVernay",
+   "year": 2014,
+   "cross": false
+  },
+  {
+   "id": "mrbeast",
+   "icon": "mrbeast",
+   "name": "MrBeast",
+   "short": "MrBeast",
+   "ini": "MB",
+   "area": "Creators",
+   "sex": "m",
+   "stance": "",
+   "desc": "Creator and founder",
+   "q": [
+    "Built an audience from nothing",
+    "Reinvests everything",
+    "Tests in public"
+   ],
+   "wiki": "MrBeast",
+   "year": 2018,
+   "cross": false
+  },
+  {
+   "id": "chamberlain",
+   "icon": "emma-chamberlain",
+   "name": "Emma Chamberlain",
+   "short": "Emma Chamberlain",
+   "ini": "EC",
+   "area": "Creators",
+   "sex": "f",
+   "stance": "",
+   "desc": "Creator and founder",
+   "q": [],
+   "wiki": "Emma_Chamberlain",
+   "year": 2018,
+   "cross": false
+  },
+  {
+   "id": "mkbhd",
+   "icon": "marques-brownlee",
+   "name": "Marques Brownlee",
+   "short": "Brownlee",
+   "ini": "MK",
+   "area": "Creators",
+   "sex": "m",
+   "stance": "",
+   "desc": "Technology reviewer",
+   "q": [],
+   "wiki": "Marques_Brownlee",
+   "year": 2009,
+   "cross": false
+  },
+  {
+   "id": "cooper",
+   "icon": "alex-cooper",
+   "name": "Alex Cooper",
+   "short": "Alex Cooper",
+   "ini": "AC",
+   "area": "Creators",
+   "sex": "f",
+   "stance": "",
+   "desc": "Podcaster and founder",
+   "q": [],
+   "wiki": "Alex_Cooper",
+   "year": 2018,
+   "cross": false
+  },
+  {
+   "id": "lilly",
+   "icon": "lilly-singh",
+   "name": "Lilly Singh",
+   "short": "Lilly Singh",
+   "ini": "LS",
+   "area": "Creators",
+   "sex": "f",
+   "stance": "",
+   "desc": "Creator, host",
+   "q": [],
+   "wiki": "Lilly_Singh",
+   "year": 2019,
+   "cross": false
+  },
+  {
+   "id": "neistat",
+   "icon": "casey-neistat",
+   "name": "Casey Neistat",
+   "short": "Neistat",
+   "ini": "CN",
+   "area": "Creators",
+   "sex": "m",
+   "stance": "",
+   "desc": "Filmmaker, creator",
+   "q": [],
+   "wiki": "Casey_Neistat",
+   "year": 2015,
+   "cross": false
+  },
+  {
+   "id": "chanel",
+   "icon": "coco-chanel",
+   "name": "Coco Chanel",
+   "short": "Chanel",
+   "ini": "CC",
+   "area": "Fashion & design",
+   "sex": "f",
+   "stance": "",
+   "desc": "Designer",
+   "q": [],
+   "wiki": "Coco_Chanel",
+   "year": 1926,
+   "cross": false
+  },
+  {
+   "id": "lauren",
+   "icon": "ralph-lauren",
+   "name": "Ralph Lauren",
+   "short": "Ralph Lauren",
+   "ini": "RL",
+   "area": "Fashion & design",
+   "sex": "m",
+   "stance": "",
+   "desc": "Designer, founder",
+   "q": [],
+   "wiki": "Ralph_Lauren",
+   "year": 1967,
+   "cross": false
+  },
+  {
+   "id": "dvf",
+   "icon": "diane-von-furstenberg",
+   "name": "Diane von Furstenberg",
+   "short": "von Furstenberg",
+   "ini": "DF",
+   "area": "Fashion & design",
+   "sex": "f",
+   "stance": "",
+   "desc": "Designer",
+   "q": [],
+   "wiki": "Diane_von_Furstenberg",
+   "year": 1974,
+   "cross": false
+  },
+  {
+   "id": "prada",
+   "icon": "miuccia-prada",
+   "name": "Miuccia Prada",
+   "short": "Prada",
+   "ini": "MP",
+   "area": "Fashion & design",
+   "sex": "f",
+   "stance": "",
+   "desc": "Designer",
+   "q": [],
+   "wiki": "Miuccia_Prada",
+   "year": 1988,
+   "cross": false
+  },
+  {
+   "id": "ive",
+   "icon": "jony-ive",
+   "name": "Jony Ive",
+   "short": "Ive",
+   "ini": "JI",
+   "area": "Fashion & design",
+   "sex": "m",
+   "stance": "",
+   "desc": "Industrial designer",
+   "q": [],
+   "wiki": "Jony_Ive",
+   "year": 1998,
+   "cross": false
+  },
+  {
+   "id": "abloh",
+   "icon": "virgil-abloh",
+   "name": "Virgil Abloh",
+   "short": "Abloh",
+   "ini": "VA",
+   "area": "Fashion & design",
+   "sex": "m",
+   "stance": "",
+   "desc": "Designer",
+   "q": [],
+   "wiki": "Virgil_Abloh",
+   "year": 2018,
+   "cross": false
+  },
+  {
+   "id": "lauder",
+   "icon": "estee-lauder",
+   "name": "Estée Lauder",
+   "short": "Estée Lauder",
+   "ini": "EL",
+   "area": "Business",
+   "sex": "f",
+   "stance": "",
+   "desc": "Founder",
+   "q": [],
+   "wiki": "Estée_Lauder_(businesswoman)",
+   "year": 1946,
+   "cross": false
+  },
+  {
+   "id": "buffett",
+   "icon": "warren-buffett",
+   "name": "Warren Buffett",
+   "short": "Buffett",
+   "ini": "WB",
+   "area": "Business",
+   "sex": "m",
+   "stance": "",
+   "desc": "Investor",
+   "q": [],
+   "wiki": "Warren_Buffett",
+   "year": 1965,
+   "cross": false
+  },
+  {
+   "id": "schultz",
+   "icon": "howard-schultz",
+   "name": "Howard Schultz",
+   "short": "Schultz",
+   "ini": "HS",
+   "area": "Business",
+   "sex": "m",
+   "stance": "",
+   "desc": "Builder of Starbucks",
+   "q": [],
+   "wiki": "Howard_Schultz",
+   "year": 1987,
+   "cross": false
+  },
+  {
+   "id": "huang",
+   "icon": "jensen-huang",
+   "name": "Jensen Huang",
+   "short": "Huang",
+   "ini": "JH",
+   "area": "Business",
+   "sex": "m",
+   "stance": "",
+   "desc": "Co-founder, Nvidia",
+   "q": [],
+   "wiki": "Jensen_Huang",
+   "year": 1993,
+   "cross": false
+  },
+  {
+   "id": "blakely",
+   "icon": "sara-blakely",
+   "name": "Sara Blakely",
+   "short": "Sara Blakely",
+   "ini": "SB",
+   "area": "Business",
+   "sex": "f",
+   "stance": "",
+   "desc": "Founder, Spanx",
+   "q": [],
+   "wiki": "Sara_Blakely",
+   "year": 2000,
+   "cross": false
+  },
+  {
+   "id": "barra",
+   "icon": "mary-barra",
+   "name": "Mary Barra",
+   "short": "Mary Barra",
+   "ini": "MB",
+   "area": "Business",
+   "sex": "f",
+   "stance": "",
+   "desc": "CEO, General Motors",
+   "q": [],
+   "wiki": "Mary_Barra",
+   "year": 2014,
+   "cross": false
+  },
+  {
+   "id": "wolfeherd",
+   "icon": "whitney-wolfe-herd",
+   "name": "Whitney Wolfe Herd",
+   "short": "Wolfe Herd",
+   "ini": "WW",
+   "area": "Business",
+   "sex": "f",
+   "stance": "",
+   "desc": "Founder, Bumble",
+   "q": [],
+   "wiki": "Whitney_Wolfe_Herd",
+   "year": 2014,
+   "cross": false
+  },
+  {
+   "id": "albright",
+   "icon": "madeleine-albright",
+   "name": "Madeleine Albright",
+   "short": "Albright",
+   "ini": "MA",
+   "area": "Politics & public life",
+   "sex": "f",
+   "stance": "",
+   "desc": "Secretary of State",
+   "q": [],
+   "wiki": "Madeleine_Albright",
+   "year": 1997,
+   "cross": false
+  },
+  {
+   "id": "sotomayor",
+   "icon": "sonia-sotomayor",
+   "name": "Sonia Sotomayor",
+   "short": "Sotomayor",
+   "ini": "SS",
+   "area": "Politics & public life",
+   "sex": "f",
+   "stance": "",
+   "desc": "Supreme Court Justice",
+   "q": [],
+   "wiki": "Sonia_Sotomayor",
+   "year": 2009,
+   "cross": false
+  },
+  {
+   "id": "curie",
+   "icon": "marie-curie",
+   "name": "Marie Curie",
+   "short": "Curie",
+   "ini": "MC",
+   "area": "Science & invention",
+   "sex": "f",
+   "stance": "",
+   "desc": "Physicist, chemist",
+   "q": [],
+   "wiki": "Marie_Curie",
+   "year": 1911,
+   "cross": false
+  },
+  {
+   "id": "bernerslee",
+   "icon": "tim-berners-lee",
+   "name": "Tim Berners-Lee",
+   "short": "Berners-Lee",
+   "ini": "TB",
+   "area": "Science & invention",
+   "sex": "m",
+   "stance": "",
+   "desc": "Inventor of the web",
+   "q": [],
+   "wiki": "Tim_Berners-Lee",
+   "year": 1989,
+   "cross": false
+  },
+  {
+   "id": "doudna",
+   "icon": "jennifer-doudna",
+   "name": "Jennifer Doudna",
+   "short": "Doudna",
+   "ini": "JD",
+   "area": "Science & invention",
+   "sex": "f",
+   "stance": "",
+   "desc": "Biochemist",
+   "q": [],
+   "wiki": "Jennifer_Doudna",
+   "year": 2012,
+   "cross": false
+  },
+  {
+   "id": "tyson",
+   "icon": "neil-degrasse-tyson",
+   "name": "Neil deGrasse Tyson",
+   "short": "Tyson",
+   "ini": "NT",
+   "area": "Science & invention",
+   "sex": "m",
+   "stance": "",
+   "desc": "Astrophysicist",
+   "q": [],
+   "wiki": "Neil_deGrasse_Tyson",
+   "year": 2014,
+   "cross": false
+  },
+  {
+   "id": "kahlo",
+   "icon": "frida-kahlo",
+   "name": "Frida Kahlo",
+   "short": "Kahlo",
+   "ini": "FK",
+   "area": "Art",
+   "sex": "f",
+   "stance": "",
+   "desc": "Painter",
+   "q": [],
+   "wiki": "Frida_Kahlo",
+   "year": 1939,
+   "cross": false
+  },
+  {
+   "id": "warhol",
+   "icon": "andy-warhol",
+   "name": "Andy Warhol",
+   "short": "Warhol",
+   "ini": "AW",
+   "area": "Art",
+   "sex": "m",
+   "stance": "",
+   "desc": "Artist",
+   "q": [],
+   "wiki": "Andy_Warhol",
+   "year": 1962,
+   "cross": false
+  },
+  {
+   "id": "basquiat",
+   "icon": "jean-michel-basquiat",
+   "name": "Jean-Michel Basquiat",
+   "short": "Basquiat",
+   "ini": "JB",
+   "area": "Art",
+   "sex": "m",
+   "stance": "",
+   "desc": "Artist",
+   "q": [],
+   "wiki": "Jean-Michel_Basquiat",
+   "year": 1982,
+   "cross": false
+  },
+  {
+   "id": "kusama",
+   "icon": "yayoi-kusama",
+   "name": "Yayoi Kusama",
+   "short": "Kusama",
+   "ini": "YK",
+   "area": "Art",
+   "sex": "f",
+   "stance": "",
+   "desc": "Artist",
+   "q": [],
+   "wiki": "Yayoi_Kusama",
+   "year": 2017,
+   "cross": false
+  },
+  {
+   "id": "banksy",
+   "icon": "banksy",
+   "name": "Banksy",
+   "short": "Banksy",
+   "ini": "B",
+   "area": "Art",
+   "sex": "m",
+   "stance": "",
+   "desc": "Artist",
+   "q": [],
+   "wiki": "Banksy",
+   "year": 2018,
+   "cross": false
+  },
+  {
+   "id": "wiley",
+   "icon": "kehinde-wiley",
+   "name": "Kehinde Wiley",
+   "short": "Wiley",
+   "ini": "KW",
+   "area": "Art",
+   "sex": "m",
+   "stance": "",
+   "desc": "Painter",
+   "q": [],
+   "wiki": "Kehinde_Wiley",
+   "year": 2018,
+   "cross": false
+  },
+  {
+   "id": "angelou",
+   "icon": "maya-angelou",
+   "name": "Maya Angelou",
+   "short": "Angelou",
+   "ini": "MA",
+   "area": "Books & writing",
+   "sex": "f",
+   "stance": "",
+   "desc": "Poet, memoirist",
+   "q": [],
+   "wiki": "Maya_Angelou",
+   "year": 1969,
+   "cross": false
+  },
+  {
+   "id": "sking",
+   "icon": "stephen-king",
+   "name": "Stephen King",
+   "short": "Stephen King",
+   "ini": "SK",
+   "area": "Books & writing",
+   "sex": "m",
+   "stance": "",
+   "desc": "Novelist",
+   "q": [],
+   "wiki": "Stephen_King",
+   "year": 1974,
+   "cross": false
+  },
+  {
+   "id": "morrison",
+   "icon": "toni-morrison",
+   "name": "Toni Morrison",
+   "short": "Morrison",
+   "ini": "TM",
+   "area": "Books & writing",
+   "sex": "f",
+   "stance": "",
+   "desc": "Novelist, editor",
+   "q": [],
+   "wiki": "Toni_Morrison",
+   "year": 1987,
+   "cross": false
+  },
+  {
+   "id": "adichie",
+   "icon": "chimamanda-ngozi-adichie",
+   "name": "Chimamanda Ngozi Adichie",
+   "short": "Adichie",
+   "ini": "CA",
+   "area": "Books & writing",
+   "sex": "f",
+   "stance": "",
+   "desc": "Novelist",
+   "q": [],
+   "wiki": "Chimamanda_Ngozi_Adichie",
+   "year": 2013,
+   "cross": false
+  },
+  {
+   "id": "coates",
+   "icon": "ta-nehisi-coates",
+   "name": "Ta-Nehisi Coates",
+   "short": "Coates",
+   "ini": "TC",
+   "area": "Books & writing",
+   "sex": "m",
+   "stance": "",
+   "desc": "Writer",
+   "q": [],
+   "wiki": "Ta-Nehisi_Coates",
+   "year": 2015,
+   "cross": false
+  },
+  {
+   "id": "gorman",
+   "icon": "amanda-gorman",
+   "name": "Amanda Gorman",
+   "short": "Gorman",
+   "ini": "AG",
+   "area": "Books & writing",
+   "sex": "f",
+   "stance": "",
+   "desc": "Poet",
+   "q": [],
+   "wiki": "Amanda_Gorman",
+   "year": 2021,
+   "cross": false
+  },
+  {
+   "id": "child",
+   "icon": "julia-child",
+   "name": "Julia Child",
+   "short": "Julia Child",
+   "ini": "JC",
+   "area": "Food",
+   "sex": "f",
+   "stance": "",
+   "desc": "Cook, broadcaster",
+   "q": [],
+   "wiki": "Julia_Child",
+   "year": 1963,
+   "cross": false
+  },
+  {
+   "id": "waters",
+   "icon": "alice-waters",
+   "name": "Alice Waters",
+   "short": "Alice Waters",
+   "ini": "AW",
+   "area": "Food",
+   "sex": "f",
+   "stance": "",
+   "desc": "Chef, founder",
+   "q": [],
+   "wiki": "Alice_Waters",
+   "year": 1971,
+   "cross": false
+  },
+  {
+   "id": "bourdain",
+   "icon": "anthony-bourdain",
+   "name": "Anthony Bourdain",
+   "short": "Bourdain",
+   "ini": "AB",
+   "area": "Food",
+   "sex": "m",
+   "stance": "",
+   "desc": "Chef, writer",
+   "q": [],
+   "wiki": "Anthony_Bourdain",
+   "year": 2000,
+   "cross": false
+  },
+  {
+   "id": "chang",
+   "icon": "david-chang",
+   "name": "David Chang",
+   "short": "David Chang",
+   "ini": "DC",
+   "area": "Food",
+   "sex": "m",
+   "stance": "",
+   "desc": "Chef, founder",
+   "q": [],
+   "wiki": "David_Chang",
+   "year": 2004,
+   "cross": false
+  },
+  {
+   "id": "andres",
+   "icon": "jose-andres",
+   "name": "José Andrés",
+   "short": "José Andrés",
+   "ini": "JA",
+   "area": "Food",
+   "sex": "m",
+   "stance": "",
+   "desc": "Chef, founder of World Central Kitchen",
+   "q": [],
+   "wiki": "José_Andrés",
+   "year": 2017,
+   "cross": false
+  },
+  {
+   "id": "nosrat",
+   "icon": "samin-nosrat",
+   "name": "Samin Nosrat",
+   "short": "Nosrat",
+   "ini": "SN",
+   "area": "Food",
+   "sex": "f",
+   "stance": "",
+   "desc": "Cook, writer",
+   "q": [],
+   "wiki": "Samin_Nosrat",
+   "year": 2017,
+   "cross": false
+  },
+  {
+   "id": "goodall",
+   "icon": "jane-goodall",
+   "name": "Jane Goodall",
+   "short": "Goodall",
+   "ini": "JG",
+   "area": "Exploration",
+   "sex": "f",
+   "stance": "",
+   "desc": "Primatologist",
+   "q": [],
+   "wiki": "Jane_Goodall",
+   "year": 1960,
+   "cross": false
+  },
+  {
+   "id": "armstrong",
+   "icon": "neil-armstrong",
+   "name": "Neil Armstrong",
+   "short": "Armstrong",
+   "ini": "NA",
+   "area": "Exploration",
+   "sex": "m",
+   "stance": "",
+   "desc": "Astronaut",
+   "q": [],
+   "wiki": "Neil_Armstrong",
+   "year": 1969,
+   "cross": false
+  },
+  {
+   "id": "tabei",
+   "icon": "junko-tabei",
+   "name": "Junko Tabei",
+   "short": "Tabei",
+   "ini": "JT",
+   "area": "Exploration",
+   "sex": "f",
+   "stance": "",
+   "desc": "Mountaineer",
+   "q": [],
+   "wiki": "Junko_Tabei",
+   "year": 1975,
+   "cross": false
+  },
+  {
+   "id": "earle",
+   "icon": "sylvia-earle",
+   "name": "Sylvia Earle",
+   "short": "Earle",
+   "ini": "SE",
+   "area": "Exploration",
+   "sex": "f",
+   "stance": "",
+   "desc": "Oceanographer",
+   "q": [],
+   "wiki": "Sylvia_Earle",
+   "year": 1979,
+   "cross": false
+  },
+  {
+   "id": "jemison",
+   "icon": "mae-jemison",
+   "name": "Mae Jemison",
+   "short": "Jemison",
+   "ini": "MJ",
+   "area": "Exploration",
+   "sex": "f",
+   "stance": "",
+   "desc": "Astronaut, physician",
+   "q": [],
+   "wiki": "Mae_Jemison",
+   "year": 1992,
+   "cross": false
+  },
+  {
+   "id": "honnold",
+   "icon": "alex-honnold",
+   "name": "Alex Honnold",
+   "short": "Honnold",
+   "ini": "AH",
+   "area": "Exploration",
+   "sex": "m",
+   "stance": "",
+   "desc": "Climber",
+   "q": [],
+   "wiki": "Alex_Honnold",
+   "year": 2017,
+   "cross": false
+  },
+  {
+   "id": "huerta",
+   "icon": "dolores-huerta",
+   "name": "Dolores Huerta",
+   "short": "Huerta",
+   "ini": "DH",
+   "area": "Faith & activism",
+   "sex": "f",
+   "stance": "",
+   "desc": "Labour organiser",
+   "q": [],
+   "wiki": "Dolores_Huerta",
+   "year": 1965,
+   "cross": false
+  },
+  {
+   "id": "tutu",
+   "icon": "desmond-tutu",
+   "name": "Desmond Tutu",
+   "short": "Tutu",
+   "ini": "DT",
+   "area": "Faith & activism",
+   "sex": "m",
+   "stance": "",
+   "desc": "Archbishop",
+   "q": [],
+   "wiki": "Desmond_Tutu",
+   "year": 1984,
+   "cross": false
+  },
+  {
+   "id": "dalai",
+   "icon": "dalai-lama",
+   "name": "Dalai Lama",
+   "short": "Dalai Lama",
+   "ini": "DL",
+   "area": "Faith & activism",
+   "sex": "m",
+   "stance": "",
+   "desc": "Spiritual leader",
+   "q": [],
+   "wiki": "14th_Dalai_Lama",
+   "year": 1989,
+   "cross": false
+  },
+  {
+   "id": "francis",
+   "icon": "pope-francis",
+   "name": "Pope Francis",
+   "short": "Pope Francis",
+   "ini": "PF",
+   "area": "Faith & activism",
+   "sex": "m",
+   "stance": "",
+   "desc": "Pope",
+   "q": [],
+   "wiki": "Pope_Francis",
+   "year": 2013,
+   "cross": false
+  },
+  {
+   "id": "thunberg",
+   "icon": "greta-thunberg",
+   "name": "Greta Thunberg",
+   "short": "Thunberg",
+   "ini": "GT",
+   "area": "Faith & activism",
+   "sex": "f",
+   "stance": "",
+   "desc": "Climate activist",
+   "q": [],
+   "wiki": "Greta_Thunberg",
+   "year": 2018,
+   "cross": false
+  }
+ ],
+ "works": [
+  {
+   "id": "obama-promised",
+   "hero": "obama",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "A Promised Land",
+   "by": "Barack Obama",
+   "year": 2020,
+   "line": "His own account of the 2008 campaign and the first term, including how the cabinet was built.",
+   "icon": "barack-obama"
+  },
+  {
+   "id": "obama-dreams",
+   "hero": "obama",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "Dreams from My Father",
+   "by": "Barack Obama",
+   "year": 1995,
+   "line": "The early memoir, written before politics.",
+   "icon": "barack-obama"
+  },
+  {
+   "id": "obama-renegades",
+   "hero": "obama",
+   "kind": "audio",
+   "form": "Podcast",
+   "title": "Renegades: Born in the USA",
+   "by": "Barack Obama and Bruce Springsteen",
+   "year": 2021,
+   "line": "Eight conversations about fathers, race and the country.",
+   "icon": "barack-obama"
+  },
+  {
+   "id": "obama-hbo",
+   "hero": "obama",
+   "kind": "film",
+   "form": "Documentary",
+   "title": "Obama: In Pursuit of a More Perfect Union",
+   "by": "Peter Kunhardt, HBO",
+   "year": 2021,
+   "line": "Three parts, on his life and presidency.",
+   "icon": "barack-obama"
+  },
+  {
+   "id": "michelle-becoming",
+   "hero": "michelle",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "Becoming",
+   "by": "Michelle Obama",
+   "year": 2018,
+   "line": "Her memoir. The 2016 convention speech is in it.",
+   "icon": "michelle-obama"
+  },
+  {
+   "id": "michelle-light",
+   "hero": "michelle",
+   "kind": "book",
+   "form": "Essays",
+   "title": "The Light We Carry",
+   "by": "Michelle Obama",
+   "year": 2022,
+   "line": "On the habits that steady her in uncertain times.",
+   "icon": "michelle-obama"
+  },
+  {
+   "id": "michelle-imo",
+   "hero": "michelle",
+   "kind": "audio",
+   "form": "Podcast",
+   "title": "IMO with Michelle Obama and Craig Robinson",
+   "by": "Michelle Obama and Craig Robinson",
+   "year": 2025,
+   "line": "A weekly show with her brother.",
+   "icon": "michelle-obama"
+  },
+  {
+   "id": "michelle-becoming-doc",
+   "hero": "michelle",
+   "kind": "film",
+   "form": "Documentary",
+   "title": "Becoming",
+   "by": "Nadia Hallgren, Netflix",
+   "year": 2020,
+   "line": "Follows the book tour.",
+   "icon": "michelle-obama"
+  },
+  {
+   "id": "ali-trials",
+   "hero": "ali",
+   "kind": "film",
+   "form": "Documentary",
+   "title": "The Trials of Muhammad Ali",
+   "by": "Bill Siegel",
+   "year": 2013,
+   "line": "On the draft refusal and the years out of the ring.",
+   "icon": "muhammad-ali"
+  },
+  {
+   "id": "ali-burns",
+   "hero": "ali",
+   "kind": "film",
+   "form": "Documentary",
+   "title": "Muhammad Ali",
+   "by": "Ken Burns, Sarah Burns and David McMahon, PBS",
+   "year": 2021,
+   "line": "Four parts, from Louisville to Atlanta 1996.",
+   "icon": "muhammad-ali"
+  },
+  {
+   "id": "ali-greatest",
+   "hero": "ali",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "The Greatest: My Own Story",
+   "by": "Muhammad Ali with Richard Durham",
+   "year": 1975,
+   "line": "His own account.",
+   "icon": "muhammad-ali"
+  },
+  {
+   "id": "ali-remnick",
+   "hero": "ali",
+   "kind": "book",
+   "form": "Biography",
+   "title": "King of the World",
+   "by": "David Remnick",
+   "year": 1998,
+   "line": "His rise, through the first Liston fight.",
+   "icon": "muhammad-ali"
+  },
+  {
+   "id": "ali-kings",
+   "hero": "ali",
+   "kind": "film",
+   "form": "Documentary",
+   "title": "When We Were Kings",
+   "by": "Leon Gast",
+   "year": 1996,
+   "line": "The Rumble in the Jungle, Kinshasa 1974.",
+   "icon": "muhammad-ali"
+  },
+  {
+   "id": "stevie-pod",
+   "hero": "stevie",
+   "kind": "audio",
+   "form": "Podcast",
+   "title": "The Wonder of Stevie",
+   "by": "Wesley Morris, Higher Ground and Audible",
+   "year": 2024,
+   "line": "On the five albums from 1972 to 1976 and the deal that made them possible.",
+   "icon": "stevie-wonder"
+  },
+  {
+   "id": "stevie-ribowsky",
+   "hero": "stevie",
+   "kind": "book",
+   "form": "Biography",
+   "title": "Signed, Sealed, and Delivered: The Soulful Journey of Stevie Wonder",
+   "by": "Mark Ribowsky",
+   "year": 2010,
+   "line": "A full biography.",
+   "icon": "stevie-wonder"
+  },
+  {
+   "id": "stevie-werner",
+   "hero": "stevie",
+   "kind": "book",
+   "form": "History",
+   "title": "Higher Ground: Stevie Wonder, Aretha Franklin, Curtis Mayfield, and the Rise and Fall of American Soul",
+   "by": "Craig Werner",
+   "year": 2004,
+   "line": "Three careers, set against the 1960s and 70s.",
+   "icon": "stevie-wonder"
+  },
+  {
+   "id": "jackie-inhm",
+   "hero": "jackie",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "I Never Had It Made",
+   "by": "Jackie Robinson with Alfred Duckett",
+   "year": 1972,
+   "line": "His autobiography, and the source for the Rickey meeting.",
+   "icon": "jackie-robinson"
+  },
+  {
+   "id": "jackie-rampersad",
+   "hero": "jackie",
+   "kind": "book",
+   "form": "Biography",
+   "title": "Jackie Robinson: A Biography",
+   "by": "Arnold Rampersad",
+   "year": 1997,
+   "line": "The standard biography.",
+   "icon": "jackie-robinson"
+  },
+  {
+   "id": "jackie-burns",
+   "hero": "jackie",
+   "kind": "film",
+   "form": "Documentary",
+   "title": "Jackie Robinson",
+   "by": "Ken Burns, Sarah Burns and David McMahon, PBS",
+   "year": 2016,
+   "line": "Two parts.",
+   "icon": "jackie-robinson"
+  },
+  {
+   "id": "jackie-42",
+   "hero": "jackie",
+   "kind": "film",
+   "form": "Film",
+   "title": "42",
+   "by": "Brian Helgeland",
+   "year": 2013,
+   "line": "The 1945 meeting with Rickey is an early scene.",
+   "icon": "jackie-robinson"
+  },
+  {
+   "id": "bjk-allin",
+   "hero": "bjk",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "All In: An Autobiography",
+   "by": "Billie Jean King",
+   "year": 2021,
+   "line": "Her own account, including the 1973 match.",
+   "icon": "billie-jean-king"
+  },
+  {
+   "id": "bjk-bots",
+   "hero": "bjk",
+   "kind": "film",
+   "form": "Film",
+   "title": "Battle of the Sexes",
+   "by": "Jonathan Dayton and Valerie Faris",
+   "year": 2017,
+   "line": "A feature film about the 1973 match.",
+   "icon": "billie-jean-king"
+  },
+  {
+   "id": "bjk-hbo",
+   "hero": "bjk",
+   "kind": "film",
+   "form": "Documentary",
+   "title": "Billie Jean King: Portrait of a Pioneer",
+   "by": "HBO",
+   "year": 2006,
+   "line": "On her playing career and the founding of the tour.",
+   "icon": "billie-jean-king"
+  },
+  {
+   "id": "churchill-larson",
+   "hero": "churchill",
+   "kind": "book",
+   "form": "History",
+   "title": "The Splendid and the Vile",
+   "by": "Erik Larson",
+   "year": 2020,
+   "line": "1940 to 1941, the year of the Blitz.",
+   "icon": "winston-churchill"
+  },
+  {
+   "id": "churchill-roberts",
+   "hero": "churchill",
+   "kind": "book",
+   "form": "Biography",
+   "title": "Churchill: Walking with Destiny",
+   "by": "Andrew Roberts",
+   "year": 2018,
+   "line": "A single-volume life.",
+   "icon": "winston-churchill"
+  },
+  {
+   "id": "churchill-darkest",
+   "hero": "churchill",
+   "kind": "film",
+   "form": "Film",
+   "title": "Darkest Hour",
+   "by": "Joe Wright",
+   "year": 2017,
+   "line": "May 1940, the first weeks as Prime Minister.",
+   "icon": "winston-churchill"
+  },
+  {
+   "id": "golda-mylife",
+   "hero": "golda",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "My Life",
+   "by": "Golda Meir",
+   "year": 1975,
+   "line": "Her autobiography.",
+   "icon": "golda-meir"
+  },
+  {
+   "id": "golda-lioness",
+   "hero": "golda",
+   "kind": "book",
+   "form": "Biography",
+   "title": "Lioness: Golda Meir and the Nation of Israel",
+   "by": "Francine Klagsbrun",
+   "year": 2017,
+   "line": "A full biography.",
+   "icon": "golda-meir"
+  },
+  {
+   "id": "golda-film",
+   "hero": "golda",
+   "kind": "film",
+   "form": "Film",
+   "title": "Golda",
+   "by": "Guy Nattiv",
+   "year": 2023,
+   "line": "Helen Mirren, in the days of the 1973 war.",
+   "icon": "golda-meir"
+  },
+  {
+   "id": "oprah-sure",
+   "hero": "oprah",
+   "kind": "book",
+   "form": "Essays",
+   "title": "What I Know for Sure",
+   "by": "Oprah Winfrey",
+   "year": 2014,
+   "line": "Her magazine columns, collected.",
+   "icon": "oprah-winfrey"
+  },
+  {
+   "id": "oprah-path",
+   "hero": "oprah",
+   "kind": "book",
+   "form": "Essays",
+   "title": "The Path Made Clear",
+   "by": "Oprah Winfrey",
+   "year": 2019,
+   "line": "On purpose, drawn from her interviews.",
+   "icon": "oprah-winfrey"
+  },
+  {
+   "id": "oprah-supersoul",
+   "hero": "oprah",
+   "kind": "audio",
+   "form": "Podcast",
+   "title": "Oprah's Super Soul",
+   "by": "Oprah Winfrey",
+   "year": null,
+   "line": "Her long-form interviews, as a podcast.",
+   "icon": "oprah-winfrey"
+  },
+  {
+   "id": "yoyoma-strangers",
+   "hero": "yoyoma",
+   "kind": "film",
+   "form": "Documentary",
+   "title": "The Music of Strangers: Yo-Yo Ma and the Silk Road Ensemble",
+   "by": "Morgan Neville",
+   "year": 2015,
+   "line": "On the ensemble he founded.",
+   "icon": "yo-yo-ma"
+  },
+  {
+   "id": "yoyoma-beginners",
+   "hero": "yoyoma",
+   "kind": "audio",
+   "form": "Audiobook",
+   "title": "Beginner's Mind",
+   "by": "Yo-Yo Ma",
+   "year": 2021,
+   "line": "An audio memoir, in his own voice, with cello.",
+   "icon": "yo-yo-ma"
+  },
+  {
+   "id": "yoyoma-onbeing",
+   "hero": "yoyoma",
+   "kind": "audio",
+   "form": "Podcast episode",
+   "title": "On Being: Yo-Yo Ma — Music Happens Between the Notes",
+   "by": "Krista Tippett",
+   "year": 2014,
+   "line": "A long conversation.",
+   "icon": "yo-yo-ma"
+  },
+  {
+   "id": "jfk-dallek",
+   "hero": "jfk",
+   "kind": "book",
+   "form": "Biography",
+   "title": "An Unfinished Life: John F. Kennedy, 1917–1963",
+   "by": "Robert Dallek",
+   "year": 2003,
+   "line": "A full biography.",
+   "icon": "john-f-kennedy"
+  },
+  {
+   "id": "jfk-logevall",
+   "hero": "jfk",
+   "kind": "book",
+   "form": "Biography",
+   "title": "JFK: Coming of Age in the American Century, 1917–1956",
+   "by": "Fredrik Logevall",
+   "year": 2020,
+   "line": "Volume one, to 1956.",
+   "icon": "john-f-kennedy"
+  },
+  {
+   "id": "jfk-profiles",
+   "hero": "jfk",
+   "kind": "book",
+   "form": "History",
+   "title": "Profiles in Courage",
+   "by": "John F. Kennedy",
+   "year": 1956,
+   "line": "His book on eight senators.",
+   "icon": "john-f-kennedy"
+  },
+  {
+   "id": "jfk-13days",
+   "hero": "jfk",
+   "kind": "film",
+   "form": "Film",
+   "title": "Thirteen Days",
+   "by": "Roger Donaldson",
+   "year": 2000,
+   "line": "The Cuban missile crisis, October 1962.",
+   "icon": "john-f-kennedy"
+  },
+  {
+   "id": "aretha-ritz",
+   "hero": "aretha",
+   "kind": "book",
+   "form": "Biography",
+   "title": "Respect: The Life of Aretha Franklin",
+   "by": "David Ritz",
+   "year": 2014,
+   "line": "A full biography.",
+   "icon": "aretha-franklin"
+  },
+  {
+   "id": "aretha-roots",
+   "hero": "aretha",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "Aretha: From These Roots",
+   "by": "Aretha Franklin with David Ritz",
+   "year": 1999,
+   "line": "Her memoir.",
+   "icon": "aretha-franklin"
+  },
+  {
+   "id": "aretha-grace",
+   "hero": "aretha",
+   "kind": "film",
+   "form": "Documentary",
+   "title": "Amazing Grace",
+   "by": "Sydney Pollack and Alan Elliott",
+   "year": 2018,
+   "line": "The 1972 gospel concert, filmed.",
+   "icon": "aretha-franklin"
+  },
+  {
+   "id": "aretha-respect",
+   "hero": "aretha",
+   "kind": "film",
+   "form": "Film",
+   "title": "Respect",
+   "by": "Liesl Tommy",
+   "year": 2021,
+   "line": "Jennifer Hudson, through the 1972 Amazing Grace sessions.",
+   "icon": "aretha-franklin"
+  },
+  {
+   "id": "huff-thrive",
+   "hero": "huffington",
+   "kind": "book",
+   "form": "Essays",
+   "title": "Thrive",
+   "by": "Arianna Huffington",
+   "year": 2014,
+   "line": "On redefining success, written after her collapse from exhaustion.",
+   "icon": "arianna-huffington"
+  },
+  {
+   "id": "huff-fearless",
+   "hero": "huffington",
+   "kind": "book",
+   "form": "Essays",
+   "title": "On Becoming Fearless",
+   "by": "Arianna Huffington",
+   "year": 2006,
+   "line": "On fear, at work and in public.",
+   "icon": "arianna-huffington"
+  },
+  {
+   "id": "huff-pod",
+   "hero": "huffington",
+   "kind": "audio",
+   "form": "Podcast",
+   "title": "The Thrive Global Podcast",
+   "by": "Arianna Huffington",
+   "year": 2017,
+   "line": "Conversations on wellbeing and work.",
+   "icon": "arianna-huffington"
+  },
+  {
+   "id": "biles-courage",
+   "hero": "biles",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "Courage to Soar",
+   "by": "Simone Biles with Michelle Burford",
+   "year": 2016,
+   "line": "Her memoir, written at nineteen.",
+   "icon": "simone-biles"
+  },
+  {
+   "id": "biles-rising",
+   "hero": "biles",
+   "kind": "film",
+   "form": "Series",
+   "title": "Simone Biles Rising",
+   "by": "Katie Walsh, Netflix",
+   "year": 2024,
+   "line": "Tokyo 2021 and the road back to Paris.",
+   "icon": "simone-biles"
+  },
+  {
+   "id": "biles-vs",
+   "hero": "biles",
+   "kind": "film",
+   "form": "Series",
+   "title": "Simone vs Herself",
+   "by": "Gotham Chopra",
+   "year": 2021,
+   "line": "The run-up to Tokyo.",
+   "icon": "simone-biles"
+  },
+  {
+   "id": "mlk-stride",
+   "hero": "mlk",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "Stride Toward Freedom: The Montgomery Story",
+   "by": "Martin Luther King Jr.",
+   "year": 1958,
+   "line": "His own account of the bus boycott.",
+   "icon": "martin-luther-king-jr"
+  },
+  {
+   "id": "mlk-eig",
+   "hero": "mlk",
+   "kind": "book",
+   "form": "Biography",
+   "title": "King: A Life",
+   "by": "Jonathan Eig",
+   "year": 2023,
+   "line": "A full biography, drawing on newly released files.",
+   "icon": "martin-luther-king-jr"
+  },
+  {
+   "id": "mlk-branch",
+   "hero": "mlk",
+   "kind": "book",
+   "form": "History",
+   "title": "Parting the Waters: America in the King Years 1954–63",
+   "by": "Taylor Branch",
+   "year": 1988,
+   "line": "Volume one of a trilogy.",
+   "icon": "martin-luther-king-jr"
+  },
+  {
+   "id": "mlk-wilderness",
+   "hero": "mlk",
+   "kind": "film",
+   "form": "Documentary",
+   "title": "King in the Wilderness",
+   "by": "Peter Kunhardt, HBO",
+   "year": 2018,
+   "line": "The last eighteen months, 1966 to 1968.",
+   "icon": "martin-luther-king-jr"
+  },
+  {
+   "id": "nina-spell",
+   "hero": "nina",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "I Put a Spell on You",
+   "by": "Nina Simone with Stephen Cleary",
+   "year": 1991,
+   "line": "Her autobiography.",
+   "icon": "nina-simone"
+  },
+  {
+   "id": "nina-noire",
+   "hero": "nina",
+   "kind": "book",
+   "form": "Biography",
+   "title": "Princess Noire: The Tumultuous Reign of Nina Simone",
+   "by": "Nadine Cohodas",
+   "year": 2010,
+   "line": "A full biography.",
+   "icon": "nina-simone"
+  },
+  {
+   "id": "nina-doc",
+   "hero": "nina",
+   "kind": "film",
+   "form": "Documentary",
+   "title": "What Happened, Miss Simone?",
+   "by": "Liz Garbus, Netflix",
+   "year": 2015,
+   "line": "From her own recordings and letters.",
+   "icon": "nina-simone"
+  },
+  {
+   "id": "staley-favor",
+   "hero": "staley",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "Uncommon Favor",
+   "by": "Dawn Staley",
+   "year": 2025,
+   "line": "Her memoir: North Philly, her mother, and basketball.",
+   "icon": "dawn-staley"
+  },
+  {
+   "id": "kj-hidden",
+   "hero": "kjohnson",
+   "kind": "book",
+   "form": "History",
+   "title": "Hidden Figures",
+   "by": "Margot Lee Shetterly",
+   "year": 2016,
+   "line": "The book that made her widely known.",
+   "icon": "katherine-johnson"
+  },
+  {
+   "id": "kj-film",
+   "hero": "kjohnson",
+   "kind": "film",
+   "form": "Film",
+   "title": "Hidden Figures",
+   "by": "Theodore Melfi",
+   "year": 2016,
+   "line": "Taraji P. Henson as Johnson.",
+   "icon": "katherine-johnson"
+  },
+  {
+   "id": "obama-bridge",
+   "hero": "obama",
+   "kind": "book",
+   "form": "Biography",
+   "title": "The Bridge: The Life and Rise of Barack Obama",
+   "by": "David Remnick",
+   "year": 2010,
+   "line": "Includes the Law Review election.",
+   "icon": "barack-obama"
+  },
+  {
+   "id": "schultz-pour",
+   "hero": "schultz",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "Pour Your Heart Into It",
+   "by": "Howard Schultz with Dori Jones Yang",
+   "year": 1997,
+   "line": "His own account of buying the company.",
+   "icon": "howard-schultz"
+  },
+  {
+   "id": "marley-white",
+   "hero": "marley",
+   "kind": "book",
+   "form": "Biography",
+   "title": "Catch a Fire: The Life of Bob Marley",
+   "by": "Timothy White",
+   "year": 1983,
+   "line": "The standard biography.",
+   "icon": "bob-marley"
+  },
+  {
+   "id": "marley-doc",
+   "hero": "marley",
+   "kind": "film",
+   "form": "Documentary",
+   "title": "Marley",
+   "by": "Kevin Macdonald",
+   "year": 2012,
+   "line": "Family-authorised, two and a half hours.",
+   "icon": "bob-marley"
+  },
+  {
+   "id": "jordan-dance",
+   "hero": "jordan",
+   "kind": "film",
+   "form": "Series",
+   "title": "The Last Dance",
+   "by": "Jason Hehir, ESPN and Netflix",
+   "year": 2020,
+   "line": "Ten parts: the 1997–98 season and everything before it.",
+   "icon": "michael-jordan"
+  },
+  {
+   "id": "jordan-lazenby",
+   "hero": "jordan",
+   "kind": "book",
+   "form": "Biography",
+   "title": "Michael Jordan: The Life",
+   "by": "Roland Lazenby",
+   "year": 2014,
+   "line": "A full biography.",
+   "icon": "michael-jordan"
+  },
+  {
+   "id": "serena-line",
+   "hero": "serena",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "On the Line",
+   "by": "Serena Williams with Daniel Paisner",
+   "year": 2009,
+   "line": "Her memoir.",
+   "icon": "serena-williams"
+  },
+  {
+   "id": "serena-being",
+   "hero": "serena",
+   "kind": "film",
+   "form": "Series",
+   "title": "Being Serena",
+   "by": "HBO",
+   "year": 2018,
+   "line": "Five parts, 2017 to 2018.",
+   "icon": "serena-williams"
+  },
+  {
+   "id": "serena-king",
+   "hero": "serena",
+   "kind": "film",
+   "form": "Film",
+   "title": "King Richard",
+   "by": "Reinaldo Marcus Green",
+   "year": 2021,
+   "line": "Her father and the early years.",
+   "icon": "serena-williams"
+  },
+  {
+   "id": "rihanna-book",
+   "hero": "rihanna",
+   "kind": "book",
+   "form": "Visual autobiography",
+   "title": "Rihanna",
+   "by": "Rihanna, Phaidon",
+   "year": 2019,
+   "line": "Five hundred pages of photographs.",
+   "icon": "rihanna"
+  },
+  {
+   "id": "mrbeast-lex",
+   "hero": "mrbeast",
+   "kind": "audio",
+   "form": "Podcast episode",
+   "title": "Lex Fridman Podcast #351: MrBeast",
+   "by": "Lex Fridman",
+   "year": 2023,
+   "line": "A long conversation on how he builds.",
+   "icon": "mrbeast"
+  },
+  {
+   "id": "saujani-brave",
+   "hero": "saujani",
+   "kind": "book",
+   "form": "Essays",
+   "title": "Brave, Not Perfect",
+   "by": "Reshma Saujani",
+   "year": 2019,
+   "line": "On the habit of perfection and what it costs.",
+   "icon": "reshma-saujani"
+  },
+  {
+   "id": "saujani-ted",
+   "hero": "saujani",
+   "kind": "film",
+   "form": "Talk",
+   "title": "Teach girls bravery, not perfection",
+   "by": "TED",
+   "year": 2016,
+   "line": "Eleven minutes.",
+   "icon": "reshma-saujani"
+  },
+  {
+   "id": "prince-ones",
+   "hero": "prince",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "The Beautiful Ones",
+   "by": "Prince, edited by Dan Piepenbring",
+   "year": 2019,
+   "line": "The unfinished memoir.",
+   "icon": "prince"
+  },
+  {
+   "id": "prince-rain",
+   "hero": "prince",
+   "kind": "film",
+   "form": "Film",
+   "title": "Purple Rain",
+   "by": "Albert Magnoli",
+   "year": 1984,
+   "line": "The film, and the album.",
+   "icon": "prince"
+  },
+  {
+   "id": "mandela-walk",
+   "hero": "mandela",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "Long Walk to Freedom",
+   "by": "Nelson Mandela",
+   "year": 1994,
+   "line": "His autobiography.",
+   "icon": "nelson-mandela"
+  },
+  {
+   "id": "jobs-isaacson",
+   "hero": "jobs",
+   "kind": "book",
+   "form": "Biography",
+   "title": "Steve Jobs",
+   "by": "Walter Isaacson",
+   "year": 2011,
+   "line": "The authorised biography.",
+   "icon": "steve-jobs"
+  },
+  {
+   "id": "rbg-doc",
+   "hero": "rbg",
+   "kind": "film",
+   "form": "Documentary",
+   "title": "RBG",
+   "by": "Betsy West and Julie Cohen",
+   "year": 2018,
+   "line": "Her life and career.",
+   "icon": "ruth-bader-ginsburg"
+  },
+  {
+   "id": "ardern-power",
+   "hero": "ardern",
+   "kind": "book",
+   "form": "Memoir",
+   "title": "A Different Kind of Power",
+   "by": "Jacinda Ardern",
+   "year": 2025,
+   "line": "Her memoir.",
+   "icon": "jacinda-ardern"
+  },
+  {
+   "id": "tina-doc",
+   "hero": "tina",
+   "kind": "film",
+   "form": "Documentary",
+   "title": "Tina",
+   "by": "Dan Lindsay and T.J. Martin, HBO",
+   "year": 2021,
+   "line": "Her own account, on film.",
+   "icon": "tina-turner"
+  }
+ ],
+ "samples": [
+  {
+   "id": "st-ali-1967-induction",
+   "hero": "ali",
+   "place": "Houston, April 1967",
+   "keys": [
+    "saying-it-in-your-own-words"
+   ],
+   "reach": "far",
+   "verified": false,
+   "moment": "On 28 April 1967, at the induction centre in Houston, his name was called and he did not step forward. Within hours the boxing authorities moved to strip his title. He did not fight again for three and a half years, and he did not change his account of why.",
+   "pattern": "",
+   "by": "",
+   "why": "Chosen because there are weeks when you have to say where you stand, out loud, and keep saying it.",
+   "source": "Not yet sourced. Several versions of his best-known line on the war circulate; none is confirmed.",
+   "caution": "",
+   "gist": "He did not step forward, and did not change his account of why.",
+   "walk": "",
+   "deeper": [
+    "ali-trials",
+    "ali-burns",
+    "ali-greatest"
+   ],
+   "icon": "muhammad-ali",
+   "twin": null
+  },
+  {
+   "id": "st-bjk-1973-riggs",
+   "hero": "bjk",
+   "place": "Houston, September 1973",
+   "keys": [
+    "agreeing-and-not-moving",
+    "every-act-is-a-message"
+   ],
+   "reach": "mid",
+   "verified": true,
+   "moment": "She had turned Bobby Riggs down. Then Margaret Court accepted, and lost. King understood what a second loss would cost every woman in the game, and said yes. On 20 September 1973, in the Houston Astrodome, in front of more than thirty thousand people and a vast television audience, she won in straight sets.",
+   "pattern": "I thought it would set us back 50 years if I didn't win that match.",
+   "by": "",
+   "why": "Chosen because the thing you've been avoiding gets more expensive every week you wait.",
+   "source": "billiejeanking.com, “Battle of the Sexes”; check quote against a primary interview.",
+   "caution": "",
+   "gist": "She took the match she had turned down, once waiting cost more.",
+   "walk": "take the conversation you've been avoiding, and set its terms.",
+   "deeper": [
+    "bjk-allin",
+    "bjk-bots"
+   ],
+   "icon": "billie-jean-king",
+   "twin": null
+  },
+  {
+   "id": "st-jackie-robinson-1945-rickey",
+   "hero": "jackie",
+   "place": "Brooklyn, August 1945",
+   "keys": [
+    "every-act-is-a-message",
+    "style-against-expectation"
+   ],
+   "reach": "mid",
+   "verified": true,
+   "moment": "Branch Rickey wanted him to break baseball's colour line, and spent the meeting acting out the abuse he would face — the slurs, the spikes, the umpires. Robinson asked if Rickey wanted a player who was afraid to fight back. Rickey said no. He agreed to take it, without answering, for his first seasons.",
+   "pattern": "I'm looking for a ballplayer with guts enough not to fight back.",
+   "by": "Rickey, as Robinson told it",
+   "why": "Chosen because, for a while, your restraint will say more than anything you could answer back.",
+   "source": "Robinson, I Never Had It Made (1972). Check wording.",
+   "caution": "The restraint was a condition, not a temperament. Robinson spoke out forcefully once it lifted.",
+   "gist": "He agreed to take it without answering, for a while.",
+   "walk": "let the first reaction pass without an answer.",
+   "deeper": [
+    "jackie-inhm",
+    "jackie-42",
+    "jackie-burns"
+   ],
+   "icon": "jackie-robinson",
+   "twin": "s-E1-jackie-robinson"
+  },
+  {
+   "id": "st-michelle-obama-2016-go-high",
+   "hero": "michelle",
+   "place": "Philadelphia, July 2016",
+   "keys": [
+    "every-act-is-a-message",
+    "contradictory-feedback"
+   ],
+   "reach": "mid",
+   "verified": true,
+   "moment": "Opening night of the 2016 Democratic convention, in the ugliest campaign in memory. She never named the opponent. She talked about raising two daughters in the White House, and about what she and her husband told them to do when someone was cruel.",
+   "pattern": "When they go low, we go high.",
+   "by": "",
+   "why": "Chosen because the room will be watching how you respond, more than what you say.",
+   "source": "Full text, ABC News, 25 July 2016.",
+   "caution": "",
+   "gist": "She never named the opponent.",
+   "walk": "don't name the person. Say what you stand for, and let the room compare.",
+   "deeper": [
+    "michelle-becoming",
+    "michelle-becoming-doc"
+   ],
+   "icon": "michelle-obama",
+   "twin": null
+  },
+  {
+   "id": "st-obama-2008-clinton",
+   "hero": "obama",
+   "place": "Chicago, December 2008",
+   "keys": [
+    "renegotiating-standing",
+    "coalition-without-mandate"
+   ],
+   "reach": "mid",
+   "verified": true,
+   "moment": "He had just beaten Hillary Clinton in a primary that ran seventeen months. Four weeks after the election he named her Secretary of State — the senior post in his cabinet — and announced it standing next to her, with the rest of his national security team.",
+   "pattern": "",
+   "by": "",
+   "why": "Chosen because, like you, he had to lead alongside someone who had wanted his job.",
+   "source": "NPR, “Obama Unveils National Security Team,” 1 Dec 2008.",
+   "caution": "",
+   "gist": "He gave his rival the senior post, and stood next to her to announce it.",
+   "walk": "give the person who wanted your job the senior seat, and stand next to them when you say it.",
+   "deeper": [
+    "obama-promised",
+    "obama-hbo"
+   ],
+   "icon": "barack-obama",
+   "twin": null
+  },
+  {
+   "id": "st-obama-2008-more-perfect-union",
+   "hero": "obama",
+   "place": "Philadelphia, March 2008",
+   "keys": [
+    "every-act-is-a-message",
+    "naming-an-unseen-problem"
+   ],
+   "reach": "mid",
+   "verified": true,
+   "moment": "Video of his former pastor's sermons was running on every channel. He did not issue a short statement and move on. On 18 March 2008, at the National Constitution Center in Philadelphia, he gave a long speech on race in America — condemning the remarks, refusing to disown the man, and naming the grievance on more than one side.",
+   "pattern": "I can no more disown him than I can disown the black community.",
+   "by": "",
+   "why": "Chosen because everything you say this week will be read for what it means, not just what it says.",
+   "source": "“A More Perfect Union,” transcript, National Constitution Center.",
+   "caution": "",
+   "gist": "He said the hardest part himself, at length, once.",
+   "walk": "say the hardest part yourself, before anyone else frames it.",
+   "deeper": [
+    "obama-promised",
+    "obama-hbo"
+   ],
+   "icon": "barack-obama",
+   "twin": null
+  },
+  {
+   "id": "st-stevie-wonder-1971-motown",
+   "hero": "stevie",
+   "place": "Detroit, 1971",
+   "keys": [
+    "credit-and-attribution",
+    "unclassifiable-profile"
+   ],
+   "reach": "mid",
+   "verified": true,
+   "moment": "He turned twenty-one in May 1971 and his Motown contract ended. He did not re-sign on the old terms. He recorded on his own, then went back to the label with the work in hand. The contract he signed gave him control of his own records.",
+   "pattern": "",
+   "by": "",
+   "why": "Chosen because the work is yours, and so is how it reaches people.",
+   "source": "Music of My Mind release history; check against a primary biography.",
+   "caution": "Royalty figures that circulate online are unverified. Do not add them.",
+   "gist": "He went back to the label with the finished work in hand.",
+   "walk": "put your name on the work. You built it.",
+   "deeper": [
+    "stevie-pod",
+    "stevie-ribowsky"
+   ],
+   "icon": "stevie-wonder",
+   "twin": null
+  },
+  {
+   "id": "st-kjohnson-1958-langley",
+   "hero": "kjohnson",
+   "place": "Langley, Virginia, late 1950s",
+   "keys": [
+    "expertise-without-pull"
+   ],
+   "reach": "mid",
+   "verified": false,
+   "origin": "corpus",
+   "moment": "Langley, Virginia, late 1950s: Johnson, a mathematician in the Flight Research Division, did calculations the engineers built on, yet the engineers' briefings where the space work was decided were closed to the women computers. She kept asking to attend and asked whether any rule barred her. None did, and she began sitting in. Within a few years flight crews relied on her numbers.",
+   "pattern": "Is there a law against it?",
+   "by": "",
+   "why": "Chosen because getting into the room where it's decided is your work this year.",
+   "source": "Corpus draft. NASA oral-history interviews describe her asking to attend the briefings; verify the wording.",
+   "caution": "",
+   "gist": "She asked whether any rule barred her. None did.",
+   "walk": "ask whether any rule actually bars you from the room. Then sit in.",
+   "deeper": [
+    "kj-hidden",
+    "kj-film"
+   ],
+   "icon": "katherine-johnson",
+   "twin": "s-B6-katherine-johnson"
+  },
+  {
+   "id": "st-obama-1990-law-review",
+   "hero": "obama",
+   "place": "Cambridge, February 1990",
+   "keys": [
+    "renegotiating-standing"
+   ],
+   "reach": "mid",
+   "verified": false,
+   "origin": "corpus",
+   "moment": "Elected president of the Harvard Law Review in February 1990 by a board split into factions, he gave senior posts to editors who had opposed him, including conservatives who had voted against him. Some of his own supporters felt passed over. The Review came out on time.",
+   "pattern": "",
+   "by": "",
+   "why": "Chosen because the people who didn't back you still have to work with you on Monday.",
+   "source": "Corpus draft. Remnick, The Bridge (2010); verify the appointments detail.",
+   "caution": "",
+   "gist": "He gave posts to the editors who had opposed him.",
+   "walk": "ask the person who ran against you for the number, out loud, in front of the group.",
+   "deeper": [
+    "obama-bridge",
+    "obama-dreams"
+   ],
+   "icon": "barack-obama",
+   "twin": "s-A2-barack-obama"
+  },
+  {
+   "id": "st-schultz-1987-seattle",
+   "hero": "schultz",
+   "place": "Seattle, August 1987",
+   "keys": [
+    "renegotiating-standing"
+   ],
+   "reach": "mid",
+   "verified": false,
+   "origin": "corpus",
+   "moment": "He had run marketing for the founders and left when they would not back his idea. Two years later, in August 1987, he bought the company from them. The first thing he did was make his case in person, in the roasting plant, to people who had known him as a colleague.",
+   "pattern": "",
+   "by": "",
+   "why": "Chosen because, like you, he had to lead people who remembered him as a peer.",
+   "source": "Corpus draft. Verify against Schultz, Pour Your Heart Into It (1997).",
+   "caution": "",
+   "gist": "He made his case in person to people who had known him as a colleague.",
+   "walk": "let their call stand when you'd have changed it.",
+   "deeper": [
+    "schultz-pour"
+   ],
+   "icon": "howard-schultz",
+   "twin": "s-A2-howard-schultz"
+  },
+  {
+   "id": "st-ali-1964-miami",
+   "hero": "ali",
+   "place": "Miami Beach, February 1964",
+   "keys": [
+    "borrowed-versus-owned-standing"
+   ],
+   "reach": "mid",
+   "verified": false,
+   "origin": "corpus",
+   "moment": "On 25 February 1964 he took the heavyweight title from Sonny Liston as Cassius Clay. The next morning he confirmed he was a member of the Nation of Islam, and within weeks he was introducing himself by a new name and insisting on it, whatever the press printed.",
+   "pattern": "I don't have to be what you want me to be.",
+   "by": "",
+   "why": "Chosen because standing on your own name, not the firm's, is the work this year.",
+   "source": "Corpus draft. Press conference, Miami Beach, 26 February 1964; the name followed on 6 March. Verify wording.",
+   "caution": "",
+   "gist": "Within weeks he was introducing himself by a new name.",
+   "walk": "say your one thing in the first two minutes, before the credentials.",
+   "deeper": [
+    "ali-remnick",
+    "ali-kings"
+   ],
+   "icon": "muhammad-ali",
+   "twin": "s-B4-muhammad-ali"
+  },
+  {
+   "id": "st-marley-1960s-kingston",
+   "hero": "marley",
+   "place": "Kingston, late 1960s",
+   "keys": [
+    "borrowed-versus-owned-standing"
+   ],
+   "reach": "mid",
+   "verified": false,
+   "origin": "corpus",
+   "moment": "The Wailers had recorded for other people's labels and seen little of the money. By the end of the decade they had started their own imprint and were putting their records out themselves, selling them from a shop in Trench Town.",
+   "pattern": "",
+   "by": "",
+   "why": "Chosen because the name on the record is the thing you own.",
+   "source": "Corpus draft. Verify against White, Catch a Fire (1983).",
+   "caution": "",
+   "gist": "They put their records out under their own imprint.",
+   "walk": "leave the credentials slide out, once.",
+   "deeper": [
+    "marley-white",
+    "marley-doc"
+   ],
+   "icon": "bob-marley",
+   "twin": "s-C2-bob-marley"
+  },
+  {
+   "id": "st-bjk-1973-gloucester",
+   "hero": "bjk",
+   "place": "London, June 1973",
+   "keys": [
+    "renegotiating-standing",
+    "coalition-without-mandate"
+   ],
+   "reach": "mid",
+   "verified": false,
+   "origin": "corpus",
+   "moment": "A week before Wimbledon, in a room at the Gloucester Hotel, she got more than sixty women players to agree to form their own association, with her as its first president. The day before, she had been one of them.",
+   "pattern": "",
+   "by": "",
+   "why": "Chosen because you had to become the person who speaks for people who were your peers.",
+   "source": "Corpus draft. WTA founding, Gloucester Hotel, 21 June 1973. Verify the numbers.",
+   "caution": "",
+   "gist": "The day before, she had been one of them.",
+   "walk": "",
+   "deeper": [
+    "bjk-allin"
+   ],
+   "icon": "billie-jean-king",
+   "twin": "s-A2-billie-jean-king"
+  }
+ ],
+ "idmap": {
+  "obama": "barack-obama",
+  "aretha": "aretha-franklin",
+  "churchill": "winston-churchill",
+  "jackie": "jackie-robinson",
+  "oprah": "oprah-winfrey",
+  "ali": "muhammad-ali",
+  "golda": "golda-meir",
+  "yoyoma": "yo-yo-ma",
+  "jfk": "john-f-kennedy",
+  "stevie": "stevie-wonder",
+  "huffington": "arianna-huffington",
+  "biles": "simone-biles",
+  "michelle": "michelle-obama",
+  "bjk": "billie-jean-king",
+  "mlk": "martin-luther-king-jr",
+  "nina": "nina-simone",
+  "staley": "dawn-staley",
+  "mandela": "nelson-mandela",
+  "jobs": "steve-jobs",
+  "rbg": "ruth-bader-ginsburg",
+  "carter": "jimmy-carter",
+  "ride": "sally-ride",
+  "malala": "malala-yousafzai",
+  "ardern": "jacinda-ardern",
+  "saujani": "reshma-saujani",
+  "nadella": "satya-nadella",
+  "kjohnson": "katherine-johnson",
+  "nooyi": "indra-nooyi",
+  "merkel": "angela-merkel",
+  "eleanor": "eleanor-roosevelt",
+  "powell": "colin-powell",
+  "marley": "bob-marley",
+  "prince": "prince",
+  "tina": "tina-turner",
+  "springsteen": "bruce-springsteen",
+  "beyonce": "beyonce-knowles",
+  "rihanna": "rihanna",
+  "swift": "taylor-swift",
+  "badbunny": "bad-bunny",
+  "dolly": "dolly-parton",
+  "jordan": "michael-jordan",
+  "serena": "serena-williams",
+  "lebron": "lebron-james",
+  "magic": "magic-johnson",
+  "rapinoe": "megan-rapinoe",
+  "gauff": "coco-gauff",
+  "clark": "caitlin-clark",
+  "spielberg": "steven-spielberg",
+  "zendaya": "zendaya",
+  "lucille": "lucille-ball",
+  "spikelee": "spike-lee",
+  "shonda": "shonda-rhimes",
+  "duvernay": "ava-duvernay",
+  "mrbeast": "mrbeast",
+  "chamberlain": "emma-chamberlain",
+  "mkbhd": "marques-brownlee",
+  "cooper": "alex-cooper",
+  "lilly": "lilly-singh",
+  "neistat": "casey-neistat",
+  "chanel": "coco-chanel",
+  "lauren": "ralph-lauren",
+  "dvf": "diane-von-furstenberg",
+  "prada": "miuccia-prada",
+  "ive": "jony-ive",
+  "abloh": "virgil-abloh",
+  "lauder": "estee-lauder",
+  "buffett": "warren-buffett",
+  "schultz": "howard-schultz",
+  "huang": "jensen-huang",
+  "blakely": "sara-blakely",
+  "barra": "mary-barra",
+  "wolfeherd": "whitney-wolfe-herd",
+  "albright": "madeleine-albright",
+  "sotomayor": "sonia-sotomayor",
+  "curie": "marie-curie",
+  "bernerslee": "tim-berners-lee",
+  "doudna": "jennifer-doudna",
+  "tyson": "neil-degrasse-tyson",
+  "kahlo": "frida-kahlo",
+  "warhol": "andy-warhol",
+  "basquiat": "jean-michel-basquiat",
+  "kusama": "yayoi-kusama",
+  "banksy": "banksy",
+  "wiley": "kehinde-wiley",
+  "angelou": "maya-angelou",
+  "sking": "stephen-king",
+  "morrison": "toni-morrison",
+  "adichie": "chimamanda-ngozi-adichie",
+  "coates": "ta-nehisi-coates",
+  "gorman": "amanda-gorman",
+  "child": "julia-child",
+  "waters": "alice-waters",
+  "bourdain": "anthony-bourdain",
+  "chang": "david-chang",
+  "andres": "jose-andres",
+  "nosrat": "samin-nosrat",
+  "goodall": "jane-goodall",
+  "armstrong": "neil-armstrong",
+  "tabei": "junko-tabei",
+  "earle": "sylvia-earle",
+  "jemison": "mae-jemison",
+  "honnold": "alex-honnold",
+  "huerta": "dolores-huerta",
+  "tutu": "desmond-tutu",
+  "dalai": "dalai-lama",
+  "francis": "pope-francis",
+  "thunberg": "greta-thunberg"
+ },
+ "twins": {
+  "st-jackie-robinson-1945-rickey": "s-E1-jackie-robinson",
+  "st-kjohnson-1958-langley": "s-B6-katherine-johnson",
+  "st-obama-1990-law-review": "s-A2-barack-obama",
+  "st-schultz-1987-seattle": "s-A2-howard-schultz",
+  "st-ali-1964-miami": "s-B4-muhammad-ali",
+  "st-marley-1960s-kingston": "s-C2-bob-marley",
+  "st-bjk-1973-gloucester": "s-A2-billie-jean-king"
+ },
+ "keymap": {
+  "nobody-told-you-what-the-job-asks": "unnamed-expectations"
+ },
+ "situations": [
+  {
+   "id": "A1",
+   "key": "unnamed-expectations",
+   "chip": "Nobody told you what the job asks",
+   "line": "The job changed and nobody said how.",
+   "label_from": "prototype"
+  },
+  {
+   "id": "A2",
+   "key": "renegotiating-standing",
+   "chip": "The boss of people who were your peers",
+   "line": "The people you sat beside now report to you.",
+   "label_from": "prototype"
+  },
+  {
+   "id": "A3",
+   "key": "naming-an-unseen-problem",
+   "chip": "Naming a problem nobody sees",
+   "line": "You inherited a problem and everyone here thinks things are fine.",
+   "label_from": "prototype+line"
+  },
+  {
+   "id": "A4",
+   "key": "following-a-legend",
+   "chip": "Following someone they loved",
+   "line": "The person before you was loved here, and you are measured against them.",
+   "label_from": "added"
+  },
+  {
+   "id": "A5",
+   "key": "judging-unfamiliar-work",
+   "chip": "Accountable for work you can't judge",
+   "line": "You answer for work you could not do yourself.",
+   "label_from": "added"
+  },
+  {
+   "id": "B1",
+   "key": "credit-and-attribution",
+   "chip": "Getting credit for your work",
+   "line": "Your work reaches the client in somebody else's voice.",
+   "label_from": "prototype+line"
+  },
+  {
+   "id": "B2",
+   "key": "style-against-expectation",
+   "chip": "Not the style they expected",
+   "line": "You are quiet in meetings, and you are not going to start shouting.",
+   "label_from": "prototype+line"
+  },
+  {
+   "id": "B3",
+   "key": "contradictory-feedback",
+   "chip": "You were told one thing, then another",
+   "line": "The ask keeps changing under you.",
+   "label_from": "prototype"
+  },
+  {
+   "id": "B4",
+   "key": "unclassifiable-profile",
+   "chip": "Hard to place",
+   "line": "People do not know what to do with you.",
+   "label_from": "prototype+line"
+  },
+  {
+   "id": "B5",
+   "key": "saying-it-in-your-own-words",
+   "chip": "Saying it in your own words",
+   "line": "You have to announce yourself, and every draft sounds like everyone else.",
+   "label_from": "prototype+line"
+  },
+  {
+   "id": "B6",
+   "key": "expertise-without-pull",
+   "chip": "Being heard in a room that decides",
+   "line": "You know the answer and the room does not follow it.",
+   "label_from": "prototype"
+  },
+  {
+   "id": "C1",
+   "key": "selling-what-you-used-to-make",
+   "chip": "Selling what you used to make",
+   "line": "You used to do the work. Now you have to win it.",
+   "label_from": "prototype"
+  },
+  {
+   "id": "C2",
+   "key": "borrowed-versus-owned-standing",
+   "chip": "Standing that's yours, not the firm's",
+   "line": "Clients come for the firm. You want them to come for you.",
+   "label_from": "prototype"
+  },
+  {
+   "id": "C3",
+   "key": "coalition-without-mandate",
+   "chip": "The decision gets made before the meeting",
+   "line": "You need people who do not report to you.",
+   "label_from": "prototype"
+  },
+  {
+   "id": "D1",
+   "key": "leading-beyond-line-of-sight",
+   "chip": "More people than you can see",
+   "line": "Your team is bigger than the people you see each week.",
+   "label_from": "added"
+  },
+  {
+   "id": "D2",
+   "key": "developing-without-a-bench",
+   "chip": "Growing people without a bench",
+   "line": "The people you used to grow through have gone.",
+   "label_from": "added"
+  },
+  {
+   "id": "D3",
+   "key": "stopping-the-old-work",
+   "chip": "Stopping work people are proud of",
+   "line": "Something has to stop, and people built it.",
+   "label_from": "prototype"
+  },
+  {
+   "id": "D4",
+   "key": "carrying-somebody-elses-decision",
+   "chip": "Carrying a decision you didn't make",
+   "line": "You have to stand behind a call that was not yours.",
+   "label_from": "prototype"
+  },
+  {
+   "id": "E1",
+   "key": "every-act-is-a-message",
+   "chip": "Everything you do gets read as a signal",
+   "line": "Everything you do is read for what it means.",
+   "label_from": "prototype"
+  },
+  {
+   "id": "E2",
+   "key": "agreeing-and-not-moving",
+   "chip": "Everyone agrees, and nothing moves",
+   "line": "The room says yes and nothing changes.",
+   "label_from": "prototype"
+  },
+  {
+   "id": "E3",
+   "key": "the-loss-inside-the-promotion",
+   "chip": "Losing what you were best at",
+   "line": "The promotion took away the work you were best at.",
+   "label_from": "added"
+  },
+  {
+   "id": "E4",
+   "key": "competent-and-becalmed",
+   "chip": "Good at it, and becalmed",
+   "line": "It works, you are good at it, and you are bored.",
+   "label_from": "added"
+  }
+ ]
+}

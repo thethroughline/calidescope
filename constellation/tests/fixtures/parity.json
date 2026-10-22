@@ -1,0 +1,6511 @@
+{
+"m001": {
+"member": {
+"id": "m001",
+"situation_keys": [
+"credit-and-attribution",
+"renegotiating-standing",
+"stopping-the-old-work"
+],
+"stars": [
+"stevie-wonder",
+"joan-of-arc",
+"beyonce-knowles",
+"barack-obama"
+],
+"kept_quotes": [],
+"context": null,
+"rep_pattern": null,
+"reps": null
+},
+"log": [
+{
+"week": 0,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-1",
+"mode": "direct",
+"line": "l-credit-and-attribution-1",
+"story": "s-B1-stevie-wonder",
+"icon": "stevie-wonder",
+"logged": "observable"
+},
+{
+"week": 1,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "direct",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 2,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-1",
+"story": "s-D3-bayard-rustin",
+"icon": "bayard-rustin",
+"logged": "observable"
+},
+{
+"week": 3,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-1",
+"mode": "direct",
+"line": "l-credit-and-attribution-2",
+"story": "s-B1-joan-of-arc",
+"icon": "joan-of-arc",
+"logged": "observable"
+},
+{
+"week": 4,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "direct",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-karl-marx",
+"icon": "karl-marx",
+"logged": "observable"
+},
+{
+"week": 5,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-2",
+"story": "s-D3-carmen-callil",
+"icon": "carmen-callil",
+"logged": "observable"
+},
+{
+"week": 6,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-1",
+"mode": "direct",
+"line": "l-credit-and-attribution-3",
+"story": "s-B1-akio-morita",
+"icon": "akio-morita",
+"logged": "observable"
+},
+{
+"week": 7,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "direct",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-tom-petty",
+"icon": "tom-petty",
+"logged": "observable"
+},
+{
+"week": 8,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-3",
+"story": "s-D3-haruki-murakami",
+"icon": "haruki-murakami",
+"logged": "observable"
+},
+{
+"week": 9,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-1",
+"mode": "direct",
+"line": "l-credit-and-attribution-1",
+"story": "s-B1-stevie-wonder",
+"icon": "stevie-wonder",
+"logged": "observable"
+},
+{
+"week": 10,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "direct",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 11,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-1",
+"story": "s-D3-bayard-rustin",
+"icon": "bayard-rustin",
+"logged": "observable"
+},
+{
+"week": 12,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-1",
+"mode": "direct",
+"line": "l-credit-and-attribution-2",
+"story": "s-B1-joan-of-arc",
+"icon": "joan-of-arc",
+"logged": "observable"
+},
+{
+"week": 13,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "direct",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "observable"
+},
+{
+"week": 14,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-2",
+"story": "s-D3-andrew-carnegie",
+"icon": "andrew-carnegie",
+"logged": "observable"
+},
+{
+"week": 15,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-2",
+"mode": "direct",
+"line": "l-credit-and-attribution-3",
+"story": "s-B1-albert-einstein",
+"icon": "albert-einstein",
+"logged": "observable"
+},
+{
+"week": 16,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "direct",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-yogi-berra",
+"icon": "yogi-berra",
+"logged": "observable"
+},
+{
+"week": 17,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-3",
+"story": "s-D3-babe-ruth",
+"icon": "babe-ruth",
+"logged": "observable"
+},
+{
+"week": 18,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-2",
+"mode": "direct",
+"line": "l-credit-and-attribution-1",
+"story": "s-B1-stevie-wonder",
+"icon": "stevie-wonder",
+"logged": "observable"
+},
+{
+"week": 19,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "direct",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 20,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-2",
+"mode": "direct",
+"line": "l-stopping-the-old-work-1",
+"story": "s-D3-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "observable"
+},
+{
+"week": 21,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-2",
+"mode": "direct",
+"line": "l-credit-and-attribution-2",
+"story": "s-B1-joan-of-arc",
+"icon": "joan-of-arc",
+"logged": "observable"
+},
+{
+"week": 22,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "direct",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-karl-marx",
+"icon": "karl-marx",
+"logged": "observable"
+},
+{
+"week": 23,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-2",
+"mode": "direct",
+"line": "l-stopping-the-old-work-2",
+"story": "s-D3-carmen-callil",
+"icon": "carmen-callil",
+"logged": "observable"
+},
+{
+"week": 24,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-2",
+"mode": "direct",
+"line": "l-credit-and-attribution-3",
+"story": "s-B1-albert-einstein",
+"icon": "albert-einstein",
+"logged": "observable"
+},
+{
+"week": 25,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "direct",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "observable"
+},
+{
+"week": 26,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-2",
+"mode": "direct",
+"line": "l-stopping-the-old-work-3",
+"story": "s-D3-john-d-rockefeller",
+"icon": "john-d-rockefeller",
+"logged": "observable"
+},
+{
+"week": 27,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-3",
+"mode": "calibrated",
+"line": "l-credit-and-attribution-1",
+"story": "s-B1-stevie-wonder",
+"icon": "stevie-wonder",
+"logged": "observable"
+},
+{
+"week": 28,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 29,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-2",
+"mode": "direct",
+"line": "l-stopping-the-old-work-1",
+"story": "s-D3-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "observable"
+},
+{
+"week": 30,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-3",
+"mode": "calibrated",
+"line": "l-credit-and-attribution-2",
+"story": "s-B1-joan-of-arc",
+"icon": "joan-of-arc",
+"logged": "observable"
+},
+{
+"week": 31,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-elena-kagan",
+"icon": "elena-kagan",
+"logged": "observable"
+},
+{
+"week": 32,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-2",
+"mode": "direct",
+"line": "l-stopping-the-old-work-2",
+"story": "s-D3-carmen-callil",
+"icon": "carmen-callil",
+"logged": "observable"
+},
+{
+"week": 33,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-3",
+"mode": "calibrated",
+"line": "l-credit-and-attribution-3",
+"story": "s-B1-albert-einstein",
+"icon": "albert-einstein",
+"logged": "observable"
+},
+{
+"week": 34,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-pope-francis",
+"icon": "pope-francis",
+"logged": "observable"
+},
+{
+"week": 35,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-3",
+"mode": "calibrated",
+"line": "l-stopping-the-old-work-3",
+"story": "s-D3-andrew-carnegie",
+"icon": "andrew-carnegie",
+"logged": "observable"
+},
+{
+"week": 36,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-3",
+"mode": "calibrated",
+"line": "l-credit-and-attribution-1",
+"story": "s-B1-stevie-wonder",
+"icon": "stevie-wonder",
+"logged": "observable"
+},
+{
+"week": 37,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 38,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-3",
+"mode": "calibrated",
+"line": "l-stopping-the-old-work-1",
+"story": "s-D3-mark-rober",
+"icon": "mark-rober",
+"logged": "observable"
+},
+{
+"week": 39,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-3",
+"mode": "calibrated",
+"line": "l-credit-and-attribution-2",
+"story": "s-B1-joan-of-arc",
+"icon": "joan-of-arc",
+"logged": "observable"
+}
+]
+},
+"m002": {
+"member": {
+"id": "m002",
+"situation_keys": [
+"renegotiating-standing",
+"contradictory-feedback",
+"selling-what-you-used-to-make"
+],
+"stars": [
+"ruth-bader-ginsburg",
+"thurgood-marshall",
+"ann-hopkins",
+"sandra-day-oconnor"
+],
+"kept_quotes": [
+"q016",
+"q017",
+"q023",
+"q025",
+"q028",
+"q033",
+"q038",
+"q042",
+"q043",
+"q047",
+"q054",
+"q062",
+"q064",
+"q003",
+"q024"
+],
+"context": {
+"setting": "firm",
+"temperature": "political"
+},
+"rep_pattern": "stalls",
+"reps": null
+},
+"log": [
+{
+"week": 0,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "indirect",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-abraham-lincoln",
+"icon": "abraham-lincoln",
+"logged": "first_failure"
+},
+{
+"week": 1,
+"key": "contradictory-feedback",
+"move": "m-contradictory-feedback-1",
+"mode": "indirect",
+"line": "l-contradictory-feedback-1",
+"story": "s-B3-ann-hopkins",
+"icon": "ann-hopkins",
+"logged": "first_failure"
+},
+{
+"week": 2,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-1",
+"mode": "indirect",
+"line": "l-selling-what-you-used-to-make-1",
+"story": "s-C1-wolfgang-amadeus-mozart",
+"icon": "wolfgang-amadeus-mozart",
+"logged": "first_failure"
+},
+{
+"week": 3,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "indirect",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-condoleezza-rice",
+"icon": "condoleezza-rice",
+"logged": "first_failure"
+},
+{
+"week": 4,
+"key": "contradictory-feedback",
+"move": "m-contradictory-feedback-1",
+"mode": "indirect",
+"line": "l-contradictory-feedback-2",
+"story": "s-B3-joan-of-arc",
+"icon": "joan-of-arc",
+"logged": "first_failure"
+},
+{
+"week": 5,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-1",
+"mode": "indirect",
+"line": "l-selling-what-you-used-to-make-2",
+"story": "s-C1-selena-gomez",
+"icon": "selena-gomez",
+"logged": "first_failure"
+},
+{
+"week": 6,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "indirect",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 7,
+"key": "contradictory-feedback",
+"move": "m-contradictory-feedback-1",
+"mode": "indirect",
+"line": "l-contradictory-feedback-3",
+"story": "s-B3-ivanka-trump",
+"icon": "ivanka-trump",
+"logged": "observable"
+},
+{
+"week": 8,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-1",
+"mode": "indirect",
+"line": "l-selling-what-you-used-to-make-3",
+"story": "s-C1-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "observable"
+},
+{
+"week": 9,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "indirect",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-abraham-lincoln",
+"icon": "abraham-lincoln",
+"logged": "observable"
+},
+{
+"week": 10,
+"key": "contradictory-feedback",
+"move": "m-contradictory-feedback-1",
+"mode": "indirect",
+"line": "l-contradictory-feedback-1",
+"story": "s-B3-ann-hopkins",
+"icon": "ann-hopkins",
+"logged": "observable"
+},
+{
+"week": 11,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-1",
+"mode": "indirect",
+"line": "l-selling-what-you-used-to-make-1",
+"story": "s-C1-wolfgang-amadeus-mozart",
+"icon": "wolfgang-amadeus-mozart",
+"logged": "observable"
+},
+{
+"week": 12,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "indirect",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-condoleezza-rice",
+"icon": "condoleezza-rice",
+"logged": "observable"
+},
+{
+"week": 13,
+"key": "contradictory-feedback",
+"move": "m-contradictory-feedback-1",
+"mode": "indirect",
+"line": "l-contradictory-feedback-2",
+"story": "s-B3-joan-of-arc",
+"icon": "joan-of-arc",
+"logged": "observable"
+},
+{
+"week": 14,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-1",
+"mode": "indirect",
+"line": "l-selling-what-you-used-to-make-2",
+"story": "s-C1-selena-gomez",
+"icon": "selena-gomez",
+"logged": "observable"
+},
+{
+"week": 15,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "indirect",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-derek-jeter",
+"icon": "derek-jeter",
+"logged": "observable"
+},
+{
+"week": 16,
+"key": "contradictory-feedback",
+"move": "m-contradictory-feedback-2",
+"mode": "calibrated",
+"line": "l-contradictory-feedback-3",
+"story": "s-B3-anne-frank",
+"icon": "anne-frank",
+"logged": "first_failure"
+},
+{
+"week": 17,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-1",
+"mode": "indirect",
+"line": "l-selling-what-you-used-to-make-3",
+"story": "s-C1-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "observable"
+},
+{
+"week": 18,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "indirect",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-abraham-lincoln",
+"icon": "abraham-lincoln",
+"logged": "observable"
+},
+{
+"week": 19,
+"key": "contradictory-feedback",
+"move": "m-contradictory-feedback-2",
+"mode": "calibrated",
+"line": "l-contradictory-feedback-1",
+"story": "s-B3-ann-hopkins",
+"icon": "ann-hopkins",
+"logged": "first_failure"
+},
+{
+"week": 20,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-1",
+"mode": "indirect",
+"line": "l-selling-what-you-used-to-make-1",
+"story": "s-C1-wolfgang-amadeus-mozart",
+"icon": "wolfgang-amadeus-mozart",
+"logged": "observable"
+},
+{
+"week": 21,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "indirect",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-condoleezza-rice",
+"icon": "condoleezza-rice",
+"logged": "first_failure"
+},
+{
+"week": 22,
+"key": "contradictory-feedback",
+"move": "m-contradictory-feedback-2",
+"mode": "calibrated",
+"line": "l-contradictory-feedback-2",
+"story": "s-B3-coco-gauff",
+"icon": "coco-gauff",
+"logged": "observable"
+},
+{
+"week": 23,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-2",
+"mode": "indirect",
+"line": "l-selling-what-you-used-to-make-2",
+"story": "s-C1-selena-gomez",
+"icon": "selena-gomez",
+"logged": "first_failure"
+},
+{
+"week": 24,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "indirect",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-derek-jeter",
+"icon": "derek-jeter",
+"logged": "first_failure"
+},
+{
+"week": 25,
+"key": "contradictory-feedback",
+"move": "m-contradictory-feedback-2",
+"mode": "calibrated",
+"line": "l-contradictory-feedback-3",
+"story": "s-B3-anne-frank",
+"icon": "anne-frank",
+"logged": "observable"
+},
+{
+"week": 26,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-2",
+"mode": "indirect",
+"line": "l-selling-what-you-used-to-make-3",
+"story": "s-C1-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "first_failure"
+},
+{
+"week": 27,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "indirect",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-abraham-lincoln",
+"icon": "abraham-lincoln",
+"logged": "observable"
+},
+{
+"week": 28,
+"key": "contradictory-feedback",
+"move": "m-contradictory-feedback-2",
+"mode": "calibrated",
+"line": "l-contradictory-feedback-1",
+"story": "s-B3-ann-hopkins",
+"icon": "ann-hopkins",
+"logged": "observable"
+},
+{
+"week": 29,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-2",
+"mode": "indirect",
+"line": "l-selling-what-you-used-to-make-1",
+"story": "s-C1-wolfgang-amadeus-mozart",
+"icon": "wolfgang-amadeus-mozart",
+"logged": "observable"
+},
+{
+"week": 30,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "indirect",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-condoleezza-rice",
+"icon": "condoleezza-rice",
+"logged": "observable"
+},
+{
+"week": 31,
+"key": "contradictory-feedback",
+"move": "m-contradictory-feedback-2",
+"mode": "calibrated",
+"line": "l-contradictory-feedback-2",
+"story": "s-B3-coco-gauff",
+"icon": "coco-gauff",
+"logged": "observable"
+},
+{
+"week": 32,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-2",
+"mode": "indirect",
+"line": "l-selling-what-you-used-to-make-2",
+"story": "s-C1-selena-gomez",
+"icon": "selena-gomez",
+"logged": "observable"
+},
+{
+"week": 33,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "indirect",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-derek-jeter",
+"icon": "derek-jeter",
+"logged": "observable"
+},
+{
+"week": 34,
+"key": "contradictory-feedback",
+"move": "m-contradictory-feedback-3",
+"mode": "calibrated",
+"line": "l-contradictory-feedback-3",
+"story": "s-B3-hannah-arendt",
+"icon": "hannah-arendt",
+"logged": "first_failure"
+},
+{
+"week": 35,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-2",
+"mode": "indirect",
+"line": "l-selling-what-you-used-to-make-3",
+"story": "s-C1-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "observable"
+},
+{
+"week": 36,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "indirect",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-abraham-lincoln",
+"icon": "abraham-lincoln",
+"logged": "observable"
+},
+{
+"week": 37,
+"key": "contradictory-feedback",
+"move": "m-contradictory-feedback-3",
+"mode": "calibrated",
+"line": "l-contradictory-feedback-1",
+"story": "s-B3-ann-hopkins",
+"icon": "ann-hopkins",
+"logged": "first_failure"
+},
+{
+"week": 38,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-2",
+"mode": "indirect",
+"line": "l-selling-what-you-used-to-make-1",
+"story": "s-C1-wolfgang-amadeus-mozart",
+"icon": "wolfgang-amadeus-mozart",
+"logged": "observable"
+},
+{
+"week": 39,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-elena-kagan",
+"icon": "elena-kagan",
+"logged": "first_failure"
+}
+]
+},
+"m003": {
+"member": {
+"id": "m003",
+"situation_keys": [
+"credit-and-attribution",
+"borrowed-versus-owned-standing",
+"expertise-without-pull"
+],
+"stars": [
+"mary-wells-lawrence",
+"david-ogilvy",
+"steve-jobs",
+"oprah-winfrey"
+],
+"kept_quotes": [
+"q001",
+"q019",
+"q022",
+"q034",
+"q035",
+"q039",
+"q051",
+"q067",
+"q002",
+"q004"
+],
+"context": {
+"setting": "agency",
+"temperature": "guarded"
+},
+"rep_pattern": "steady",
+"reps": null
+},
+"log": [
+{
+"week": 0,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-1",
+"mode": "indirect",
+"line": "l-credit-and-attribution-1",
+"story": "s-B1-diana-athill",
+"icon": "diana-athill",
+"logged": "observable"
+},
+{
+"week": 1,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-1",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-mary-wells-lawrence",
+"icon": "mary-wells-lawrence",
+"logged": "observable"
+},
+{
+"week": 2,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-1",
+"mode": "calibrated",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-katherine-johnson",
+"icon": "katherine-johnson",
+"logged": "observable"
+},
+{
+"week": 3,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-1",
+"mode": "indirect",
+"line": "l-credit-and-attribution-2",
+"story": "s-B1-helen-lansdowne-resor",
+"icon": "helen-lansdowne-resor",
+"logged": "observable"
+},
+{
+"week": 4,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-1",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-C2-frederick-douglass",
+"icon": "frederick-douglass",
+"logged": "observable"
+},
+{
+"week": 5,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-1",
+"mode": "calibrated",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-mary-callahan-erdoes",
+"icon": "mary-callahan-erdoes",
+"logged": "observable"
+},
+{
+"week": 6,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-1",
+"mode": "indirect",
+"line": "l-credit-and-attribution-3",
+"story": "s-B1-bill-russell",
+"icon": "bill-russell",
+"logged": "observable"
+},
+{
+"week": 7,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-1",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-B1-muriel-siebert",
+"icon": "muriel-siebert",
+"logged": "observable"
+},
+{
+"week": 8,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-1",
+"mode": "calibrated",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-michelle-phan",
+"icon": "michelle-phan",
+"logged": "observable"
+},
+{
+"week": 9,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-1",
+"mode": "indirect",
+"line": "l-credit-and-attribution-1",
+"story": "s-B1-diana-athill",
+"icon": "diana-athill",
+"logged": "observable"
+},
+{
+"week": 10,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-1",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-mary-wells-lawrence",
+"icon": "mary-wells-lawrence",
+"logged": "observable"
+},
+{
+"week": 11,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-1",
+"mode": "calibrated",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-katherine-johnson",
+"icon": "katherine-johnson",
+"logged": "observable"
+},
+{
+"week": 12,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-1",
+"mode": "indirect",
+"line": "l-credit-and-attribution-2",
+"story": "s-B1-maxwell-perkins",
+"icon": "maxwell-perkins",
+"logged": "observable"
+},
+{
+"week": 13,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-1",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-C2-emma-watson",
+"icon": "emma-watson",
+"logged": "observable"
+},
+{
+"week": 14,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-1",
+"mode": "calibrated",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-mary-callahan-erdoes",
+"icon": "mary-callahan-erdoes",
+"logged": "observable"
+},
+{
+"week": 15,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-2",
+"mode": "indirect",
+"line": "l-credit-and-attribution-3",
+"story": "s-B1-bill-russell",
+"icon": "bill-russell",
+"logged": "observable"
+},
+{
+"week": 16,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-2",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-B1-muriel-siebert",
+"icon": "muriel-siebert",
+"logged": "observable"
+},
+{
+"week": 17,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-2",
+"mode": "direct",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-dwight-d-eisenhower",
+"icon": "dwight-d-eisenhower",
+"logged": "observable"
+},
+{
+"week": 18,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-2",
+"mode": "indirect",
+"line": "l-credit-and-attribution-1",
+"story": "s-B1-diana-athill",
+"icon": "diana-athill",
+"logged": "observable"
+},
+{
+"week": 19,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-2",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-mary-wells-lawrence",
+"icon": "mary-wells-lawrence",
+"logged": "observable"
+},
+{
+"week": 20,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-2",
+"mode": "direct",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-harry-markopolos",
+"icon": "harry-markopolos",
+"logged": "observable"
+},
+{
+"week": 21,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-2",
+"mode": "indirect",
+"line": "l-credit-and-attribution-2",
+"story": "s-B1-maxwell-perkins",
+"icon": "maxwell-perkins",
+"logged": "observable"
+},
+{
+"week": 22,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-2",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-C2-emma-watson",
+"icon": "emma-watson",
+"logged": "observable"
+},
+{
+"week": 23,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-2",
+"mode": "direct",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-golda-meir",
+"icon": "golda-meir",
+"logged": "observable"
+},
+{
+"week": 24,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-2",
+"mode": "indirect",
+"line": "l-credit-and-attribution-3",
+"story": "s-B1-bill-russell",
+"icon": "bill-russell",
+"logged": "observable"
+},
+{
+"week": 25,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-2",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-B1-muriel-siebert",
+"icon": "muriel-siebert",
+"logged": "observable"
+},
+{
+"week": 26,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-2",
+"mode": "direct",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-dwight-d-eisenhower",
+"icon": "dwight-d-eisenhower",
+"logged": "observable"
+},
+{
+"week": 27,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-3",
+"mode": "calibrated",
+"line": "l-credit-and-attribution-1",
+"story": "s-B1-diana-athill",
+"icon": "diana-athill",
+"logged": "observable"
+},
+{
+"week": 28,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-mary-wells-lawrence",
+"icon": "mary-wells-lawrence",
+"logged": "observable"
+},
+{
+"week": 29,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-alexander-hamilton",
+"icon": "alexander-hamilton",
+"logged": "observable"
+},
+{
+"week": 30,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-3",
+"mode": "calibrated",
+"line": "l-credit-and-attribution-2",
+"story": "s-B1-maxwell-perkins",
+"icon": "maxwell-perkins",
+"logged": "observable"
+},
+{
+"week": 31,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-C2-asma-jahangir",
+"icon": "asma-jahangir",
+"logged": "observable"
+},
+{
+"week": 32,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-nellie-bly",
+"icon": "nellie-bly",
+"logged": "observable"
+},
+{
+"week": 33,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-3",
+"mode": "calibrated",
+"line": "l-credit-and-attribution-3",
+"story": "s-B1-bill-russell",
+"icon": "bill-russell",
+"logged": "observable"
+},
+{
+"week": 34,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-C2-madam-c-j-walker",
+"icon": "madam-c-j-walker",
+"logged": "observable"
+},
+{
+"week": 35,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-winston-churchill",
+"icon": "winston-churchill",
+"logged": "observable"
+},
+{
+"week": 36,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-3",
+"mode": "calibrated",
+"line": "l-credit-and-attribution-1",
+"story": "s-B1-diana-athill",
+"icon": "diana-athill",
+"logged": "observable"
+},
+{
+"week": 37,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-mary-wells-lawrence",
+"icon": "mary-wells-lawrence",
+"logged": "observable"
+},
+{
+"week": 38,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-alexander-hamilton",
+"icon": "alexander-hamilton",
+"logged": "observable"
+},
+{
+"week": 39,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-3",
+"mode": "calibrated",
+"line": "l-credit-and-attribution-2",
+"story": "s-B1-maxwell-perkins",
+"icon": "maxwell-perkins",
+"logged": "observable"
+}
+]
+},
+"m004": {
+"member": {
+"id": "m004",
+"situation_keys": [
+"leading-beyond-line-of-sight",
+"developing-without-a-bench",
+"stopping-the-old-work"
+],
+"stars": [
+"frances-hesselbein",
+"pat-summitt",
+"bill-russell",
+"indra-nooyi"
+],
+"kept_quotes": [
+"q006",
+"q011",
+"q015",
+"q018",
+"q032",
+"q040",
+"q050",
+"q053",
+"q056",
+"q057",
+"q063",
+"q003",
+"q024"
+],
+"context": {
+"setting": "corporate",
+"temperature": "open"
+},
+"rep_pattern": "slow",
+"reps": null
+},
+"log": [
+{
+"week": 0,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "direct",
+"line": "l-leading-beyond-line-of-sight-1",
+"story": "s-D1-frances-hesselbein",
+"icon": "frances-hesselbein",
+"logged": "observable"
+},
+{
+"week": 1,
+"key": "developing-without-a-bench",
+"move": "m-developing-without-a-bench-1",
+"mode": "direct",
+"line": "l-developing-without-a-bench-1",
+"story": "s-D2-pat-summitt",
+"icon": "pat-summitt",
+"logged": "observable"
+},
+{
+"week": 2,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-1",
+"story": "s-D3-bayard-rustin",
+"icon": "bayard-rustin",
+"logged": "observable"
+},
+{
+"week": 3,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "direct",
+"line": "l-leading-beyond-line-of-sight-2",
+"story": "s-D1-ernest-shackleton",
+"icon": "ernest-shackleton",
+"logged": "none"
+},
+{
+"week": 4,
+"key": "developing-without-a-bench",
+"move": "m-developing-without-a-bench-1",
+"mode": "direct",
+"line": "l-developing-without-a-bench-2",
+"story": "s-D2-anne-boden",
+"icon": "anne-boden",
+"logged": "none"
+},
+{
+"week": 5,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-2",
+"story": "s-D3-mark-rober",
+"icon": "mark-rober",
+"logged": "none"
+},
+{
+"week": 6,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "direct",
+"line": "l-leading-beyond-line-of-sight-3",
+"story": "s-D1-bill-walsh",
+"icon": "bill-walsh",
+"logged": "observable"
+},
+{
+"week": 7,
+"key": "developing-without-a-bench",
+"move": "m-developing-without-a-bench-1",
+"mode": "direct",
+"line": "l-developing-without-a-bench-3",
+"story": "s-D2-benjamin-franklin",
+"icon": "benjamin-franklin",
+"logged": "observable"
+},
+{
+"week": 8,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-3",
+"story": "s-D3-toni-morrison",
+"icon": "toni-morrison",
+"logged": "observable"
+},
+{
+"week": 9,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "direct",
+"line": "l-leading-beyond-line-of-sight-1",
+"story": "s-D1-frances-hesselbein",
+"icon": "frances-hesselbein",
+"logged": "none"
+},
+{
+"week": 10,
+"key": "developing-without-a-bench",
+"move": "m-developing-without-a-bench-1",
+"mode": "direct",
+"line": "l-developing-without-a-bench-1",
+"story": "s-D2-pat-summitt",
+"icon": "pat-summitt",
+"logged": "none"
+},
+{
+"week": 11,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-1",
+"story": "s-D3-bayard-rustin",
+"icon": "bayard-rustin",
+"logged": "none"
+},
+{
+"week": 12,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "direct",
+"line": "l-leading-beyond-line-of-sight-2",
+"story": "s-D1-ernest-shackleton",
+"icon": "ernest-shackleton",
+"logged": "observable"
+},
+{
+"week": 13,
+"key": "developing-without-a-bench",
+"move": "m-developing-without-a-bench-1",
+"mode": "direct",
+"line": "l-developing-without-a-bench-2",
+"story": "s-A2-pope-francis",
+"icon": "pope-francis",
+"logged": "observable"
+},
+{
+"week": 14,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-2",
+"story": "s-D3-andrew-carnegie",
+"icon": "andrew-carnegie",
+"logged": "observable"
+},
+{
+"week": 15,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "direct",
+"line": "l-leading-beyond-line-of-sight-3",
+"story": "s-D1-bill-walsh",
+"icon": "bill-walsh",
+"logged": "none"
+},
+{
+"week": 16,
+"key": "developing-without-a-bench",
+"move": "m-developing-without-a-bench-1",
+"mode": "direct",
+"line": "l-developing-without-a-bench-3",
+"story": "s-D2-archimedes",
+"icon": "archimedes",
+"logged": "none"
+},
+{
+"week": 17,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-3",
+"story": "s-D3-mark-rober",
+"icon": "mark-rober",
+"logged": "none"
+},
+{
+"week": 18,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "direct",
+"line": "l-leading-beyond-line-of-sight-1",
+"story": "s-D1-frances-hesselbein",
+"icon": "frances-hesselbein",
+"logged": "observable"
+},
+{
+"week": 19,
+"key": "developing-without-a-bench",
+"move": "m-developing-without-a-bench-1",
+"mode": "direct",
+"line": "l-developing-without-a-bench-1",
+"story": "s-D2-pat-summitt",
+"icon": "pat-summitt",
+"logged": "observable"
+},
+{
+"week": 20,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-1",
+"story": "s-D3-bayard-rustin",
+"icon": "bayard-rustin",
+"logged": "observable"
+},
+{
+"week": 21,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "direct",
+"line": "l-leading-beyond-line-of-sight-2",
+"story": "s-D1-ernest-shackleton",
+"icon": "ernest-shackleton",
+"logged": "none"
+},
+{
+"week": 22,
+"key": "developing-without-a-bench",
+"move": "m-developing-without-a-bench-1",
+"mode": "direct",
+"line": "l-developing-without-a-bench-2",
+"story": "s-A2-pope-francis",
+"icon": "pope-francis",
+"logged": "none"
+},
+{
+"week": 23,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-2",
+"story": "s-D3-andrew-carnegie",
+"icon": "andrew-carnegie",
+"logged": "none"
+},
+{
+"week": 24,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "direct",
+"line": "l-leading-beyond-line-of-sight-3",
+"story": "s-D1-bill-walsh",
+"icon": "bill-walsh",
+"logged": "observable"
+},
+{
+"week": 25,
+"key": "developing-without-a-bench",
+"move": "m-developing-without-a-bench-1",
+"mode": "direct",
+"line": "l-developing-without-a-bench-3",
+"story": "s-D2-archimedes",
+"icon": "archimedes",
+"logged": "observable"
+},
+{
+"week": 26,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-3",
+"story": "s-D3-mark-rober",
+"icon": "mark-rober",
+"logged": "observable"
+},
+{
+"week": 27,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "direct",
+"line": "l-leading-beyond-line-of-sight-1",
+"story": "s-D1-frances-hesselbein",
+"icon": "frances-hesselbein",
+"logged": "none"
+},
+{
+"week": 28,
+"key": "developing-without-a-bench",
+"move": "m-developing-without-a-bench-2",
+"mode": "direct",
+"line": "l-developing-without-a-bench-1",
+"story": "s-D2-pat-summitt",
+"icon": "pat-summitt",
+"logged": "observable"
+},
+{
+"week": 29,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-1",
+"story": "s-D3-bayard-rustin",
+"icon": "bayard-rustin",
+"logged": "none"
+},
+{
+"week": 30,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "direct",
+"line": "l-leading-beyond-line-of-sight-2",
+"story": "s-D1-ernest-shackleton",
+"icon": "ernest-shackleton",
+"logged": "observable"
+},
+{
+"week": 31,
+"key": "developing-without-a-bench",
+"move": "m-developing-without-a-bench-2",
+"mode": "direct",
+"line": "l-developing-without-a-bench-2",
+"story": "s-A2-pope-francis",
+"icon": "pope-francis",
+"logged": "none"
+},
+{
+"week": 32,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-1",
+"mode": "direct",
+"line": "l-stopping-the-old-work-2",
+"story": "s-D3-andrew-carnegie",
+"icon": "andrew-carnegie",
+"logged": "observable"
+},
+{
+"week": 33,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-2",
+"mode": "direct",
+"line": "l-leading-beyond-line-of-sight-3",
+"story": "s-D1-bill-walsh",
+"icon": "bill-walsh",
+"logged": "observable"
+},
+{
+"week": 34,
+"key": "developing-without-a-bench",
+"move": "m-developing-without-a-bench-2",
+"mode": "direct",
+"line": "l-developing-without-a-bench-3",
+"story": "s-D2-archimedes",
+"icon": "archimedes",
+"logged": "observable"
+},
+{
+"week": 35,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-2",
+"mode": "direct",
+"line": "l-stopping-the-old-work-3",
+"story": "s-D3-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "observable"
+},
+{
+"week": 36,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-2",
+"mode": "direct",
+"line": "l-leading-beyond-line-of-sight-1",
+"story": "s-D1-frances-hesselbein",
+"icon": "frances-hesselbein",
+"logged": "none"
+},
+{
+"week": 37,
+"key": "developing-without-a-bench",
+"move": "m-developing-without-a-bench-2",
+"mode": "direct",
+"line": "l-developing-without-a-bench-1",
+"story": "s-D2-pat-summitt",
+"icon": "pat-summitt",
+"logged": "none"
+},
+{
+"week": 38,
+"key": "stopping-the-old-work",
+"move": "m-stopping-the-old-work-2",
+"mode": "direct",
+"line": "l-stopping-the-old-work-1",
+"story": "s-D3-carmen-callil",
+"icon": "carmen-callil",
+"logged": "none"
+},
+{
+"week": 39,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-2",
+"mode": "direct",
+"line": "l-leading-beyond-line-of-sight-2",
+"story": "s-D1-ernest-shackleton",
+"icon": "ernest-shackleton",
+"logged": "observable"
+}
+]
+},
+"m005": {
+"member": {
+"id": "m005",
+"situation_keys": [
+"style-against-expectation",
+"saying-it-in-your-own-words",
+"unclassifiable-profile"
+],
+"stars": [
+"michelle-obama",
+"barack-obama",
+"maya-angelou",
+"sonia-sotomayor"
+],
+"kept_quotes": [
+"q008",
+"q009",
+"q012",
+"q013",
+"q014",
+"q020",
+"q027",
+"q045",
+"q049",
+"q052",
+"q061",
+"q065",
+"q066",
+"q070",
+"q003",
+"q024"
+],
+"context": {
+"setting": "firm",
+"temperature": "guarded"
+},
+"rep_pattern": "steady",
+"reps": null
+},
+"log": [
+{
+"week": 0,
+"key": "style-against-expectation",
+"move": "m-style-against-expectation-1",
+"mode": "indirect",
+"line": "l-style-against-expectation-1",
+"story": "s-B2-maya-angelou",
+"icon": "maya-angelou",
+"logged": "observable"
+},
+{
+"week": 1,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-1",
+"mode": "indirect",
+"line": "l-saying-it-in-your-own-words-1",
+"story": "s-B5-michelle-obama",
+"icon": "michelle-obama",
+"logged": "observable"
+},
+{
+"week": 2,
+"key": "unclassifiable-profile",
+"move": "m-unclassifiable-profile-1",
+"mode": "indirect",
+"line": "l-unclassifiable-profile-1",
+"story": "s-B4-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 3,
+"key": "style-against-expectation",
+"move": "m-style-against-expectation-1",
+"mode": "indirect",
+"line": "l-style-against-expectation-2",
+"story": "s-B2-joan-didion",
+"icon": "joan-didion",
+"logged": "observable"
+},
+{
+"week": 4,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-1",
+"mode": "indirect",
+"line": "l-saying-it-in-your-own-words-2",
+"story": "s-B5-rene-descartes",
+"icon": "rene-descartes",
+"logged": "observable"
+},
+{
+"week": 5,
+"key": "unclassifiable-profile",
+"move": "m-unclassifiable-profile-1",
+"mode": "indirect",
+"line": "l-unclassifiable-profile-2",
+"story": "s-B4-pablo-picasso",
+"icon": "pablo-picasso",
+"logged": "observable"
+},
+{
+"week": 6,
+"key": "style-against-expectation",
+"move": "m-style-against-expectation-1",
+"mode": "indirect",
+"line": "l-style-against-expectation-3",
+"story": "s-B2-phyllis-robinson",
+"icon": "phyllis-robinson",
+"logged": "observable"
+},
+{
+"week": 7,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-1",
+"mode": "indirect",
+"line": "l-saying-it-in-your-own-words-3",
+"story": "s-B5-gabriel-garcia-marquez",
+"icon": "gabriel-garcia-marquez",
+"logged": "observable"
+},
+{
+"week": 8,
+"key": "unclassifiable-profile",
+"move": "m-unclassifiable-profile-1",
+"mode": "indirect",
+"line": "l-unclassifiable-profile-3",
+"story": "s-B4-constance-baker-motley",
+"icon": "constance-baker-motley",
+"logged": "observable"
+},
+{
+"week": 9,
+"key": "style-against-expectation",
+"move": "m-style-against-expectation-1",
+"mode": "indirect",
+"line": "l-style-against-expectation-1",
+"story": "s-B2-maya-angelou",
+"icon": "maya-angelou",
+"logged": "observable"
+},
+{
+"week": 10,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-1",
+"mode": "indirect",
+"line": "l-saying-it-in-your-own-words-1",
+"story": "s-B5-michelle-obama",
+"icon": "michelle-obama",
+"logged": "observable"
+},
+{
+"week": 11,
+"key": "unclassifiable-profile",
+"move": "m-unclassifiable-profile-1",
+"mode": "indirect",
+"line": "l-unclassifiable-profile-1",
+"story": "s-B4-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 12,
+"key": "style-against-expectation",
+"move": "m-style-against-expectation-1",
+"mode": "indirect",
+"line": "l-style-against-expectation-2",
+"story": "s-A2-derek-jeter",
+"icon": "derek-jeter",
+"logged": "observable"
+},
+{
+"week": 13,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-2",
+"mode": "indirect",
+"line": "l-saying-it-in-your-own-words-2",
+"story": "s-B5-rene-descartes",
+"icon": "rene-descartes",
+"logged": "observable"
+},
+{
+"week": 14,
+"key": "unclassifiable-profile",
+"move": "m-unclassifiable-profile-1",
+"mode": "indirect",
+"line": "l-unclassifiable-profile-2",
+"story": "s-B4-pablo-picasso",
+"icon": "pablo-picasso",
+"logged": "observable"
+},
+{
+"week": 15,
+"key": "style-against-expectation",
+"move": "m-style-against-expectation-1",
+"mode": "indirect",
+"line": "l-style-against-expectation-3",
+"story": "s-B2-sally-ride",
+"icon": "sally-ride",
+"logged": "observable"
+},
+{
+"week": 16,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-2",
+"mode": "indirect",
+"line": "l-saying-it-in-your-own-words-3",
+"story": "s-B5-gabriel-garcia-marquez",
+"icon": "gabriel-garcia-marquez",
+"logged": "observable"
+},
+{
+"week": 17,
+"key": "unclassifiable-profile",
+"move": "m-unclassifiable-profile-2",
+"mode": "indirect",
+"line": "l-unclassifiable-profile-3",
+"story": "s-B4-david-rubenstein",
+"icon": "david-rubenstein",
+"logged": "observable"
+},
+{
+"week": 18,
+"key": "style-against-expectation",
+"move": "m-style-against-expectation-2",
+"mode": "indirect",
+"line": "l-style-against-expectation-1",
+"story": "s-B2-maya-angelou",
+"icon": "maya-angelou",
+"logged": "observable"
+},
+{
+"week": 19,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-2",
+"mode": "indirect",
+"line": "l-saying-it-in-your-own-words-1",
+"story": "s-B5-michelle-obama",
+"icon": "michelle-obama",
+"logged": "observable"
+},
+{
+"week": 20,
+"key": "unclassifiable-profile",
+"move": "m-unclassifiable-profile-2",
+"mode": "indirect",
+"line": "l-unclassifiable-profile-1",
+"story": "s-B4-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 21,
+"key": "style-against-expectation",
+"move": "m-style-against-expectation-2",
+"mode": "indirect",
+"line": "l-style-against-expectation-2",
+"story": "s-B2-carmen-callil",
+"icon": "carmen-callil",
+"logged": "observable"
+},
+{
+"week": 22,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-2",
+"mode": "indirect",
+"line": "l-saying-it-in-your-own-words-2",
+"story": "s-B5-rene-descartes",
+"icon": "rene-descartes",
+"logged": "observable"
+},
+{
+"week": 23,
+"key": "unclassifiable-profile",
+"move": "m-unclassifiable-profile-2",
+"mode": "indirect",
+"line": "l-unclassifiable-profile-2",
+"story": "s-B4-pablo-picasso",
+"icon": "pablo-picasso",
+"logged": "observable"
+},
+{
+"week": 24,
+"key": "style-against-expectation",
+"move": "m-style-against-expectation-2",
+"mode": "indirect",
+"line": "l-style-against-expectation-3",
+"story": "s-B2-ruth-bader-ginsburg",
+"icon": "ruth-bader-ginsburg",
+"logged": "observable"
+},
+{
+"week": 25,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-2",
+"mode": "indirect",
+"line": "l-saying-it-in-your-own-words-3",
+"story": "s-B5-gabriel-garcia-marquez",
+"icon": "gabriel-garcia-marquez",
+"logged": "observable"
+},
+{
+"week": 26,
+"key": "unclassifiable-profile",
+"move": "m-unclassifiable-profile-2",
+"mode": "indirect",
+"line": "l-unclassifiable-profile-3",
+"story": "s-B4-david-rubenstein",
+"icon": "david-rubenstein",
+"logged": "observable"
+},
+{
+"week": 27,
+"key": "style-against-expectation",
+"move": "m-style-against-expectation-2",
+"mode": "indirect",
+"line": "l-style-against-expectation-1",
+"story": "s-B2-maya-angelou",
+"icon": "maya-angelou",
+"logged": "observable"
+},
+{
+"week": 28,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-3",
+"mode": "calibrated",
+"line": "l-saying-it-in-your-own-words-1",
+"story": "s-B5-michelle-obama",
+"icon": "michelle-obama",
+"logged": "observable"
+},
+{
+"week": 29,
+"key": "unclassifiable-profile",
+"move": "m-unclassifiable-profile-2",
+"mode": "indirect",
+"line": "l-unclassifiable-profile-1",
+"story": "s-B4-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 30,
+"key": "style-against-expectation",
+"move": "m-style-against-expectation-2",
+"mode": "indirect",
+"line": "l-style-against-expectation-2",
+"story": "s-B2-carmen-callil",
+"icon": "carmen-callil",
+"logged": "observable"
+},
+{
+"week": 31,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-3",
+"mode": "calibrated",
+"line": "l-saying-it-in-your-own-words-2",
+"story": "s-B5-anne-frank",
+"icon": "anne-frank",
+"logged": "observable"
+},
+{
+"week": 32,
+"key": "unclassifiable-profile",
+"move": "m-unclassifiable-profile-3",
+"mode": "calibrated",
+"line": "l-unclassifiable-profile-2",
+"story": "s-B4-carol-burnett",
+"icon": "carol-burnett",
+"logged": "observable"
+},
+{
+"week": 33,
+"key": "style-against-expectation",
+"move": "m-style-against-expectation-3",
+"mode": "calibrated",
+"line": "l-style-against-expectation-3",
+"story": "s-B2-george-c-marshall",
+"icon": "george-c-marshall",
+"logged": "observable"
+},
+{
+"week": 34,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-3",
+"mode": "calibrated",
+"line": "l-saying-it-in-your-own-words-3",
+"story": "s-B5-george-foreman",
+"icon": "george-foreman",
+"logged": "observable"
+},
+{
+"week": 35,
+"key": "unclassifiable-profile",
+"move": "m-unclassifiable-profile-3",
+"mode": "calibrated",
+"line": "l-unclassifiable-profile-3",
+"story": "s-B4-david-rubenstein",
+"icon": "david-rubenstein",
+"logged": "observable"
+},
+{
+"week": 36,
+"key": "style-against-expectation",
+"move": "m-style-against-expectation-3",
+"mode": "calibrated",
+"line": "l-style-against-expectation-1",
+"story": "s-B2-maya-angelou",
+"icon": "maya-angelou",
+"logged": "observable"
+},
+{
+"week": 37,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-3",
+"mode": "calibrated",
+"line": "l-saying-it-in-your-own-words-1",
+"story": "s-B5-michelle-obama",
+"icon": "michelle-obama",
+"logged": "observable"
+},
+{
+"week": 38,
+"key": "unclassifiable-profile",
+"move": "m-unclassifiable-profile-3",
+"mode": "calibrated",
+"line": "l-unclassifiable-profile-1",
+"story": "s-B4-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 39,
+"key": "style-against-expectation",
+"move": "m-style-against-expectation-3",
+"mode": "calibrated",
+"line": "l-style-against-expectation-2",
+"story": "s-B2-laura-bush",
+"icon": "laura-bush",
+"logged": "observable"
+}
+]
+},
+"m006": {
+"member": {
+"id": "m006",
+"situation_keys": [
+"following-a-legend",
+"naming-an-unseen-problem",
+"carrying-somebody-elses-decision"
+],
+"stars": [
+"katharine-graham",
+"winston-churchill",
+"golda-meir",
+"anne-mulcahy"
+],
+"kept_quotes": [
+"q016",
+"q017",
+"q023",
+"q025",
+"q028",
+"q033",
+"q038",
+"q042",
+"q043",
+"q047",
+"q054",
+"q062",
+"q064",
+"q008",
+"q009"
+],
+"context": {
+"setting": "corporate",
+"temperature": "political"
+},
+"rep_pattern": "ghost",
+"reps": null
+},
+"log": [
+{
+"week": 0,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-1",
+"story": "s-A4-justin-trudeau",
+"icon": "justin-trudeau",
+"logged": "none"
+},
+{
+"week": 1,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-1",
+"story": "s-A3-cynthia-cooper",
+"icon": "cynthia-cooper",
+"logged": "none"
+},
+{
+"week": 2,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-1",
+"story": "s-D4-winston-churchill",
+"icon": "winston-churchill",
+"logged": "none"
+},
+{
+"week": 3,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-2",
+"story": "s-A4-louis-armstrong",
+"icon": "louis-armstrong",
+"logged": "none"
+},
+{
+"week": 4,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-2",
+"story": "s-A3-alex-ferguson",
+"icon": "alex-ferguson",
+"logged": "none"
+},
+{
+"week": 5,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-2",
+"story": "s-D4-jackie-robinson",
+"icon": "jackie-robinson",
+"logged": "none"
+},
+{
+"week": 6,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-3",
+"story": "s-A4-katharine-viner",
+"icon": "katharine-viner",
+"logged": "none"
+},
+{
+"week": 7,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-3",
+"story": "s-A3-john-bogle",
+"icon": "john-bogle",
+"logged": "none"
+},
+{
+"week": 8,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-3",
+"story": "s-D4-john-lewis",
+"icon": "john-lewis",
+"logged": "none"
+},
+{
+"week": 9,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-1",
+"story": "s-A4-justin-trudeau",
+"icon": "justin-trudeau",
+"logged": "none"
+},
+{
+"week": 10,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-1",
+"story": "s-A3-cynthia-cooper",
+"icon": "cynthia-cooper",
+"logged": "none"
+},
+{
+"week": 11,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-1",
+"story": "s-D4-winston-churchill",
+"icon": "winston-churchill",
+"logged": "none"
+},
+{
+"week": 12,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-2",
+"story": "s-A4-louis-armstrong",
+"icon": "louis-armstrong",
+"logged": "none"
+},
+{
+"week": 13,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-2",
+"story": "s-A3-alex-ferguson",
+"icon": "alex-ferguson",
+"logged": "none"
+},
+{
+"week": 14,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-2",
+"story": "s-D4-jackie-robinson",
+"icon": "jackie-robinson",
+"logged": "none"
+},
+{
+"week": 15,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-3",
+"story": "s-A4-katharine-viner",
+"icon": "katharine-viner",
+"logged": "none"
+},
+{
+"week": 16,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-3",
+"story": "s-A3-john-bogle",
+"icon": "john-bogle",
+"logged": "none"
+},
+{
+"week": 17,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-3",
+"story": "s-D4-john-lewis",
+"icon": "john-lewis",
+"logged": "none"
+},
+{
+"week": 18,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-1",
+"story": "s-A4-justin-trudeau",
+"icon": "justin-trudeau",
+"logged": "none"
+},
+{
+"week": 19,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-1",
+"story": "s-A3-martin-baron",
+"icon": "martin-baron",
+"logged": "none"
+},
+{
+"week": 20,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-1",
+"story": "s-D4-winston-churchill",
+"icon": "winston-churchill",
+"logged": "none"
+},
+{
+"week": 21,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-2",
+"story": "s-A4-louis-armstrong",
+"icon": "louis-armstrong",
+"logged": "none"
+},
+{
+"week": 22,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-2",
+"story": "s-A3-alex-ferguson",
+"icon": "alex-ferguson",
+"logged": "none"
+},
+{
+"week": 23,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-2",
+"story": "s-D4-jackie-robinson",
+"icon": "jackie-robinson",
+"logged": "none"
+},
+{
+"week": 24,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-3",
+"story": "s-A4-katharine-viner",
+"icon": "katharine-viner",
+"logged": "none"
+},
+{
+"week": 25,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-3",
+"story": "s-A3-john-bogle",
+"icon": "john-bogle",
+"logged": "none"
+},
+{
+"week": 26,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-3",
+"story": "s-D4-john-lewis",
+"icon": "john-lewis",
+"logged": "none"
+},
+{
+"week": 27,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-1",
+"story": "s-A4-justin-trudeau",
+"icon": "justin-trudeau",
+"logged": "none"
+},
+{
+"week": 28,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-1",
+"story": "s-A3-martin-baron",
+"icon": "martin-baron",
+"logged": "none"
+},
+{
+"week": 29,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-1",
+"story": "s-D4-winston-churchill",
+"icon": "winston-churchill",
+"logged": "none"
+},
+{
+"week": 30,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-2",
+"story": "s-A4-louis-armstrong",
+"icon": "louis-armstrong",
+"logged": "none"
+},
+{
+"week": 31,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-2",
+"story": "s-A3-alex-ferguson",
+"icon": "alex-ferguson",
+"logged": "none"
+},
+{
+"week": 32,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-2",
+"story": "s-D4-jackie-robinson",
+"icon": "jackie-robinson",
+"logged": "none"
+},
+{
+"week": 33,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-3",
+"story": "s-A4-katharine-viner",
+"icon": "katharine-viner",
+"logged": "none"
+},
+{
+"week": 34,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-3",
+"story": "s-A3-john-bogle",
+"icon": "john-bogle",
+"logged": "none"
+},
+{
+"week": 35,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-3",
+"story": "s-D4-john-lewis",
+"icon": "john-lewis",
+"logged": "none"
+},
+{
+"week": 36,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-1",
+"story": "s-A4-justin-trudeau",
+"icon": "justin-trudeau",
+"logged": "none"
+},
+{
+"week": 37,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-1",
+"story": "s-A3-martin-baron",
+"icon": "martin-baron",
+"logged": "none"
+},
+{
+"week": 38,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-1",
+"story": "s-D4-winston-churchill",
+"icon": "winston-churchill",
+"logged": "none"
+},
+{
+"week": 39,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-2",
+"story": "s-A4-louis-armstrong",
+"icon": "louis-armstrong",
+"logged": "none"
+}
+]
+},
+"m007": {
+"member": {
+"id": "m007",
+"situation_keys": [
+"unnamed-expectations",
+"every-act-is-a-message",
+"competent-and-becalmed"
+],
+"stars": [
+"taylor-swift",
+"naomi-osaka",
+"simone-biles",
+"lebron-james"
+],
+"kept_quotes": [
+"q002",
+"q004",
+"q005",
+"q007",
+"q010",
+"q021",
+"q026",
+"q029",
+"q030",
+"q036",
+"q037",
+"q044",
+"q048",
+"q058",
+"q008",
+"q009"
+],
+"context": {
+"setting": "startup",
+"temperature": "open"
+},
+"rep_pattern": "stalls",
+"reps": null
+},
+"log": [
+{
+"week": 0,
+"key": "unnamed-expectations",
+"move": "m-unnamed-expectations-1",
+"mode": "direct",
+"line": "l-unnamed-expectations-1",
+"story": "s-A1-jane-maas",
+"icon": "jane-maas",
+"logged": "first_failure"
+},
+{
+"week": 1,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "direct",
+"line": "l-every-act-is-a-message-1",
+"story": "s-E1-martin-luther-king-jr",
+"icon": "martin-luther-king-jr",
+"logged": "first_failure"
+},
+{
+"week": 2,
+"key": "competent-and-becalmed",
+"move": "m-competent-and-becalmed-1",
+"mode": "direct",
+"line": "l-competent-and-becalmed-1",
+"story": "s-E4-peter-drucker",
+"icon": "peter-drucker",
+"logged": "first_failure"
+},
+{
+"week": 3,
+"key": "unnamed-expectations",
+"move": "m-unnamed-expectations-1",
+"mode": "direct",
+"line": "l-unnamed-expectations-2",
+"story": "s-A1-mahatma-gandhi",
+"icon": "mahatma-gandhi",
+"logged": "first_failure"
+},
+{
+"week": 4,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "direct",
+"line": "l-every-act-is-a-message-2",
+"story": "s-E1-miles-davis",
+"icon": "miles-davis",
+"logged": "first_failure"
+},
+{
+"week": 5,
+"key": "competent-and-becalmed",
+"move": "m-competent-and-becalmed-1",
+"mode": "direct",
+"line": "l-competent-and-becalmed-2",
+"story": "s-E4-bob-dylan",
+"icon": "bob-dylan",
+"logged": "first_failure"
+},
+{
+"week": 6,
+"key": "unnamed-expectations",
+"move": "m-unnamed-expectations-1",
+"mode": "indirect",
+"line": "l-unnamed-expectations-3",
+"story": "s-A1-charlotte-bronte",
+"icon": "charlotte-bronte",
+"logged": "observable"
+},
+{
+"week": 7,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "indirect",
+"line": "l-every-act-is-a-message-3",
+"story": "s-A2-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 8,
+"key": "competent-and-becalmed",
+"move": "m-competent-and-becalmed-1",
+"mode": "indirect",
+"line": "l-competent-and-becalmed-3",
+"story": "s-E4-elton-john",
+"icon": "elton-john",
+"logged": "observable"
+},
+{
+"week": 9,
+"key": "unnamed-expectations",
+"move": "m-unnamed-expectations-1",
+"mode": "indirect",
+"line": "l-unnamed-expectations-1",
+"story": "s-A1-jill-biden",
+"icon": "jill-biden",
+"logged": "observable"
+},
+{
+"week": 10,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "indirect",
+"line": "l-every-act-is-a-message-1",
+"story": "s-E1-jackie-robinson",
+"icon": "jackie-robinson",
+"logged": "observable"
+},
+{
+"week": 11,
+"key": "competent-and-becalmed",
+"move": "m-competent-and-becalmed-1",
+"mode": "indirect",
+"line": "l-competent-and-becalmed-1",
+"story": "s-E4-althea-gibson",
+"icon": "althea-gibson",
+"logged": "observable"
+},
+{
+"week": 12,
+"key": "unnamed-expectations",
+"move": "m-unnamed-expectations-1",
+"mode": "indirect",
+"line": "l-unnamed-expectations-2",
+"story": "s-A1-catherine-the-great",
+"icon": "catherine-the-great",
+"logged": "observable"
+},
+{
+"week": 13,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "indirect",
+"line": "l-every-act-is-a-message-2",
+"story": "s-B2-sally-ride",
+"icon": "sally-ride",
+"logged": "observable"
+},
+{
+"week": 14,
+"key": "competent-and-becalmed",
+"move": "m-competent-and-becalmed-1",
+"mode": "indirect",
+"line": "l-competent-and-becalmed-2",
+"story": "s-E4-joe-wicks",
+"icon": "joe-wicks",
+"logged": "observable"
+},
+{
+"week": 15,
+"key": "unnamed-expectations",
+"move": "m-unnamed-expectations-1",
+"mode": "indirect",
+"line": "l-unnamed-expectations-3",
+"story": "s-A1-charlotte-bronte",
+"icon": "charlotte-bronte",
+"logged": "observable"
+},
+{
+"week": 16,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "indirect",
+"line": "l-every-act-is-a-message-3",
+"story": "s-E1-gwen-ifill",
+"icon": "gwen-ifill",
+"logged": "observable"
+},
+{
+"week": 17,
+"key": "competent-and-becalmed",
+"move": "m-competent-and-becalmed-1",
+"mode": "indirect",
+"line": "l-competent-and-becalmed-3",
+"story": "s-E4-elton-john",
+"icon": "elton-john",
+"logged": "observable"
+},
+{
+"week": 18,
+"key": "unnamed-expectations",
+"move": "m-unnamed-expectations-2",
+"mode": "direct",
+"line": "l-unnamed-expectations-1",
+"story": "s-A1-katherine-johnson",
+"icon": "katherine-johnson",
+"logged": "first_failure"
+},
+{
+"week": 19,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "indirect",
+"line": "l-every-act-is-a-message-1",
+"story": "s-E1-michelle-obama",
+"icon": "michelle-obama",
+"logged": "observable"
+},
+{
+"week": 20,
+"key": "competent-and-becalmed",
+"move": "m-competent-and-becalmed-2",
+"mode": "direct",
+"line": "l-competent-and-becalmed-1",
+"story": "s-E4-ruth-porat",
+"icon": "ruth-porat",
+"logged": "first_failure"
+},
+{
+"week": 21,
+"key": "unnamed-expectations",
+"move": "m-unnamed-expectations-2",
+"mode": "direct",
+"line": "l-unnamed-expectations-2",
+"story": "s-A1-sally-ride",
+"icon": "sally-ride",
+"logged": "first_failure"
+},
+{
+"week": 22,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "indirect",
+"line": "l-every-act-is-a-message-2",
+"story": "s-E1-sonia-sotomayor",
+"icon": "sonia-sotomayor",
+"logged": "observable"
+},
+{
+"week": 23,
+"key": "competent-and-becalmed",
+"move": "m-competent-and-becalmed-2",
+"mode": "direct",
+"line": "l-competent-and-becalmed-2",
+"story": "s-E4-stevie-wonder",
+"icon": "stevie-wonder",
+"logged": "first_failure"
+},
+{
+"week": 24,
+"key": "unnamed-expectations",
+"move": "m-unnamed-expectations-2",
+"mode": "indirect",
+"line": "l-unnamed-expectations-3",
+"story": "s-A1-jill-biden",
+"icon": "jill-biden",
+"logged": "observable"
+},
+{
+"week": 25,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-2",
+"mode": "calibrated",
+"line": "l-every-act-is-a-message-3",
+"story": "s-A5-christine-lagarde",
+"icon": "christine-lagarde",
+"logged": "first_failure"
+},
+{
+"week": 26,
+"key": "competent-and-becalmed",
+"move": "m-competent-and-becalmed-2",
+"mode": "indirect",
+"line": "l-competent-and-becalmed-3",
+"story": "s-E4-althea-gibson",
+"icon": "althea-gibson",
+"logged": "observable"
+},
+{
+"week": 27,
+"key": "unnamed-expectations",
+"move": "m-unnamed-expectations-2",
+"mode": "indirect",
+"line": "l-unnamed-expectations-1",
+"story": "s-A1-charlotte-bronte",
+"icon": "charlotte-bronte",
+"logged": "observable"
+},
+{
+"week": 28,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-2",
+"mode": "calibrated",
+"line": "l-every-act-is-a-message-1",
+"story": "s-E1-cesar-chavez",
+"icon": "cesar-chavez",
+"logged": "first_failure"
+},
+{
+"week": 29,
+"key": "competent-and-becalmed",
+"move": "m-competent-and-becalmed-2",
+"mode": "indirect",
+"line": "l-competent-and-becalmed-1",
+"story": "s-E4-angela-merkel",
+"icon": "angela-merkel",
+"logged": "observable"
+},
+{
+"week": 30,
+"key": "unnamed-expectations",
+"move": "m-unnamed-expectations-2",
+"mode": "indirect",
+"line": "l-unnamed-expectations-2",
+"story": "s-A1-catherine-the-great",
+"icon": "catherine-the-great",
+"logged": "observable"
+},
+{
+"week": 31,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-2",
+"mode": "calibrated",
+"line": "l-every-act-is-a-message-2",
+"story": "s-E1-jacinda-ardern",
+"icon": "jacinda-ardern",
+"logged": "observable"
+},
+{
+"week": 32,
+"key": "competent-and-becalmed",
+"move": "m-competent-and-becalmed-2",
+"mode": "indirect",
+"line": "l-competent-and-becalmed-2",
+"story": "s-E4-joan-didion",
+"icon": "joan-didion",
+"logged": "observable"
+},
+{
+"week": 33,
+"key": "unnamed-expectations",
+"move": "m-unnamed-expectations-2",
+"mode": "indirect",
+"line": "l-unnamed-expectations-3",
+"story": "s-A1-jill-biden",
+"icon": "jill-biden",
+"logged": "observable"
+},
+{
+"week": 34,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-2",
+"mode": "calibrated",
+"line": "l-every-act-is-a-message-3",
+"story": "s-A5-christine-lagarde",
+"icon": "christine-lagarde",
+"logged": "observable"
+},
+{
+"week": 35,
+"key": "competent-and-becalmed",
+"move": "m-competent-and-becalmed-2",
+"mode": "indirect",
+"line": "l-competent-and-becalmed-3",
+"story": "s-E4-althea-gibson",
+"icon": "althea-gibson",
+"logged": "observable"
+},
+{
+"week": 36,
+"key": "unnamed-expectations",
+"move": "m-unnamed-expectations-2",
+"mode": "indirect",
+"line": "l-unnamed-expectations-1",
+"story": "s-A1-charlotte-bronte",
+"icon": "charlotte-bronte",
+"logged": "observable"
+},
+{
+"week": 37,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-2",
+"mode": "calibrated",
+"line": "l-every-act-is-a-message-1",
+"story": "s-E1-cesar-chavez",
+"icon": "cesar-chavez",
+"logged": "observable"
+},
+{
+"week": 38,
+"key": "competent-and-becalmed",
+"move": "m-competent-and-becalmed-2",
+"mode": "indirect",
+"line": "l-competent-and-becalmed-1",
+"story": "s-E4-angela-merkel",
+"icon": "angela-merkel",
+"logged": "observable"
+},
+{
+"week": 39,
+"key": "unnamed-expectations",
+"move": "m-unnamed-expectations-3",
+"mode": "calibrated",
+"line": "l-unnamed-expectations-2",
+"story": "s-A1-frances-hesselbein",
+"icon": "frances-hesselbein",
+"logged": "first_failure"
+}
+]
+},
+"m008": {
+"member": {
+"id": "m008",
+"situation_keys": [
+"coalition-without-mandate",
+"agreeing-and-not-moving",
+"the-loss-inside-the-promotion"
+],
+"stars": [
+"malala-yousafzai",
+"martin-luther-king-jr",
+"ashleigh-barty"
+],
+"kept_quotes": [
+"q003",
+"q024",
+"q031",
+"q041",
+"q046",
+"q055",
+"q059",
+"q060",
+"q068",
+"q069",
+"q006",
+"q011"
+],
+"context": {
+"setting": "public",
+"temperature": "open"
+},
+"rep_pattern": "slow",
+"reps": null
+},
+"log": [
+{
+"week": 0,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-1",
+"story": "s-C3-benjamin-franklin",
+"icon": "benjamin-franklin",
+"logged": "observable"
+},
+{
+"week": 1,
+"key": "agreeing-and-not-moving",
+"move": "m-agreeing-and-not-moving-1",
+"mode": "direct",
+"line": "l-agreeing-and-not-moving-1",
+"story": "s-E2-rosa-parks",
+"icon": "rosa-parks",
+"logged": "observable"
+},
+{
+"week": 2,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "direct",
+"line": "l-the-loss-inside-the-promotion-1",
+"story": "s-E3-wilma-rudolph",
+"icon": "wilma-rudolph",
+"logged": "observable"
+},
+{
+"week": 3,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-2",
+"story": "s-C3-frances-perkins",
+"icon": "frances-perkins",
+"logged": "none"
+},
+{
+"week": 4,
+"key": "agreeing-and-not-moving",
+"move": "m-agreeing-and-not-moving-1",
+"mode": "direct",
+"line": "l-agreeing-and-not-moving-2",
+"story": "s-E2-colin-kaepernick",
+"icon": "colin-kaepernick",
+"logged": "none"
+},
+{
+"week": 5,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "direct",
+"line": "l-the-loss-inside-the-promotion-2",
+"story": "s-E3-antonio-banderas",
+"icon": "antonio-banderas",
+"logged": "none"
+},
+{
+"week": 6,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-3",
+"story": "s-C3-anthony-fauci",
+"icon": "anthony-fauci",
+"logged": "observable"
+},
+{
+"week": 7,
+"key": "agreeing-and-not-moving",
+"move": "m-agreeing-and-not-moving-1",
+"mode": "direct",
+"line": "l-agreeing-and-not-moving-3",
+"story": "s-E2-sidney-weinberg",
+"icon": "sidney-weinberg",
+"logged": "observable"
+},
+{
+"week": 8,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "direct",
+"line": "l-the-loss-inside-the-promotion-3",
+"story": "s-E3-herbert-hoover",
+"icon": "herbert-hoover",
+"logged": "observable"
+},
+{
+"week": 9,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-1",
+"story": "s-C3-benjamin-franklin",
+"icon": "benjamin-franklin",
+"logged": "none"
+},
+{
+"week": 10,
+"key": "agreeing-and-not-moving",
+"move": "m-agreeing-and-not-moving-1",
+"mode": "direct",
+"line": "l-agreeing-and-not-moving-1",
+"story": "s-E2-rosa-parks",
+"icon": "rosa-parks",
+"logged": "none"
+},
+{
+"week": 11,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "direct",
+"line": "l-the-loss-inside-the-promotion-1",
+"story": "s-E3-wilma-rudolph",
+"icon": "wilma-rudolph",
+"logged": "none"
+},
+{
+"week": 12,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-2",
+"story": "s-C3-dolores-huerta",
+"icon": "dolores-huerta",
+"logged": "observable"
+},
+{
+"week": 13,
+"key": "agreeing-and-not-moving",
+"move": "m-agreeing-and-not-moving-1",
+"mode": "direct",
+"line": "l-agreeing-and-not-moving-2",
+"story": "s-E2-colin-kaepernick",
+"icon": "colin-kaepernick",
+"logged": "observable"
+},
+{
+"week": 14,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "direct",
+"line": "l-the-loss-inside-the-promotion-2",
+"story": "s-E3-antonio-banderas",
+"icon": "antonio-banderas",
+"logged": "observable"
+},
+{
+"week": 15,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-3",
+"story": "s-C3-anthony-fauci",
+"icon": "anthony-fauci",
+"logged": "none"
+},
+{
+"week": 16,
+"key": "agreeing-and-not-moving",
+"move": "m-agreeing-and-not-moving-1",
+"mode": "direct",
+"line": "l-agreeing-and-not-moving-3",
+"story": "s-E2-sidney-weinberg",
+"icon": "sidney-weinberg",
+"logged": "none"
+},
+{
+"week": 17,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "direct",
+"line": "l-the-loss-inside-the-promotion-3",
+"story": "s-E3-herbert-hoover",
+"icon": "herbert-hoover",
+"logged": "none"
+},
+{
+"week": 18,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-1",
+"story": "s-C3-felix-rohatyn",
+"icon": "felix-rohatyn",
+"logged": "observable"
+},
+{
+"week": 19,
+"key": "agreeing-and-not-moving",
+"move": "m-agreeing-and-not-moving-1",
+"mode": "direct",
+"line": "l-agreeing-and-not-moving-1",
+"story": "s-E2-rosa-parks",
+"icon": "rosa-parks",
+"logged": "observable"
+},
+{
+"week": 20,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "direct",
+"line": "l-the-loss-inside-the-promotion-1",
+"story": "s-E3-jerry-rice",
+"icon": "jerry-rice",
+"logged": "observable"
+},
+{
+"week": 21,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-2",
+"story": "s-C3-dolores-huerta",
+"icon": "dolores-huerta",
+"logged": "none"
+},
+{
+"week": 22,
+"key": "agreeing-and-not-moving",
+"move": "m-agreeing-and-not-moving-1",
+"mode": "direct",
+"line": "l-agreeing-and-not-moving-2",
+"story": "s-E2-colin-kaepernick",
+"icon": "colin-kaepernick",
+"logged": "none"
+},
+{
+"week": 23,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "direct",
+"line": "l-the-loss-inside-the-promotion-2",
+"story": "s-E3-antonio-banderas",
+"icon": "antonio-banderas",
+"logged": "none"
+},
+{
+"week": 24,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-3",
+"story": "s-C3-anthony-fauci",
+"icon": "anthony-fauci",
+"logged": "observable"
+},
+{
+"week": 25,
+"key": "agreeing-and-not-moving",
+"move": "m-agreeing-and-not-moving-1",
+"mode": "direct",
+"line": "l-agreeing-and-not-moving-3",
+"story": "s-E2-sidney-weinberg",
+"icon": "sidney-weinberg",
+"logged": "observable"
+},
+{
+"week": 26,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "direct",
+"line": "l-the-loss-inside-the-promotion-3",
+"story": "s-E3-herbert-hoover",
+"icon": "herbert-hoover",
+"logged": "observable"
+},
+{
+"week": 27,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-2",
+"mode": "indirect",
+"line": "l-coalition-without-mandate-1",
+"story": "s-C3-j-robert-oppenheimer",
+"icon": "j-robert-oppenheimer",
+"logged": "observable"
+},
+{
+"week": 28,
+"key": "agreeing-and-not-moving",
+"move": "m-agreeing-and-not-moving-2",
+"mode": "direct",
+"line": "l-agreeing-and-not-moving-1",
+"story": "s-E2-rosa-parks",
+"icon": "rosa-parks",
+"logged": "observable"
+},
+{
+"week": 29,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "direct",
+"line": "l-the-loss-inside-the-promotion-1",
+"story": "s-E3-jerry-rice",
+"icon": "jerry-rice",
+"logged": "none"
+},
+{
+"week": 30,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-2",
+"mode": "indirect",
+"line": "l-coalition-without-mandate-2",
+"story": "s-C3-felix-rohatyn",
+"icon": "felix-rohatyn",
+"logged": "none"
+},
+{
+"week": 31,
+"key": "agreeing-and-not-moving",
+"move": "m-agreeing-and-not-moving-2",
+"mode": "direct",
+"line": "l-agreeing-and-not-moving-2",
+"story": "s-E2-colin-kaepernick",
+"icon": "colin-kaepernick",
+"logged": "none"
+},
+{
+"week": 32,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "direct",
+"line": "l-the-loss-inside-the-promotion-2",
+"story": "s-E3-antonio-banderas",
+"icon": "antonio-banderas",
+"logged": "observable"
+},
+{
+"week": 33,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-2",
+"mode": "indirect",
+"line": "l-coalition-without-mandate-3",
+"story": "s-C3-benjamin-franklin",
+"icon": "benjamin-franklin",
+"logged": "observable"
+},
+{
+"week": 34,
+"key": "agreeing-and-not-moving",
+"move": "m-agreeing-and-not-moving-2",
+"mode": "direct",
+"line": "l-agreeing-and-not-moving-3",
+"story": "s-E2-sidney-weinberg",
+"icon": "sidney-weinberg",
+"logged": "observable"
+},
+{
+"week": 35,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-2",
+"mode": "calibrated",
+"line": "l-the-loss-inside-the-promotion-3",
+"story": "s-E3-herbert-hoover",
+"icon": "herbert-hoover",
+"logged": "observable"
+},
+{
+"week": 36,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-2",
+"mode": "indirect",
+"line": "l-coalition-without-mandate-1",
+"story": "s-C3-j-robert-oppenheimer",
+"icon": "j-robert-oppenheimer",
+"logged": "none"
+},
+{
+"week": 37,
+"key": "agreeing-and-not-moving",
+"move": "m-agreeing-and-not-moving-2",
+"mode": "direct",
+"line": "l-agreeing-and-not-moving-1",
+"story": "s-E2-rosa-parks",
+"icon": "rosa-parks",
+"logged": "none"
+},
+{
+"week": 38,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-2",
+"mode": "calibrated",
+"line": "l-the-loss-inside-the-promotion-1",
+"story": "s-E3-jerry-rice",
+"icon": "jerry-rice",
+"logged": "none"
+},
+{
+"week": 39,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-2",
+"mode": "indirect",
+"line": "l-coalition-without-mandate-2",
+"story": "s-C3-felix-rohatyn",
+"icon": "felix-rohatyn",
+"logged": "observable"
+}
+]
+},
+"m009": {
+"member": {
+"id": "m009",
+"situation_keys": [
+"judging-unfamiliar-work",
+"coalition-without-mandate",
+"renegotiating-standing",
+"credit-and-attribution"
+],
+"stars": [
+"charlotte-beers",
+"shelly-lazarus",
+"marvin-bower",
+"zaha-hadid"
+],
+"kept_quotes": [
+"q001",
+"q019",
+"q022",
+"q034",
+"q035",
+"q039",
+"q051",
+"q067",
+"q006",
+"q011"
+],
+"context": {
+"setting": "agency",
+"temperature": "political"
+},
+"rep_pattern": "steady",
+"reps": null
+},
+"log": [
+{
+"week": 0,
+"key": "judging-unfamiliar-work",
+"move": "m-judging-unfamiliar-work-1",
+"mode": "direct",
+"line": "l-judging-unfamiliar-work-1",
+"story": "s-A5-robert-f-smith",
+"icon": "robert-f-smith",
+"logged": "observable"
+},
+{
+"week": 1,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-1",
+"story": "s-C3-benjamin-franklin",
+"icon": "benjamin-franklin",
+"logged": "observable"
+},
+{
+"week": 2,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "indirect",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-abraham-lincoln",
+"icon": "abraham-lincoln",
+"logged": "observable"
+},
+{
+"week": 3,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-1",
+"mode": "indirect",
+"line": "l-credit-and-attribution-1",
+"story": "s-B1-diana-athill",
+"icon": "diana-athill",
+"logged": "observable"
+},
+{
+"week": 4,
+"key": "judging-unfamiliar-work",
+"move": "m-judging-unfamiliar-work-1",
+"mode": "direct",
+"line": "l-judging-unfamiliar-work-2",
+"story": "s-A5-ben-affleck",
+"icon": "ben-affleck",
+"logged": "observable"
+},
+{
+"week": 5,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-2",
+"story": "s-C3-frances-perkins",
+"icon": "frances-perkins",
+"logged": "observable"
+},
+{
+"week": 6,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "indirect",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-condoleezza-rice",
+"icon": "condoleezza-rice",
+"logged": "observable"
+},
+{
+"week": 7,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-1",
+"mode": "indirect",
+"line": "l-credit-and-attribution-2",
+"story": "s-B1-helen-lansdowne-resor",
+"icon": "helen-lansdowne-resor",
+"logged": "observable"
+},
+{
+"week": 8,
+"key": "judging-unfamiliar-work",
+"move": "m-judging-unfamiliar-work-1",
+"mode": "direct",
+"line": "l-judging-unfamiliar-work-3",
+"story": "s-A5-michael-douglas",
+"icon": "michael-douglas",
+"logged": "observable"
+},
+{
+"week": 9,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-3",
+"story": "s-C3-anthony-fauci",
+"icon": "anthony-fauci",
+"logged": "observable"
+},
+{
+"week": 10,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "indirect",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 11,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-1",
+"mode": "indirect",
+"line": "l-credit-and-attribution-3",
+"story": "s-B1-bill-russell",
+"icon": "bill-russell",
+"logged": "observable"
+},
+{
+"week": 12,
+"key": "judging-unfamiliar-work",
+"move": "m-judging-unfamiliar-work-1",
+"mode": "direct",
+"line": "l-judging-unfamiliar-work-1",
+"story": "s-A5-robert-f-smith",
+"icon": "robert-f-smith",
+"logged": "observable"
+},
+{
+"week": 13,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-1",
+"story": "s-C3-dolores-huerta",
+"icon": "dolores-huerta",
+"logged": "observable"
+},
+{
+"week": 14,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "indirect",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-abraham-lincoln",
+"icon": "abraham-lincoln",
+"logged": "observable"
+},
+{
+"week": 15,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-1",
+"mode": "indirect",
+"line": "l-credit-and-attribution-1",
+"story": "s-B1-maxwell-perkins",
+"icon": "maxwell-perkins",
+"logged": "observable"
+},
+{
+"week": 16,
+"key": "judging-unfamiliar-work",
+"move": "m-judging-unfamiliar-work-2",
+"mode": "direct",
+"line": "l-judging-unfamiliar-work-2",
+"story": "s-A5-ben-affleck",
+"icon": "ben-affleck",
+"logged": "observable"
+},
+{
+"week": 17,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-2",
+"story": "s-C3-felix-rohatyn",
+"icon": "felix-rohatyn",
+"logged": "observable"
+},
+{
+"week": 18,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "indirect",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-condoleezza-rice",
+"icon": "condoleezza-rice",
+"logged": "observable"
+},
+{
+"week": 19,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-1",
+"mode": "indirect",
+"line": "l-credit-and-attribution-2",
+"story": "s-B1-diana-athill",
+"icon": "diana-athill",
+"logged": "observable"
+},
+{
+"week": 20,
+"key": "judging-unfamiliar-work",
+"move": "m-judging-unfamiliar-work-2",
+"mode": "direct",
+"line": "l-judging-unfamiliar-work-3",
+"story": "s-A5-mary-barra",
+"icon": "mary-barra",
+"logged": "observable"
+},
+{
+"week": 21,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-2",
+"mode": "indirect",
+"line": "l-coalition-without-mandate-3",
+"story": "s-C3-j-robert-oppenheimer",
+"icon": "j-robert-oppenheimer",
+"logged": "observable"
+},
+{
+"week": 22,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "indirect",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-derek-jeter",
+"icon": "derek-jeter",
+"logged": "observable"
+},
+{
+"week": 23,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-2",
+"mode": "indirect",
+"line": "l-credit-and-attribution-3",
+"story": "s-B1-bill-russell",
+"icon": "bill-russell",
+"logged": "observable"
+},
+{
+"week": 24,
+"key": "judging-unfamiliar-work",
+"move": "m-judging-unfamiliar-work-2",
+"mode": "direct",
+"line": "l-judging-unfamiliar-work-1",
+"story": "s-A5-robert-f-smith",
+"icon": "robert-f-smith",
+"logged": "observable"
+},
+{
+"week": 25,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-2",
+"mode": "indirect",
+"line": "l-coalition-without-mandate-1",
+"story": "s-C3-anna-kendrick",
+"icon": "anna-kendrick",
+"logged": "observable"
+},
+{
+"week": 26,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "indirect",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-abraham-lincoln",
+"icon": "abraham-lincoln",
+"logged": "observable"
+},
+{
+"week": 27,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-2",
+"mode": "indirect",
+"line": "l-credit-and-attribution-1",
+"story": "s-B1-maxwell-perkins",
+"icon": "maxwell-perkins",
+"logged": "observable"
+},
+{
+"week": 28,
+"key": "judging-unfamiliar-work",
+"move": "m-judging-unfamiliar-work-2",
+"mode": "direct",
+"line": "l-judging-unfamiliar-work-2",
+"story": "s-A5-ben-affleck",
+"icon": "ben-affleck",
+"logged": "observable"
+},
+{
+"week": 29,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-2",
+"mode": "indirect",
+"line": "l-coalition-without-mandate-2",
+"story": "s-C3-benjamin-o-davis-sr",
+"icon": "benjamin-o-davis-sr",
+"logged": "observable"
+},
+{
+"week": 30,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "indirect",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-condoleezza-rice",
+"icon": "condoleezza-rice",
+"logged": "observable"
+},
+{
+"week": 31,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-2",
+"mode": "indirect",
+"line": "l-credit-and-attribution-2",
+"story": "s-B1-diana-athill",
+"icon": "diana-athill",
+"logged": "observable"
+},
+{
+"week": 32,
+"key": "judging-unfamiliar-work",
+"move": "m-judging-unfamiliar-work-2",
+"mode": "direct",
+"line": "l-judging-unfamiliar-work-3",
+"story": "s-A5-mary-barra",
+"icon": "mary-barra",
+"logged": "observable"
+},
+{
+"week": 33,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-2",
+"mode": "indirect",
+"line": "l-coalition-without-mandate-3",
+"story": "s-C3-j-robert-oppenheimer",
+"icon": "j-robert-oppenheimer",
+"logged": "observable"
+},
+{
+"week": 34,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "indirect",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-derek-jeter",
+"icon": "derek-jeter",
+"logged": "observable"
+},
+{
+"week": 35,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-2",
+"mode": "indirect",
+"line": "l-credit-and-attribution-3",
+"story": "s-B1-bill-russell",
+"icon": "bill-russell",
+"logged": "observable"
+},
+{
+"week": 36,
+"key": "judging-unfamiliar-work",
+"move": "m-judging-unfamiliar-work-3",
+"mode": "calibrated",
+"line": "l-judging-unfamiliar-work-1",
+"story": "s-A5-georges-doriot",
+"icon": "georges-doriot",
+"logged": "observable"
+},
+{
+"week": 37,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-3",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-1",
+"story": "s-C3-anthony-fauci",
+"icon": "anthony-fauci",
+"logged": "observable"
+},
+{
+"week": 38,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-elena-kagan",
+"icon": "elena-kagan",
+"logged": "observable"
+},
+{
+"week": 39,
+"key": "credit-and-attribution",
+"move": "m-credit-and-attribution-3",
+"mode": "calibrated",
+"line": "l-credit-and-attribution-1",
+"story": "s-B1-maxwell-perkins",
+"icon": "maxwell-perkins",
+"logged": "observable"
+}
+]
+},
+"m010": {
+"member": {
+"id": "m010",
+"situation_keys": [
+"following-a-legend",
+"coalition-without-mandate",
+"every-act-is-a-message"
+],
+"stars": [
+"barbara-jordan",
+"alan-mulally",
+"george-c-marshall",
+"eleanor-roosevelt"
+],
+"kept_quotes": [
+"q016",
+"q017",
+"q023",
+"q025",
+"q028",
+"q033",
+"q038",
+"q042",
+"q043",
+"q047",
+"q054",
+"q062",
+"q064",
+"q003",
+"q024"
+],
+"context": {
+"setting": "firm",
+"temperature": "guarded"
+},
+"rep_pattern": "slow",
+"reps": null
+},
+"log": [
+{
+"week": 0,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-1",
+"story": "s-A4-justin-trudeau",
+"icon": "justin-trudeau",
+"logged": "observable"
+},
+{
+"week": 1,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-1",
+"story": "s-C3-benjamin-franklin",
+"icon": "benjamin-franklin",
+"logged": "observable"
+},
+{
+"week": 2,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "direct",
+"line": "l-every-act-is-a-message-1",
+"story": "s-E1-martin-luther-king-jr",
+"icon": "martin-luther-king-jr",
+"logged": "observable"
+},
+{
+"week": 3,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-2",
+"story": "s-A4-louis-armstrong",
+"icon": "louis-armstrong",
+"logged": "none"
+},
+{
+"week": 4,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-2",
+"story": "s-C3-frances-perkins",
+"icon": "frances-perkins",
+"logged": "none"
+},
+{
+"week": 5,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "direct",
+"line": "l-every-act-is-a-message-2",
+"story": "s-E1-miles-davis",
+"icon": "miles-davis",
+"logged": "none"
+},
+{
+"week": 6,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-3",
+"story": "s-A4-katharine-viner",
+"icon": "katharine-viner",
+"logged": "observable"
+},
+{
+"week": 7,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-3",
+"story": "s-C3-anthony-fauci",
+"icon": "anthony-fauci",
+"logged": "observable"
+},
+{
+"week": 8,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "direct",
+"line": "l-every-act-is-a-message-3",
+"story": "s-B2-zendaya",
+"icon": "zendaya",
+"logged": "observable"
+},
+{
+"week": 9,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-1",
+"story": "s-A4-justin-trudeau",
+"icon": "justin-trudeau",
+"logged": "none"
+},
+{
+"week": 10,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-1",
+"story": "s-C3-benjamin-franklin",
+"icon": "benjamin-franklin",
+"logged": "none"
+},
+{
+"week": 11,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "direct",
+"line": "l-every-act-is-a-message-1",
+"story": "s-E1-martin-luther-king-jr",
+"icon": "martin-luther-king-jr",
+"logged": "none"
+},
+{
+"week": 12,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-2",
+"story": "s-A4-louis-armstrong",
+"icon": "louis-armstrong",
+"logged": "observable"
+},
+{
+"week": 13,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-2",
+"story": "s-C3-dolores-huerta",
+"icon": "dolores-huerta",
+"logged": "observable"
+},
+{
+"week": 14,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "direct",
+"line": "l-every-act-is-a-message-2",
+"story": "s-B5-brenda-hale",
+"icon": "brenda-hale",
+"logged": "observable"
+},
+{
+"week": 15,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-3",
+"story": "s-A4-katharine-viner",
+"icon": "katharine-viner",
+"logged": "none"
+},
+{
+"week": 16,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-3",
+"story": "s-C3-anthony-fauci",
+"icon": "anthony-fauci",
+"logged": "none"
+},
+{
+"week": 17,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "direct",
+"line": "l-every-act-is-a-message-3",
+"story": "s-B2-zendaya",
+"icon": "zendaya",
+"logged": "none"
+},
+{
+"week": 18,
+"key": "following-a-legend",
+"move": "m-following-a-legend-1",
+"mode": "indirect",
+"line": "l-following-a-legend-1",
+"story": "s-A4-justin-trudeau",
+"icon": "justin-trudeau",
+"logged": "observable"
+},
+{
+"week": 19,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-1",
+"story": "s-C3-felix-rohatyn",
+"icon": "felix-rohatyn",
+"logged": "observable"
+},
+{
+"week": 20,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "direct",
+"line": "l-every-act-is-a-message-1",
+"story": "s-E1-emma-watson",
+"icon": "emma-watson",
+"logged": "observable"
+},
+{
+"week": 21,
+"key": "following-a-legend",
+"move": "m-following-a-legend-2",
+"mode": "indirect",
+"line": "l-following-a-legend-2",
+"story": "s-A4-franklin-d-roosevelt",
+"icon": "franklin-d-roosevelt",
+"logged": "observable"
+},
+{
+"week": 22,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-2",
+"story": "s-C3-dolores-huerta",
+"icon": "dolores-huerta",
+"logged": "none"
+},
+{
+"week": 23,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "direct",
+"line": "l-every-act-is-a-message-2",
+"story": "s-B5-brenda-hale",
+"icon": "brenda-hale",
+"logged": "none"
+},
+{
+"week": 24,
+"key": "following-a-legend",
+"move": "m-following-a-legend-2",
+"mode": "indirect",
+"line": "l-following-a-legend-3",
+"story": "s-A4-thurgood-marshall",
+"icon": "thurgood-marshall",
+"logged": "none"
+},
+{
+"week": 25,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-1",
+"mode": "calibrated",
+"line": "l-coalition-without-mandate-3",
+"story": "s-C3-anthony-fauci",
+"icon": "anthony-fauci",
+"logged": "observable"
+},
+{
+"week": 26,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "direct",
+"line": "l-every-act-is-a-message-3",
+"story": "s-B2-zendaya",
+"icon": "zendaya",
+"logged": "observable"
+},
+{
+"week": 27,
+"key": "following-a-legend",
+"move": "m-following-a-legend-2",
+"mode": "indirect",
+"line": "l-following-a-legend-1",
+"story": "s-A4-aristotle",
+"icon": "aristotle",
+"logged": "observable"
+},
+{
+"week": 28,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-2",
+"mode": "indirect",
+"line": "l-coalition-without-mandate-1",
+"story": "s-C3-j-robert-oppenheimer",
+"icon": "j-robert-oppenheimer",
+"logged": "observable"
+},
+{
+"week": 29,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "direct",
+"line": "l-every-act-is-a-message-1",
+"story": "s-E1-emma-watson",
+"icon": "emma-watson",
+"logged": "none"
+},
+{
+"week": 30,
+"key": "following-a-legend",
+"move": "m-following-a-legend-2",
+"mode": "indirect",
+"line": "l-following-a-legend-2",
+"story": "s-A4-franklin-d-roosevelt",
+"icon": "franklin-d-roosevelt",
+"logged": "none"
+},
+{
+"week": 31,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-2",
+"mode": "indirect",
+"line": "l-coalition-without-mandate-2",
+"story": "s-C3-benjamin-o-davis-sr",
+"icon": "benjamin-o-davis-sr",
+"logged": "none"
+},
+{
+"week": 32,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-1",
+"mode": "direct",
+"line": "l-every-act-is-a-message-2",
+"story": "s-B5-brenda-hale",
+"icon": "brenda-hale",
+"logged": "observable"
+},
+{
+"week": 33,
+"key": "following-a-legend",
+"move": "m-following-a-legend-2",
+"mode": "indirect",
+"line": "l-following-a-legend-3",
+"story": "s-A4-thurgood-marshall",
+"icon": "thurgood-marshall",
+"logged": "observable"
+},
+{
+"week": 34,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-2",
+"mode": "indirect",
+"line": "l-coalition-without-mandate-3",
+"story": "s-C3-karl-marx",
+"icon": "karl-marx",
+"logged": "observable"
+},
+{
+"week": 35,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-2",
+"mode": "calibrated",
+"line": "l-every-act-is-a-message-3",
+"story": "s-A5-christine-lagarde",
+"icon": "christine-lagarde",
+"logged": "observable"
+},
+{
+"week": 36,
+"key": "following-a-legend",
+"move": "m-following-a-legend-2",
+"mode": "indirect",
+"line": "l-following-a-legend-1",
+"story": "s-A4-aristotle",
+"icon": "aristotle",
+"logged": "none"
+},
+{
+"week": 37,
+"key": "coalition-without-mandate",
+"move": "m-coalition-without-mandate-2",
+"mode": "indirect",
+"line": "l-coalition-without-mandate-1",
+"story": "s-C3-j-robert-oppenheimer",
+"icon": "j-robert-oppenheimer",
+"logged": "none"
+},
+{
+"week": 38,
+"key": "every-act-is-a-message",
+"move": "m-every-act-is-a-message-2",
+"mode": "calibrated",
+"line": "l-every-act-is-a-message-1",
+"story": "s-E1-cesar-chavez",
+"icon": "cesar-chavez",
+"logged": "none"
+},
+{
+"week": 39,
+"key": "following-a-legend",
+"move": "m-following-a-legend-2",
+"mode": "indirect",
+"line": "l-following-a-legend-2",
+"story": "s-A4-franklin-d-roosevelt",
+"icon": "franklin-d-roosevelt",
+"logged": "observable"
+}
+]
+},
+"m011": {
+"member": {
+"id": "m011",
+"situation_keys": [
+"naming-an-unseen-problem",
+"carrying-somebody-elses-decision",
+"leading-beyond-line-of-sight"
+],
+"stars": [
+"jamie-dimon",
+"ginni-rometty",
+"maggie-lena-walker",
+"andy-grove"
+],
+"kept_quotes": [
+"q016",
+"q017",
+"q023",
+"q025",
+"q028",
+"q033",
+"q038",
+"q042",
+"q043",
+"q047",
+"q054",
+"q062",
+"q064",
+"q002",
+"q004"
+],
+"context": {
+"setting": "corporate",
+"temperature": "political"
+},
+"rep_pattern": "stalls",
+"reps": null
+},
+"log": [
+{
+"week": 0,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-1",
+"story": "s-A3-cynthia-cooper",
+"icon": "cynthia-cooper",
+"logged": "first_failure"
+},
+{
+"week": 1,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-1",
+"story": "s-D4-jackie-robinson",
+"icon": "jackie-robinson",
+"logged": "first_failure"
+},
+{
+"week": 2,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "indirect",
+"line": "l-leading-beyond-line-of-sight-1",
+"story": "s-D1-cesar-chavez",
+"icon": "cesar-chavez",
+"logged": "first_failure"
+},
+{
+"week": 3,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-2",
+"story": "s-A3-alex-ferguson",
+"icon": "alex-ferguson",
+"logged": "first_failure"
+},
+{
+"week": 4,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-2",
+"story": "s-D4-john-lewis",
+"icon": "john-lewis",
+"logged": "first_failure"
+},
+{
+"week": 5,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "indirect",
+"line": "l-leading-beyond-line-of-sight-2",
+"story": "s-D1-anne-boden",
+"icon": "anne-boden",
+"logged": "first_failure"
+},
+{
+"week": 6,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-3",
+"story": "s-A3-john-bogle",
+"icon": "john-bogle",
+"logged": "observable"
+},
+{
+"week": 7,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-3",
+"story": "s-D4-mary-schapiro",
+"icon": "mary-schapiro",
+"logged": "observable"
+},
+{
+"week": 8,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "indirect",
+"line": "l-leading-beyond-line-of-sight-3",
+"story": "s-D1-david-ogilvy",
+"icon": "david-ogilvy",
+"logged": "observable"
+},
+{
+"week": 9,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-1",
+"story": "s-A3-cynthia-cooper",
+"icon": "cynthia-cooper",
+"logged": "observable"
+},
+{
+"week": 10,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-1",
+"story": "s-D4-jackie-robinson",
+"icon": "jackie-robinson",
+"logged": "observable"
+},
+{
+"week": 11,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "indirect",
+"line": "l-leading-beyond-line-of-sight-1",
+"story": "s-D1-cesar-chavez",
+"icon": "cesar-chavez",
+"logged": "observable"
+},
+{
+"week": 12,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-2",
+"story": "s-A3-alex-ferguson",
+"icon": "alex-ferguson",
+"logged": "observable"
+},
+{
+"week": 13,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-2",
+"story": "s-D4-john-lewis",
+"icon": "john-lewis",
+"logged": "observable"
+},
+{
+"week": 14,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "indirect",
+"line": "l-leading-beyond-line-of-sight-2",
+"story": "s-D1-anne-boden",
+"icon": "anne-boden",
+"logged": "observable"
+},
+{
+"week": 15,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-1",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-3",
+"story": "s-A3-john-bogle",
+"icon": "john-bogle",
+"logged": "observable"
+},
+{
+"week": 16,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-1",
+"mode": "indirect",
+"line": "l-carrying-somebody-elses-decision-3",
+"story": "s-D4-mary-schapiro",
+"icon": "mary-schapiro",
+"logged": "observable"
+},
+{
+"week": 17,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "indirect",
+"line": "l-leading-beyond-line-of-sight-3",
+"story": "s-D1-david-ogilvy",
+"icon": "david-ogilvy",
+"logged": "observable"
+},
+{
+"week": 18,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-2",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-1",
+"story": "s-A3-martin-baron",
+"icon": "martin-baron",
+"logged": "first_failure"
+},
+{
+"week": 19,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-2",
+"mode": "calibrated",
+"line": "l-carrying-somebody-elses-decision-1",
+"story": "s-D4-elena-kagan",
+"icon": "elena-kagan",
+"logged": "first_failure"
+},
+{
+"week": 20,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "indirect",
+"line": "l-leading-beyond-line-of-sight-1",
+"story": "s-D1-cesar-chavez",
+"icon": "cesar-chavez",
+"logged": "observable"
+},
+{
+"week": 21,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-2",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-2",
+"story": "s-A3-alex-ferguson",
+"icon": "alex-ferguson",
+"logged": "first_failure"
+},
+{
+"week": 22,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-2",
+"mode": "calibrated",
+"line": "l-carrying-somebody-elses-decision-2",
+"story": "s-D4-ernest-shackleton",
+"icon": "ernest-shackleton",
+"logged": "first_failure"
+},
+{
+"week": 23,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-1",
+"mode": "indirect",
+"line": "l-leading-beyond-line-of-sight-2",
+"story": "s-D1-anne-boden",
+"icon": "anne-boden",
+"logged": "observable"
+},
+{
+"week": 24,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-2",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-3",
+"story": "s-A3-john-bogle",
+"icon": "john-bogle",
+"logged": "observable"
+},
+{
+"week": 25,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-2",
+"mode": "calibrated",
+"line": "l-carrying-somebody-elses-decision-3",
+"story": "s-D4-jacinda-ardern",
+"icon": "jacinda-ardern",
+"logged": "observable"
+},
+{
+"week": 26,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-2",
+"mode": "indirect",
+"line": "l-leading-beyond-line-of-sight-3",
+"story": "s-D1-david-ogilvy",
+"icon": "david-ogilvy",
+"logged": "first_failure"
+},
+{
+"week": 27,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-2",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-1",
+"story": "s-A3-martin-baron",
+"icon": "martin-baron",
+"logged": "observable"
+},
+{
+"week": 28,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-2",
+"mode": "calibrated",
+"line": "l-carrying-somebody-elses-decision-1",
+"story": "s-D4-elena-kagan",
+"icon": "elena-kagan",
+"logged": "observable"
+},
+{
+"week": 29,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-2",
+"mode": "indirect",
+"line": "l-leading-beyond-line-of-sight-1",
+"story": "s-D1-cesar-chavez",
+"icon": "cesar-chavez",
+"logged": "first_failure"
+},
+{
+"week": 30,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-2",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-2",
+"story": "s-A3-alex-ferguson",
+"icon": "alex-ferguson",
+"logged": "observable"
+},
+{
+"week": 31,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-2",
+"mode": "calibrated",
+"line": "l-carrying-somebody-elses-decision-2",
+"story": "s-D4-ernest-shackleton",
+"icon": "ernest-shackleton",
+"logged": "observable"
+},
+{
+"week": 32,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-2",
+"mode": "indirect",
+"line": "l-leading-beyond-line-of-sight-2",
+"story": "s-D1-anne-boden",
+"icon": "anne-boden",
+"logged": "observable"
+},
+{
+"week": 33,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-2",
+"mode": "indirect",
+"line": "l-naming-an-unseen-problem-3",
+"story": "s-A3-john-bogle",
+"icon": "john-bogle",
+"logged": "observable"
+},
+{
+"week": 34,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-2",
+"mode": "calibrated",
+"line": "l-carrying-somebody-elses-decision-3",
+"story": "s-D4-jacinda-ardern",
+"icon": "jacinda-ardern",
+"logged": "observable"
+},
+{
+"week": 35,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-2",
+"mode": "indirect",
+"line": "l-leading-beyond-line-of-sight-3",
+"story": "s-D1-david-ogilvy",
+"icon": "david-ogilvy",
+"logged": "observable"
+},
+{
+"week": 36,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-3",
+"mode": "calibrated",
+"line": "l-naming-an-unseen-problem-1",
+"story": "s-A3-anthony-fauci",
+"icon": "anthony-fauci",
+"logged": "first_failure"
+},
+{
+"week": 37,
+"key": "carrying-somebody-elses-decision",
+"move": "m-carrying-somebody-elses-decision-2",
+"mode": "calibrated",
+"line": "l-carrying-somebody-elses-decision-1",
+"story": "s-D4-elena-kagan",
+"icon": "elena-kagan",
+"logged": "observable"
+},
+{
+"week": 38,
+"key": "leading-beyond-line-of-sight",
+"move": "m-leading-beyond-line-of-sight-2",
+"mode": "indirect",
+"line": "l-leading-beyond-line-of-sight-1",
+"story": "s-D1-cesar-chavez",
+"icon": "cesar-chavez",
+"logged": "observable"
+},
+{
+"week": 39,
+"key": "naming-an-unseen-problem",
+"move": "m-naming-an-unseen-problem-3",
+"mode": "calibrated",
+"line": "l-naming-an-unseen-problem-2",
+"story": "s-A4-angela-ahrendts",
+"icon": "angela-ahrendts",
+"logged": "first_failure"
+}
+]
+},
+"m012": {
+"member": {
+"id": "m012",
+"situation_keys": [
+"saying-it-in-your-own-words",
+"selling-what-you-used-to-make",
+"the-loss-inside-the-promotion"
+],
+"stars": [
+"nora-ephron",
+"bill-bernbach",
+"toni-morrison",
+"walt-disney"
+],
+"kept_quotes": [
+"q002",
+"q004",
+"q005",
+"q007",
+"q010",
+"q021",
+"q026",
+"q029",
+"q030",
+"q036",
+"q037",
+"q044",
+"q048",
+"q058",
+"q008",
+"q009"
+],
+"context": {
+"setting": "agency",
+"temperature": "open"
+},
+"rep_pattern": "steady",
+"reps": null
+},
+"log": [
+{
+"week": 0,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-1",
+"mode": "direct",
+"line": "l-saying-it-in-your-own-words-1",
+"story": "s-B5-bill-bernbach",
+"icon": "bill-bernbach",
+"logged": "observable"
+},
+{
+"week": 1,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-1",
+"mode": "direct",
+"line": "l-selling-what-you-used-to-make-1",
+"story": "s-C1-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "observable"
+},
+{
+"week": 2,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "indirect",
+"line": "l-the-loss-inside-the-promotion-1",
+"story": "s-E3-jesse-owens",
+"icon": "jesse-owens",
+"logged": "observable"
+},
+{
+"week": 3,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-1",
+"mode": "direct",
+"line": "l-saying-it-in-your-own-words-2",
+"story": "s-B5-toni-morrison",
+"icon": "toni-morrison",
+"logged": "observable"
+},
+{
+"week": 4,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-1",
+"mode": "direct",
+"line": "l-selling-what-you-used-to-make-2",
+"story": "s-C3-golda-meir",
+"icon": "golda-meir",
+"logged": "observable"
+},
+{
+"week": 5,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "indirect",
+"line": "l-the-loss-inside-the-promotion-2",
+"story": "s-E3-ludwig-van-beethoven",
+"icon": "ludwig-van-beethoven",
+"logged": "observable"
+},
+{
+"week": 6,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-1",
+"mode": "direct",
+"line": "l-saying-it-in-your-own-words-3",
+"story": "s-B5-anita-roddick",
+"icon": "anita-roddick",
+"logged": "observable"
+},
+{
+"week": 7,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-1",
+"mode": "direct",
+"line": "l-selling-what-you-used-to-make-3",
+"story": "s-C1-akio-morita",
+"icon": "akio-morita",
+"logged": "observable"
+},
+{
+"week": 8,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "indirect",
+"line": "l-the-loss-inside-the-promotion-3",
+"story": "s-E3-ulysses-s-grant",
+"icon": "ulysses-s-grant",
+"logged": "observable"
+},
+{
+"week": 9,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-1",
+"mode": "direct",
+"line": "l-saying-it-in-your-own-words-1",
+"story": "s-B5-bill-bernbach",
+"icon": "bill-bernbach",
+"logged": "observable"
+},
+{
+"week": 10,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-1",
+"mode": "direct",
+"line": "l-selling-what-you-used-to-make-1",
+"story": "s-C1-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "observable"
+},
+{
+"week": 11,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "indirect",
+"line": "l-the-loss-inside-the-promotion-1",
+"story": "s-E3-jesse-owens",
+"icon": "jesse-owens",
+"logged": "observable"
+},
+{
+"week": 12,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-2",
+"mode": "direct",
+"line": "l-saying-it-in-your-own-words-2",
+"story": "s-B5-toni-morrison",
+"icon": "toni-morrison",
+"logged": "observable"
+},
+{
+"week": 13,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-1",
+"mode": "direct",
+"line": "l-selling-what-you-used-to-make-2",
+"story": "s-C3-golda-meir",
+"icon": "golda-meir",
+"logged": "observable"
+},
+{
+"week": 14,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "indirect",
+"line": "l-the-loss-inside-the-promotion-2",
+"story": "s-E3-ludwig-van-beethoven",
+"icon": "ludwig-van-beethoven",
+"logged": "observable"
+},
+{
+"week": 15,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-2",
+"mode": "direct",
+"line": "l-saying-it-in-your-own-words-3",
+"story": "s-B5-bozoma-saint-john",
+"icon": "bozoma-saint-john",
+"logged": "observable"
+},
+{
+"week": 16,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-2",
+"mode": "direct",
+"line": "l-selling-what-you-used-to-make-3",
+"story": "s-C1-andy-warhol",
+"icon": "andy-warhol",
+"logged": "observable"
+},
+{
+"week": 17,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-1",
+"mode": "indirect",
+"line": "l-the-loss-inside-the-promotion-3",
+"story": "s-E3-ulysses-s-grant",
+"icon": "ulysses-s-grant",
+"logged": "observable"
+},
+{
+"week": 18,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-2",
+"mode": "direct",
+"line": "l-saying-it-in-your-own-words-1",
+"story": "s-B5-bill-bernbach",
+"icon": "bill-bernbach",
+"logged": "observable"
+},
+{
+"week": 19,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-2",
+"mode": "direct",
+"line": "l-selling-what-you-used-to-make-1",
+"story": "s-C1-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "observable"
+},
+{
+"week": 20,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-2",
+"mode": "calibrated",
+"line": "l-the-loss-inside-the-promotion-1",
+"story": "s-E3-antonio-banderas",
+"icon": "antonio-banderas",
+"logged": "observable"
+},
+{
+"week": 21,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-2",
+"mode": "direct",
+"line": "l-saying-it-in-your-own-words-2",
+"story": "s-B5-toni-morrison",
+"icon": "toni-morrison",
+"logged": "observable"
+},
+{
+"week": 22,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-2",
+"mode": "direct",
+"line": "l-selling-what-you-used-to-make-2",
+"story": "s-C3-golda-meir",
+"icon": "golda-meir",
+"logged": "observable"
+},
+{
+"week": 23,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-2",
+"mode": "calibrated",
+"line": "l-the-loss-inside-the-promotion-2",
+"story": "s-E3-herbert-hoover",
+"icon": "herbert-hoover",
+"logged": "observable"
+},
+{
+"week": 24,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-2",
+"mode": "direct",
+"line": "l-saying-it-in-your-own-words-3",
+"story": "s-B5-bozoma-saint-john",
+"icon": "bozoma-saint-john",
+"logged": "observable"
+},
+{
+"week": 25,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-2",
+"mode": "direct",
+"line": "l-selling-what-you-used-to-make-3",
+"story": "s-C1-andy-warhol",
+"icon": "andy-warhol",
+"logged": "observable"
+},
+{
+"week": 26,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-2",
+"mode": "calibrated",
+"line": "l-the-loss-inside-the-promotion-3",
+"story": "s-E3-jerry-rice",
+"icon": "jerry-rice",
+"logged": "observable"
+},
+{
+"week": 27,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-3",
+"mode": "calibrated",
+"line": "l-saying-it-in-your-own-words-1",
+"story": "s-B5-bill-bernbach",
+"icon": "bill-bernbach",
+"logged": "observable"
+},
+{
+"week": 28,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-3",
+"mode": "calibrated",
+"line": "l-selling-what-you-used-to-make-1",
+"story": "s-C1-leo-burnett",
+"icon": "leo-burnett",
+"logged": "observable"
+},
+{
+"week": 29,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-2",
+"mode": "calibrated",
+"line": "l-the-loss-inside-the-promotion-1",
+"story": "s-E3-antonio-banderas",
+"icon": "antonio-banderas",
+"logged": "observable"
+},
+{
+"week": 30,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-3",
+"mode": "calibrated",
+"line": "l-saying-it-in-your-own-words-2",
+"story": "s-B5-toni-morrison",
+"icon": "toni-morrison",
+"logged": "observable"
+},
+{
+"week": 31,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-3",
+"mode": "calibrated",
+"line": "l-selling-what-you-used-to-make-2",
+"story": "s-C1-leonardo-da-vinci",
+"icon": "leonardo-da-vinci",
+"logged": "observable"
+},
+{
+"week": 32,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-2",
+"mode": "calibrated",
+"line": "l-the-loss-inside-the-promotion-2",
+"story": "s-E3-herbert-hoover",
+"icon": "herbert-hoover",
+"logged": "observable"
+},
+{
+"week": 33,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-3",
+"mode": "calibrated",
+"line": "l-saying-it-in-your-own-words-3",
+"story": "s-B5-anne-frank",
+"icon": "anne-frank",
+"logged": "observable"
+},
+{
+"week": 34,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-3",
+"mode": "calibrated",
+"line": "l-selling-what-you-used-to-make-3",
+"story": "s-C1-linda-kaplan-thaler",
+"icon": "linda-kaplan-thaler",
+"logged": "observable"
+},
+{
+"week": 35,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-3",
+"mode": "indirect",
+"line": "l-the-loss-inside-the-promotion-3",
+"story": "s-E3-w-e-b-du-bois",
+"icon": "w-e-b-du-bois",
+"logged": "observable"
+},
+{
+"week": 36,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-3",
+"mode": "calibrated",
+"line": "l-saying-it-in-your-own-words-1",
+"story": "s-B5-bill-bernbach",
+"icon": "bill-bernbach",
+"logged": "observable"
+},
+{
+"week": 37,
+"key": "selling-what-you-used-to-make",
+"move": "m-selling-what-you-used-to-make-3",
+"mode": "calibrated",
+"line": "l-selling-what-you-used-to-make-1",
+"story": "s-C1-leo-burnett",
+"icon": "leo-burnett",
+"logged": "observable"
+},
+{
+"week": 38,
+"key": "the-loss-inside-the-promotion",
+"move": "m-the-loss-inside-the-promotion-3",
+"mode": "indirect",
+"line": "l-the-loss-inside-the-promotion-1",
+"story": "s-E3-winston-churchill",
+"icon": "winston-churchill",
+"logged": "observable"
+},
+{
+"week": 39,
+"key": "saying-it-in-your-own-words",
+"move": "m-saying-it-in-your-own-words-3",
+"mode": "calibrated",
+"line": "l-saying-it-in-your-own-words-2",
+"story": "s-B5-toni-morrison",
+"icon": "toni-morrison",
+"logged": "observable"
+}
+]
+},
+"maya": {
+"member": {
+"id": "maya",
+"situation_keys": [
+"expertise-without-pull"
+],
+"stars": [],
+"kept_quotes": [],
+"context": null,
+"rep_pattern": "steady",
+"reps": null
+},
+"log": [
+{
+"week": 0,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-1",
+"mode": "calibrated",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-katherine-johnson",
+"icon": "katherine-johnson",
+"logged": "observable"
+},
+{
+"week": 1,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-1",
+"mode": "calibrated",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-mary-callahan-erdoes",
+"icon": "mary-callahan-erdoes",
+"logged": "observable"
+},
+{
+"week": 2,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-1",
+"mode": "calibrated",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-michelle-phan",
+"icon": "michelle-phan",
+"logged": "observable"
+},
+{
+"week": 3,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-1",
+"mode": "calibrated",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-nikola-tesla",
+"icon": "nikola-tesla",
+"logged": "observable"
+},
+{
+"week": 4,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-1",
+"mode": "calibrated",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-ulysses-s-grant",
+"icon": "ulysses-s-grant",
+"logged": "observable"
+},
+{
+"week": 5,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-2",
+"mode": "direct",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-golda-meir",
+"icon": "golda-meir",
+"logged": "observable"
+},
+{
+"week": 6,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-2",
+"mode": "direct",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-vince-lombardi",
+"icon": "vince-lombardi",
+"logged": "observable"
+},
+{
+"week": 7,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-2",
+"mode": "direct",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-dwight-d-eisenhower",
+"icon": "dwight-d-eisenhower",
+"logged": "observable"
+},
+{
+"week": 8,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-2",
+"mode": "direct",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-harry-markopolos",
+"icon": "harry-markopolos",
+"logged": "observable"
+},
+{
+"week": 9,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-alexander-hamilton",
+"icon": "alexander-hamilton",
+"logged": "observable"
+},
+{
+"week": 10,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-nellie-bly",
+"icon": "nellie-bly",
+"logged": "observable"
+},
+{
+"week": 11,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-winston-churchill",
+"icon": "winston-churchill",
+"logged": "observable"
+},
+{
+"week": 12,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-alice-rivlin",
+"icon": "alice-rivlin",
+"logged": "observable"
+},
+{
+"week": 13,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-grace-hopper",
+"icon": "grace-hopper",
+"logged": "observable"
+},
+{
+"week": 14,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-madam-c-j-walker",
+"icon": "madam-c-j-walker",
+"logged": "observable"
+},
+{
+"week": 15,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-george-c-marshall",
+"icon": "george-c-marshall",
+"logged": "observable"
+},
+{
+"week": 16,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-dwight-d-eisenhower",
+"icon": "dwight-d-eisenhower",
+"logged": "observable"
+},
+{
+"week": 17,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-harry-markopolos",
+"icon": "harry-markopolos",
+"logged": "observable"
+},
+{
+"week": 18,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-alexander-hamilton",
+"icon": "alexander-hamilton",
+"logged": "observable"
+},
+{
+"week": 19,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-nellie-bly",
+"icon": "nellie-bly",
+"logged": "observable"
+},
+{
+"week": 20,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-winston-churchill",
+"icon": "winston-churchill",
+"logged": "observable"
+},
+{
+"week": 21,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-alice-rivlin",
+"icon": "alice-rivlin",
+"logged": "observable"
+},
+{
+"week": 22,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-grace-hopper",
+"icon": "grace-hopper",
+"logged": "observable"
+},
+{
+"week": 23,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-madam-c-j-walker",
+"icon": "madam-c-j-walker",
+"logged": "observable"
+},
+{
+"week": 24,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-george-c-marshall",
+"icon": "george-c-marshall",
+"logged": "observable"
+},
+{
+"week": 25,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-dwight-d-eisenhower",
+"icon": "dwight-d-eisenhower",
+"logged": "observable"
+},
+{
+"week": 26,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-harry-markopolos",
+"icon": "harry-markopolos",
+"logged": "observable"
+},
+{
+"week": 27,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-alexander-hamilton",
+"icon": "alexander-hamilton",
+"logged": "observable"
+},
+{
+"week": 28,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-nellie-bly",
+"icon": "nellie-bly",
+"logged": "observable"
+},
+{
+"week": 29,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-winston-churchill",
+"icon": "winston-churchill",
+"logged": "observable"
+},
+{
+"week": 30,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-alice-rivlin",
+"icon": "alice-rivlin",
+"logged": "observable"
+},
+{
+"week": 31,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-grace-hopper",
+"icon": "grace-hopper",
+"logged": "observable"
+},
+{
+"week": 32,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-madam-c-j-walker",
+"icon": "madam-c-j-walker",
+"logged": "observable"
+},
+{
+"week": 33,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-george-c-marshall",
+"icon": "george-c-marshall",
+"logged": "observable"
+},
+{
+"week": 34,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-dwight-d-eisenhower",
+"icon": "dwight-d-eisenhower",
+"logged": "observable"
+},
+{
+"week": 35,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-harry-markopolos",
+"icon": "harry-markopolos",
+"logged": "observable"
+},
+{
+"week": 36,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-alexander-hamilton",
+"icon": "alexander-hamilton",
+"logged": "observable"
+},
+{
+"week": 37,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-2",
+"story": "s-B6-nellie-bly",
+"icon": "nellie-bly",
+"logged": "observable"
+},
+{
+"week": 38,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-3",
+"story": "s-B6-winston-churchill",
+"icon": "winston-churchill",
+"logged": "observable"
+},
+{
+"week": 39,
+"key": "expertise-without-pull",
+"move": "m-expertise-without-pull-3",
+"mode": "direct",
+"line": "l-expertise-without-pull-1",
+"story": "s-B6-alice-rivlin",
+"icon": "alice-rivlin",
+"logged": "observable"
+}
+]
+},
+"michael": {
+"member": {
+"id": "michael",
+"situation_keys": [
+"borrowed-versus-owned-standing"
+],
+"stars": [
+"john-f-kennedy",
+"john-lennon"
+],
+"kept_quotes": [],
+"context": null,
+"rep_pattern": "steady",
+"reps": null
+},
+"log": [
+{
+"week": 0,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-1",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-frederick-douglass",
+"icon": "frederick-douglass",
+"logged": "observable"
+},
+{
+"week": 1,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-1",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-B1-muriel-siebert",
+"icon": "muriel-siebert",
+"logged": "observable"
+},
+{
+"week": 2,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-1",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-C2-emma-watson",
+"icon": "emma-watson",
+"logged": "observable"
+},
+{
+"week": 3,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-1",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-john-hegarty",
+"icon": "john-hegarty",
+"logged": "observable"
+},
+{
+"week": 4,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-1",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-C2-mary-wells-lawrence",
+"icon": "mary-wells-lawrence",
+"logged": "observable"
+},
+{
+"week": 5,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-2",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-C2-asma-jahangir",
+"icon": "asma-jahangir",
+"logged": "observable"
+},
+{
+"week": 6,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-2",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-jo-malone",
+"icon": "jo-malone",
+"logged": "observable"
+},
+{
+"week": 7,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-2",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-C2-joseph-flom",
+"icon": "joseph-flom",
+"logged": "observable"
+},
+{
+"week": 8,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-2",
+"mode": "direct",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-C2-madam-c-j-walker",
+"icon": "madam-c-j-walker",
+"logged": "observable"
+},
+{
+"week": 9,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-frederick-douglass",
+"icon": "frederick-douglass",
+"logged": "observable"
+},
+{
+"week": 10,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-C2-john-coltrane",
+"icon": "john-coltrane",
+"logged": "observable"
+},
+{
+"week": 11,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-B1-muriel-siebert",
+"icon": "muriel-siebert",
+"logged": "observable"
+},
+{
+"week": 12,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-ada-lovelace",
+"icon": "ada-lovelace",
+"logged": "observable"
+},
+{
+"week": 13,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-C2-alexander-hamilton",
+"icon": "alexander-hamilton",
+"logged": "observable"
+},
+{
+"week": 14,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-C2-asma-jahangir",
+"icon": "asma-jahangir",
+"logged": "observable"
+},
+{
+"week": 15,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-bob-marley",
+"icon": "bob-marley",
+"logged": "observable"
+},
+{
+"week": 16,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-C2-cher",
+"icon": "cher",
+"logged": "observable"
+},
+{
+"week": 17,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-C2-madam-c-j-walker",
+"icon": "madam-c-j-walker",
+"logged": "observable"
+},
+{
+"week": 18,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-daniel-radcliffe",
+"icon": "daniel-radcliffe",
+"logged": "observable"
+},
+{
+"week": 19,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-C2-eleanor-roosevelt",
+"icon": "eleanor-roosevelt",
+"logged": "observable"
+},
+{
+"week": 20,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-B1-muriel-siebert",
+"icon": "muriel-siebert",
+"logged": "observable"
+},
+{
+"week": 21,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-ada-lovelace",
+"icon": "ada-lovelace",
+"logged": "observable"
+},
+{
+"week": 22,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-C2-alexander-hamilton",
+"icon": "alexander-hamilton",
+"logged": "observable"
+},
+{
+"week": 23,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-C2-asma-jahangir",
+"icon": "asma-jahangir",
+"logged": "observable"
+},
+{
+"week": 24,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-bob-marley",
+"icon": "bob-marley",
+"logged": "observable"
+},
+{
+"week": 25,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-C2-cher",
+"icon": "cher",
+"logged": "observable"
+},
+{
+"week": 26,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-C2-madam-c-j-walker",
+"icon": "madam-c-j-walker",
+"logged": "observable"
+},
+{
+"week": 27,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-daniel-radcliffe",
+"icon": "daniel-radcliffe",
+"logged": "observable"
+},
+{
+"week": 28,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-C2-eleanor-roosevelt",
+"icon": "eleanor-roosevelt",
+"logged": "observable"
+},
+{
+"week": 29,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-B1-muriel-siebert",
+"icon": "muriel-siebert",
+"logged": "observable"
+},
+{
+"week": 30,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-ada-lovelace",
+"icon": "ada-lovelace",
+"logged": "observable"
+},
+{
+"week": 31,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-C2-alexander-hamilton",
+"icon": "alexander-hamilton",
+"logged": "observable"
+},
+{
+"week": 32,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-C2-asma-jahangir",
+"icon": "asma-jahangir",
+"logged": "observable"
+},
+{
+"week": 33,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-bob-marley",
+"icon": "bob-marley",
+"logged": "observable"
+},
+{
+"week": 34,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-C2-cher",
+"icon": "cher",
+"logged": "observable"
+},
+{
+"week": 35,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-C2-madam-c-j-walker",
+"icon": "madam-c-j-walker",
+"logged": "observable"
+},
+{
+"week": 36,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-daniel-radcliffe",
+"icon": "daniel-radcliffe",
+"logged": "observable"
+},
+{
+"week": 37,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-2",
+"story": "s-C2-eleanor-roosevelt",
+"icon": "eleanor-roosevelt",
+"logged": "observable"
+},
+{
+"week": 38,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-3",
+"story": "s-B1-muriel-siebert",
+"icon": "muriel-siebert",
+"logged": "observable"
+},
+{
+"week": 39,
+"key": "borrowed-versus-owned-standing",
+"move": "m-borrowed-versus-owned-standing-3",
+"mode": "calibrated",
+"line": "l-borrowed-versus-owned-standing-1",
+"story": "s-C2-ada-lovelace",
+"icon": "ada-lovelace",
+"logged": "observable"
+}
+]
+},
+"sarah": {
+"member": {
+"id": "sarah",
+"situation_keys": [
+"renegotiating-standing"
+],
+"stars": [],
+"kept_quotes": [],
+"context": null,
+"rep_pattern": "steady",
+"reps": null
+},
+"log": [
+{
+"week": 0,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "direct",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-karl-marx",
+"icon": "karl-marx",
+"logged": "observable"
+},
+{
+"week": 1,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "direct",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-tom-petty",
+"icon": "tom-petty",
+"logged": "observable"
+},
+{
+"week": 2,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "direct",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "observable"
+},
+{
+"week": 3,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "direct",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-yogi-berra",
+"icon": "yogi-berra",
+"logged": "observable"
+},
+{
+"week": 4,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-1",
+"mode": "direct",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-howard-schultz",
+"icon": "howard-schultz",
+"logged": "observable"
+},
+{
+"week": 5,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "direct",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-pope-francis",
+"icon": "pope-francis",
+"logged": "observable"
+},
+{
+"week": 6,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "direct",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-abraham-lincoln",
+"icon": "abraham-lincoln",
+"logged": "observable"
+},
+{
+"week": 7,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "direct",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-condoleezza-rice",
+"icon": "condoleezza-rice",
+"logged": "observable"
+},
+{
+"week": 8,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-2",
+"mode": "direct",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 9,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-elena-kagan",
+"icon": "elena-kagan",
+"logged": "observable"
+},
+{
+"week": 10,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-jane-maas",
+"icon": "jane-maas",
+"logged": "observable"
+},
+{
+"week": 11,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-karl-marx",
+"icon": "karl-marx",
+"logged": "observable"
+},
+{
+"week": 12,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "observable"
+},
+{
+"week": 13,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-derek-jeter",
+"icon": "derek-jeter",
+"logged": "observable"
+},
+{
+"week": 14,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-pope-francis",
+"icon": "pope-francis",
+"logged": "observable"
+},
+{
+"week": 15,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-howard-schultz",
+"icon": "howard-schultz",
+"logged": "observable"
+},
+{
+"week": 16,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-condoleezza-rice",
+"icon": "condoleezza-rice",
+"logged": "observable"
+},
+{
+"week": 17,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 18,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-elena-kagan",
+"icon": "elena-kagan",
+"logged": "observable"
+},
+{
+"week": 19,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-yogi-berra",
+"icon": "yogi-berra",
+"logged": "observable"
+},
+{
+"week": 20,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-abraham-lincoln",
+"icon": "abraham-lincoln",
+"logged": "observable"
+},
+{
+"week": 21,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "observable"
+},
+{
+"week": 22,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-derek-jeter",
+"icon": "derek-jeter",
+"logged": "observable"
+},
+{
+"week": 23,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-pope-francis",
+"icon": "pope-francis",
+"logged": "observable"
+},
+{
+"week": 24,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-howard-schultz",
+"icon": "howard-schultz",
+"logged": "observable"
+},
+{
+"week": 25,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-condoleezza-rice",
+"icon": "condoleezza-rice",
+"logged": "observable"
+},
+{
+"week": 26,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 27,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-elena-kagan",
+"icon": "elena-kagan",
+"logged": "observable"
+},
+{
+"week": 28,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-yogi-berra",
+"icon": "yogi-berra",
+"logged": "observable"
+},
+{
+"week": 29,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-abraham-lincoln",
+"icon": "abraham-lincoln",
+"logged": "observable"
+},
+{
+"week": 30,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "observable"
+},
+{
+"week": 31,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-derek-jeter",
+"icon": "derek-jeter",
+"logged": "observable"
+},
+{
+"week": 32,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-pope-francis",
+"icon": "pope-francis",
+"logged": "observable"
+},
+{
+"week": 33,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-howard-schultz",
+"icon": "howard-schultz",
+"logged": "observable"
+},
+{
+"week": 34,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-condoleezza-rice",
+"icon": "condoleezza-rice",
+"logged": "observable"
+},
+{
+"week": 35,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-barack-obama",
+"icon": "barack-obama",
+"logged": "observable"
+},
+{
+"week": 36,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-elena-kagan",
+"icon": "elena-kagan",
+"logged": "observable"
+},
+{
+"week": 37,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-2",
+"story": "s-A2-yogi-berra",
+"icon": "yogi-berra",
+"logged": "observable"
+},
+{
+"week": 38,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-3",
+"story": "s-A2-abraham-lincoln",
+"icon": "abraham-lincoln",
+"logged": "observable"
+},
+{
+"week": 39,
+"key": "renegotiating-standing",
+"move": "m-renegotiating-standing-3",
+"mode": "calibrated",
+"line": "l-renegotiating-standing-1",
+"story": "s-A2-billie-jean-king",
+"icon": "billie-jean-king",
+"logged": "observable"
+}
+]
+}
+}

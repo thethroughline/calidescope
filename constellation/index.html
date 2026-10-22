@@ -7,6 +7,8 @@
 <link rel="icon" href="/constellation/favicon.svg" type="image/svg+xml">
 <script>window.__resources = {"https://unpkg.com/react@18.3.1/umd/react.production.min.js": "/constellation/vendor/react.production.min.js", "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "/constellation/vendor/react-dom.production.min.js"};</script>
 <script src="/constellation/js/support.js"></script>
+<script data-bridge="scripts" src="/constellation/lib/core.js"></script>
+<script data-bridge="scripts-bridge" src="/constellation/js/constellation-bridge.js"></script>
 
 </head>
 <body>
@@ -750,6 +752,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
                       </button>
                     </sc-for>
                     <div style="border-top:1px solid var(--hair);padding-top:16px">
+                      <button data-bridge="heroes-library" sc-camel-on-click="{{ hz.explore }}" style="display:flex;gap:14px;width:100%;text-align:left;padding:16px;margin:0 0 16px;border:1px solid var(--hair);border-radius:16px;background:var(--well);color:var(--ink);cursor:pointer;align-items:center" style-hover="border-color:var(--ink)"><div style="width:44px;height:44px;border-radius:50%;background:var(--paper);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;flex:none"><i class="ph ph-books" style="font-size:20px;color:var(--pru)"></i></div><div style="flex:1;min-width:0"><div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">The library</div><div style="font:400 17px/1.35 var(--serif);margin-top:2px">{{ hz.exploreLine }}</div></div><i class="ph ph-caret-right" style="color:var(--faint);flex:none;font-size:18px"></i></button>
                       <sc-if value="{{ hz.addClosed }}" hint-placeholder-val="{{ true }}">
                         <button sc-camel-on-click="{{ hz.openAdd }}" style="height:48px;border-radius:24px;background:transparent;color:var(--ink);border:1px solid var(--ink);font:500 14px var(--sans);cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:8px"><i class="ph ph-plus"></i>Add someone</button>
                       </sc-if>
@@ -847,6 +850,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
                     <button sc-camel-on-click="{{ sv.openHero }}" style="display:flex;align-items:center;justify-content:space-between;width:100%;min-height:48px;padding:0;border:0;background:transparent;color:var(--pru);font:500 14px var(--sans);cursor:pointer;text-align:left"><span>{{ sv.moreLabel }}</span><i class="ph ph-caret-right"></i></button>
                   </div>
                 </sc-if>
+                <button data-bridge="story-library" sc-camel-on-click="{{ sv.explore }}" style="display:flex;align-items:center;justify-content:space-between;width:100%;min-height:48px;margin-top:18px;padding:0;border:0;border-top:1px solid var(--hair);background:transparent;color:var(--pru);font:500 14px var(--sans);cursor:pointer;text-align:left"><span style="display:flex;align-items:center;gap:8px"><i class="ph ph-path"></i>{{ sv.exploreLabel }}</span><i class="ph ph-caret-right"></i></button>
                 <sc-if value="{{ sv.declined }}"><p style="font:italic 400 15px/1.45 var(--serif);color:var(--mute);margin:18px 0 0">{{ coach.first }} will see that. You won't get this one again.</p></sc-if>
               </div>
               <div style="flex:none;display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:8px;padding:12px 16px 30px;border-top:1px solid var(--hair)">
@@ -857,6 +861,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
             </div>
           </sc-if>
 
+          <sc-if value="{{ ov.library }}"><div data-bridge="library-overlay" data-screen-label="M15 Library" style="position:absolute;top:0;left:0;right:0;bottom:0;background:var(--paper);z-index:20;display:flex;flex-direction:column;animation:cpUp 420ms var(--ease) both"><div style="height:52px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 10px;border-bottom:1px solid var(--hair)"><button sc-camel-on-click="{{ lx.back }}" aria-label="{{ lx.backLabel }}" style="width:44px;height:44px;border:0;background:transparent;color:var(--ink);font-size:20px;cursor:pointer"><i class="{{ lx.backIcon }}"></i></button><span style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">The library</span><a href="{{ lx.full }}" target="_blank" rel="noopener" aria-label="Open the library in a new tab" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--faint);font-size:18px"><i class="ph ph-arrow-square-out"></i></a></div><iframe sc-camel-src="{{ lx.src }}" title="The Constellation library" style="flex:1;width:100%;border:0;background:var(--paper)"></iframe></div></sc-if>
           <sc-if value="{{ ov.thread }}">
             <div data-screen-label="M12 Coach thread" style="position:absolute;top:0;left:0;right:0;bottom:0;background:var(--paper);z-index:21;display:flex;flex-direction:column;animation:cpUp 420ms var(--ease) both">
               <div style="height:60px;flex:none;display:flex;align-items:center;gap:10px;padding:0 10px;border-bottom:1px solid var(--hair)">
@@ -979,6 +984,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
                   </sc-for>
                   <sc-if value="{{ hv.moreInLib }}"><p style="font:400 14px/1.5 var(--serif);color:var(--mute);margin:10px 0 0">{{ hv.moreText }}</p></sc-if>
                 </div>
+                <button data-bridge="hero-library" sc-camel-on-click="{{ hv.explore }}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:48px;margin-top:22px;padding:0 18px;border:1px solid var(--ink);border-radius:24px;background:transparent;color:var(--ink);font:500 14px var(--sans);cursor:pointer;text-align:left" style-hover="background:var(--well)"><span style="display:flex;align-items:center;gap:8px"><i class="ph ph-books"></i>{{ hv.exploreLabel }}</span><i class="ph ph-caret-right"></i></button>
                 <sc-if value="{{ hv.hasWorks }}">
                   <div style="margin-top:28px;padding-top:14px;border-top:1px solid var(--hair)">
                     <div style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Go deeper</div>
@@ -1205,7 +1211,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
                   </sc-for>
                 </div>
               </sc-if>
+              <sc-if value="{{ cs.CX }}"><div data-bridge="coach-explore" data-screen-label="CX Library" style="height:100%;display:flex;flex-direction:column"><div data-bridge="coach-tabs" style="flex:none;display:flex;align-items:center;gap:6px;padding:10px 28px;border-bottom:1px solid var(--hair)"><button sc-camel-on-click="{{ lt.explore.go }}" style="height:30px;padding:0 14px;border-radius:15px;border:1px solid {{ lt.explore.bd }};background:{{ lt.explore.bg }};color:{{ lt.explore.fg }};font:500 12px var(--sans);cursor:pointer">Explore</button><button sc-camel-on-click="{{ lt.send.go }}" style="height:30px;padding:0 14px;border-radius:15px;border:1px solid {{ lt.send.bd }};background:{{ lt.send.bg }};color:{{ lt.send.fg }};font:500 12px var(--sans);cursor:pointer">Find and send</button><span style="margin-left:10px;font:400 12px var(--sans);color:var(--faint)">{{ lt.line }}</span><span style="flex:1"></span><a href="{{ cx.full }}" target="_blank" rel="noopener" style="font:500 12px var(--sans);color:var(--pru);text-decoration:none;display:flex;align-items:center;gap:6px">Open the library in a new tab <i class="ph ph-arrow-square-out"></i></a></div><iframe sc-camel-src="{{ cx.src }}" title="The Constellation library" style="flex:1;width:100%;border:0;background:var(--paper)"></iframe></div></sc-if>
               <sc-if value="{{ cs.C4 }}">
+                <div data-bridge="send-tabs" style="flex:none;display:flex;align-items:center;gap:6px;padding:10px 28px;border-bottom:1px solid var(--hair)"><button sc-camel-on-click="{{ lt.explore.go }}" style="height:30px;padding:0 14px;border-radius:15px;border:1px solid {{ lt.explore.bd }};background:{{ lt.explore.bg }};color:{{ lt.explore.fg }};font:500 12px var(--sans);cursor:pointer">Explore</button><button sc-camel-on-click="{{ lt.send.go }}" style="height:30px;padding:0 14px;border-radius:15px;border:1px solid {{ lt.send.bd }};background:{{ lt.send.bg }};color:{{ lt.send.fg }};font:500 12px var(--sans);cursor:pointer">Find and send</button><span style="margin-left:10px;font:400 12px var(--sans);color:var(--faint)">{{ lt.line }}</span><span style="flex:1"></span><a href="{{ cx.full }}" target="_blank" rel="noopener" style="font:500 12px var(--sans);color:var(--pru);text-decoration:none;display:flex;align-items:center;gap:6px">Open the library in a new tab <i class="ph ph-arrow-square-out"></i></a></div>
                 <div data-screen-label="C4 Library" style="display:grid;grid-template-columns:250px minmax(0,1fr) 470px;min-height:100%">
                   <div style="border-right:1px solid var(--hair);padding:18px 14px;display:flex;flex-direction:column;gap:16px">
                     <div>
@@ -1222,7 +1230,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
                   </div>
                   <div style="padding:18px 24px;border-right:1px solid var(--hair)">
                     <div style="font:500 12px var(--sans);color:var(--mute);margin-bottom:8px">{{ lib.count }}</div>
-                    <sc-if value="{{ lib.none }}"><p style="font:400 15px var(--serif);color:var(--mute)">No stories match. The corpus covers eight of the twenty-two situations so far.</p></sc-if>
+                    <sc-if value="{{ lib.none }}"><p style="font:400 15px var(--serif);color:var(--mute)">No stories match these filters. Clear one, or open the Library to search the whole corpus.</p></sc-if>
                     <sc-for list="{{ lib.results }}" as="r">
                       <button sc-camel-on-click="{{ r.go }}" style="display:block;width:100%;text-align:left;padding:14px 12px;border:0;border-bottom:1px solid var(--hair);background:{{ r.bg }};color:var(--ink);cursor:pointer;border-radius:6px">
                         <div style="display:flex;gap:8px;align-items:center"><span style="font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);flex:1">{{ r.eyebrow }}</span><span style="font:500 11px var(--sans);color:var(--faint)">{{ r.reach }}</span><span style="padding:1px 8px;border-radius:10px;border:1px solid {{ r.verC }};color:{{ r.verC }};font:500 11px/1.5 var(--sans)">{{ r.ver }}</span></div>
@@ -1248,7 +1256,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
                           <button sc-camel-on-click="{{ lib.pinFor }}" disabled="{{ lib.dis }}" title="{{ lib.title }}" style="height:34px;padding:0 14px;border-radius:17px;border:1px solid var(--ink);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer;opacity:{{ lib.op }}">Pin for next week</button>
                           <button sc-camel-on-click="{{ lib.sendNow }}" disabled="{{ lib.dis }}" title="{{ lib.title }}" style="height:34px;padding:0 14px;border-radius:17px;border:1px solid var(--hair);background:transparent;color:var(--ink);font:500 12px var(--sans);cursor:pointer;opacity:{{ lib.op }}">Send now</button>
                         </div>
-                        <sc-if value="{{ lib.dis }}"><div style="font:400 12px var(--sans);color:var(--mad)">Verify the source before sending.</div></sc-if>
+                        <sc-if value="{{ lib.dis }}"><div style="font:400 12px var(--sans);color:var(--mad)">Verify the source before sending.</div></sc-if><sc-if value="{{ lib.dis }}"><button data-bridge="send-verify" sc-camel-on-click="{{ lib.inLibrary }}" style="align-self:flex-start;height:30px;padding:0 12px;border-radius:15px;border:1px solid var(--pru);background:transparent;color:var(--pru);font:500 12px var(--sans);cursor:pointer">Check the source in the Library</button></sc-if>
                         <sc-if value="{{ lib.hasMsg }}"><div style="font:500 12px var(--sans);color:var(--pru)">{{ lib.msg }}</div></sc-if>
                       </div>
                     </sc-if>

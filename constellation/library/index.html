@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en-GB" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Constellation Library</title>
+<meta name="description" content="The Constellation library: stories from the lives members choose as heroes, filed by the situation each one speaks to.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/constellation/favicon.svg" type="image/svg+xml">
+<script>
+  /* Theme before first paint: the app's choice when embedded, else the reader's last choice, else the system's. */
+  (function () {
+    var q = new URLSearchParams(location.search), t = q.get('theme');
+    try { t = t || localStorage.getItem('cl-theme'); } catch (e) {}
+    if (!t) t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light');
+    if (q.get('embed') === '1') document.documentElement.classList.add('embed');
+  })();
+</script>
+<link rel="stylesheet" href="/constellation/library/fonts.css">
+<link rel="stylesheet" href="/constellation/vendor/phosphor/regular/style.css">
+<link rel="stylesheet" href="/constellation/vendor/phosphor/fill/style.css">
+<link rel="stylesheet" href="/constellation/library/library.css">
+</head>
+<body>
+<a class="sr" href="#main">Skip to the page</a>
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#/" aria-label="The library, home">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M11 3.5l1.6 5.9 5.9 1.6-5.9 1.6L11 18.5l-1.6-5.9L3.5 11l5.9-1.6z" fill="currentColor"/><circle cx="18.5" cy="4" r="1.2" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
+      Library <small>Constellation</small>
+    </a>
+    <form class="search" role="search" id="searchform">
+      <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+      <label class="sr" for="q">Search the library</label>
+      <input id="q" type="search" autocomplete="off" placeholder="A name, a place, a year, a situation">
+    </form>
+    <nav class="links" id="links" aria-label="Library"></nav>
+    <div class="modes" id="modes" role="group" aria-label="Read the library as"></div>
+    <button class="iconbtn themebtn" id="theme" type="button" aria-label="Switch theme"><i class="ph ph-moon"></i></button>
+  </div>
+</header>
+<div class="trail" id="trail" aria-label="Your trail"></div>
+<main id="main" tabindex="-1"><p class="empty">Opening the library…</p></main>
+<div id="live" class="sr" aria-live="polite"></div>
+<script src="/constellation/lib/core.js"></script>
+<script src="/constellation/library/library.js"></script>
+</body>
+</html>

@@ -193,6 +193,12 @@
       "permanent": true
     }
   ],
+  "rewrites": [
+    {
+      "source": "/api/constellation/:path*",
+      "destination": "/api/constellation?path=:path*"
+    }
+  ],
   "headers": [
     {
       "source": "/assets/fonts/(.*)",

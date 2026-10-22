@@ -148,9 +148,15 @@ Newsreader and IBM Plex Sans fonts and the Phosphor icons, so it loads nothing f
 `noindex, nofollow` (meta tag and an `X-Robots-Tag` header in `vercel.json`) and is in neither the
 sitemap nor the navigation. The data is sample data: members and companies are fictional.
 
+It runs on the Constellation corpus (`constellation/data/`), has a Library at `/constellation/library`
+and a back end at `/api/constellation` (`api/constellation.js`, one function, rewritten in
+`vercel.json`). How the pieces fit, the routes, the tests and how to refresh the corpus:
+`constellation/README.md`.
+
 To refresh it from a new export, save the bundled export HTML and run
 
     npm pack @phosphor-icons/web@2.1.1 && mkdir -p /tmp/ph && tar -xzf phosphor-icons-web-2.1.1.tgz -C /tmp/ph
     python3 -I constellation/tools/unbundle.py <export.html> /tmp/ph/package
 
-`constellation/tools/` is in `.vercelignore`.
+`unbundle.py` re-applies the corpus connection (`constellation/tools/patches.py`) to every export.
+`constellation/tools/`, `constellation/tests/` and `constellation/README.md` are in `.vercelignore`.
